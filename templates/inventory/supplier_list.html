@@ -1,0 +1,79 @@
+{% extends 'base_dashboard.html' %}
+
+{% block content %}
+<style>
+    .table th {
+    background-color: #f8f9fa;
+    font-weight: 600;
+}
+
+.table tbody tr:hover {
+    background-color: #f1f3f5;
+    }
+
+</style>
+<h3 class="mb-3"><b><a href="{% url 'supplier_dashboard' %}" style="color: grey; font-size: 2rem;">
+        <i class="bi bi-arrow-left-circle-fill"></i></a> Suppliers</b></h3>
+<hr>
+<table class="table table-hover align-middle bg-white shadow-sm rounded">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Categories Supplied</th>
+            <th>Brands Supplied</th>
+            <th>Total Products</th>
+            <th>Phone</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        {% for item in page_obj %}
+        <tr>
+            <td>{{ item.supplier.id }}</td>
+            <td>{{ item.supplier.name }}</td>
+            <td>{{ item.categories }}</td>
+            <td>{{ item.brands }}</td>
+            <td>{{ item.total_products }}</td>
+            <td>{{ item.supplier.phone }}</td>
+            <td>
+                {% if request.user.is_superuser %}
+                <a href="{% url 'update_supplier' item.supplier.id %}" class="btn btn-sm btn-warning">Edit</a>
+                <a href="{% url 'delete_supplier' item.supplier.id %}" class="btn btn-sm btn-danger">Delete</a>
+                {% elif request.user.groups.first.name == "Manager" %}
+                <a href="{% url 'update_supplier' item.supplier.id %}" class="btn btn-sm btn-warning">Edit</a>
+                {% else %}
+                View Only
+                {% endif %}
+            </td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="5" class="text-center">No suppliers found</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+<nav class="mt-4">
+<ul class="pagination justify-content-center">
+
+    {% if page_obj.has_previous %}
+        <li class="page-item">
+            <a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous</a>
+        </li>
+    {% endif %}
+
+    <li class="page-item active">
+        <span class="page-link">{{ page_obj.number }}</span>
+    </li>
+
+    {% if page_obj.has_next %}
+        <li class="page-item">
+            <a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a>
+        </li>
+    {% endif %}
+
+</ul>
+</nav>
+{% endblock %}

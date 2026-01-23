@@ -1,0 +1,41 @@
+{% extends 'base_dashboard.html' %}
+{% load crispy_forms_tags %}
+{% block content %}
+
+<h3><b><a href="{% url 'order_dashboard' %}" style="color: grey; font-size: 2rem;">
+        <i class="bi bi-arrow-left-circle-fill"></i></a>Update Order #{{ order.id }}</h3>
+
+<form method="POST">
+    {% csrf_token %}
+
+    <!-- Customer Details -->
+    <div class="card shadow-sm mb-4">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0"><i class="bi bi-person-fill me-2"></i>Customer Details</h5>
+            </div>
+            <div class="card-body">
+                {{ order_form|crispy }}
+            </div>
+        </div>
+
+    <!-- Product Details -->
+    <div class="card shadow-sm mb-4">
+            <div class="card-header bg-success text-white">
+                <h5 class="mb-0"><i class="bi bi-box-seam me-2"></i>Product</h5>
+            </div>
+            <div class="card-body">
+                {{ item_form|crispy }}
+            </div>
+        </div>
+    <!-- Action Buttons -->
+    <div class="d-flex justify-content-end gap-2 mb-5">
+            <a href="{% url 'order_list' %}" class="btn btn-outline-secondary">
+                ← Cancel
+            </a>
+            <button type="submit" class="btn btn-primary">
+                Update Order
+            </button>
+        </div>
+    </form>
+
+{% endblock %}

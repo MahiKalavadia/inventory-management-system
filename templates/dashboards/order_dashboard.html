@@ -1,0 +1,93 @@
+{% extends 'base_dashboard.html' %}
+{% block content %}
+<div class="dashboard-header mb-4 d-flex justify-content-between align-items-center p-3 bg-light rounded shadow-sm">
+    <div class="page-title fw-bold fs-5">
+        Order Dashboard
+    </div>
+    <div class="d-flex align-items-center">
+        <div class="header-right d-flex align-items-center">
+            <div class="welcome-text me-2">Welcome to Order Dashboard</div>
+        </div>
+    </div>
+</div>
+<div class="mb-3 d-flex gap-2">
+    
+    {% if request.user.is_superuser or request.user.groups.first.name == "Manager"%}
+        <a href="{% url 'create_order' %}" class="btn btn-primary">➕ Create Bills</a>
+    {% endif %}
+    <a href="{% url 'order_list' %}" class="btn btn-outline-secondary">📄 View Orders</a>
+</div>
+<!--Stats-->
+<div class="row mb-6">
+    <div class="col-md-2">
+        <div class="card shadow-sm p-4 text-center card-hover" style="border-left: 5px solid #7c3aed">
+            <div class="card-icon mb-2">
+                <i class="bi bi-receipt-cutoff icon-p icon-bg"></i>
+            </div>
+            <h6 class="text-muted">Total Sales Records</h6>
+            <h3 class="fw-bold">{{ total_orders }}</h3>
+        </div>
+    </div>
+<!-- Total Orders → (you can rename to Total Sales Records)
+
+Pending Bills
+
+Open Bills
+
+Cancelled Bills
+
+Completed Sales
+
+Total Sales Amount -->
+    <div class="col-md-2">
+        <div class="card shadow-sm p-4 text-center card-hover" style="border-left: 5px solid #f59e0b">
+            <div class="card-icon mb-2">
+                <i class="bi bi-hourglass-split icon-y icon-bg"></i>
+            </div>
+            <h6 class="text-muted">Pending Bills</h6>
+            <h3 class="fw-bold">{{ pending_bills }}</h3>
+        </div>
+    </div>
+    
+    <div class="col-md-2">
+        <div class="card shadow-sm p-4 text-center card-hover" style="border-left: 5px solid #2563eb">
+            <div class="card-icon mb-2">
+                <i class="bi bi-gear icon-bbb icon-bg"></i>
+            </div>
+            <h6 class="text-muted">Open Bills</h6>
+            <h3 class="fw-bold">{{ open_bills }}</h3>
+        </div>
+    </div>
+
+    <div class="col-md-2">
+        <div class="card shadow-sm p-4 text-center card-hover" style="border-left: 5px solid #7c3aed">
+            <div class="card-icon mb-2">
+                <i class="bi bi-x-circle icon-ppp icon-bg"></i>
+            </div>
+            <h6 class="text-muted">Cancelled Bills</h6>
+            <h3 class="fw-bold">{{ cancelled_bills }}</h3>
+        </div>
+    </div>
+
+    <div class="col-md-2">
+        <div class="card shadow-sm p-4 text-center card-hover" style="border-left: 5px solid #16a34a">
+            <div class="card-icon mb-2">
+                <i class="bi bi-check-circle icon-g icon-bg"></i>
+            </div>
+            <h6 class="text-muted">Completed Sales</h6>
+            <h3 class="fw-bold">{{ completed_sales }}</h3>
+        </div>
+    </div>
+
+    <div class="col-md-2">
+        <div class="card shadow-sm p-4 text-center card-hover" style="border-left: 5px solid #2563eb">
+            <div class="card-icon mb-2">
+                <i class="bi bi-currency-rupee icon-b icon-bg"></i>
+            </div>
+            <h6 class="text-muted">Total Sales Amount </h6>
+            <h3 class="fw-bold">{{ total_sales }}</h3>
+        </div>
+    </div>
+</div>
+<hr>
+{% endblock content %}

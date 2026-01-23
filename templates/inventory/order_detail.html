@@ -1,0 +1,64 @@
+{% extends 'base_dashboard.html' %}
+{% block content %}
+
+<div class="dashboard-header mb-4 p-3 bg-light rounded shadow-sm">
+    <h5 class="fw-bold"><b><a href="{% url 'order_list' %}" style="color: grey; font-size: 2rem;">
+        <i class="bi bi-arrow-left-circle-fill"></i></a> Order #{{ order.id }}</h5>
+
+    {% if order.payment_status == "Paid" %}
+        <a href="{% url 'order_receipt' order.id %}" class="btn btn-success">
+            ⬇ Download Receipt
+        </a>
+    {% endif %}
+</div>
+
+<div class="row">
+    <div class="col-md-4">
+        <div class="card shadow-sm p-3 mb-3">
+            <h6 class="fw-bold">Customer Details</h6>
+            <p class="mb-1"><strong>Name:</strong> {{ order.customer_name }}</p>
+            <p class="mb-1"><strong>Email:</strong> {{ order.customer_email }}</p>
+            <p class="mb-1"><strong>Phone:</strong> {{ order.customer_phonenumber }}</p>
+        </div>
+
+        <div class="card shadow-sm p-3">
+            <h6 class="fw-bold">Delivery Address</h6>
+            <p class="mb-1">{{ order.customer_address }}</p>
+            <p class="mb-1">{{ order.city }} - {{ order.pincode }}</p>
+            <p class="mb-0">{{ order.get_state_display }}</p>
+        </div>
+    </div>
+
+    <div class="col-md-8">
+        <div class="card shadow-sm">
+            <table class="table mb-0">
+                <thead class="table-light">
+                    <tr>
+                        <th>Product</th>
+                        <th>Price</th>
+                        <th>Qty</th>
+                        <th>Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in order.items.all %}
+                    <tr>
+                        <td>{{ item.product }}</td>
+                        <td>₹ {{ item.price }}</td>
+                        <td>{{ item.quantity }}</td>
+                        <td>₹ {{ item.total }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+                <tfoot class="table-light">
+                    <tr>
+                        <th colspan="3" class="text-end">Grand Total</th>
+                        <th>₹ {{ order.total_amount }}</th>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

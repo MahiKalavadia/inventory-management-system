@@ -1,0 +1,118 @@
+{% extends 'base_dashboard.html' %}
+{% block content %}
+
+<style>
+    .table th {
+    background-color: #f8f9fa;
+    font-weight: 600;
+}
+
+.table tbody tr:hover {
+    background-color: #f1f3f5;
+    }
+
+</style>
+<div class="dashboard-header mb-4 d-flex justify-content-between align-items-center p-3 bg-light rounded shadow-sm">
+    <div class="page-title fw-bold fs-5">
+        Category Dashboard
+    </div>
+    <div class="d-flex align-items-center">
+        <div class="header-right d-flex align-items-center">
+            <div class="welcome-text me-2">Welcome to Category Dashboard</div>
+        </div>
+    </div>
+</div>
+<!--Top Actions-->
+<div class="mb-3 d-flex gap-2">
+    
+    {% if request.user.is_superuser or request.user.groups.first.name == "Manager" %}
+        <a href="{% url 'add_category' %}" class="btn btn-primary">➕ Add Category</a>
+    {% endif %}
+    <a href="{% url 'category_list' %}" class="btn btn-outline-secondary">📄 View Category</a>
+</div>
+<!--Stats-->
+<div class="row mb-3">
+    <div class="col-md-4">
+        <div class="card shadow-sm p-4 text-center card-hover" style="border-left: 5px solid #7c3aed">
+            <div class="card-icon mb-2">
+                <i class="bi bi-grid-fill icon-purple icon-bg"></i>
+            </div>
+            <h6 class="text-muted">Total Categories</h6>
+            <h3 class="fw-bold">{{ total_category }}</h3>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card shadow-sm p-4 text-center card-hover" style="border-left: 5px solid #16a34a">
+            <div class="card-icon mb-2">
+                <i class="bi bi-box-seam-fill icon-greeny icon-bg"></i>
+            </div>
+            <h6 class="text-muted">Categories With Products</h6>
+            <h3 class="fw-bold">{{ categories_with_products }}</h3>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card shadow-sm p-4 text-center card-hover" style="border-left: 5px solid #f97316">
+            <div class="card-icon mb-2">
+                <i class="bi bi-exclamation-circle-fill icon-orangey icon-bg"></i>
+            </div>
+            <h6 class="text-muted">Categories Without Products</h6>
+            <h3 class="fw-bold">{{ categories_without_products }}</h3>
+        </div>
+    </div>
+</div>
+<hr>
+
+<table class="table table-hover align-middle bg-white shadow-sm rounded">
+        <tr>
+            <th>Category</th>
+            <th>Total Products</th>
+            <th>Actions</th>
+        </tr>
+    <tbody>
+        {% for category in categories %}
+        <tr>
+            <td>{{ category.name }}</td>
+            <td>{{ category.product_count }}</td>
+            <td>
+                {% if request.user.is_superuser  %}
+            <a href="{% url 'update_category' category.id %}" class="btn btn-sm btn-warning">Edit</a>
+            <a href="{% url 'delete_category' category.id %}" class="btn btn-sm btn-danger">Delete</a>
+            {% elif request.user.groups.first.name == "Manager" %}
+            <a href="{% url 'update_category' category.id %}" class="btn btn-sm btn-warning">Edit</a>
+            {% else %}
+            View Only
+         {% endif %}
+            </td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="3" class="text-center">No categories found</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+<nav class="mt-4">
+<ul class="pagination justify-content-center">
+
+    {% if categories.has_previous %}
+        <li class="page-item">
+            <a class="page-link" href="?page={{ categories.previous_page_number }}">Previous</a>
+        </li>
+    {% endif %}
+
+    <li class="page-item active">
+        <span class="page-link">{{ categories.number }}</span>
+    </li>
+
+    {% if categories.has_next %}
+        <li class="page-item">
+            <a class="page-link" href="?page={{ categories.next_page_number }}">Next</a>
+        </li>
+    {% endif %}
+
+</ul>
+</nav>
+
+{% endblock content %}

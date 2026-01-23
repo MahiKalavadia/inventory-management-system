@@ -1,0 +1,69 @@
+{% extends 'base_dashboard.html' %}
+{% block content %}
+
+<div class="dashboard-header mb-4 p-3 bg-light rounded shadow-sm">
+    <h5 class="fw-bold"><b><a href="{% url 'order_dashboard' %}" style="color: grey; font-size: 2rem;">
+        <i class="bi bi-arrow-left-circle-fill"></i></a> All Orders</h5>
+</div>
+
+<div class="card shadow-sm">
+    <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+            <thead class="table-light">
+                <tr>
+                    <th>#</th>
+                    <th>Customer</th>
+                    <th>Status</th>
+                    <th>Payment</th>
+                    <th>Total</th>
+                    <th>Date</th>
+                    <th class="text-end">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for order in orders %}
+                <tr>
+                    <td>{{ order.id }}</td>
+                    <td>
+                        <strong>{{ order.customer_name }}</strong><br>
+                        <small class="text-muted">{{ order.customer_email }}</small>
+                    </td>
+                    <td>
+                        <span class="badge bg-info">{{ order.status }}</span>
+                    </td>
+                    <td>
+                        {% if order.payment_status == "Paid" %}
+                            <span class="badge bg-success">Paid</span>
+                        {% else %}
+                            <span class="badge bg-warning text-dark">{{ order.payment_status }}</span>
+                        {% endif %}
+                    </td>
+                    <td>₹ {{ order.total_amount }}</td>
+                    <td>{{ order.created_at|date:"d M Y" }}</td>
+                    <td class="text-end">
+                        {% if request.user.is_superuser or request.user.groups.first.name == "Manager"%}
+                        <a href="{% url 'update_order' order.id %}" class="btn btn-sm btn-outline-primary">
+                            Edit
+                        </a>
+                        <a href="{% url 'delete_order' order.id %}" class="btn btn-sm btn-outline-primary">
+                            Delete
+                        </a>
+                        {% endif %}
+                        <a href="{% url 'order_detail' order.id %}" class="btn btn-sm btn-outline-primary">
+                            View
+                        </a>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="7" class="text-center text-muted py-4">
+                        No orders found
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+{% endblock %}

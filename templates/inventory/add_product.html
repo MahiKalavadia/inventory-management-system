@@ -1,0 +1,13 @@
+{% extends 'base_dashboard.html' %}
+{% load crispy_forms_tags%}
+{% block content %}
+<h3><b><a href="{% url 'product_dashboard' %}" style="color: grey; font-size: 2rem;">
+        <i class="bi bi-arrow-left-circle-fill"></i></a> Add Product</b></h3>
+<hr>
+<form method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+
+    {{form|crispy}}
+    <button class="btn btn-success">Save Product</button>
+</form>
+{% endblock %}

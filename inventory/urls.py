@@ -1,0 +1,30 @@
+from django.urls import path
+from . import views
+
+urlpatterns = [
+    path('products/', views.product_list, name='product_list'),
+    path('products/add/', views.add_product, name='add_product'),
+    path("products/dashboard/", views.product_dashboard, name="product_dashboard"),
+    path('product/update/<int:pk>/', views.update_product, name='update_product'),
+    path('product/delete/<int:pk>/', views.delete_product, name='delete_product'),
+    path('categories/', views.category_list, name='category_list'),
+    path('categories/<int:category_id>/',
+         views.category_products, name='category_products'),
+    path('categories/add/', views.add_category, name='add_category'),
+    path('categories/update/<int:pk>/',
+         views.update_category, name='update_category'),
+    path('categories/delete/<int:pk>/',
+         views.delete_category, name='delete_category'),
+    path('categories/dashboard/', views.category_dashboard,
+         name='category_dashboard'),
+    path('reports/dashboard/', views.report_dashboard,
+         name='report_dashboard'),
+    path('stock/dashboard/', views.stock_dashboard,
+         name='stock_dashboard'),
+    path('stock/in/', views.stock_in, name='stock_in_section'),
+    path('stock/in/<int:product_id>', views.stock_in, name='stock_in'),
+    path('stock/out/', views.stock_out, name='stock_out'),
+    path('low-stock/', views.low_stock_products, name='low_stock'),
+    path('user/dashboard/', views.user_dashboard,
+         name='user_dashboard'),
+]

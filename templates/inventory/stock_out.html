@@ -1,0 +1,14 @@
+{% extends 'base_dashboard.html' %}
+{% load crispy_forms_tags %}
+{% block content %}
+<h3 class="mb-3"><b><a href="{% url 'admin_dashboard' %}" style="color: grey; font-size: 2rem;">
+        <i class="bi bi-arrow-left-circle-fill"></i></a> Stock Out</b></h3>
+<div class="card p-4 shadow-sm">
+   <h5 class="mb-3">Stock Out</h5>
+   <form method="POST">
+      {% csrf_token %}
+      {{ form|crispy }}
+      <button class="btn btn-danger">Remove Stock</button>
+   </form>
+</div>
+{% endblock content %}

@@ -1,0 +1,157 @@
+{% extends 'base_dashboard.html' %}
+{% block content %}
+
+<style>
+.product-card {
+    border-radius: 18px;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+    cursor: pointer;
+}
+
+.product-card:hover {
+    transform: translateY(-6px) scale(1.01);
+    box-shadow: 0 14px 30px rgba(0,0,0,0.15);
+}
+
+/* Image Animation */
+.product-card img {
+    transition: transform 0.4s ease;
+}
+
+.product-card:hover img {
+    transform: scale(1.08);
+}
+
+</style>
+
+<div class="d-flex align-items-center mb-3 gap-3">
+    <a href="{% url 'product_dashboard' %}" style="color: grey; font-size: 2rem;">
+        <i class="bi bi-arrow-left-circle-fill"></i></a>
+    <h3 class="mb-0"><b> View Products</b></h3>
+</div>
+
+<hr>
+<!-- FILTER BAR -->
+<form method="get" class="row g-2 mb-4">
+
+    <div class="col-md-4">
+        <input type="text" name="search" class="form-control"
+               placeholder="Search product..."
+               value="{{ request.GET.search }}">
+    </div>
+
+    <div class="col-md-2">
+        <select name="category" class="form-select">
+            <option value="">All Categories</option>
+            {% for cat in categories %}
+            <option value="{{ cat.id }}"
+                {% if request.GET.category == cat.id|stringformat:"s" %}selected{% endif %}>
+                {{ cat.name }}
+            </option>
+            {% endfor %}
+        </select>
+    </div>
+
+    <div class="col-md-2">
+        <select name="supplier" class="form-select">
+            <option value="">All Suppliers</option>
+            {% for sup in suppliers %}
+            <option value="{{ sup.id }}"
+                {% if request.GET.supplier == sup.id|stringformat:"s" %}selected{% endif %}>
+                {{ sup.name }}
+            </option>
+            {% endfor %}
+        </select>
+    </div>
+
+    <div class="col-md-2">
+        <select name="status" class="form-select">
+            <option value="">Stock Status</option>
+            <option value="in">In Stock</option>
+            <option value="low">Low Stock</option>
+            <option value="out">Out of Stock</option>
+        </select>
+    </div>
+
+    <div class="col-md-2">
+        <button class="btn btn-primary w-100">Apply</button>
+    </div>
+
+</form>
+
+<!-- PRODUCT GRID -->
+<div class="row g-4">
+
+{% for product in page_obj %}
+<div class="col-lg-3 col-md-4 col-sm-6">
+    <div class="card product-card h-100">
+
+        {% if product.image %}
+            <img src="{{ product.image.url }}" class="card-img-top" style="height:180px; object-fit:contain;">
+        {% else %}
+            <div class="text-center py-5 bg-light">No Image</div>
+        {% endif %}
+
+        <div class="card-body">
+
+            <h6 class="fw-bold mb-1">{{ product.name }}</h6>
+            <small class="text-muted">{{ product.category.name }} • {{ product.brand }}</small>
+
+            <p class="mb-1 mt-2"><b>Supplier:</b> {{ product.supplier.name }}</p>
+            <p class="mb-1"><b>Price:</b> ₹{{ product.price }}</p>
+            <p class="mb-2"><b>Qty:</b> {{ product.quantity }}</p>
+            {% if request.user.is_superuser or request.user.groups.first.name == "Manager" %}
+            <p class="mb-2"><b>Actions:</b></p>
+                <a href="{% url 'update_product' product.id %}" class="badge bg-success"> Edit</a>
+                <a href="{% url 'delete_product' product.id %}" class="badge bg-danger"> Delete</a>
+            {% endif %}
+            <br>
+            {% if product.quantity == 0 %}
+                <span class="badge bg-danger">Out of Stock</span>
+                {% if user.is_superuser or request.user.groups.first.name == "Manager" %}
+            <a href="{% url 'stock_in' product.id %}" class="badge bg-success"> Add Stock Now</a>
+                {% endif %}
+            {% elif product.quantity <= low_stock_limit %}
+                <span class="badge bg-warning text-dark">Low Stock</span>
+                {% if user.is_superuser or request.user.groups.first.name == "Manager" %}
+            <a href="{% url 'stock_in' product.id  %}" class="badge bg-success"> Add Stock Now</a>
+                {% endif %}
+            {% else %}
+                <span class="badge bg-success">In Stock</span>
+            {% endif %}
+
+        </div>
+    </div>
+</div>
+{% empty %}
+    <p class="text-center">No products found</p>
+{% endfor %}
+
+</div>
+
+<!-- PAGINATION -->
+<nav class="mt-4">
+<ul class="pagination justify-content-center">
+
+    {% if page_obj.has_previous %}
+        <li class="page-item">
+            <a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous</a>
+        </li>
+    {% endif %}
+
+    <li class="page-item active">
+        <span class="page-link">{{ page_obj.number }}</span>
+    </li>
+
+    {% if page_obj.has_next %}
+        <li class="page-item">
+            <a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a>
+        </li>
+    {% endif %}
+
+</ul>
+</nav>
+
+{% endblock %}

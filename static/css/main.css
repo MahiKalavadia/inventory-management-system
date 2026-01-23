@@ -1,0 +1,286 @@
+ body {
+     font-family: 'Inter', sans-serif;
+     background-color: #f3f4f6;
+ }
+
+ /* Sidebar */
+
+ /* Sidebar Modifications */
+ .sidebar {
+     width: 250px;
+     height: 100vh;
+     position: fixed;
+     top: 0;
+     left: 0;
+     background-color: #1f2937;
+     color: #fff;
+     transition: all 0.3s ease-in-out;
+     z-index: 1030;
+     overflow-x: hidden;
+     /* Prevents text bleeding out during animation */
+ }
+
+ .sidebar.collapsed {
+     width: 70px;
+     /* Slightly wider for better icon centering */
+ }
+
+ .sidebar .sidebar-header {
+     display: flex;
+     align-items: center;
+     justify-content: space-between;
+     padding: 1.25rem 1rem;
+     height: 70px;
+     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+     white-space: nowrap;
+ }
+
+ /* Logic for "Smart Inventory" vs Logo Icon */
+ .logo-icon {
+     display: none;
+     /* Hidden by default */
+     font-weight: 800;
+     font-size: 1.5rem;
+     color: #4f46e5;
+     width: 100%;
+     text-align: center;
+ }
+
+ .sidebar.collapsed .sidebar-title {
+     display: none;
+     /* Hide full text when collapsed */
+ }
+
+ .sidebar.collapsed .logo-icon {
+     display: block;
+     /* Show 'S' when collapsed */
+ }
+
+ /* Sidebar Navigation */
+ .sidebar ul.nav li a {
+     display: flex;
+     align-items: center;
+     color: rgba(255, 255, 255, 0.8);
+     padding: 0.8rem 1.2rem;
+     text-decoration: none;
+     white-space: nowrap;
+     /* Prevents text wrapping awkwardly */
+ }
+
+ .sidebar.collapsed ul.nav li a {
+     justify-content: center;
+     padding: 0.8rem 0;
+ }
+
+ .sidebar.collapsed .link-text {
+     display: none;
+ }
+
+ /* Main content */
+ .main-content {
+     margin-left: 250px;
+     transition: margin-left 0.3s ease-in-out;
+     padding: 25px;
+ }
+
+ .sidebar.collapsed+.main-content {
+     margin-left: 70px;
+ }
+
+ /* Cleaner Toggle Button - No more awkward blue box */
+ #sidebarCollapse {
+     background: transparent;
+     border: none;
+     color: #4b5563;
+     font-size: 1.5rem;
+     padding: 0;
+     margin-bottom: 20px;
+     transition: color 0.2s;
+ }
+
+ #sidebarCollapse:hover {
+     color: #4f46e5;
+ }
+
+ /* Mobile */
+ @media (max-width: 992px) {
+     .sidebar {
+         left: -250px;
+     }
+
+     .sidebar.show {
+         left: 0;
+     }
+
+
+     .main-content {
+         margin-left: 0;
+     }
+ }
+
+ /* Toggle buttons */
+ #sidebarCollapse,
+ #sidebarToggle {
+     cursor: pointer;
+ }
+
+ /* Optional: Hover tooltip on collapsed sidebar */
+ .sidebar.collapsed ul.nav li a {
+     justify-content: center;
+ }
+
+ .card-hover {
+     background: #ffffff;
+     border-radius: 12px;
+     cursor: pointer;
+     transition: transform 0.3s ease, box-shadow 0.3s ease;
+ }
+
+ .card-hover:hover {
+     transform: translateY(-5px);
+     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+ }
+
+ .dashboard-header {
+     display: flex;
+     justify-content: space-between;
+     align-items: center;
+     padding: 14px 20px;
+     background: #f8f9fa;
+     border-radius: 12px;
+     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+ }
+
+ .page-title {
+     font-size: 28px;
+     font-weight: 700;
+     color: #111827;
+ }
+
+ /* Right side container */
+
+ .header-right {
+     display: flex;
+     align-items: center;
+     gap: 12px;
+ }
+
+ .welcome-text {
+     font-size: 14px;
+     font-weight: 500;
+     color: #6b7280;
+     margin-top: 5px;
+ }
+
+ /* Profile image */
+
+ .profile-img {
+     width: 42px;
+     height: 42px;
+     border-radius: 50%;
+     object-fit: cover;
+     border: 2px solid #e5e7eb;
+     cursor: pointer;
+ }
+
+ /* ✅ Responsive for mobile */
+
+ @media (max-width: 768px) {
+     .dashboard-header {
+         flex-direction: column;
+         align-items: flex-start;
+         gap: 8px;
+     }
+
+     .page-title {
+         font-size: 22px;
+     }
+
+     .header-right {
+         width: 100%;
+         justify-content: space-between;
+     }
+ }
+
+ .card-icon i {
+     font-size: 28px;
+     padding: 8px;
+     border-radius: 8px;
+     margin-bottom: 6px;
+     opacity: 0.85;
+ }
+
+ /* Icon colors */
+ .icon-blue {
+     color: #2563eb;
+ }
+
+ .icon-purple {
+     color: #7c3aed;
+ }
+
+ .icon-cyan {
+     color: #38bdf8;
+ }
+
+ .icon-green {
+     color: #16a34a;
+ }
+
+ .icon-orange {
+     color: #f97316;
+ }
+
+ .icon-red {
+     color: #dc2626;
+ }
+
+ .icon-greeny {
+     color: #16a34a;
+ }
+
+ .icon-orangey {
+     color: #f97316;
+ }
+
+ .icon-gree {
+     fill: #22c55e;
+     color: #22c55e;
+ }
+
+ .icon-redd {
+     color: #ef4444;
+ }
+
+ .icon-bluish {
+     color: #3b82f6;
+ }
+
+ .icon-p {
+     color: #7c3aed;
+ }
+
+ .icon-y {
+     color: #f59e0b;
+ }
+
+ .icon-g {
+     color: #16a34a;
+ }
+
+ .icon-b {
+     color: #2563eb;
+ }
+
+ .icon-ppp {
+     color: #7c3aed;
+ }
+
+ .icon-bbb {
+     color: #2563eb;
+ }
+
+ /* Optional subtle background */
+ .icon-bg {
+     background: rgba(0, 0, 0, 0.04);
+ }
