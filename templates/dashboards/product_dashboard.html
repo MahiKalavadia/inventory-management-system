@@ -36,6 +36,7 @@
 <div class="row mb-4">
 
     <div class="col-md-2">
+        <a href="{% url 'product_list' %}" class="text-decoration-none">
         <div class="card shadow-sm p-4 text-center card-hover" style="border-left: 5px solid #2563eb">
             <div class="card-icon mb-2">
                 <i class="bi bi-box-fill icon-blue icon-bg"></i>
@@ -43,9 +44,11 @@
             <h6 class="text-muted">Total Products</h6>
             <h3 class="fw-bold">{{ total_products }}</h3>
         </div>
+    </a>
     </div>
 
     <div class="col-md-2">
+        <a href="{% url 'in_stock' %}" class="text-decoration-none">
         <div class="card shadow-sm p-4 text-center card-hover" style="border-left: 5px solid #16a34a">
             <div class="card-icon mb-2">
                 <i class="bi bi-check-circle-fill icon-green icon-bg"></i>
@@ -53,9 +56,11 @@
             <h6 class="text-muted">In Stock</h6>
             <h3 class="fw-bold">{{ in_stock }}</h3>
         </div>
+    </a>
     </div>
 
     <div class="col-md-2">
+        <a href="{% url 'low_stock' %}" class="text-decoration-none">
         <div class="card shadow-sm p-4 text-center card-hover" style="border-left: 5px solid #f97316">
             <div class="card-icon mb-2">
                 <i class="bi bi-exclamation-triangle-fill icon-orange icon-bg"></i>
@@ -63,9 +68,11 @@
             <h6 class="text-muted">Low Stock</h6>
             <h3 class="fw-bold">{{ low_stock }}</h3>
         </div>
+    </a>
     </div>
 
     <div class="col-md-2">
+        <a href="{% url 'out_stock' %}" class="text-decoration-none">
         <div class="card shadow-sm p-4 text-center card-hover" style="border-left: 5px solid #dc2626">
             <div class="card-icon mb-2">
                 <i class="bi bi-x-circle-fill icon-red icon-bg"></i>
@@ -73,9 +80,11 @@
             <h6 class="text-muted">Out of Stock</h6>
             <h3 class="fw-bold">{{ out_of_stock }}</h3>
         </div>
+    </a>
     </div>
     
     <div class="col-md-2">
+        <a href="{% url 'category_list' %}" class="text-decoration-none">
         <div class="card shadow-sm p-4 text-center card-hover" style="border-left: 5px solid #7c3aed">
             <div class="card-icon mb-2">
                 <i class="bi bi-grid-fill icon-purple icon-bg"></i>
@@ -83,9 +92,11 @@
             <h6 class="text-muted">Total Categories</h6>
             <h3 class="fw-bold">{{ total_categories }}</h3>
         </div>
+    </a>
     </div>
 
     <div class="col-md-2">
+        <a href="{% url 'supplier_list' %}" class="text-decoration-none">
         <div class="card shadow-sm p-4 text-center card-hover" style="border-left: 5px solid #38bdf8">
             <div class="card-icon mb-2">
                 <i class="bi bi-truck-front-fill icon-cyan icon-bg"></i>
@@ -93,6 +104,7 @@
             <h6 class="text-muted">Total Suppliers</h6>
             <h3 class="fw-bold">{{ total_suppliers }}</h3>
         </div>
+    </a>
     </div>
     
 </div>

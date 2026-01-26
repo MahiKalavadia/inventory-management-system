@@ -32,6 +32,7 @@
 <!--Stats-->
 <div class="row mb-3">
     <div class="col-md-3">
+        <a href="{% url 'supplier_list' %}" class="text-decoration-none">
         <div class="card shadow-sm p-4 text-center card-hover" style="border-left: 5px solid #38bdf8">
             <div class="card-icon mb-2">
                 <i class="bi bi-truck-front-fill icon-cyan icon-bg"></i>
@@ -39,8 +40,10 @@
             <h6 class="text-muted">Total Suppliers</h6>
             <h3 class="fw-bold">{{ total_supplier }}</h3>
         </div>
+    </a>
     </div>
     <div class="col-md-3">
+        <a href="{% url 'active_supplier' %}" class="text-decoration-none">
         <div class="card shadow-sm p-4 text-center card-hover" style="border-left: 5px solid #22c55e">
             <div class="card-icon mb-2">
                 <i class="bi bi-truck icon-gree icon-bg"></i>
@@ -48,8 +51,10 @@
             <h6 class="text-muted">Active Supplier</h6>
             <h3 class="fw-bold">{{ active_supplier }}</h3>
         </div>
+    </a>
     </div>
     <div class="col-md-3">
+        <a href="{% url 'inactive_supplier' %}" class="text-decoration-none">
         <div class="card shadow-sm p-4 text-center card-hover" style="border-left: 5px solid #ef4444">
             <div class="card-icon mb-2">
                 <i class="bi bi-truck-flatbed icon-redd icon-bg"></i>
@@ -57,8 +62,10 @@
             <h6 class="text-muted">Inactive Supplier</h6>
             <h3 class="fw-bold">{{ inactive_supplier }}</h3>
         </div>
+    </a>
     </div>
     <div class="col-md-3">
+        <a href="{% url 'product_list' %}" class="text-decoration-none">
         <div class="card shadow-sm p-4 text-center card-hover" style="border-left: 5px solid #3b82f6">
             <div class="card-icon mb-2">
                 <i class="bi bi-box-seam-fill icon-bluish icon-bg"></i>
@@ -66,6 +73,7 @@
             <h6 class="text-muted">Products Supplied</h6>
             <h3 class="fw-bold">{{ products }}</h3>
         </div>
+    </a >
     </div>
 <div>
     <hr>
