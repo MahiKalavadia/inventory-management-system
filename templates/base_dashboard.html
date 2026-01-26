@@ -189,23 +189,31 @@
 document.addEventListener("DOMContentLoaded", function() {
     const sidebar = document.getElementById('sidebar');
     const collapseBtn = document.getElementById('sidebarCollapse');
-    const icon = collapseBtn.querySelector('i');
+    const mobileToggle = document.getElementById('sidebarToggle');
 
-    collapseBtn.addEventListener('click', function() {
-        sidebar.classList.toggle('collapsed');
-        
-        // Change icon based on state
-        if (sidebar.classList.contains('collapsed')) {
-            icon.classList.replace('bi-text-indent-left', 'bi-list');
-        } else {
-            icon.classList.replace('bi-list', 'bi-text-indent-left');
-        }
-    });
+    if (!sidebar) return;
 
-    // Mobile toggle
-    document.getElementById('sidebarToggle').addEventListener('click', function() {
-        sidebar.classList.toggle('show');
-    });
+    if (collapseBtn) {
+        const icon = collapseBtn.querySelector('i');
+
+        collapseBtn.addEventListener('click', function() {
+            sidebar.classList.toggle('collapsed');
+
+            if (icon) {
+                if (sidebar.classList.contains('collapsed')) {
+                    icon.classList.replace('bi-text-indent-left', 'bi-list');
+                } else {
+                    icon.classList.replace('bi-list', 'bi-text-indent-left');
+                }
+            }
+        });
+    }
+
+    if (mobileToggle) {
+        mobileToggle.addEventListener('click', function() {
+            sidebar.classList.toggle('show');
+        });
+    }
 });
 </script>
 {% block extra_js %}{% endblock %}
