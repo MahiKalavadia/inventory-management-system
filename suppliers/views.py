@@ -55,6 +55,26 @@ def supplier_list(request):
     })
 
 
+def active_supplier(request):
+    active_supplier = Supplier.objects.filter(is_active=True).all()
+
+    paginator = Paginator(active_supplier, 12)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
+    return render(request, "inventory/active_supplier.html", {'page_obj': page_obj})
+
+
+def inactive_supplier(request):
+    inactive_supplier = Supplier.objects.filter(is_active=False).all()
+
+    paginator = Paginator(inactive_supplier, 12)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
+    return render(request, "inventory/inactive_supplier.html", {'page_obj': page_obj})
+
+
 def add_supplier(request):
     if request.method == 'POST':
         form = SupplierForm(request.POST)
