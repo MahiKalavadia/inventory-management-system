@@ -171,6 +171,33 @@ def category_dashboard(request):
     })
 
 
+def category_without_products(request):
+    categories_qs = Category.objects.annotate(
+        product_count=Count('product', distinct=True)
+    ).order_by('name')
+    categories_without_products = categories_qs.filter(product_count=0).all()
+
+    paginator = Paginator(categories_without_products, 12)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
+    return render(request, "inventory/category_without_products.html", {'page_obj': page_obj})
+
+
+def category_with_products(request):
+    categories_qs = Category.objects.annotate(
+        product_count=Count('product', distinct=True)
+    ).order_by('name')
+    categories_with_products = categories_qs.filter(
+        product_count__gt=0).all()
+
+    paginator = Paginator(categories_with_products, 12)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
+    return render(request, "inventory/category_with_products.html", {'page_obj': page_obj})
+
+
 def category_list(request):
     categories = Category.objects.all()
     data = []
@@ -308,10 +335,36 @@ def stock_out(request):
     return render(request, 'inventory/stock_out.html', {'form': form})
 
 
+def in_stock_products(request):
+    products = Product.objects.filter(
+        quantity__gt=LOW_STOCK_THRESHOLD, is_active=True)
+
+    paginator = Paginator(products, 12)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
+    return render(request, 'inventory/in_stock.html', {'page_obj': page_obj})
+
+
 def low_stock_products(request):
     products = Product.objects.filter(
         quantity__lte=LOW_STOCK_THRESHOLD, is_active=True)
-    return render(request, 'inventory/low_stock.html', {'products': products, "low_stock_limit": LOW_STOCK_THRESHOLD})
+
+    paginator = Paginator(products, 12)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
+    return render(request, 'inventory/low_stock.html', {'page_obj': page_obj, "low_stock_limit": LOW_STOCK_THRESHOLD})
+
+
+def out_stock_products(request):
+    products = Product.objects.filter(quantity=0, is_active=True)
+
+    paginator = Paginator(products, 12)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
+    return render(request, "inventory/out_stock.html", {"page_obj": page_obj})
 
 
 def user_dashboard(request):
