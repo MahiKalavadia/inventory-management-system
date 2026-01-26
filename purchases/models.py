@@ -35,3 +35,6 @@ class PurchaseOrderItem(models.Model):
 
     def total_price(self):
         return self.quantity * self.price_per_unit
+
+    def __str__(self):
+        return f"{self.id} ({self.product.name})"
