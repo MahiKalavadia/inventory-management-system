@@ -5,9 +5,11 @@ from django.contrib import messages
 from django.http import HttpResponseForbidden, HttpResponse
 from .utils.pdf import build_receipt_pdf
 from .utils.email import send_receipt_email
-from django.db.models import Sum, F
+from django.db.models import Sum, F, ExpressionWrapper, DecimalField
 from django.db import transaction
 from django.forms import inlineformset_factory
+from django.utils import timezone
+from datetime import date
 # Create your views here.
 
 
@@ -24,26 +26,97 @@ def admin_only(user):
 
 
 def order_dashboard(request):
+
+    today = timezone.now().date()
+    current_month = today.month
+    current_year = today.year
+
+    # ---- Order Counts ----
     total_orders = Order.objects.count()
-    pending_orders = Order.objects.filter(
-        status='Draft').count()
+    draft_orders = Order.objects.filter(status='Draft').count()
     confirmed_orders = Order.objects.filter(status='Confirmed').count()
-    paid_orders = Order.objects.filter(status='Paid').count()
     cancelled_orders = Order.objects.filter(status='Cancelled').count()
+
+    # ---- SALES CALCULATIONS ----
     total_sales = (
         OrderItem.objects
         .filter(order__payment_status='Paid')
-        .aggregate(total=Sum(F('quantity') * F('price')))['total']
-        or 0
+        .aggregate(total=Sum(
+            ExpressionWrapper(
+                F('quantity') * F('price'),
+                output_field=DecimalField()
+            )
+        ))['total'] or 0
+    )
+
+    # Today's Sales
+    today_sales = (
+        OrderItem.objects
+        .filter(order__payment_status='Paid', order__created_at__date=today)
+        .aggregate(total=Sum(
+            ExpressionWrapper(
+                F('quantity') * F('price'),
+                output_field=DecimalField()
+            )
+        ))['total'] or 0
+    )
+
+    # Monthly Sales
+    monthly_sales = (
+        OrderItem.objects
+        .filter(
+            order__payment_status='Paid',
+            order__created_at__year=current_year,
+            order__created_at__month=current_month
+        )
+        .aggregate(total=Sum(
+            ExpressionWrapper(
+                F('quantity') * F('price'),
+                output_field=DecimalField()
+            )
+        ))['total'] or 0
+    )
+
+    # Pending Payment Amount
+    pending_amount = (
+        OrderItem.objects
+        .filter(order__payment_status='Pending')
+        .aggregate(total=Sum(
+            ExpressionWrapper(
+                F('quantity') * F('price'),
+                output_field=DecimalField()
+            )
+        ))['total'] or 0
+    )
+
+    # Total Products Sold
+    total_products_sold = (
+        OrderItem.objects
+        .filter(order__payment_status='Paid')
+        .aggregate(total=Sum('quantity'))['total'] or 0
+    )
+
+    # Top Selling Product
+    top_product = (
+        OrderItem.objects
+        .filter(order__payment_status='Paid')
+        .values('product__name')
+        .annotate(total_sold=Sum('quantity'))
+        .order_by('-total_sold')
+        .first()
     )
 
     context = {
         'total_orders': total_orders,
-        'pending_orders': pending_orders,
+        'draft_orders': draft_orders,
         'confirmed_orders': confirmed_orders,
-        'paid_orders': paid_orders,
         'cancelled_orders': cancelled_orders,
         'total_sales': total_sales,
+        'today_sales': today_sales,
+        'monthly_sales': monthly_sales,
+        'pending_amount': pending_amount,
+        'total_products_sold': total_products_sold,
+        'top_product': top_product,
     }
 
     return render(request, "dashboards/order_dashboard.html", context)
