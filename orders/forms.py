@@ -1,7 +1,6 @@
-# orders/forms.py
 from django import forms
 from .models import Order, OrderItem
-from inventory.models import Product
+from django.forms import modelformset_factory
 
 
 class OrderForm(forms.ModelForm):
