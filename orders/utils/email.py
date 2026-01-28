@@ -5,38 +5,34 @@ from io import BytesIO
 
 def send_receipt_email(order):
     if not order.customer_email:
-        return  # skip if no email
+        return
 
-    # Create in-memory PDF
     pdf_buffer = BytesIO()
-    build_receipt_pdf(pdf_buffer, order)  # write PDF to buffer
-    pdf_buffer.seek(0)  # move to beginning before reading
+    build_receipt_pdf(pdf_buffer, order)
+    pdf_buffer.seek(0)
 
-    # Create email
     email = EmailMessage(
-        subject=f"Your Order Receipt - #{order.id}",
+        subject=f"Invoice for Your Order #{order.id}",
         body=f"""
 Hello {order.customer_name},
 
-Thank you for your order.
+Your order has been successfully placed.
 
-Order ID: {order.id}
-Total Amount: ₹ {order.total_amount}
+🧾 Order ID: {order.id}
+💰 Total Amount: ₹ {order.total_amount}
 
-Your receipt is attached with this email.
+Please find your invoice attached.
 
-Regards,
-Smart Inventory Team
+Thank you for shopping with us!
+SMART INVENTORY SYSTEM
 """,
         to=[order.customer_email],
     )
 
-    # Attach PDF
     email.attach(
-        f"receipt_order_{order.id}.pdf",
+        f"invoice_{order.id}.pdf",
         pdf_buffer.read(),
         "application/pdf"
     )
 
-    # Send email
     email.send(fail_silently=False)
