@@ -6,10 +6,10 @@ from django.contrib.auth.models import User
 
 class Order(models.Model):
     STATUS_CHOICES = [
-        ('Pending', 'Pending'),
-        ('Processing', 'Processing'),
-        ('Product taken', 'Product taken'),
-        ('Cancelled', 'Cancelled'),
+        ("Draft", "Draft"),
+        ("Confirmed", "Confirmed"),
+        ("Paid", "Paid"),
+        ("Cancelled", "Cancelled"),
     ]
 
     PAYMENT_STATUS = [
@@ -55,9 +55,10 @@ class Order(models.Model):
     ]
 
     # Cuustomer details
+    bill_number = models.CharField(max_length=20, unique=True, blank=True)
     customer_name = models.CharField(max_length=200, null=False)
     customer_email = models.EmailField()
-    customer_phonenumber = models.IntegerField()
+    customer_phonenumber = models.CharField(max_length=25)
     customer_address = models.TextField(default=None)
     pincode = models.CharField(max_length=6)
     city = models.CharField(max_length=20, default='Surat')
@@ -65,7 +66,8 @@ class Order(models.Model):
         max_length=30, choices=INDIAN_STATES, default='GJ')
     created_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
-    status = models.CharField(max_length=20, choices=STATUS_CHOICES)
+    status = models.CharField(
+        max_length=20, choices=STATUS_CHOICES, default='Draft')
     payment_status = models.CharField(
         max_length=10, choices=PAYMENT_STATUS, default='Pending'
     )
@@ -76,6 +78,19 @@ class Order(models.Model):
 
     def __str__(self):
         return f'Order {self.id}-{self.customer_name}'
+
+    def save(self, *args, **kwargs):
+        if not self.bill_number:
+            last_id = Order.objects.count() + 1
+            self.bill_number = f"BILL-{last_id:05d}"
+        super().save(*args, **kwargs)
+
+# ✅ STEP 2 — Why This Matters
+# Status	Meaning
+# Draft	Bill being prepared
+# Confirmed	Order finalized
+# Paid	Money received
+# Cancelled	Reversed
 
 
 class OrderItem(models.Model):
@@ -88,3 +103,8 @@ class OrderItem(models.Model):
     @property
     def total(self):
         return self.price * self.quantity
+
+    def save(self, *args, **kwargs):
+        if not self.price:
+            self.price = self.product.price
+        super().save(*args, **kwargs)
