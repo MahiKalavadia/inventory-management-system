@@ -1,30 +1,75 @@
-from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph
-from reportlab.lib.styles import getSampleStyleSheet
+from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph, Spacer, Image
+from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
+from reportlab.lib.pagesizes import A4
 from reportlab.lib import colors
+from django.conf import settings
+import os
 
 
-def build_receipt_pdf(response, order):
+def build_receipt_pdf(buffer, order):
     styles = getSampleStyleSheet()
     elements = []
-    elements.append(Paragraph("Order Receipt", styles["Title"]))
-    elements.append(Paragraph(f"Order ID: {order.id}", styles["Normal"]))
-    elements.append(
-        Paragraph(f"Customer: {order.customer_name}", styles["Normal"]))
-    elements.append(Paragraph("<br/>", styles["Normal"]))
 
-    table_data = [["Product", "Price", "Qty", "Total"]]
+    # -------- Company Header --------
+    logo_path = os.path.join(settings.BASE_DIR, "static/images/logo.jpeg")
+    if os.path.exists(logo_path):
+        elements.append(Image(logo_path, width=120, height=60))
+
+    elements.append(
+        Paragraph("<b>SMART INVENTORY SYSTEM</b>", styles["Title"]))
+    elements.append(Paragraph("Sales Receipt / Invoice", styles["Heading2"]))
+    elements.append(Spacer(1, 12))
+
+    # -------- Customer + Order Info --------
+    info_style = ParagraphStyle(name='info', fontSize=10, leading=14)
+
+    elements.append(
+        Paragraph(f"<b>Bill No:</b> {order.bill_number}", info_style))
+    elements.append(
+        Paragraph(f"<b>Customer:</b> {order.customer_name}", info_style))
+    elements.append(
+        Paragraph(f"<b>Email:</b> {order.customer_email}", info_style))
+    elements.append(
+        Paragraph(f"<b>Date:</b> {order.created_at.strftime('%d %b %Y')}", info_style))
+    elements.append(Spacer(1, 15))
+
+    # -------- Items Table --------
+    table_data = [["Product", "Unit Price", "Qty", "Total"]]
 
     for item in order.items.all():
+        table_data.append([
+            str(item.product),
+            f"₹ {item.price}",
+            item.quantity,
+            f"₹ {item.total}",
+        ])
 
-        table_data.append(
-            [str(item.product), f"₹ {item.price}", item.quantity, f"₹ {item.total}", ])
-        table_data.append(["", "", "Grand Total", f"₹ {order.total_amount}"])
-        table = Table(table_data, colWidths=[200, 80, 60, 80])
+    # Grand total row
+    table_data.append(["", "", "Grand Total", f"₹ {order.total_amount}"])
 
-        table.setStyle(TableStyle([("GRID", (0, 0), (-1, -1), 1, colors.grey),
-                                   ("BACKGROUND", (0, 0),
-                                    (-1, 0), colors.lightgrey),
-                                   ("FONT", (0, 0), (-1, 0), "Helvetica-Bold"),
-                                   ("FONT", (-2, -1), (-1, -1), "Helvetica-Bold"), ]))
-        elements.append(table)
-        SimpleDocTemplate(response).build(elements)
+    table = Table(table_data, colWidths=[200, 90, 50, 90])
+
+    table.setStyle(TableStyle([
+        ("BACKGROUND", (0, 0), (-1, 0), colors.HexColor("#2563eb")),
+        ("TEXTCOLOR", (0, 0), (-1, 0), colors.white),
+        ("ALIGN", (1, 1), (-1, -1), "CENTER"),
+        ("FONTNAME", (0, 0), (-1, 0), "Helvetica-Bold"),
+        ("FONTSIZE", (0, 0), (-1, -1), 10),
+        ("BOTTOMPADDING", (0, 0), (-1, 0), 10),
+        ("GRID", (0, 0), (-1, -1), 1, colors.grey),
+        ("BACKGROUND", (-2, -1), (-1, -1), colors.lightgrey),
+        ("FONTNAME", (-2, -1), (-1, -1), "Helvetica-Bold"),
+    ]))
+
+    elements.append(table)
+    elements.append(Spacer(1, 20))
+
+    # -------- Footer --------
+    elements.append(
+        Paragraph("Thank you for your purchase!", styles["Normal"]))
+    elements.append(
+        Paragraph("This is a computer-generated invoice.", styles["Italic"]))
+
+    # Build PDF
+    doc = SimpleDocTemplate(buffer, pagesize=A4)
+    doc.build(elements)
