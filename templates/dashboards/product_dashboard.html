@@ -109,6 +109,26 @@
     
 </div>
 <hr>
+<!--
+<div class="row mt-4">
+
+    <div class="col-md-6">
+        <div class="card shadow-sm p-3">
+            <h6 class="fw-bold">Stock by Category</h6>
+            <canvas id="categoryChart"></canvas>
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="card shadow-sm p-3">
+            <h6 class="fw-bold">Top Products by Quantity</h6>
+            <canvas id="topProductsChart"></canvas>
+        </div>
+    </div>
+
+</div>
+<hr>-->
+
 <!-- Filters -->
 <form method="get" class="row g-2 mb-3">
     <div class="col">
@@ -224,5 +244,36 @@
 
     </ul>
 </nav>
+<!--<script>
+const categoryData = JSON.parse('{{ category_chart|escapejs }}');
+const topProductsData = JSON.parse('{{ top_products_chart|escapejs }}');
+
+if (categoryData.length > 0) {
+    new Chart(document.getElementById('categoryChart'), {
+        type: 'doughnut',
+        data: {
+            labels: categoryData.map(x => x.category__name),
+            datasets: [{
+                data: categoryData.map(x => x.total_stock),
+                backgroundColor: ['#2563eb','#16a34a','#f97316','#dc2626','#7c3aed','#06b6d4']
+            }]
+        }
+    });
+}
+
+if (topProductsData.length > 0) {
+    new Chart(document.getElementById('topProductsChart'), {
+        type: 'bar',
+        data: {
+            labels: topProductsData.map(x => x.name),
+            datasets: [{
+                label: 'Quantity',
+                data: topProductsData.map(x => x.total_qty),
+                backgroundColor: '#2563eb'
+            }]
+        }
+    });
+}
+</script>-->
 
 {% endblock %}
