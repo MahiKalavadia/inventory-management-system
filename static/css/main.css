@@ -292,6 +292,38 @@
      color: #4F46E5;
  }
 
+ .icon-hourglass {
+     color: #FBBF24;
+ }
+
+ .icon-calendar {
+     color: #3B82F6;
+ }
+
+ .icon-week {
+     color: #8B5CF6;
+ }
+
+ .icon-box {
+     color: #10B981;
+ }
+
+ .icon-people {
+     color: #0ea5e9;
+ }
+
+ .icon-personbadge {
+     color: #16a34a;
+ }
+
+ .icon-amber {
+     color: #f59e0b;
+ }
+
+ .icon-xfill {
+     color: #ef4444;
+ }
+
  /* Optional subtle background */
  .icon-bg {
      background: rgba(0, 0, 0, 0.04);
