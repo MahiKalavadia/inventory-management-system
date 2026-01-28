@@ -280,6 +280,18 @@
      color: #2563eb;
  }
 
+ .icon-sale {
+     color: #16A34A;
+ }
+
+ .icon-cost {
+     color: #DC2626;
+ }
+
+ .icon-profit {
+     color: #4F46E5;
+ }
+
  /* Optional subtle background */
  .icon-bg {
      background: rgba(0, 0, 0, 0.04);
