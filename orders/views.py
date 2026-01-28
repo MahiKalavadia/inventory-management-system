@@ -160,11 +160,15 @@ def delete_order(request, pk):
     return render(request, 'inventory/delete_order.html', {'order': order})
 
 
-def download_receipt(request, pk):
-    order = get_object_or_404(Order, pk=pk)
+def download_receipt(request, order_id):
+    # Get order
+    order = Order.objects.get(id=order_id)
 
-    response = HttpResponse(content_type="application/pdf")
-    response["Content-Disposition"] = f'attachment; filename="receipt_{order.id}.pdf"'
+    # Create HTTP response with PDF content type
+    response = HttpResponse(content_type='application/pdf')
+    response['Content-Disposition'] = f'attachment; filename="receipt_{order.id}.pdf"'
 
+    # Call your PDF function
     build_receipt_pdf(response, order)
+
     return response
