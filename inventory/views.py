@@ -365,7 +365,3 @@ def out_stock_products(request):
     page_obj = paginator.get_page(page_number)
 
     return render(request, "inventory/out_stock.html", {"page_obj": page_obj})
-
-
-def user_dashboard(request):
-    return render(request, "dashboards/user_dashboard.html")

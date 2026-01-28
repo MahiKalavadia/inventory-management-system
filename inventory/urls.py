@@ -31,6 +31,4 @@ urlpatterns = [
     path('in-stock/', views.in_stock_products, name='in_stock'),
     path('low-stock/', views.low_stock_products, name='low_stock'),
     path('out-stock/', views.out_stock_products, name='out_stock'),
-    path('user/dashboard/', views.user_dashboard,
-         name='user_dashboard'),
 ]
