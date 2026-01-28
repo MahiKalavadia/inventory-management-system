@@ -1,0 +1,8 @@
+{% extends 'base_dashboard.html' %}
+<h4>Request Purchase for {{ product.name }}</h4>
+
+<form method="POST">
+    {% csrf_token %}
+    <input type="number" name="quantity" class="form-control mb-2" placeholder="Enter Quantity" required>
+    <button class="btn btn-primary">Send Request</button>
+</form>

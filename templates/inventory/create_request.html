@@ -1,0 +1,8 @@
+{% extends base_dahsboard.html %}
+<h3>Request Purchase: {{ product.name }}</h3>
+<form method="POST">
+  {% csrf_token %}
+  <label>Quantity:</label>
+  <input type="number" name="quantity" min="1" required>
+  <button type="submit" class="btn btn-primary">Request Purchase</button>
+</form>

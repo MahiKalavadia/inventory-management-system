@@ -2,6 +2,8 @@
 {% load crispy_forms_tags %}
 
 {% block content %}
+<div class="container-fluid mt-4">
+    <div class="card shadow-sm p-4">
 <h3><b><a href="{% url 'supplier_dashboard' %}" style="color: grey; font-size: 2rem;">
         <i class="bi bi-arrow-left-circle-fill"></i></a> Update Supplier</b></h3>
 <hr>
@@ -11,4 +13,6 @@
     <button type="submit" class="btn btn-success">Update</button>
     <a href="{% url 'supplier_dashboard' %}" class="btn btn-secondary">Cancel</a>
 </form>
+</div>
+</div>
 {% endblock %}
