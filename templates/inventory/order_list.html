@@ -2,8 +2,14 @@
 {% block content %}
 
 <div class="dashboard-header mb-4 p-3 bg-light rounded shadow-sm">
-    <h5 class="fw-bold"><b><a href="{% url 'order_dashboard' %}" style="color: grey; font-size: 2rem;">
-        <i class="bi bi-arrow-left-circle-fill"></i></a> All Orders</h5>
+    <h5 class="fw-bold">
+        <b>
+            <a href="{% url 'order_dashboard' %}" style="color: grey; font-size: 2rem;">
+                <i class="bi bi-arrow-left-circle-fill"></i>
+            </a>
+            All Orders
+        </b>
+    </h5>
 </div>
 
 <div class="card shadow-sm">
@@ -23,14 +29,12 @@
             <tbody>
                 {% for order in orders %}
                 <tr>
-                    <td>{{ order.id }}</td>
+                    <td>{{ order.bill_number }}</td>
                     <td>
                         <strong>{{ order.customer_name }}</strong><br>
                         <small class="text-muted">{{ order.customer_email }}</small>
                     </td>
-                    <td>
-                        <span class="badge bg-info">{{ order.status }}</span>
-                    </td>
+                    <td><span class="badge bg-info">{{ order.status }}</span></td>
                     <td>
                         {% if order.payment_status == "Paid" %}
                             <span class="badge bg-success">Paid</span>
@@ -38,29 +42,21 @@
                             <span class="badge bg-warning text-dark">{{ order.payment_status }}</span>
                         {% endif %}
                     </td>
-                    <td>₹ {{ order.total_amount }}</td>
+                    <td>₹ {{ order.total_amount|floatformat:2 }}</td>
                     <td>{{ order.created_at|date:"d M Y" }}</td>
                     <td class="text-end">
-                        {% if request.user.is_superuser or request.user.groups.first.name == "Manager"%}
-                          {% if order.payment_status == "Pending" %}
-                               <a href="{% url 'update_order' order.id %}" class="btn btn-sm btn-outline-primary">
-                               Edit
-                               </a>
-                           {% endif %}
-                        <a href="{% url 'delete_order' order.id %}" class="btn btn-sm btn-outline-primary">
-                            Delete
-                        </a>
+                        {% if request.user.is_superuser or request.user.groups.first.name == "Manager" %}
+                            {% if order.payment_status == "Pending" %}
+                                <a href="{% url 'update_order' order.id %}" class="btn btn-sm btn-outline-primary">Edit</a>
+                            {% endif %}
+                            <a href="{% url 'delete_order' order.id %}" class="btn btn-sm btn-outline-danger">Delete</a>
                         {% endif %}
-                        <a href="{% url 'order_detail' order.id %}" class="btn btn-sm btn-outline-primary">
-                            View
-                        </a>
+                        <a href="{% url 'order_detail' order.id %}" class="btn btn-sm btn-outline-primary">View</a>
                     </td>
                 </tr>
                 {% empty %}
                 <tr>
-                    <td colspan="7" class="text-center text-muted py-4">
-                        No orders found
-                    </td>
+                    <td colspan="7" class="text-center text-muted py-4">No orders found</td>
                 </tr>
                 {% endfor %}
             </tbody>
