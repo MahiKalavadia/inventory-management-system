@@ -28,6 +28,8 @@ urlpatterns = [
     path('settingsapp/', include('settings_app.urls')),
     path('orders/', include('orders.urls')),
     path('purchases/', include('purchases.urls')),
+    path('notifications/', include('notifications.urls')),
+    path('users/', include('users.urls')),
 
 ]
 if settings.DEBUG:
