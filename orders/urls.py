@@ -10,6 +10,9 @@ urlpatterns = [
     path('orders/create/', views.create_order, name='create_order'),
     path('orders/update/<int:pk>/', views.update_order, name='update_order'),
     path('orders/delete/<int:pk>/', views.delete_order, name='delete_order'),
+    path('order/<int:pk>/confirm/', views.confirm_order, name='confirm_order'),
+    path('order/<int:pk>/paid/', views.mark_paid, name='mark_paid'),
+
     path("receipt/<int:pk>/download/",
          views.download_receipt, name="download_receipt"),
 ]
