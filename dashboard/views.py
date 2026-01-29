@@ -118,8 +118,25 @@ def manager_dashboard(request):
     in_stock = Product.objects.filter(
         quantity__gt=LOW_STOCK_THRESHOLD, is_active=True).count()
     low_stock = Product.objects.filter(
-        quantity__lte=LOW_STOCK_THRESHOLD, is_active=True).count()
+        quantity__lte=LOW_STOCK_THRESHOLD, quantity__gt=0, is_active=True).count()
     out_stock = Product.objects.filter(quantity=0, is_active=True).count()
+
+    l_stock = Product.objects.filter(
+        quantity__lte=LOW_STOCK_THRESHOLD,
+        quantity__gt=0
+    ).select_related('supplier').order_by('quantity')[:5]
+
+    o_stock = Product.objects.filter(quantity=0).order_by('name')[:5]
+
+    # Recent stock activity
+    recent_stock_logs = StockLog.objects.select_related(
+        'product').order_by('-created_at')[:5]
+
+    # Inventory health %
+    total_products = total_products if total_products else 1
+
+    def percent(value):
+        return round((value / total_products) * 100, 1)
 
     context = {
         'total_products': total_products,
@@ -128,6 +145,13 @@ def manager_dashboard(request):
         'in_stock': in_stock,
         'low_stock': low_stock,
         'out_stock': out_stock,
+        'l_stock': l_stock,
+        'o_stock': o_stock,
+        'recent_stock_logs': recent_stock_logs,
+        'in_stock_bar': percent(in_stock),
+        'low_stock_bar': percent(low_stock),
+        'out_stock_bar': percent(out_stock),
+
     }
     return render(request, "manager_dashboard.html", context)
 
@@ -140,12 +164,22 @@ def staff_dashboard(request):
     low_stock = Product.objects.filter(
         quantity__lte=LOW_STOCK_THRESHOLD, is_active=True).count()
     out_stock = Product.objects.filter(quantity=0, is_active=True).count()
+    low_stock_products = Product.objects.filter(
+        quantity__lte=LOW_STOCK_THRESHOLD,
+        quantity__gt=0,
+        is_active=True
+    ).select_related('supplier')[:5]
+    recent_stock_logs = StockLog.objects.select_related(
+        'product'
+    ).order_by('-created_at')[:5]
 
     context = {
         'total_products': total_products,
         'in_stock': in_stock,
         'low_stock': low_stock,
         'out_stock': out_stock,
+        'low_stock_products': low_stock_products,
+        'recent_stock_logs': recent_stock_logs,
     }
     return render(request, "staff_dashboard.html", context)
 
