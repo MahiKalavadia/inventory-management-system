@@ -1,6 +1,7 @@
 from django.db import models
 from suppliers.models import Supplier
 from django.core.validators import MinValueValidator
+from django.contrib.auth.models import User
 
 
 class Category(models.Model):
@@ -39,6 +40,8 @@ class StockLog(models.Model):
     ]
 
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    user = models.ForeignKey(
+        User, on_delete=models.SET_NULL, blank=True, null=True)
     action = models.CharField(max_length=3, choices=ACTION_CHOICES)
     quantity = models.PositiveIntegerField(default=0)
     created_at = models.DateTimeField(auto_now_add=True)

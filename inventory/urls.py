@@ -31,4 +31,5 @@ urlpatterns = [
     path('in-stock/', views.in_stock_products, name='in_stock'),
     path('low-stock/', views.low_stock_products, name='low_stock'),
     path('out-stock/', views.out_stock_products, name='out_stock'),
+    path('stock/history/', views.stock_history, name='stock_history'),
 ]

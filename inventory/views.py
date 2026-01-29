@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Product, Category, StockLog
 from suppliers.models import Supplier
-from django.db.models import Q, F
+from django.db.models import Q, F, Sum
 from django.core.paginator import Paginator
 from django.contrib.auth.decorators import login_required
 from .forms import ProductForm, CategoryForm, StockForm
@@ -10,6 +10,7 @@ from inventory.config import LOW_STOCK_THRESHOLD
 from django.contrib import messages
 
 
+@login_required
 def product_dashboard(request):
     # Search & Filters
     search = request.GET.get("search", "")
@@ -75,6 +76,7 @@ def product_dashboard(request):
     return render(request, "dashboards/product_dashboard.html", context)
 
 
+@login_required
 def product_list(request):
     products = Product.objects.select_related(
         'category', 'supplier').filter(is_active=True)
@@ -113,6 +115,7 @@ def product_list(request):
     })
 
 
+@login_required
 def add_product(request):
     if request.method == "POST":
         form = ProductForm(request.POST)
@@ -125,6 +128,7 @@ def add_product(request):
     return render(request, 'inventory/add_product.html', {'form': form})
 
 
+@login_required
 def update_product(request, pk):
     product = get_object_or_404(Product, pk=pk)
     if request.method == 'POST':
@@ -138,6 +142,7 @@ def update_product(request, pk):
     return render(request, 'inventory/update_product.html', {'form': form})
 
 
+@login_required
 def delete_product(request, pk):
     product = get_object_or_404(Product, pk=pk)
 
@@ -149,28 +154,42 @@ def delete_product(request, pk):
     return render(request, 'inventory/delete_product.html', {'product': product})
 
 
+@login_required
 def category_dashboard(request):
     categories_qs = Category.objects.annotate(
         product_count=Count('product', distinct=True)
     ).order_by('name')
 
+    search = request.GET.get('q')
+    if search:
+        categories_qs = categories_qs.filter(
+            Q(name__icontains=search)
+        )
+
     paginator = Paginator(categories_qs, 5)
     page_number = request.GET.get('page')
     categories = paginator.get_page(page_number)
 
-    total_category = categories_qs.count()
-    categories_with_products = categories_qs.filter(
-        product_count__gt=0).count()
-    categories_without_products = categories_qs.filter(product_count=0).count()
+    total_category = Category.objects.count()
+    categories_with_products = Category.objects.annotate(
+        product_count=Count('product')
+    ).filter(product_count__gt=0).count()
+    categories_without_products = Category.objects.annotate(
+        product_count=Count('product')
+    ).filter(product_count=0).count()
 
-    return render(request, "dashboards/category_dashboard.html", {
+    context = {
         'categories': categories,
         'total_category': total_category,
         'categories_with_products': categories_with_products,
         'categories_without_products': categories_without_products,
-    })
+        'search': search, 
+    }
+
+    return render(request, "dashboards/category_dashboard.html", context)
 
 
+@login_required
 def category_without_products(request):
     categories_qs = Category.objects.annotate(
         product_count=Count('product', distinct=True)
@@ -184,6 +203,7 @@ def category_without_products(request):
     return render(request, "inventory/category_without_products.html", {'page_obj': page_obj})
 
 
+@login_required
 def category_with_products(request):
     categories_qs = Category.objects.annotate(
         product_count=Count('product', distinct=True)
@@ -198,6 +218,7 @@ def category_with_products(request):
     return render(request, "inventory/category_with_products.html", {'page_obj': page_obj})
 
 
+@login_required
 def category_list(request):
     categories = Category.objects.all()
     data = []
@@ -218,6 +239,7 @@ def category_list(request):
     })
 
 
+@login_required
 def category_products(request, category_id):
     category = get_object_or_404(Category, id=category_id)
 
@@ -233,6 +255,7 @@ def category_products(request, category_id):
     })
 
 
+@login_required
 def add_category(request):
     if request.method == "POST":
         form = CategoryForm(request.POST)
@@ -245,6 +268,7 @@ def add_category(request):
     return render(request, 'inventory/add_category.html', {'form': form})
 
 
+@login_required
 def update_category(request, pk):
     category = get_object_or_404(Category, pk=pk)
     if request.method == 'POST':
@@ -258,6 +282,7 @@ def update_category(request, pk):
     return render(request, 'inventory/update_category.html', {'form': form})
 
 
+@login_required
 def delete_category(request, pk):
     category = get_object_or_404(Category, pk=pk)
 
@@ -270,25 +295,92 @@ def delete_category(request, pk):
     })
 
 
+@login_required
 def report_dashboard(request):
     return render(request, "dashboards/report_dashboard.html")
 
 
 @login_required
 def stock_dashboard(request):
-    total_products = Product.objects.all().count()
+    # ---------- FILTER PARAMETERS ----------
+    category_id = request.GET.get('category')
+    supplier_id = request.GET.get('supplier')
+    status = request.GET.get('status')
+    search = request.GET.get('q')
+
+    # ---------- BASE QUERY ----------
+    product_qs = Product.objects.select_related(
+        'category', 'supplier').filter(is_active=True)
+
+    # ---------- APPLY FILTERS ----------
+    if category_id:
+        product_qs = product_qs.filter(category_id=category_id)
+    if supplier_id:
+        product_qs = product_qs.filter(supplier_id=supplier_id)
+    if status == 'in':
+        product_qs = product_qs.filter(quantity__gt=LOW_STOCK_THRESHOLD)
+    elif status == 'low':
+        product_qs = product_qs.filter(
+            quantity__lte=LOW_STOCK_THRESHOLD, quantity__gt=0)
+    elif status == 'out':
+        product_qs = product_qs.filter(quantity=0)
+    if search:
+        product_qs = product_qs.filter(
+            Q(name__icontains=search) | Q(sku__icontains=search))
+
+    # ---------- SUMMARY COUNTS ----------
+    total_products = Product.objects.filter(is_active=True).count()
     in_stock = Product.objects.filter(
         quantity__gt=LOW_STOCK_THRESHOLD, is_active=True).count()
     low_stock = Product.objects.filter(
         quantity__lte=LOW_STOCK_THRESHOLD, quantity__gt=0, is_active=True).count()
     out_stock = Product.objects.filter(quantity=0, is_active=True).count()
 
+    # ---------- TOTAL STOCK IN/OUT ----------
+    total_stock_in = StockLog.objects.filter(action='IN').aggregate(
+        Sum('quantity'))['quantity__sum'] or 0
+    total_stock_out = StockLog.objects.filter(
+        action='OUT').aggregate(Sum('quantity'))['quantity__sum'] or 0
+
+    # ---------- LOW STOCK PRODUCTS ----------
+    low_qs = Product.objects.filter(quantity__lte=LOW_STOCK_THRESHOLD, quantity__gt=0, is_active=True)\
+                            .select_related('category', 'supplier')
+
+    # ---------- PAGINATION ----------
+    product_paginator = Paginator(product_qs.order_by('name'), 5)
+    product_page = request.GET.get('page_products')
+    products = product_paginator.get_page(product_page)
+
+    low_paginator = Paginator(low_qs.order_by('name'), 5)
+    low_page = request.GET.get('page_low')
+    low_stock_products = low_paginator.get_page(low_page)
+
+    # ---------- RECENT LOGS ----------
+    recent_logs = StockLog.objects.select_related(
+        'product', 'user').order_by('-created_at')[:10]
+
+    # ---------- CONTEXT ----------
     context = {
+        # cards
         'total_products': total_products,
         'in_stock': in_stock,
         'low_stock': low_stock,
-        'out_stock': out_stock
+        'out_stock': out_stock,
+
+        # tables
+        'products': products,
+        'low_stock_products': low_stock_products,
+        'recent_logs': recent_logs,
+
+        # stats
+        'total_stock_in': total_stock_in,
+        'total_stock_out': total_stock_out,
+
+        # filters
+        'categories': Category.objects.all(),
+        'suppliers': Supplier.objects.all(),
     }
+
     return render(request, 'dashboards/stock_dashboard.html', context)
 
 
@@ -313,7 +405,14 @@ def stock_in(request, product_id=None):
         )
 
         messages.success(request, "Stock added successfully")
-        return redirect('admin_dashboard')
+        user = request.user
+
+        if user.is_superuser:
+            return redirect('admin_dashboard')
+        elif user.is_staff:
+            return redirect('manager_dashboard')
+        else:
+            return redirect('staff_dashboard')
     else:
         # Pre-fill form with product if available
         initial_data = {
@@ -324,14 +423,16 @@ def stock_in(request, product_id=None):
 
 @login_required
 def stock_out(request):
-    form = StockForm(request.POST or 'None')
+    form = StockForm(request.POST or None)
+
     if request.method == "POST" and form.is_valid():
         product = form.cleaned_data['product']
         qty = form.cleaned_data['quantity']
 
         product.refresh_from_db()
+
         if qty > product.quantity:
-            messages.error(request, 'Insufficent Stock availability!')
+            messages.error(request, 'Insufficient stock availability!')
             return redirect('stock_out')
 
         product.quantity = F('quantity') - qty
@@ -344,11 +445,32 @@ def stock_out(request):
         )
 
         messages.success(request, "Stock removed successfully!")
-        return redirect('admin_dashboard')
+
+        # role based redirect
+        user = request.user
+        if user.is_superuser:
+            return redirect('admin_dashboard')
+        elif user.is_staff:
+            return redirect('manager_dashboard')
+        else:
+            return redirect('staff_dashboard')
 
     return render(request, 'inventory/stock_out.html', {'form': form})
 
 
+@login_required
+def stock_history(request):
+    logs = StockLog.objects.select_related(
+        'product', 'user').order_by('-created_at')
+
+    paginator = Paginator(logs, 10)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
+    return render(request, 'inventory/stock_history.html', {'page_obj': page_obj})
+
+
+@login_required
 def in_stock_products(request):
     products = Product.objects.filter(
         quantity__gt=LOW_STOCK_THRESHOLD, is_active=True)
@@ -360,6 +482,7 @@ def in_stock_products(request):
     return render(request, 'inventory/in_stock.html', {'page_obj': page_obj})
 
 
+@login_required
 def low_stock_products(request):
     products = Product.objects.filter(
         quantity__lte=LOW_STOCK_THRESHOLD, quantity__gt=0, is_active=True)
@@ -371,6 +494,7 @@ def low_stock_products(request):
     return render(request, 'inventory/low_stock.html', {'page_obj': page_obj, "low_stock_limit": LOW_STOCK_THRESHOLD})
 
 
+@login_required
 def out_stock_products(request):
     products = Product.objects.filter(quantity=0, is_active=True)
 
