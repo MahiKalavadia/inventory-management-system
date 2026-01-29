@@ -19,6 +19,12 @@
     <div class="d-flex align-items-center">
         <div class="header-right d-flex align-items-center">
             <div class="welcome-text me-2">Welcome to Category Dashboard</div>
+            <div class="d-flex align-items-center">
+                <form method="get" class="d-flex">
+                    <input type="text" name="q" placeholder="Search categories..." class="form-control me-2" value="{{ search|default:'' }}">
+                    <button type="submit" class="btn btn-primary">Search</button>
+                </form>
+           </div>
         </div>
     </div>
 </div>
