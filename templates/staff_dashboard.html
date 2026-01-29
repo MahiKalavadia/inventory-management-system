@@ -66,7 +66,81 @@
         </div>
     </a>
     </div>
-
 </div>
 <hr>
+<div class="row mb-4">
+
+    <div class="col-md-3">
+        <a href="{% url 'product_list' %}" class="btn btn-primary w-100 p-3 shadow-sm">
+            <i class="bi bi-search"></i> View Products
+        </a>
+    </div>
+
+    <div class="col-md-3">
+        <a href="{% url 'stock_in_section' %}" class="btn btn-success w-100 p-3 shadow-sm">
+            <i class="bi bi-plus-circle"></i> Add Stock
+        </a>
+    </div>
+
+    <div class="col-md-3">
+        <a href="{% url 'stock_out' %}" class="btn btn-danger w-100 p-3 shadow-sm">
+            <i class="bi bi-dash-circle"></i> Remove Stock
+        </a>
+    </div>
+
+    <div class="col-md-3">
+        <a href="{% url 'stock_history' %}" class="btn btn-dark w-100 p-3 shadow-sm">
+            <i class="bi bi-clock-history"></i> Stock History
+        </a>
+    </div>
+
+</div>
+<div class="card mb-4 shadow-sm">
+    <div class="card-header bg-warning text-dark fw-bold">
+        ⚠ Products Running Low
+    </div>
+    <div class="card-body p-0">
+        <table class="table mb-0">
+            <thead class="table-light">
+                <tr>
+                    <th>Product</th>
+                    <th>Current Qty</th>
+                    <th>Supplier</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for product in low_stock_products %}
+                <tr>
+                    <td>{{ product.name }}</td>
+                    <td class="fw-bold text-danger">{{ product.quantity }}</td>
+                    <td>{{ product.supplier.name }}</td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="3" class="text-center text-muted">No low stock items 🎉</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+<div class="card shadow-sm">
+    <div class="card-header fw-bold">
+        🕒 Recent Stock Activity
+    </div>
+    <div class="card-body">
+        <ul class="list-group list-group-flush">
+            {% for log in recent_stock_logs %}
+            <li class="list-group-item d-flex justify-content-between">
+                <span>
+                    {{ log.product.name }} — {{ log.action }} ({{ log.quantity }})
+                </span>
+                <small class="text-muted">{{ log.created_at }}</small>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+
+
 {% endblock %}
