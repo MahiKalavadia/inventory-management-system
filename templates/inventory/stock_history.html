@@ -1,0 +1,70 @@
+{% extends 'base_dashboard.html' %}
+{% load humanize %}
+{% block content %}
+
+<div class="card mb-4">
+   <div class="card-header d-flex justify-content-between align-items-center">
+           <span><b>Stock History</b></span>
+           <div>
+              <a href="{% url 'stock_dashboard' %}" class="btn btn-outline-secondary btn-sm me-2">
+                 <i class="bi bi-arrow-left-circle-fill"></i> Back
+              </a>
+          </div>
+        </div>
+
+    <div class="card-body">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Product</th>
+                    <th>Action</th>
+                    <th>Qty</th>
+                    <th>User</th>
+                    <th>Note</th>
+                    <th>Time</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for log in page_obj %}
+                <tr>
+                    <td>{{ log.product.name }}</td>
+                    <td>
+                        {% if log.action == 'IN' %}
+                            <span class="badge bg-success">IN</span>
+                        {% else %}
+                            <span class="badge bg-danger">OUT</span>
+                        {% endif %}
+                    </td>
+                    <td>{{ log.quantity }}</td>
+                    <td>{{ log.user.username }}</td>
+                    <td>{{ log.note|default:"-" }}</td>
+                    <td>{{ log.created_at|naturaltime }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <!-- Pagination -->
+        <nav>
+            <ul class="pagination justify-content-center">
+                {% if page_obj.has_previous %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous</a>
+                    </li>
+                {% endif %}
+
+                <li class="page-item active">
+                    <span class="page-link">{{ page_obj.number }}</span>
+                </li>
+
+                {% if page_obj.has_next %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a>
+                    </li>
+                {% endif %}
+            </ul>
+        </nav>
+    </div>
+</div>
+
+{% endblock %}
