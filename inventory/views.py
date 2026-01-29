@@ -274,8 +274,22 @@ def report_dashboard(request):
     return render(request, "dashboards/report_dashboard.html")
 
 
+@login_required
 def stock_dashboard(request):
-    return render(request, 'dashboards/stock_dashboard.html')
+    total_products = Product.objects.all().count()
+    in_stock = Product.objects.filter(
+        quantity__gt=LOW_STOCK_THRESHOLD, is_active=True).count()
+    low_stock = Product.objects.filter(
+        quantity__lte=LOW_STOCK_THRESHOLD, quantity__gt=0, is_active=True).count()
+    out_stock = Product.objects.filter(quantity=0, is_active=True).count()
+
+    context = {
+        'total_products': total_products,
+        'in_stock': in_stock,
+        'low_stock': low_stock,
+        'out_stock': out_stock
+    }
+    return render(request, 'dashboards/stock_dashboard.html', context)
 
 
 @login_required
@@ -348,7 +362,7 @@ def in_stock_products(request):
 
 def low_stock_products(request):
     products = Product.objects.filter(
-        quantity__lte=LOW_STOCK_THRESHOLD, is_active=True)
+        quantity__lte=LOW_STOCK_THRESHOLD, quantity__gt=0, is_active=True)
 
     paginator = Paginator(products, 12)
     page_number = request.GET.get('page')
