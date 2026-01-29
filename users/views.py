@@ -13,7 +13,7 @@ def user_dashboard(request):
     total_managers = User.objects.filter(groups__name='Manager').count()
     total_staff = User.objects.filter(groups__name='Staff').count()
     inactive_users = User.objects.filter(is_active=False).count()
-    recent_logins = User.objects.order_by('-last_login')[:5]
+    recent_logins = User.objects.order_by('-last_login')[:3]
     users = User.objects.all()
 
     context = {
