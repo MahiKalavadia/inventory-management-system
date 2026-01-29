@@ -10,22 +10,26 @@
     background-color: #f1f3f5;
 }
 </style>
-<h3 class="mb-3">
-    <b><a href="{% url 'category_dashboard' %}" style="color: grey; font-size: 2rem;">
-        <i class="bi bi-arrow-left-circle-fill"></i></a> Categories</b></h3>
-<hr>
-<table class="table table-hover align-middle bg-white shadow-sm rounded">
+<div class="card mb-4">
+<div class="card-header d-flex justify-content-between align-items-center">
+           <h3><b>View Categories</b></h3>
+           <div>
+              <a href="{% url 'category_dashboard' %}" class="btn btn-outline-secondary btn-sm me-2">
+                 <i class="bi bi-arrow-left-circle-fill"></i> Back
+              </a>
+          </div>
+        </div>
 
-    <thead>
-        <tr>
-            <th>Category Name</th>
-            <th>Total Products</th>
-            <th>Actions</th>
-
-        </tr>
-    </thead>
-
-    <tbody>
+<div class="card-body">
+        <table class="table table-striped">
+            <thead>
+                 <tr>
+                    <th>Category Name</th>
+                    <th>Total Products</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
         {% for item in page_obj %}
         <tr>
             <td>
@@ -52,7 +56,9 @@
         </tr>
         {% endfor %}
     </tbody>
-</table>
+        </table>
+    </div>
+</div>
 <nav class="mt-4">
 <ul class="pagination justify-content-center">
 
