@@ -4,6 +4,7 @@ from inventory.models import Product
 from inventory.models import Product, Category
 from .forms import SupplierForm
 from django.core.paginator import Paginator
+from django.db.models import Q
 
 
 def supplier_dashboard(request):
@@ -12,6 +13,12 @@ def supplier_dashboard(request):
     active_supplier = Supplier.objects.filter(is_active=True).count()
     inactive_supplier = Supplier.objects.filter(is_active=False).count()
     products = Product.objects.count()
+
+    search = request.GET.get('q')
+    if search:
+        suppliers = suppliers.filter(
+            Q(name__icontains=search)
+        )
 
     paginator = Paginator(suppliers, 5)
     page_number = request.GET.get('page')
