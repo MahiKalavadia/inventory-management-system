@@ -53,7 +53,7 @@
             <div class="card-icon mb-2">
                 <i class="bi bi-check-circle-fill icon-green icon-bg"></i>
             </div>
-            <h6 class="text-muted">In Stock</h6>
+            <h6 class="text-muted">Products Available</h6>
             <h3 class="fw-bold">{{ in_stock }}</h3>
         </div>
     </a>
@@ -65,7 +65,7 @@
             <div class="card-icon mb-2">
                 <i class="bi bi-exclamation-triangle-fill icon-orange icon-bg"></i>
             </div>
-            <h6 class="text-muted">Low Stock</h6>
+            <h6 class="text-muted">Products having low stock</h6>
             <h3 class="fw-bold">{{ low_stock }}</h3>
         </div>
     </a>
@@ -77,7 +77,7 @@
             <div class="card-icon mb-2">
                 <i class="bi bi-x-circle-fill icon-red icon-bg"></i>
             </div>
-            <h6 class="text-muted">Out of Stock</h6>
+            <h6 class="text-muted">Products Out of Stock</h6>
             <h3 class="fw-bold">{{ out_of_stock }}</h3>
         </div>
     </a>
@@ -108,26 +108,62 @@
     </div>
     
 </div>
-<hr>
-<!--
-<div class="row mt-4">
+<div class="row mb-4">
 
-    <div class="col-md-6">
-        <div class="card shadow-sm p-3">
-            <h6 class="fw-bold">Stock by Category</h6>
-            <canvas id="categoryChart"></canvas>
+    <!-- Stock Status -->
+    <div class="col-md-4">
+        <div class="card shadow-sm p-3 h-100">
+            <h6 class="fw-bold mb-3">Stock Status</h6>
+            <div style="height:240px;">
+                <canvas id="stockChart"></canvas>
+            </div>
         </div>
     </div>
 
-    <div class="col-md-6">
-        <div class="card shadow-sm p-3">
-            <h6 class="fw-bold">Top Products by Quantity</h6>
-            <canvas id="topProductsChart"></canvas>
+    <!-- Category Chart -->
+    <div class="col-md-4">
+        <div class="card shadow-sm p-3 h-100">
+            <h6 class="fw-bold mb-3">By Category</h6>
+            <div style="height:240px;">
+                <canvas id="categoryChart"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <!-- Expensive Products -->
+    <div class="col-md-4">
+        <div class="card shadow-sm p-3 h-100">
+            <h6 class="fw-bold mb-3">Top Expensive</h6>
+            <div style="height:240px;">
+                <canvas id="expensiveChart"></canvas>
+            </div>
         </div>
     </div>
 
 </div>
-<hr>-->
+<div class="row mb-6">
+        <div class="col-lg-6">
+        <div class="card shadow-sm h-100">
+            <div class="card-body">
+                <h6 class="card-title text-muted">Monthly Growth</h6>
+                <canvas id="trendChart" height="100px"></canvas>
+            </div>
+        </div>
+    </div>
+     <div class="col-md-6">
+    <div class="card shadow-sm p-3">
+        <h6 class="fw-bold mb-2">Inventory Value by Category</h6>
+        <p class="text-muted small">
+           Top categories holding most inventory capital.  
+           Total Inventory Value: <strong>₹ {{ total_inventory_value|floatformat:0 }}</strong>
+        </p>
+        <canvas id="inventoryValueChart" height="250px"></canvas>
+    </div>
+</div>
+
+</div>
+<hr>
+
 
 <!-- Filters -->
 <form method="get" class="row g-2 mb-3">
@@ -190,7 +226,14 @@
     <td>{{ product.category.name }}</td>
     <td>{{ product.supplier.name }}</td>
     <td>{{ product.brand }}</td>
-    <td>{{ product.quantity }}</td>
+    <td class="fw-bold 
+          {% if product.quantity == 0 %}text-danger
+          {% elif product.quantity <= low_stock_limit %}text-warning
+          {% else %}text-success
+          {% endif %}">
+              {{ product.quantity }}
+    </td>
+
     <td>{{ product.price }}</td>
     <td>
         {% if product.quantity == 0 %}
@@ -244,36 +287,121 @@
 
     </ul>
 </nav>
-<!--<script>
-const categoryData = JSON.parse('{{ category_chart|escapejs }}');
-const topProductsData = JSON.parse('{{ top_products_chart|escapejs }}');
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-if (categoryData.length > 0) {
-    new Chart(document.getElementById('categoryChart'), {
+<script>
+    // Stock Chart
+    const stockCtx = document.getElementById('stockChart');
+    new Chart(stockCtx, {
         type: 'doughnut',
         data: {
-            labels: categoryData.map(x => x.category__name),
+            labels: ['In Stock', 'Low Stock', 'Out of Stock'],
             datasets: [{
-                data: categoryData.map(x => x.total_stock),
-                backgroundColor: ['#2563eb','#16a34a','#f97316','#dc2626','#7c3aed','#06b6d4']
+                data: [{{ in_stock }}, {{ low_stock }}, {{ out_of_stock }}],
+                backgroundColor: ['#16a34a', '#f97316', '#dc2626'],
+                borderWidth: 1
             }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: { position: 'bottom' }
+            },
+            scales: {
+                y: { beginAtZero: true }
+            }
         }
-    });
-}
 
-if (topProductsData.length > 0) {
-    new Chart(document.getElementById('topProductsChart'), {
-        type: 'bar',
-        data: {
-            labels: topProductsData.map(x => x.name),
-            datasets: [{
-                label: 'Quantity',
-                data: topProductsData.map(x => x.total_qty),
-                backgroundColor: '#2563eb'
-            }]
-        }
     });
-}
-</script>-->
+
+    // Category Chart
+    new Chart(document.getElementById('categoryChart'), {
+    type: 'bar',
+    data: {
+        labels: {{ category_names|safe }},
+        datasets: [{
+            label: 'Products',
+            data: {{ category_counts|safe }},
+            borderRadius: 6,
+            barThickness: 18
+        }]
+    },
+    options: {
+        indexAxis: 'y',  
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+            legend: { display: false }
+        },
+        scales: {
+            x: { beginAtZero: true },
+            y: {
+                ticks: { font: { size: 12 } }
+            }
+        }
+    }
+});
+
+    // Expensive Products Chart
+new Chart(document.getElementById('expensiveChart'), {
+    type: 'bar',
+    data: {
+        labels: {{ expensive_names|safe }},
+        datasets: [{
+            label: 'Price',
+            data: {{ expensive_prices|safe }},
+            backgroundColor: '#6f42c1'
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: { legend: { display: false }},
+        scales: {
+            y: { beginAtZero: true }
+        }
+    }
+});
+
+new Chart(document.getElementById('trendChart'), {
+    type: 'line',
+    data: {
+        labels: {{ months|safe }},
+        datasets: [{
+            label: 'Products Added',
+            data: {{ monthly_counts|safe }},
+            fill: true,
+            tension: 0.4
+        }]
+    },
+    options: {
+        plugins: { legend: { display: false }},
+        scales: { y: { beginAtZero: true }}
+    }
+});
+
+new Chart(document.getElementById('inventoryValueChart'), {
+    type: 'bar',
+    data: {
+        labels: {{ category_value_labels|safe }},
+        datasets: [{
+            label: 'Stock Value (₹)',
+            data: {{ category_value_values|safe }},
+            borderWidth: 1
+        }]
+    },
+    options: {
+        indexAxis: 'y',  // 🔥 makes horizontal
+        responsive: true,
+        plugins: {
+            legend: { display: false }
+        },
+        scales: {
+            x: { beginAtZero: true }
+        }
+    }
+});
+</script>
 
 {% endblock %}
