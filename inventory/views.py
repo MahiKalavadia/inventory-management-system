@@ -1,13 +1,14 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Product, Category, StockLog
 from suppliers.models import Supplier
-from django.db.models import Q, F, Sum
+from django.db.models import Q, F, Sum,  FloatField, ExpressionWrapper
 from django.core.paginator import Paginator
 from django.contrib.auth.decorators import login_required
 from .forms import ProductForm, CategoryForm, StockForm
 from django.db.models import Count
 from inventory.config import LOW_STOCK_THRESHOLD
 from django.contrib import messages
+from django.db.models.functions import TruncMonth
 
 
 @login_required
@@ -59,6 +60,43 @@ def product_dashboard(request):
     total_suppliers = Supplier.objects.count()
     suppliers = Supplier.objects.all()
 
+    # charts
+    top_categories = (
+        Product.objects.values('category__name')
+        .annotate(total=Count('id'))
+        .order_by('-total')[:8]
+    )
+
+    category_names = [c['category__name']
+                      or "Uncategorized" for c in top_categories]
+    category_counts = [c['total'] for c in top_categories]
+
+    top_expensive = Product.objects.filter(
+        price__isnull=False).order_by('-price')[:5]
+    expensive_names = [p.name for p in top_expensive]
+    expensive_prices = [float(p.price) for p in top_expensive]
+
+    monthly_products = (
+        Product.objects
+        .annotate(month=TruncMonth('created_at'))
+        .values('month')
+        .annotate(total=Count('id'))
+        .order_by('month')
+    )
+
+    months = [m['month'].strftime('%b %Y')
+              for m in monthly_products if m['month']]
+    monthly_counts = [m['total'] for m in monthly_products]
+
+    category_value_data = Category.objects.annotate(
+        inventory_value=Sum(
+            ExpressionWrapper(
+                F('product__price') * F('product__quantity'),
+                output_field=FloatField()
+            )
+        )
+    ).order_by('-inventory_value')[:8]
+
     context = {
         'products': page_obj,
         'page_obj': page_obj,
@@ -71,6 +109,14 @@ def product_dashboard(request):
         "total_categories": total_categories,
         "total_suppliers": total_suppliers,
         "low_stock_limit": LOW_STOCK_THRESHOLD,
+        'category_names': category_names,
+        'category_counts': category_counts,
+        'expensive_names': expensive_names,
+        'expensive_prices': expensive_prices,
+        'months': months,
+        'monthly_counts': monthly_counts,
+        'category_value_labels': [c.name for c in category_value_data],
+        'category_value_values': [float(c.inventory_value or 0) for c in category_value_data],
     }
 
     return render(request, "dashboards/product_dashboard.html", context)
@@ -183,7 +229,7 @@ def category_dashboard(request):
         'total_category': total_category,
         'categories_with_products': categories_with_products,
         'categories_without_products': categories_without_products,
-        'search': search, 
+        'search': search,
     }
 
     return render(request, "dashboards/category_dashboard.html", context)
