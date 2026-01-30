@@ -32,6 +32,23 @@ body {
     font-weight: 500;
     font-size: 16px;
 }
+.password-wrapper {
+    position: relative;
+}
+
+.password-wrapper input {
+    padding-right: 45px;
+}
+
+.toggle-password {
+    position: absolute;
+    right: 12px;
+    top: 70%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    font-size: 18px;
+}
+
 </style>
 </head>
 
@@ -52,9 +69,10 @@ body {
                 <input type="text" name="username" class="form-control" required>
             </div>
 
-            <div class="mb-4">
+            <div class="mb-4 password-wrapper">
                 <label class="form-label">Password</label>
-                <input type="password" name="password" class="form-control" required>
+                <input type="password" name="password" id="password" class="form-control" required>
+                <span class="toggle-password" onclick="togglePassword(this)">👁️</span>
             </div>
 
             <button class="btn btn-primary w-100 btn-login">
@@ -65,6 +83,17 @@ body {
     </div>
 
 </div>
+<script>
+function togglePassword() {
+    const passwordInput = document.getElementById("password");
+
+    if (passwordInput.type === "password") {
+        passwordInput.type = "text";
+    } else {
+        passwordInput.type = "password";
+    }
+}
+</script>
 
 </body>
 </html>
