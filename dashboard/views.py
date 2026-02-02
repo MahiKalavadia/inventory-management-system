@@ -6,6 +6,7 @@ from inventory.config import LOW_STOCK_THRESHOLD
 from django.contrib.auth.models import User
 from django.utils import timezone
 from datetime import timedelta
+from notifications.models import Notification
 
 
 def landing(request):
@@ -38,6 +39,9 @@ def admin_dashboard(request):
         quantity__gt=LOW_STOCK_THRESHOLD, is_active=True).count()
     out_stock_bar = Product.objects.filter(
         quantity__lte=0, is_active=True).count()
+    notifications = Notification.objects.filter(
+        is_read=False)[:5]  # latest 10 unread
+    notifications_count = notifications.count()
     # recent activities
     recent_products = Product.objects.order_by('-created_at')[:3]
     recent_stock_log = StockLog.objects.select_related(
@@ -103,6 +107,8 @@ def admin_dashboard(request):
         'low_stock_bar': percent(low_stock_bar),
         'in_stock_bar': percent(in_stock_bar),
         'out_stock_bar': percent(out_stock_bar),
+        'notifications': notifications,
+        'notifications_count': notifications_count,
         # recent activity
         'recent_activity': activities,
     }
@@ -132,6 +138,10 @@ def manager_dashboard(request):
     recent_stock_logs = StockLog.objects.select_related(
         'product').order_by('-created_at')[:5]
 
+    notifications = Notification.objects.filter(
+        is_read=False)[:5]  # latest 10 unread
+    notifications_count = notifications.count()
+
     # Inventory health %
     total_products = total_products if total_products else 1
 
@@ -151,6 +161,8 @@ def manager_dashboard(request):
         'in_stock_bar': percent(in_stock),
         'low_stock_bar': percent(low_stock),
         'out_stock_bar': percent(out_stock),
+        'notifications': notifications,
+        'notifications_count': notifications_count,
 
     }
     return render(request, "manager_dashboard.html", context)
@@ -173,6 +185,10 @@ def staff_dashboard(request):
         'product'
     ).order_by('-created_at')[:5]
 
+    notifications = Notification.objects.filter(
+        is_read=False)[:5]  # latest 10 unread
+    notifications_count = notifications.count()
+
     context = {
         'total_products': total_products,
         'in_stock': in_stock,
@@ -180,6 +196,8 @@ def staff_dashboard(request):
         'out_stock': out_stock,
         'low_stock_products': low_stock_products,
         'recent_stock_logs': recent_stock_logs,
+        'notifications': notifications,
+        'notifications_count': notifications_count,
     }
     return render(request, "staff_dashboard.html", context)
 
