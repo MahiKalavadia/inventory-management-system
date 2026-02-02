@@ -4,18 +4,37 @@
 {% block content %}
 <div class="dashboard-header mb-4 d-flex justify-content-between align-items-center p-3 bg-light rounded shadow-sm">
     <div class="page-title fw-bold fs-5">
-        Admin Dashboard
+        Inventory Control Dashboard
     </div>
     <div class="d-flex align-items-center">
-        <div class="me-3 position-relative">
-            <!-- Notification Bell -->
-            <i class="bi bi-bell fs-5"></i>
-            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                {{ notifications_count|default:"0" }}
-            </span>
-        </div>
+        <div class="dropdown me-3">
+  <button class="btn btn-link position-relative p-0" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+    <i class="bi bi-bell fs-4"></i>
+    {% if notifications_count > 0 %}
+      <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+        {{ notifications_count }}
+      </span>
+    {% endif %}
+  </button>
+
+  <ul class="dropdown-menu dropdown-menu-end p-2" style="width: 300px;">
+    {% for n in notifications %}
+      <li class="mb-2">
+        <a href="{% url 'notifications:mark_as_read' n.pk %}" class="dropdown-item small {% if not n.is_read %}bg-light{% endif %}">
+          <b>{{ n.title }}</b><br>
+          <span>{{ n.message }}</span><br>
+          <small class="text-muted">{{ n.created_at|naturaltime }}</small>
+        </a>
+      </li>
+    {% empty %}
+      <li class="text-center small text-muted">No notifications</li>
+    {% endfor %}
+    <li class="text-center"><a href="{% url 'notifications:all_notifications' %}">See All →</a></li>
+  </ul>
+</div>
+
         <div class="header-right d-flex align-items-center">
-            <div class="welcome-text me-2">Welcome back, Admin</div>
+            <div class="welcome-text me-2">Welcome back, Administrator</div>
             <img src="{% static 'images/admin.jpeg' %}" class="profile-img rounded-circle" alt="Profile" width="40" height="40">
         </div>
     </div>
@@ -23,49 +42,49 @@
 
 <div class="row mb-4">
 
-    <div class="col-md-3">
+    <div class="col-md-3 order-md-last">
         <a href="{% url 'product_list' %}" class="text-decoration-none">
           <div class="card shadow-sm p-4 text-center card-hover" style="border-left: 5px solid #2563eb">
             <div class="card-icon mb-2">
                 <i class="bi bi-box-fill icon-blue icon-bg"></i>
             </div>
-            <h6 class="text-muted">Total Products</h6>
+            <h6 class="text-muted">Total Inventory Items</h6><!--Total products-->
             <h3 class="fw-bold">{{ total_products }}</h3>
           </div>
         </a>
     </div>
 
-    <div class="col-md-3">
+    <div class="col-md-3 order-md-last">
         <a href="{% url 'category_list' %}" class="text-decoration-none">
         <div class="card shadow-sm p-4 text-center card-hover" style="border-left: 5px solid #7c3aed">
             <div class="card-icon mb-2">
                 <i class="bi bi-grid-fill icon-purple icon-bg"></i>
             </div>
-            <h6 class="text-muted">Total Categories</h6>
+            <h6 class="text-muted">Product Categories</h6><!--total categories-->
             <h3 class="fw-bold">{{ total_categories }}</h3>
         </div>
     </a>
     </div>
 
-    <div class="col-md-3">
+    <div class="col-md-3 order-md-last">
         <a href="{% url 'supplier_list' %}" class="text-decoration-none">
         <div class="card shadow-sm p-4 text-center card-hover" style="border-left: 5px solid #38bdf8">
             <div class="card-icon mb-2">
                 <i class="bi bi-truck-front-fill icon-cyan icon-bg"></i>
             </div>
-            <h6 class="text-muted">Total Suppliers</h6>
+            <h6 class="text-muted">Vendors</h6><!--total supplier-->
             <h3 class="fw-bold">{{ total_suppliers }}</h3>
         </div>
     </a>
     </div>
 
-    <div class="col-md-3">
+    <div class="col-md-3 order-md-last">
         <a href="{% url 'low_stock' %}" class="text-decoration-none">
         <div class="card shadow-sm p-4 text-center card-hover" style="border-left: 5px solid #f97316">
             <div class="card-icon mb-2">
                 <i class="bi bi-exclamation-triangle-fill icon-orange icon-bg"></i>
             </div>
-            <h6 class="text-muted">Products having low stock</h6>
+            <h6 class="text-muted">Reorder Alerts</h6><!--low stock products-->
             <h3 class="fw-bold">{{ low_stock }}</h3>
         </div>
     </a>
@@ -74,49 +93,49 @@
 </div>
 <div class="row mb-4">
 
-    <div class="col-md-3">
+    <div class="col-md-3 order-md-last">
         <a href="{% url 'out_stock' %}" class="text-decoration-none">
         <div class="card shadow-sm p-4 text-center card-hover" style="border-left: 5px solid #dc2626">
             <div class="card-icon mb-2">
                 <i class="bi bi-x-circle-fill icon-red icon-bg"></i>
             </div>
-            <h6 class="text-muted">Products Out of Stock</h6>
+            <h6 class="text-muted">Stockouts</h6><!--out of stock-->
             <h3 class="fw-bold">{{ out_of_stock }}</h3>
         </div>
     </a>
     </div>
 
-    <div class="col-md-3">
+    <div class="col-md-3 order-md-last">
         <a href="#" class="text-decoration-none">
         <div class="card shadow-sm p-4 text-center card-hover" style="border-left: 5px solid #16A34A">
             <div class="card-icon mb-2">
                 <i class="bi bi-currency-rupee icon-sale icon-bg"></i>
             </div>
-            <h6 class="text-muted">Total Sales</h6>
+            <h6 class="text-muted">Total Revenue</h6><!--total sales-->
             <h3 class="fw-bold">463,994</h3>
         </div>
     </a>
     </div>
 
-    <div class="col-md-3">
+    <div class="col-md-3 order-md-last">
         <a href="#" class="text-decoration-none">
         <div class="card shadow-sm p-4 text-center card-hover" style="border-left: 5px solid #DC2626">
             <div class="card-icon mb-2">
                 <i class="fa-solid fa-file-invoice-dollar icon-cost icon-bg"></i>
             </div>
-            <h6 class="text-muted">Total Cost of Goods</h6>
+            <h6 class="text-muted">Cost of Goods Sold</h6><!--Total cost spent on purchased/produced inventory sold.-->
             <h3 class="fw-bold">417594.6</h3>
         </div>
     </a>
     </div>
 
-    <div class="col-md-3">
+    <div class="col-md-3 order-md-last">
         <a href="#" class="text-decoration-none">
         <div class="card shadow-sm p-4 text-center card-hover" style="border-left: 5px solid #4F46E5">
             <div class="card-icon mb-2">
                 <i class="fas fa-chart-line icon-profit icon-bg"></i>
             </div>
-            <h6 class="text-muted">Total Profit</h6>
+            <h6 class="text-muted">Gross Margin</h6><!--total profit-->
             <h3 class="fw-bold">46399.4</h3>
         </div>
     </a>
@@ -133,16 +152,16 @@
         <!-- RECENT LOGINS -->
         <div class="card mb-3">
             <div class="card-header d-flex justify-content-between align-items-center">
-                <span><b>Recent Logins</b></span>
-                <a href="{% url 'view_all' %}" class="btn btn-sm btn-outline-primary">View All Logins →</a>
+                <span><b>User Login Activity</b></span>
+                <a href="{% url 'view_all' %}" class="btn btn-sm btn-outline-primary">View All Activity →</a>
             </div>
             <div class="card-body">
                 <table class="table table-striped">
                     <thead>
                         <tr>
-                            <th>Username</th>
-                            <th>Role</th>
-                            <th>Last Login</th>
+                            <th>User</th>
+                            <th>Role Access</th>
+                            <th>Last Login Time</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -177,7 +196,7 @@
             <div class="col-md-6">
                 <div class="card h-100">
                     <div class="card-header d-flex justify-content-between align-items-center">
-                        <span><b>Low Stock Alerts</b></span>
+                        <span><b>Critical Stock Alerts</b></span>
                         <a href="{% url 'low_stock' %}" class="btn btn-sm btn-outline-primary">View All →</a>
                     </div>
                     <div class="card-body">
@@ -207,7 +226,7 @@
             <div class="col-md-6">
                 <div class="card h-100">
                     <div class="card-header d-flex justify-content-between align-items-center">
-                        <span><b>Out Of Stock</b></span>
+                        <span><b>Stockout Items</b></span>
                         <a href="{% url 'out_stock' %}" class="btn btn-sm btn-outline-primary">View All →</a>
                     </div>
                     <div class="card-body">
@@ -240,17 +259,20 @@
         <div class="card shadow-sm mb-4">
             <div class="card-body p-3">
                 <h6 class="mb-3"><b>Quick Actions</b></h6>
-                <a href="{% url 'add_product' %}" class="btn btn-sm btn-outline-primary w-100 mb-2">➕ Add Product</a>
+                <a href="{% url 'add_product' %}" class="btn btn-sm btn-outline-primary w-100 mb-2">➕ Add Inventory Item</a>
                 <a href="{% url 'add_category' %}" class="btn btn-sm btn-outline-secondary w-100 mb-2">➕ Add Category</a>
-                <a href="{% url 'add_supplier' %}" class="btn btn-sm btn-outline-info w-100 mb-2">➕ Add Supplier</a>
+                <a href="{% url 'add_supplier' %}" class="btn btn-sm btn-outline-info w-100 mb-2">➕ Add Vendor</a>
                 <a href="{% url 'stock_in_section' %}" class="btn btn-sm btn-outline-success w-100 mb-2">➕ Stock In</a>
-                <a href="{% url 'create_order' %}" class="btn btn-sm btn-outline-dark w-100 mb-2">➕ Create Order</a>
+                <a href="{% url 'create_order' %}" class="btn btn-sm btn-outline-dark w-100 mb-2">➕ Create Sales Order</a>
+                <a href="{% url 'notifications:all_notifications' %}" class="btn btn-sm btn-outline-primary w-100 mb-2 d-flex align-items-center justify-content-center">
+                     <i class="bi bi-bell me-2"></i> View Notifications
+                </a>
             </div>
         </div>
 
         <div class="card shadow-sm">
             <div class="card-body p-3">
-                <h6 class="mb-3"><b>Inventory Status</b></h6>
+                <h6 class="mb-3"><b>Inventory Distribution</b></h6>
 
                 <small>In Stock ({{ in_stock_bar }}%)</small>
                 <div class="progress mb-2" style="height: 6px;">
@@ -272,7 +294,7 @@
         <!-- Recent Activity (Sidebar Style) -->
         <div class="card shadow-sm">
             <div class="card-body p-3">
-                <h6 class="mb-3"><b>Recent Activity</b></h6>
+                <h6 class="mb-3"><b>Audit Log</b></h6><!--recent activity-->
 
                 <div style="max-height: 260px; overflow-y: auto;">
 
