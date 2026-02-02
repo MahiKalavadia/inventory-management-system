@@ -14,7 +14,7 @@
 </style>
 <div class="card mb-4">
    <div class="card-header d-flex justify-content-between align-items-center">
-           <h3><b>Inactive Supplier</b></h3>
+           <h3><b>Inactive Vendors</b></h3>
            <div>
               <a href="{% url 'supplier_dashboard' %}" class="btn btn-outline-secondary btn-sm me-2">
                  <i class="bi bi-arrow-left-circle-fill"></i> Back
@@ -29,7 +29,7 @@
                      <th>Contact Person</th>
                      <th>Phone Number</th>
                      <th>Email</th>
-                     <th>Category Supplying</th>
+                     <th>Category Supplied</th>
                  </tr>
             </thead>
              <tbody>
@@ -43,7 +43,7 @@
         </tr>
         {% empty %}
         <tr>
-            <td colspan="5" class="text-center">No Inactive suppliers!!</td>
+            <td colspan="5" class="text-center">No Inactive vendors!!</td>
         </tr>
         {% endfor %}
     </tbody>
