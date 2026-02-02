@@ -3,10 +3,10 @@
 
 <!-- Header -->
 <div class="dashboard-header mb-4 d-flex justify-content-between align-items-center p-3 bg-light rounded shadow-sm">
-    <div class="page-title fw-bold fs-5">Order Dashboard</div>
+    <div class="page-title fw-bold fs-5">Order & Sales Insights Dashboard</div>
     <div class="d-flex align-items-center">
         <div class="header-right d-flex align-items-center">
-            <div class="welcome-text me-2">Welcome to Order Dashboard</div>
+            <div class="welcome-text me-2">Manage your orders and sales efficiently</div>
         </div>
     </div>
 </div>
@@ -14,100 +14,121 @@
 <!-- Quick Actions -->
 <div class="mb-3 d-flex gap-2">
     {% if request.user.is_superuser or request.user.groups.first.name == "Manager" or request.user.groups.first.name == "Staff" %}
-        <a href="{% url 'create_order' %}" class="btn btn-primary">➕ Create Bills</a>
-        <a href="{% url 'order_list' %}" class="btn btn-outline-secondary">📄 View Orders</a>
+        <a href="{% url 'create_order' %}" class="btn btn-primary">➕ New Invoice</a>
+        <a href="{% url 'order_list' %}" class="btn btn-outline-secondary">📄 Order History</a>
     {% endif %}
 </div>
 
 <!-- First Row of 5 Cards -->
-<div class="d-flex mb-4 gap-3">
-    {% comment %} Use flex-fill to make all 5 cards equal width {% endcomment %}
-    <div class="card flex-fill shadow-sm p-4 text-center card-hover" style="border-left: 5px solid #2563EB">
-        <div class="card-icon mb-2">
-            <i class="bi bi-receipt-cutoff icon-receipt icon-bg"></i>
-        </div>
-        <h6 class="text-muted">Total Orders</h6>
-        <h3 class="fw-bold">{{ total_orders }}</h3>
-    </div>
+<div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 row-cols-xl-5 g-3 mb-4">
 
-    <div class="card flex-fill shadow-sm p-4 text-center card-hover" style="border-left: 5px solid #F59E0B">
+
+    {% comment %} Use flex-fill to make all 5 cards equal width {% endcomment %}
+    <div class="col order-md-last">
+       <div class="card h-100 shadow-sm text-center p-4 card-hover" style="border-left: 5px solid #2563EB">
+         <div class="card-icon mb-2">
+            <i class="bi bi-receipt-cutoff icon-receipt icon-bg"></i>
+         </div>
+        <h6 class="text-muted">All Orders</h6>
+        <h3 class="fw-bold">{{ total_orders }}</h3>
+       </div>
+    </div>
+    
+    <div class="col">
+      <div class="card h-100 shadow-sm text-center p-4 card-hover" style="border-left: 5px solid #F59E0B">
         <div class="card-icon mb-2">
             <i class="bi bi-clock icon-clock icon-bg"></i>
         </div>
-        <h6 class="text-muted">Draft Orders</h6>
+        <h6 class="text-muted">Pending Drafts</h6>
         <h3 class="fw-bold">{{ draft_orders }}</h3>
     </div>
-
-    <div class="card flex-fill shadow-sm p-4 text-center card-hover" style="border-left: 5px solid #14B8A6">
+    </div>
+    
+    <div class="col">
+      <div class="card h-100 shadow-sm text-center p-4 card-hover" style="border-left: 5px solid #14B8A6">
         <div class="card-icon mb-2">
             <i class="bi-check2-circle icon-circle icon-bg"></i>
         </div>
         <h6 class="text-muted">Confirmed Orders</h6>
         <h3 class="fw-bold">{{ confirmed_orders }}</h3>
     </div>
-
-    <div class="card flex-fill shadow-sm p-4 text-center card-hover" style="border-left: 5px solid #EF4444">
+    </div>
+    
+    <div class="col">
+      <div class="card h-100 shadow-sm text-center p-4 card-hover" style="border-left: 5px solid #EF4444">
         <div class="card-icon mb-2">
             <i class="bi bi-x-circle icon-xcircle icon-bg"></i>
         </div>
         <h6 class="text-muted">Cancelled Orders</h6>
         <h3 class="fw-bold">{{ cancelled_orders }}</h3>
     </div>
-
-    <div class="card flex-fill shadow-sm p-4 text-center card-hover" style="border-left: 5px solid #FBBF24">
+    </div>
+    
+    <div class="col">
+      <div class="card h-100 shadow-sm p-4 text-center card-hover" style="border-left: 5px solid #FBBF24">
         <div class="card-icon mb-2">
             <i class="bi bi-hourglass-split icon-hourglass icon-bg"></i>
         </div>
-        <h6 class="text-muted">Pending Payments</h6>
+        <h6 class="text-muted">Outstanding Payments</h6><!--pending payments-->
         <h3 class="fw-bold">₹ {{ pending_amount }}</h3>
     </div>
 </div>
 
 <!-- Second Row of 5 Cards -->
-<div class="d-flex mb-4 gap-3">
-    <div class="card flex-fill shadow-sm p-4 text-center card-hover" style="border-left: 5px solid #22C55E">
+
+    <div class="col">
+      <div class="card h-100 shadow-sm p-4 text-center card-hover" style="border-left: 5px solid #22C55E">
         <div class="card-icon mb-2">
             <i class="bi bi-currency-dollar icon-dollar icon-bg"></i>
         </div>
-        <h6 class="text-muted">Total Sales</h6>
+        <h6 class="text-muted">Total Revenue</h6>
         <h3 class="fw-bold">₹ {{ total_sales }}</h3>
     </div>
-
-    <div class="card flex-fill shadow-sm p-4 text-center card-hover" style="border-left: 5px solid #3B82F6">
+    </div>
+    
+    <div class="col">
+      <div class="card h-100 shadow-sm p-4 text-center card-hover" style="border-left: 5px solid #3B82F6">
         <div class="card-icon mb-2">
             <i class="bi bi-calendar-day icon-calendar icon-bg"></i>
         </div>
-        <h6 class="text-muted">Today’s Sales</h6>
+        <h6 class="text-muted">Revenue Today</h6>
         <h3 class="fw-bold">₹ {{ today_sales }}</h3>
     </div>
-
-    <div class="card flex-fill shadow-sm p-4 text-center card-hover" style="border-left: 5px solid #8B5CF6">
+    </div>
+    
+    <div class="col">
+      <div class="card h-100 shadow-sm p-4 text-center card-hover" style="border-left: 5px solid #8B5CF6">
         <div class="card-icon mb-2">
             <i class="bi bi-calendar-week icon-week icon-bg"></i>
         </div>
-        <h6 class="text-muted">Monthly Sales</h6>
+        <h6 class="text-muted">Revenue This Month</h6>
         <h3 class="fw-bold">₹ {{ monthly_sales }}</h3>
     </div>
-
-    <div class="card flex-fill shadow-sm p-4 text-center card-hover" style="border-left: 5px solid #10B981">
+    </div>
+     
+    <div class="col">
+      <div class="card h-100 shadow-sm p-4 text-center card-hover" style="border-left: 5px solid #10B981">
         <div class="card-icon mb-2">
             <i class="bi bi-box-seam icon-box icon-bg"></i>
         </div>
-        <h6 class="text-muted">Products Sold</h6>
+        <h6 class="text-muted">Total Units Sold</h6>
         <h3 class="fw-bold">{{ total_products_sold }}</h3>
     </div>
-
-    <div class="card flex-fill shadow-sm p-4 text-center card-hover" style="border-left: 5px solid #F43F5E">
+    </div>
+    
+    <div class="col">
+      <div class="card h-100 shadow-sm p-4 text-center card-hover" style="border-left: 5px solid #F43F5E">
         <div class="card-icon mb-2">
             <i class="bi bi-fire fs-3 text-danger"></i>
         </div>
-        <h6 class="text-muted mb-1">Top Selling Product</h6>
+        <h6 class="text-muted mb-1">Best-Selling Product</h6>
         {% if top_product %}
             <h5 class="fw-bold mb-1">{{ top_product.product__name }}</h5>
             <p class="mb-0">Sold: {{ top_product.total_sold }} units</p>
         {% else %}
             <p class="mb-0">No sales yet</p>
         {% endif %}
+    </div>
     </div>
 </div>
 
