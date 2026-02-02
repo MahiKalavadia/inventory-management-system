@@ -4,20 +4,20 @@
 {% block content %}
 <div class="dashboard-header mb-4 d-flex justify-content-between align-items-center p-3 bg-light rounded shadow-sm">
     <div class="page-title fw-bold fs-5">
-        User Dashboard
+        User Management
     </div>
     <div class="d-flex align-items-center">
         <div class="header-right d-flex align-items-center">
-            <div class="welcome-text me-2">Welcome to User Dashboard</div>
+            <div class="welcome-text me-2">Overview of Users & Activity</div>
         </div>
     </div>
 </div>
 <div class="mb-3 d-flex gap-2">
     
     {% if request.user.is_superuser %}
-        <a href="{% url 'add_user' %}" class="btn btn-primary">➕ Add Users</a>
+        <a href="{% url 'add_user' %}" class="btn btn-primary">➕ Create New User</a>
     {% endif %}
-    <a href="{% url 'view_users' %}" class="btn btn-outline-secondary">📄 View Users</a>
+    <a href="{% url 'view_users' %}" class="btn btn-outline-secondary">📄 All Users</a>
 </div>
 
 <div class="container-fluid mt-4">
@@ -28,7 +28,7 @@
             <div class="card-icon mb-2">
                 <i class="bi bi-people-fill icon-people icon-bg"></i>
             </div>
-            <h6 class="text-muted">Total Users</h6>
+            <h6 class="text-muted">Total Active Users</h6>
             <h3 class="fw-bold">{{ total_users }}</h3>
         </div>
     </div>
@@ -37,7 +37,7 @@
             <div class="card-icon mb-2">
                 <i class="bi bi-person-badge-fill icon-personbadge icon-bg"></i>
             </div>
-            <h6 class="text-muted">Total Managers</h6>
+            <h6 class="text-muted">Managers</h6>
             <h3 class="fw-bold">{{ total_managers }}</h3>
         </div>
     </div>
@@ -46,7 +46,7 @@
             <div class="card-icon mb-2">
                 <i class="bi bi-person-fill icon-amber icon-bg"></i>
             </div>
-            <h6 class="text-muted">Total Staff</h6>
+            <h6 class="text-muted">Staff Members</h6>
             <h3 class="fw-bold">{{ total_staff }}</h3>
         </div>
     </div>
@@ -55,7 +55,7 @@
             <div class="card-icon mb-2">
                 <i class="bi bi-person-x-fill icon-xfill icon-bg"></i>
             </div>
-            <h6 class="text-muted">Inactive Users</h6>
+            <h6 class="text-muted">Deactivated Accounts</h6>
             <h3 class="fw-bold">{{ inactive_users }}</h3>
         </div>
     </div>
@@ -64,9 +64,9 @@
     <!-- Recent Logins -->
 <div class="card mb-4">
     <div class="card-header d-flex justify-content-between align-items-center">
-           <span><b>Recent Logins</b></span>
+           <span><b>Recent User Activitys</b></span>
            <div>
-             <a href="{% url 'view_all' %}" class="btn btn-sm btn-outline-primary">View All Logins →</a>
+             <a href="{% url 'view_all' %}" class="btn btn-sm btn-outline-primary">Full Login History →</a>
           </div>
         </div>
     <div class="card-body">
@@ -106,8 +106,8 @@
     <!-- User List -->
     <div class="card mt-3">
     <div class="card-header d-flex justify-content-between align-items-center">
-        <span><b>Users List</b></span>
-        <a href="{% url 'view_users' %}" class="btn btn-sm btn-outline-primary">View All Users →</a>
+        <span><b>User Directory</b></span>
+        <a href="{% url 'view_users' %}" class="btn btn-sm btn-outline-primary">See All Users →</a>
     </div>
     <div class="card-body">
         <table class="table table-hover">
@@ -140,11 +140,11 @@
                         {% endif %}
                     </td>
                     <td>
-                        <a href="{% url 'update_user' user.id %}" class="btn btn-sm btn-primary">Edit</a>
+                        <a href="{% url 'update_user' user.id %}" class="btn btn-sm btn-primary">Manage</a>
                         <a href="{% url 'toggle_user_status' user.id %}" class="btn btn-sm btn-warning">
                             {% if user.is_active %}Deactivate{% else %}Activate{% endif %}
                         </a>
-                        <a href="{% url 'reset_user_password' user.id %}" class="btn btn-sm btn-secondary">Reset Password</a>
+                        <a href="{% url 'reset_user_password' user.id %}" class="btn btn-sm btn-secondary">Password Reset</a>
                     </td>
                 </tr>
                 {% endfor %}

@@ -2,11 +2,11 @@
 {% block content %}
 <div class="dashboard-header mb-4 d-flex justify-content-between align-items-center p-3 bg-light rounded shadow-sm">
     <div class="page-title fw-bold fs-5">
-        Stock Dashboard
+        Inventory Management
     </div>
     <div class="d-flex align-items-center">
         <div class="header-right d-flex align-items-center">
-            <div class="welcome-text me-2">Welcome to Stock Dashboard</div>
+            <div class="welcome-text me-2">Overview of Inventory & Stock Levels</div>
         </div>
     </div>
 </div>
@@ -15,7 +15,7 @@
     {% if request.user.is_superuser or request.user.groups.first.name == "Manager" or request.user.groups.first.name == "Staff" %}
         <a href="{% url 'stock_in_section' %}" class="btn btn-primary">➕ Add Stock</a>
         <a href="{% url 'stock_history' %}" class="btn btn-dark">Stock History</a>
-        <a href="#" class="btn btn-outline-secondary">📄 View Stock</a>
+        <a href="#" class="btn btn-outline-secondary">📄 Inventory Overview</a>
     {% endif %}
 </div>
 <!--Stats-->
@@ -27,7 +27,7 @@
             <div class="card-icon mb-2">
                 <i class="bi bi-box-fill icon-blue icon-bg"></i>
             </div>
-            <h6 class="text-muted">Total Products</h6>
+            <h6 class="text-muted">Total Inventory Items</h6>
             <h3 class="fw-bold">{{ total_products }}</h3>
         </div>
     </a>
@@ -39,7 +39,7 @@
             <div class="card-icon mb-2">
                 <i class="bi bi-check-circle-fill icon-green icon-bg"></i>
             </div>
-            <h6 class="text-muted">In Stock</h6>
+            <h6 class="text-muted">In-Stock Items</h6>
             <h3 class="fw-bold">{{ in_stock }}</h3>
         </div>
     </a>
@@ -51,7 +51,7 @@
             <div class="card-icon mb-2">
                 <i class="bi bi-exclamation-triangle-fill icon-orange icon-bg"></i>
             </div>
-            <h6 class="text-muted">Low Stock Alerts</h6>
+            <h6 class="text-muted">Reorder Alerts</h6>
             <h3 class="fw-bold">{{ low_stock }}</h3>
         </div>
     </a>
@@ -63,7 +63,7 @@
             <div class="card-icon mb-2">
                 <i class="bi bi-x-circle-fill icon-red icon-bg"></i>
             </div>
-            <h6 class="text-muted">Out of Stock</h6>
+            <h6 class="text-muted">Stockouts</h6>
             <h3 class="fw-bold">{{ out_stock }}</h3>
         </div>
     </a>
@@ -110,7 +110,7 @@
             </div>
 
             <div class="col-md-3 d-flex">
-                <button class="btn btn-dark w-100">Apply Filters</button>
+                <button class="btn btn-dark w-100">Filter Inventory</button>
             </div>
 
         </div>
@@ -120,7 +120,7 @@
 <hr>
 <div class="card shadow-sm mb-4">
     <div class="card-header bg-warning text-dark fw-bold">
-        Low Stock Alerts
+        Critical Stock Alerts
     </div>
     <div class="card-body p-0">
         <table class="table mb-0">
@@ -171,7 +171,7 @@
 </div>
 <div class="card shadow-sm mb-4">
     <div class="card-header fw-bold">
-        Current Stock Overview
+        Inventory Snapshot
     </div>
     <div class="card-body p-0">
         <table class="table table-striped mb-0">
