@@ -14,11 +14,11 @@
 </style>
 <div class="dashboard-header mb-4 d-flex justify-content-between align-items-center p-3 bg-light rounded shadow-sm">
     <div class="page-title fw-bold fs-5">
-        Category Dashboard
+        Product Categories Dashboard
     </div>
     <div class="d-flex align-items-center">
         <div class="header-right d-flex align-items-center">
-            <div class="welcome-text me-2">Welcome to Category Dashboard</div>
+            <div class="welcome-text me-2">Manage your product categories efficiently</div>
             <div class="d-flex align-items-center">
                 <form method="get" class="d-flex">
                     <input type="text" name="q" placeholder="Search categories..." class="form-control me-2" value="{{ search|default:'' }}">
@@ -34,52 +34,56 @@
     {% if request.user.is_superuser or request.user.groups.first.name == "Manager" %}
         <a href="{% url 'add_category' %}" class="btn btn-primary">➕ Add Category</a>
     {% endif %}
-    <a href="{% url 'category_list' %}" class="btn btn-outline-secondary">📄 View Category</a>
+    <a href="{% url 'category_list' %}" class="btn btn-outline-secondary">📄 All Categories</a>
 </div>
 <!--Stats-->
 <div class="row mb-3">
-    <div class="col-md-4">
+    <div class="col-md-4 order-md-last">
         <a href="{% url 'category_list' %}" class="text-decoration-none">
         <div class="card shadow-sm p-4 text-center card-hover" style="border-left: 5px solid #7c3aed">
             <div class="card-icon mb-2">
                 <i class="bi bi-grid-fill icon-purple icon-bg"></i>
             </div>
-            <h6 class="text-muted">Total Categories</h6>
+            <h6 class="text-muted">All Categories</h6>
             <h3 class="fw-bold">{{ total_category }}</h3>
         </div>
     </a>
     </div>
 
-    <div class="col-md-4">
+    <div class="col-md-4 order-md-last">
         <a href="{% url 'category_with_products' %}" class="text-decoration-none">
         <div class="card shadow-sm p-4 text-center card-hover" style="border-left: 5px solid #16a34a">
             <div class="card-icon mb-2">
                 <i class="bi bi-box-seam-fill icon-greeny icon-bg"></i>
             </div>
-            <h6 class="text-muted">Categories With Products</h6>
+            <h6 class="text-muted">Active Categories</h6>
             <h3 class="fw-bold">{{ categories_with_products }}</h3>
         </div>
     </a>
     </div>
 
-    <div class="col-md-4">
+    <div class="col-md-4 order-md-last">
         <a href="{% url 'category_without_products' %}" class="text-decoration-none">
         <div class="card shadow-sm p-4 text-center card-hover" style="border-left: 5px solid #f97316">
             <div class="card-icon mb-2">
                 <i class="bi bi-exclamation-circle-fill icon-orangey icon-bg"></i>
             </div>
-            <h6 class="text-muted">Categories Without Products</h6>
+            <h6 class="text-muted">Empty Categories</h6>
             <h3 class="fw-bold">{{ categories_without_products }}</h3>
         </div>
     </a>
     </div>
 </div>
 <hr>
-
+<div class="card shadow-sm mb-4">
+    <div class="card-header fw-bold bg-light">
+        📂 Category List
+    </div>
+    <div class="card-body p-0">
 <table class="table table-hover align-middle bg-white shadow-sm rounded">
         <tr>
-            <th>Category</th>
-            <th>Total Products</th>
+            <th>Category Name</th>
+            <th>Products Count</th>
             <th>Actions</th>
         </tr>
     <tbody>
@@ -105,6 +109,8 @@
         {% endfor %}
     </tbody>
 </table>
+</div>
+</div>
 <nav class="mt-4">
 <ul class="pagination justify-content-center">
 
