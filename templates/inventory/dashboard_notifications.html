@@ -1,0 +1,25 @@
+{% extends 'base_dashboard.html' %}
+{% block content %}
+<div class="card">
+    <div class="card-header">
+        <h5>Notifications ({{ all_count }})</h5>
+    </div>
+    <ul class="list-group list-group-flush">
+        {% for notif in top_notifications %}
+            <li class="list-group-item {% if not notif.is_read %}fw-bold{% endif %}">
+                <strong>{{ notif.title }}</strong> - {{ notif.message }}
+                <br>
+                <small>{{ notif.created_at|date:"M d, Y H:i" }}</small>
+                {% if not notif.is_read %}
+                    <a href="{% url 'notifications:mark_as_read' notif.pk %}" class="btn btn-sm btn-primary float-end">Mark as Read</a>
+                {% endif %}
+            </li>
+        {% empty %}
+            <li class="list-group-item">No notifications yet.</li>
+        {% endfor %}
+    </ul>
+    <div class="card-footer">
+        <a href="{% url 'notifications:all_notifications' %}">See All</a>
+    </div>
+</div>
+{% endblock content %}
