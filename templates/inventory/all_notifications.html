@@ -1,0 +1,99 @@
+{% extends 'base_dashboard.html' %}
+{% load group_tags %}  
+{% block content %}
+<style>
+    .table th {
+    background-color: #f8f9fa;
+    font-weight: 600;
+}
+
+.table tbody tr:hover {
+    background-color: #f1f3f5;
+}
+</style>
+<div class="card mb-4">
+<div class="card-header d-flex justify-content-between align-items-center">
+           <h3><b>Notification List</b></h3>
+           <div>
+            {% if user.is_superuser %}
+              <a href="{% url 'admin_dashboard' %}" class="btn btn-outline-secondary btn-sm me-2">
+            {% elif user|has_group:"Manager" %}
+              <a href="{% url 'manager_dashboard' %}" class="btn btn-outline-secondary btn-sm me-2">
+            {% elif user|has_group:"Staff" %}
+              <a href="{% url 'staff_dashboard' %}" class="btn btn-outline-secondary btn-sm me-2">
+            {% endif %}
+                 <i class="bi bi-arrow-left-circle-fill"></i> Back
+              </a>
+          </div>
+        </div>
+<div class="card-body">
+        <table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Title</th>
+            <th>Message</th>
+            <th>Type</th>
+            <th>Created At</th>
+            <th>Role</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for notif in notifications %}
+        <tr class="{% if not notif.is_read %}fw-bold{% endif %}">
+            <td>{{ notif.title }}</td>
+            <td>{{ notif.message }}</td>
+            <td>
+                {% if notif.type == "info" %}
+                  <span class="badge bg-info">{{ notif.type|title }}</span>
+                {% elif notif.type == "success" %}
+                  <span class="badge bg-success">{{ notif.type|title }}</span>
+                {% elif notif.type == "warning" %}
+                  <span class="badge bg-warning">{{ notif.type|title }}</span>
+                {% elif notif.type == "danger" %}
+                  <span class="badge bg-danger">{{ notif.type|title }}</span>
+                {% else %}
+                  <span class="badge bg-secondary">{{ notif.type|title }}</span>
+                {% endif %}
+            </td>
+            <td>{{ notif.created_at|date:"M d, Y H:i" }}</td>
+            <td>{{ notif.role_target|title }}</td>
+            <td>
+                {% if not notif.is_read %}
+                    <a href="{% url 'notifications:mark_as_read' notif.pk %}" class="btn btn-sm btn-primary">Mark as Read</a>
+                {% else %}
+                    <span class="text-success">Read</span>
+                {% endif %}
+            </td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="6" class="text-center">No notifications found.</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+    </div>
+</div>
+<nav class="mt-4">
+<ul class="pagination justify-content-center">
+
+    {% if page_obj.has_previous %}
+        <li class="page-item">
+            <a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous</a>
+        </li>
+    {% endif %}
+
+    <li class="page-item active">
+        <span class="page-link">{{ page_obj.number }}</span>
+    </li>
+
+    {% if page_obj.has_next %}
+        <li class="page-item">
+            <a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a>
+        </li>
+    {% endif %}
+
+</ul>
+</nav>
+{% endblock %}
