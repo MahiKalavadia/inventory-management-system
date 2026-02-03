@@ -342,11 +342,6 @@ def delete_category(request, pk):
 
 
 @login_required
-def report_dashboard(request):
-    return render(request, "dashboards/report_dashboard.html")
-
-
-@login_required
 def stock_dashboard(request):
     # ---------- FILTER PARAMETERS ----------
     category_id = request.GET.get('category')
@@ -549,3 +544,8 @@ def out_stock_products(request):
     page_obj = paginator.get_page(page_number)
 
     return render(request, "inventory/out_stock.html", {"page_obj": page_obj})
+
+
+@login_required
+def report_dashboard(request):
+    return render(request, "dashboards/report_dashboard.html")
