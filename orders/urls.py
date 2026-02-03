@@ -12,7 +12,9 @@ urlpatterns = [
     path('orders/delete/<int:pk>/', views.delete_order, name='delete_order'),
     path('order/<int:pk>/confirm/', views.confirm_order, name='confirm_order'),
     path('order/<int:pk>/paid/', views.mark_paid, name='mark_paid'),
-
     path("receipt/<int:pk>/download/",
          views.download_receipt, name="download_receipt"),
+    path("warranty-check/", views.warranty_check, name="warranty_check"),
+
+
 ]
