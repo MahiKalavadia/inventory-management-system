@@ -1,6 +1,8 @@
 from django.db import models
 from inventory.models import Product
 from django.contrib.auth.models import User
+from datetime import timedelta
+from django.utils import timezone
 # Create your models here.
 
 
@@ -85,26 +87,44 @@ class Order(models.Model):
             self.bill_number = f"BILL-{last_id:05d}"
         super().save(*args, **kwargs)
 
-# ✅ STEP 2 — Why This Matters
-# Status	Meaning
-# Draft	Bill being prepared
-# Confirmed	Order finalized
-# Paid	Money received
-# Cancelled	Reversed
-
 
 class OrderItem(models.Model):
     order = models.ForeignKey(
-        Order, on_delete=models.CASCADE, related_name='items')
+        Order, on_delete=models.CASCADE, related_name='items'
+    )
     product = models.ForeignKey(Product, on_delete=models.SET_NULL, null=True)
     quantity = models.PositiveIntegerField(default=1)
     price = models.DecimalField(max_digits=10, decimal_places=2)
+
+    # ✅ Warranty snapshot
+    warranty_months = models.PositiveIntegerField(default=0)
+    warranty_start = models.DateField(null=True, blank=True)
+    warranty_end = models.DateField(null=True, blank=True)
 
     @property
     def total(self):
         return self.price * self.quantity
 
     def save(self, *args, **kwargs):
-        if not self.price:
+        # 1️⃣ Set price automatically
+        if not self.price and self.product:
             self.price = self.product.price
+
+        # 2️⃣ Copy warranty from product ONLY once
+        if not self.pk and self.product:
+            self.warranty_months = self.product.warranty_months
+
+        # 3️⃣ Start warranty when order is PAID
+        if self.order.status == "Paid" and not self.warranty_start:
+            self.warranty_start = timezone.now().date()
+            self.warranty_end = self.warranty_start + timedelta(
+                days=30 * self.warranty_months
+            )
+
         super().save(*args, **kwargs)
+
+    def is_under_warranty(self):
+        return (
+            self.warranty_end is not None and
+            timezone.now().date() <= self.warranty_end
+        )
