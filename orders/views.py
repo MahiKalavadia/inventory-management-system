@@ -184,6 +184,10 @@ def create_order(request):
                 return redirect('create_order')
 
             messages.success(request, "Order created successfully!")
+            try:
+                send_receipt_email(order)
+            except Exception as e:
+                print("EMAIL ERROR:", e)
             return redirect('order_list')
 
     else:
@@ -294,3 +298,17 @@ def download_receipt(request, pk):
     build_receipt_pdf(response, order)
 
     return response
+
+
+def warranty_check(request):
+    order_id = request.GET.get("order_id")
+    items = None
+
+    if order_id:
+        items = OrderItem.objects.filter(order__id=order_id)
+
+    return render(
+        request,
+        "orders/warranty_check.html",
+        {"items": items}
+    )
