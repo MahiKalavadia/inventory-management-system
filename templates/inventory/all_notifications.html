@@ -39,7 +39,7 @@
         </tr>
     </thead>
     <tbody>
-        {% for notif in notifications %}
+        {% for notif in page_obj %}
         <tr class="{% if not notif.is_read %}fw-bold{% endif %}">
             <td>{{ notif.title }}</td>
             <td>{{ notif.message }}</td>
