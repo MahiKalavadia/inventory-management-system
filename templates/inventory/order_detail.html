@@ -70,18 +70,21 @@
                         <td>₹ {{ item.price|floatformat:2 }}</td>
                         <td>{{ item.quantity }}</td>
                         <td>
-                            {{ item.warranty_months }} months<br>
+                            {{ item.warranty_months }} months <br>
+
                             {% if item.warranty_end %}
-                                Ends: {{ item.warranty_end }}<br>
+                                Valid till: {{ item.warranty_end }} <br>
+
                                 {% if item.is_under_warranty %}
                                     <span class="badge bg-success">Under Warranty</span>
                                 {% else %}
-                                    <span class="badge bg-danger">Expired</span>
+                                    <span class="badge bg-danger">Warranty Expired</span>
                                 {% endif %}
                             {% else %}
-                                <span class="text-muted">Not started</span>
+                                <span class="text-muted">Warranty not started</span>
                             {% endif %}
                         </td>
+
                         <td>₹ {{ item.total|floatformat:2 }}</td>
                     </tr>
                     {% endfor %}
