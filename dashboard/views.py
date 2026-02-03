@@ -7,6 +7,8 @@ from django.contrib.auth.models import User
 from django.utils import timezone
 from datetime import timedelta
 from notifications.models import Notification
+from django.db.models import Sum, F, ExpressionWrapper, DecimalField
+from orders.models import OrderItem
 
 
 def landing(request):
@@ -23,6 +25,16 @@ def admin_dashboard(request):
     low_stock = low_stock_products.count()
     out_of_stock = Product.objects.filter(quantity__lte=0).count()
     in_stock = Product.objects.filter(quantity__gt=LOW_STOCK_THRESHOLD).count()
+    total_sales = (
+        OrderItem.objects
+        .filter(order__payment_status='Paid')
+        .aggregate(total=Sum(
+            ExpressionWrapper(
+                F('quantity') * F('price'),
+                output_field=DecimalField()
+            )
+        ))['total'] or 0
+    )
     recent_stock_logs = StockLog.objects.select_related(
         'product').order_by('-created_at')[:5]
     # login status
@@ -97,6 +109,7 @@ def admin_dashboard(request):
         'out_of_stock': out_of_stock,
         'in_stock': in_stock,
         'recent_stock_logs': recent_stock_logs,
+        'total_sales': total_sales,
         # for admin
         'l_stock': l_stock,
         'o_stock': o_stock,
