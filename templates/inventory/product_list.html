@@ -105,6 +105,7 @@
             <p class="mb-1 mt-2"><b>Vendor:</b> {{ product.supplier.name }}</p>
             <p class="mb-1"><b>Price:</b> ₹{{ product.price }}</p>
             <p class="mb-2"><b>Qty:</b> {{ product.quantity }}</p>
+            <p class="mb-2"><b>Warranty:</b> {{ product.warranty_months }} Months</p>
             {% if request.user.is_superuser or request.user.groups.first.name == "Manager" %}
             <p class="mb-2"><b>Actions:</b></p>
                 <a href="{% url 'update_product' product.id %}" class="badge bg-success"> Edit</a>
