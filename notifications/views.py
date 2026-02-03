@@ -55,11 +55,11 @@ def all_notifications(request):
         notifications = Notification.objects.filter(
             role_target=user_role).order_by('-created_at')
 
-    paginator = Paginator('notifications', 15)
+    paginator = Paginator(notifications, 15)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
 
-    return render(request, 'inventory/all_notifications.html', {'notifications': notifications, 'page_obj': page_obj})
+    return render(request, 'inventory/all_notifications.html', {'page_obj': page_obj})
 
 
 @login_required
