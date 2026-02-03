@@ -1,4 +1,5 @@
 {% extends 'base_dashboard.html' %}
+{% load humanize %}
 {% block content %}
 
 <!-- Header -->
@@ -70,7 +71,7 @@
             <i class="bi bi-hourglass-split icon-hourglass icon-bg"></i>
         </div>
         <h6 class="text-muted">Outstanding Payments</h6><!--pending payments-->
-        <h3 class="fw-bold">₹ {{ pending_amount }}</h3>
+        <h3 class="fw-bold">₹ {{ pending_amount|intcomma }}</h3>
     </div>
 </div>
 
@@ -79,10 +80,10 @@
     <div class="col">
       <div class="card h-100 shadow-sm p-4 text-center card-hover" style="border-left: 5px solid #22C55E">
         <div class="card-icon mb-2">
-            <i class="bi bi-currency-dollar icon-dollar icon-bg"></i>
+            <i class="bi bi-currency-rupee icon-dollar icon-bg"></i>
         </div>
         <h6 class="text-muted">Total Revenue</h6>
-        <h3 class="fw-bold">₹ {{ total_sales }}</h3>
+        <h3 class="fw-bold">₹ {{ total_sales|intcomma }}</h3>
     </div>
     </div>
     
@@ -92,7 +93,7 @@
             <i class="bi bi-calendar-day icon-calendar icon-bg"></i>
         </div>
         <h6 class="text-muted">Revenue Today</h6>
-        <h3 class="fw-bold">₹ {{ today_sales }}</h3>
+        <h3 class="fw-bold">₹ {{ today_sales|intcomma }}</h3>
     </div>
     </div>
     
@@ -102,7 +103,7 @@
             <i class="bi bi-calendar-week icon-week icon-bg"></i>
         </div>
         <h6 class="text-muted">Revenue This Month</h6>
-        <h3 class="fw-bold">₹ {{ monthly_sales }}</h3>
+        <h3 class="fw-bold">₹ {{ monthly_sales|intcomma }}</h3>
     </div>
     </div>
      
