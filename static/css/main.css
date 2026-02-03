@@ -269,6 +269,14 @@ body {
     color: #ef4444;
 }
 
+.icon-checkcircle {
+    color: #10B981;
+}
+
+.icon-tri {
+    color: #EF4444;
+}
+
 /* Optional subtle background */
 .icon-bg {
     background: rgba(0, 0, 0, 0.04);
