@@ -62,7 +62,7 @@
                 {% if not notif.is_read %}
                     <a href="{% url 'notifications:mark_as_read' notif.pk %}" class="btn btn-sm btn-primary">Mark as Read</a>
                 {% else %}
-                    <span class="text-success">Read</span>
+                    <span class="btn btn-sm btn-success">Read</span>
                 {% endif %}
                    <a href="{% url 'notifications:delete_notification' notif.pk %}" class="btn btn-sm btn-danger">Delete</a>
             </td>
