@@ -34,20 +34,28 @@ def build_receipt_pdf(buffer, order):
     elements.append(Spacer(1, 15))
 
     # -------- Items Table --------
-    table_data = [["Product", "Unit Price", "Qty", "Total"]]
+    table_data = [["Product", "Unit Price", "Qty", "Warranty", "Total"]]
 
     for item in order.items.all():
+
+        # Warranty display
+        if item.warranty_months > 0 and item.warranty_end:
+            warranty_text = f"{item.warranty_months}Months\nValid till {item.warranty_end.strftime('%d-%m-%Y')}"
+        else:
+            warranty_text = "No Warranty"
+
         table_data.append([
             str(item.product),
             f"₹ {item.price}",
             item.quantity,
+            warranty_text,
             f"₹ {item.total}",
         ])
 
     # Grand total row
-    table_data.append(["", "", "Grand Total", f"₹ {order.total_amount}"])
+    table_data.append(["", "", "", "Grand Total", f"₹ {order.total_amount}"])
 
-    table = Table(table_data, colWidths=[200, 90, 50, 90])
+    table = Table(table_data, colWidths=[160, 80, 40, 120, 80])
 
     table.setStyle(TableStyle([
         ("BACKGROUND", (0, 0), (-1, 0), colors.HexColor("#2563eb")),
@@ -64,7 +72,16 @@ def build_receipt_pdf(buffer, order):
     elements.append(table)
     elements.append(Spacer(1, 20))
 
-    # -------- Footer --------
+    # -------- Warranty Terms Footer --------
+    elements.append(Paragraph("<b>Warranty Terms:</b>", styles["Normal"]))
+    elements.append(
+        Paragraph("• Warranty starts from invoice date.", styles["Normal"]))
+    elements.append(
+        Paragraph("• Original bill required for claims.", styles["Normal"]))
+    elements.append(
+        Paragraph("• Physical / liquid damage not covered.", styles["Normal"]))
+    elements.append(Spacer(1, 10))
+
     elements.append(
         Paragraph("Thank you for your purchase!", styles["Normal"]))
     elements.append(

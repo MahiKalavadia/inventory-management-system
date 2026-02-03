@@ -11,6 +11,10 @@ def send_receipt_email(order):
     build_receipt_pdf(pdf_buffer, order)
     pdf_buffer.seek(0)
 
+    warranty_info = ""
+    for item in order.items.all():
+        warranty_info += f"{item.product.name}: {item.warranty_months} months\n"
+
     email = EmailMessage(
         subject=f"Invoice for Your Order #{order.id}",
         body=f"""
@@ -20,7 +24,8 @@ Your order has been successfully placed.
 
 🧾 Order ID: {order.id}
 💰 Total Amount: ₹ {order.total_amount}
-
+🛡️ Warranty Details per Product:
+{warranty_info}
 Please find your invoice attached.
 
 Thank you for shopping with us!
