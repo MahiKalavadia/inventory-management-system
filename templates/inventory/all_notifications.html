@@ -64,6 +64,7 @@
                 {% else %}
                     <span class="text-success">Read</span>
                 {% endif %}
+                   <a href="{% url 'notifications:delete_notification' notif.pk %}" class="btn btn-sm btn-danger">Delete</a>
             </td>
         </tr>
         {% empty %}
