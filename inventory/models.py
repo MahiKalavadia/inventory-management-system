@@ -23,6 +23,8 @@ class Product(models.Model):
     image = models.ImageField(
         upload_to='product_images/', blank=True, null=True)
     description = models.TextField(blank=True, null=True)
+    warranty_months = models.PositiveIntegerField(
+        help_text="Warranty period in months")
     is_active = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
