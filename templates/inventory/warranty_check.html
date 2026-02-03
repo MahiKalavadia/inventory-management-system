@@ -1,0 +1,29 @@
+{% extends 'base_dashboard.html' %}
+<form method="get">
+    <input type="text" name="q" placeholder="Enter Order ID">
+    <button class="btn btn-dark">Check</button>
+</form>
+
+{% if items %}
+<table class="table">
+<tr>
+<th>Product</th>
+<th>Warranty Ends</th>
+<th>Status</th>
+</tr>
+
+{% for item in items %}
+<tr>
+<td>{{ item.product.name }}</td>
+<td>{{ item.warranty_end }}</td>
+<td>
+{% if item.is_under_warranty %}
+<span class="badge bg-success">Valid</span>
+{% else %}
+<span class="badge bg-danger">Expired</span>
+{% endif %}
+</td>
+</tr>
+{% endfor %}
+</table>
+{% endif %}
