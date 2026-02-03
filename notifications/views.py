@@ -66,7 +66,7 @@ def all_notifications(request):
 def delete_notfification(request, pk):
     notify = get_object_or_404(Notification, pk=pk)
     if request.method == "POST":
-        if notify.user == request.user or notify.user is None:
+        if notify.user_target == request.user or notify.user_target is None:
             notify.delete()
             return redirect('notifications:all_notifications')
 
