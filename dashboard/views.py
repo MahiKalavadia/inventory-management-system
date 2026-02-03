@@ -40,7 +40,7 @@ def admin_dashboard(request):
     out_stock_bar = Product.objects.filter(
         quantity__lte=0, is_active=True).count()
     notifications = Notification.objects.filter(
-        is_read=False)[:5]  # latest 10 unread
+        is_read=False).order_by('-created_at')[:5]
     notifications_count = notifications.count()
     # recent activities
     recent_products = Product.objects.order_by('-created_at')[:3]
