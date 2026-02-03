@@ -59,6 +59,7 @@
                         <th>Product</th>
                         <th>Price</th>
                         <th>Qty</th>
+                        <th>Warranty</th>
                         <th>Total</th>
                     </tr>
                 </thead>
@@ -68,6 +69,19 @@
                         <td>{{ item.product }}</td>
                         <td>₹ {{ item.price|floatformat:2 }}</td>
                         <td>{{ item.quantity }}</td>
+                        <td>
+                            {{ item.warranty_months }} months<br>
+                            {% if item.warranty_end %}
+                                Ends: {{ item.warranty_end }}<br>
+                                {% if item.is_under_warranty %}
+                                    <span class="badge bg-success">Under Warranty</span>
+                                {% else %}
+                                    <span class="badge bg-danger">Expired</span>
+                                {% endif %}
+                            {% else %}
+                                <span class="text-muted">Not started</span>
+                            {% endif %}
+                        </td>
                         <td>₹ {{ item.total|floatformat:2 }}</td>
                     </tr>
                     {% endfor %}
