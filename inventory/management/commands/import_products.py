@@ -21,7 +21,7 @@ class Command(BaseCommand):
 
             for row in reader:
                 # Skip empty rows
-                if not row['sku']:
+                if not row.get('sku'):
                     continue
 
                 # CATEGORY
@@ -29,12 +29,17 @@ class Command(BaseCommand):
                     name=row['category'].strip()
                 )
 
-                # SUPPLIER (nullable)
+                # SUPPLIER
                 supplier = None
                 if row.get('supplier'):
                     supplier, _ = Supplier.objects.get_or_create(
                         name=row['supplier'].strip()
                     )
+
+                # WARRANTY (SAFE EVEN IF COLUMN NOT PRESENT)
+                warranty_value = row.get('warranty')
+                if warranty_value:
+                    warranty_value = warranty_value.strip()
 
                 # CREATE or UPDATE PRODUCT
                 Product.objects.update_or_create(
@@ -46,10 +51,11 @@ class Command(BaseCommand):
                         'quantity': int(row['quantity']),
                         'category': category,
                         'supplier': supplier,
-                        'description': row.get('description', '').strip()
+                        'description': row.get('description', '').strip(),
+                        'warranty': warranty_value  # 👈 NEW FIELD
                     }
                 )
 
         self.stdout.write(
-            self.style.SUCCESS("✅ Products imported successfully")
+            self.style.SUCCESS("✅ Products imported/updated successfully")
         )
