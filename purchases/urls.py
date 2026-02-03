@@ -1,10 +1,18 @@
 from django.urls import path
 from . import views
 
+app_name = "purchases"
+
+
 urlpatterns = [
-    path('dashboard/', views.purchase_dashboard, name='purchase_dashboard'),
-    path('request/<int:product_id>/', views.create_purchase_request,
-         name='create_purchase_request'),
-    path('approve/<int:pr_id>/<str:action>/',
-         views.approve_purchase_request, name='approve_purchase_request'),
+    path('purchase-dahsboard/', views.purchase_dashboard,
+         name='purchase_dashboard'),
+    path('request/create/', views.create_purchase_request,
+         name='create_request'),
+    path('request/<int:pk>/approve/',
+         views.approve_request, name='approve_purchase_request'),
+    path('request/<int:pk>/reject/',
+         views.reject_request, name='reject_purchase_request'),
+    path('order/<int:pk>/status/<str:status>/',
+         views.update_order_status, name='update_order_status'),
 ]

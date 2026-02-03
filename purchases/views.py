@@ -1,48 +1,90 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import PurchaseRequest
-from inventory.models import Product
 from django.contrib.auth.decorators import login_required
+from django.utils import timezone
+from .models import PurchaseRequest, PurchaseOrder
+from .forms import PurchaseRequestForm, PurchaseOrderForm
+from notifications.models import Notification
+from django.contrib.auth.models import User
 
 
+@login_required
 def purchase_dashboard(request):
-    if request.user.is_superuser:
-        requests = PurchaseRequest.objects.all().order_by('-created_at')
-    else:
-        requests = PurchaseRequest.objects.filter(requested_by=request.user)
+    total_purchases = PurchaseRequest.objects.filter(status='Approved').count()
+    order_placed = PurchaseOrder.objects.filter(status="Ordered").count()
+    completed_orders = PurchaseOrder.objects.filter(status="Delivered").count()
+    overdue = PurchaseOrder.objects.filter(status="Delayed").count()
 
-    return render(request, 'dashboards/purchase_dashboard.html')
+    context = {
+        'total_purchaserequest': total_purchases,
+        'order_placed': order_placed,
+        'completed_orders': completed_orders,
+        'overdue': overdue,
+    }
+    return render(request, 'dashboards/purchase_dashboard.html', context)
 
 
 @login_required
-def create_purchase_request(request, product_id):
-    product = get_object_or_404(Product, id=product_id)
-
+def create_purchase_request(request):
     if request.method == "POST":
-        qty = int(request.POST.get("quantity"))
-        PurchaseRequest.objects.create(
-            product=product,
-            quantity=qty,
-            requested_by=request.user
-        )
-        return redirect('stock_dashboard')
+        form = PurchaseRequestForm(request.POST)
+        if form.is_valid():
+            pr = form.save(commit=False)
+            pr.requested_by = request.user
+            pr.save()
 
-    return render(request, "inventory/request_form.html", {"product": product})
+            # Notify admin
+            admin = User.objects.filter(is_superuser=True).first()
+            Notification.objects.create(
+                user=admin,
+                message=f"Purchase request for {pr.product.name} ({pr.quantity})"
+            )
+
+            return redirect('dashboard')
+    else:
+        form = PurchaseRequestForm()
+    return render(request, 'inventory/create_request.html', {'form': form})
 
 
 @login_required
-def approve_purchase_request(request, pr_id, action):
-    pr = get_object_or_404(PurchaseRequest, id=pr_id)
+def approve_request(request, pk):
+    pr = get_object_or_404(PurchaseRequest, pk=pk)
+    if request.method == "POST":
+        form = PurchaseOrderForm(request.POST)
+        if form.is_valid():
+            pr.status = 'approved'
+            pr.save()
 
-    if not request.user.is_superuser:
-        return redirect('admin_dashboard')
+            po = form.save(commit=False)
+            po.request = pr
+            po.supplier = pr.supplier
+            po.total_cost = pr.product.purchase_price * pr.quantity
+            po.save()
 
-    if action == "approve":
-        pr.status = "Approved"
-        pr.product.quantity += pr.quantity   # STOCK INCREASE
-        pr.product.save()
+            return redirect('purchases:purchase_dashboard')
+    else:
+        form = PurchaseOrderForm()
+    return render(request, 'inventory/approve_request.html', {'pr': pr, 'form': form})
 
-    elif action == "reject":
-        pr.status = "Rejected"
 
+@login_required
+def reject_request(request, pk):
+    pr = get_object_or_404(PurchaseRequest, pk=pk)
+    pr.status = 'rejected'
     pr.save()
-    return redirect('purchase_dashboard')
+    return redirect('purchases:purchase_dashboard')
+
+
+@login_required
+def update_order_status(request, pk, status):
+    order = get_object_or_404(PurchaseOrder, pk=pk)
+    order.status = status
+
+    if status == 'delivered':
+        order.actual_delivery = timezone.now().date()
+        # Update stock
+        product = order.request.product
+        product.stock += order.request.quantity
+        product.save()
+
+    order.save()
+    return redirect('purchases:purchase_dashboard')
