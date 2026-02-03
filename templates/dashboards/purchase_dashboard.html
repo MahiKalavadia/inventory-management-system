@@ -7,16 +7,77 @@
 </div>
 
 <div class="mb-3 d-flex gap-2">
-    {% if request.user.is_superuser or request.user.groups.first.name == "Manager" %}
-        <a href="{% url 'purchase_create' %}" class="btn btn-primary">➕ Create Purchase Request</a>
-        <a href="{% url 'purchase_list' %}" class="btn btn-outline-secondary">📄 All Purchase Records</a>
+    {% if request.user.is_superuser %}
+        <a href="#" class="btn btn-outline-secondary">📄 All Purchase Records</a>
+    {% else %}
+        <a href="#" class="btn btn-primary">➕ Create Purchase Request</a>
     {% endif %}
 </div>
 
-<h3>Pending Purchase Requests</h3>
+<div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 row-cols-xl-5 g-3 mb-4">
 
-<table class="table">
-<tr>
+
+    {% comment %} Use flex-fill to make all 5 cards equal width {% endcomment %}
+    <div class="col">
+       <div class="card h-100 shadow-sm text-center p-4 card-hover" style="border-left: 5px solid #2563EB">
+         <div class="card-icon mb-2">
+            <i class="bi bi-receipt-cutoff icon-receipt icon-bg"></i>
+         </div>
+        <h6 class="text-muted">Purchase Orders</h6>
+        <h3 class="fw-bold">{{ total_purchases }}</h3>
+       </div>
+    </div>
+    
+    <div class="col">
+      <div class="card h-100 shadow-sm text-center p-4 card-hover" style="border-left: 5px solid #F59E0B">
+        <div class="card-icon mb-2">
+            <i class="bi bi-currency-dollar icon-clock icon-bg"></i>
+        </div>
+        <h6 class="text-muted">Total Expenditure</h6>
+        <h3 class="fw-bold"></h3>
+    </div>
+    </div>
+    
+    <div class="col">
+      <div class="card h-100 shadow-sm text-center p-4 card-hover" style="border-left: 5px solid #14B8A6">
+        <div class="card-icon mb-2">
+            <i class="bi bi-hourglass-split icon-circle icon-bg"></i>
+        </div>
+        <h6 class="text-muted">Purchase Order Placed</h6>
+        <h3 class="fw-bold">{{ order_placed }}</h3>
+    </div>
+    </div>
+    
+    <div class="col">
+      <div class="card h-100 shadow-sm text-center p-4 card-hover" style="border-left: 5px solid #10B981">
+        <div class="card-icon mb-2">
+            <i class="bi bi-check-circle-fill icon-checkcircle icon-bg"></i>
+        </div>
+        <h6 class="text-muted">Received Orders</h6>
+        <h3 class="fw-bold">{{ completed_orders }}</h3>
+    </div>
+    </div>
+    
+    <div class="col">
+      <div class="card h-100 shadow-sm p-4 text-center card-hover" style="border-left: 5px solid #EF4444">
+        <div class="card-icon mb-2">
+            <i class="bi bi-exclamation-triangle-fill icon-tri icon-bg"></i>
+        </div>
+        <h6 class="text-muted">Overdue Deliveries</h6>
+        <h3 class="fw-bold">{{ overdue }}</h3>
+    </div>
+</div>
+</div>
+<hr>
+
+
+
+ <div class="card shadow-sm mb-4">
+    <div class="card-header fw-bold bg-light">
+        📂 Purchase Request Received
+    </div>
+<table class="table table-hover align-middle bg-white shadow-sm rounded">
+    <tr>
     <th>Product</th>
     <th>Qty</th>
     <th>Requested By</th>
@@ -42,7 +103,9 @@
     {% endif %}
     </td>
 </tr>
+
 {% endfor %}
 </table>
+</div>
 
 {% endblock %}
