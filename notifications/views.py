@@ -60,3 +60,14 @@ def all_notifications(request):
     page_obj = paginator.get_page(page_number)
 
     return render(request, 'inventory/all_notifications.html', {'notifications': notifications, 'page_obj': page_obj})
+
+
+@login_required
+def delete_notfification(request, pk):
+    notify = get_object_or_404(Notification, pk=pk)
+    if request.method == "POST":
+        if notify.user == request.user or notify.user is None:
+            notify.delete()
+            return redirect('notifications:all_notifications')
+
+    return render(request, 'inventory/delete_notification.html', {'notify': notify})

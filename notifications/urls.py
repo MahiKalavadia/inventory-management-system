@@ -8,4 +8,6 @@ urlpatterns = [
          name='dashboard_notifications'),
     path('all/', views.all_notifications, name='all_notifications'),
     path('mark-read/<int:pk>/', views.mark_as_read, name='mark_as_read'),
+    path('delete/<int:pk>/', views.delete_notfification,
+         name='delete_notification'),
 ]
