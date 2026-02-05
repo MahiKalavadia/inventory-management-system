@@ -9,12 +9,13 @@ from .models import Notification
 # Utility function to create notifications for multiple roles
 
 
-def create_notification(title, message, type, roles):
+def create_notification(title, message, type, notification_type, roles):
     for role in roles:
         Notification.objects.create(
             title=title,
             message=message,
             type=type,
+            notification_type=notification_type,
             role_target=role
         )
 
@@ -30,6 +31,7 @@ def product_saved(sender, instance, created, **kwargs):
         title=f"Product {'Added' if created else 'Updated'}",
         message=f"{instance.name} was {action} inventory.",
         type="success" if created else "info",
+        notification_type="product",
         roles=roles
     )
 
@@ -40,6 +42,7 @@ def product_deleted(sender, instance, **kwargs):
         title="Product Deleted",
         message=f"{instance.name} was removed from inventory.",
         type="danger",
+        notification_type="product",
         roles=['admin', 'manager', 'staff']
     )
 
@@ -53,6 +56,7 @@ def category_saved(sender, instance, created, **kwargs):
         title=f"Category {'Added' if created else 'Updated'}",
         message=f"{instance.name} was {'added to' if created else 'updated in'} inventory.",
         type="success" if created else "info",
+        notification_type="category",
         roles=roles
     )
 
@@ -63,6 +67,7 @@ def category_deleted(sender, instance, **kwargs):
         title="Category Deleted",
         message=f"{instance.name} was removed from inventory.",
         type="danger",
+        notification_type="category",
         roles=['admin', 'manager']
     )
 
@@ -76,6 +81,7 @@ def supplier_saved(sender, instance, created, **kwargs):
         title=f"Supplier {'Added' if created else 'Updated'}",
         message=f"{instance.name} was {'added to' if created else 'updated in'} inventory.",
         type="success" if created else "info",
+        notification_type="supplier",
         roles=roles
     )
 
@@ -86,6 +92,7 @@ def supplier_deleted(sender, instance, **kwargs):
         title="Supplier Deleted",
         message=f"{instance.name} was removed from inventory.",
         type="danger",
+        notification_type="supplier",
         roles=['admin', 'manager']
     )
 
@@ -99,6 +106,7 @@ def stock_log_created(sender, instance, created, **kwargs):
             title="Stock Movement",
             message=f"{instance.quantity} units {'added to' if instance.action == 'IN' else 'removed from'} {instance.product.name}",
             type="warning",
+            notification_type="stock",
             roles=['admin', 'manager', 'staff']
         )
 
@@ -112,6 +120,7 @@ def order_saved(sender, instance, created, **kwargs):
         title=f"Order {'Created' if created else 'Updated'}",
         message=f"Order #{instance.id} for {instance.customer_name if created else 'status: ' + instance.status}",
         type="success" if created else "info",
+        notification_type="order",
         roles=roles
     )
 
@@ -122,6 +131,7 @@ def order_deleted(sender, instance, **kwargs):
         title="Order Deleted",
         message=f"Order #{instance.id} was deleted.",
         type="danger",
+        notification_type="order",
         roles=['admin', 'manager', 'staff']
     )
 
@@ -134,5 +144,6 @@ def purchase_request_saved(sender, instance, created, **kwargs):
         title="Purchase Request",
         message=f"{instance.product.name} request is {instance.status}",
         type="warning",
+        notification_type="purchase",
         roles=['admin', 'manager']  # Only admin and manager
     )
