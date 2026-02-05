@@ -251,7 +251,7 @@
     
     <td>
         {% if request.user.is_superuser or request.user.groups.first.name == "Manager" %}
-            <a href="{% url 'update_product' product.id %}" class="btn btn-sm btn-warning">Edit</a>
+            <a href="{% url 'update_product' product.id %}" class="btn btn-sm btn-warning">Manage</a>
             <a href="{% url 'delete_product' product.id %}" class="btn btn-sm btn-danger">Delete</a>
         {% else %}
             Read-Only Access
