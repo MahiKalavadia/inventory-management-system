@@ -180,15 +180,14 @@ def create_order(request):
                         item.save()
 
             except Exception as e:
-                messages.error(request, str(e))
-                return redirect('create_order')
+                raise e
 
-            messages.success(request, "Order created successfully!")
-            try:
-                send_receipt_email(order)
-            except Exception as e:
-                print("EMAIL ERROR:", e)
-            return redirect('order_list')
+        messages.success(request, "Order created successfully!")
+        try:
+            send_receipt_email(order)
+        except Exception as e:
+            print("EMAIL ERROR:", e)
+        return redirect('order_list')
 
     else:
         order_form = OrderForm()
