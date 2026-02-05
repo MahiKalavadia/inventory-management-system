@@ -1,4 +1,7 @@
 {% extends 'base_dashboard.html' %}
+{% block extra_head %}
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;600;700&display=swap" rel="stylesheet">
+{% endblock %}
 {% block content %}
 
 <style>
@@ -25,18 +28,19 @@
 }
 
 </style>
-
+<div class="card mb-4">
 <div class="card-header d-flex justify-content-between align-items-center">
-           <span><b>Inventory Items</b></span>
+           <span><h3><b>Inventory Items</b></h3></span>
            <div>
               <a href="{% url 'product_dashboard' %}" class="btn btn-outline-secondary btn-sm me-2">
                  <i class="bi bi-arrow-left-circle-fill"></i> Back
               </a>
           </div>
         </div>
+   
 
-<hr>
 <!-- FILTER BAR -->
+<div class="card-body">
 <form method="get" class="row g-2 mb-4">
 
     <div class="col-md-4">
@@ -103,15 +107,25 @@
             <small class="text-muted">{{ product.category.name }} • {{ product.brand }}</small>
 
             <p class="mb-1 mt-2"><b>Vendor:</b> {{ product.supplier.name }}</p>
+            {% if request.user.groups.first.name != 'Staff' %}
+            <p class="mb-1 mt-2"><b>Purchase Price:</b>{{ product.purchase_price }}</p>
+            <p class="mb-1 mt-2"><b>Profit:</b>{{ product.profit }}</p>
+            <p class="mb-1 mt-2"><b>Margin:</b>{{ product.margin_percent }}</p>
+            {% endif %}
             <p class="mb-1"><b>Price:</b> ₹{{ product.price }}</p>
             <p class="mb-2"><b>Qty:</b> {{ product.quantity }}</p>
             <p class="mb-2"><b>Warranty:</b> {{ product.warranty_months }} Months</p>
-            {% if request.user.is_superuser or request.user.groups.first.name == "Manager" %}
-            <p class="mb-2"><b>Actions:</b></p>
-                <a href="{% url 'update_product' product.id %}" class="badge bg-success"> Edit</a>
-                <a href="{% url 'delete_product' product.id %}" class="badge bg-danger"> Delete</a>
-            {% endif %}
-            <br>
+            <div class="row">
+              {% if request.user.is_superuser or request.user.groups.first.name == "Manager" %}
+              <div class="col md-2">
+                <p class="mb-2"><b>Actions:</b></p>
+               </div>
+               <div class="col md-5">
+                  <a href="{% url 'update_product' product.id %}" class="badge bg-success"> Edit</a>
+                  <a href="{% url 'delete_product' product.id %}" class="badge bg-danger"> Delete</a>
+               </div>
+              {% endif %}
+            </div>
             {% if product.quantity == 0 %}
                 <span class="badge bg-danger">Out of Stock</span>
                 {% if user.is_superuser or request.user.groups.first.name == "Manager" %}
@@ -157,5 +171,8 @@
 
 </ul>
 </nav>
+</div>
+</div>
+</div>
 
 {% endblock %}
