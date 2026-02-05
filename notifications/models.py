@@ -4,6 +4,15 @@ from django.contrib.auth.models import User
 
 class Notification(models.Model):
 
+    NOTIFY_CHOICES = [
+        ('product', 'Product Activity'),
+        ('category', 'Category Activity'),
+        ('supplier', 'Supplier Activity'),
+        ('stock', 'Stock Activity'),
+        ('purchase', 'Purchase Activity'),
+        ('order', 'Order Activity'),
+    ]
+
     TYPE_CHOICES = [
         ('info', 'Info'),
         ('success', 'Success'),
@@ -28,7 +37,8 @@ class Notification(models.Model):
         User, null=True, blank=True, on_delete=models.CASCADE)
 
     link = models.CharField(max_length=255, blank=True, null=True)
-
+    notification_type = models.CharField(
+        max_length=20, choices=NOTIFY_CHOICES, blank=True, null=True)
     is_read = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
 
