@@ -36,7 +36,7 @@
                             {% endif %}
                         </td>
                         <td>
-                            <a href="{% url 'update_user' user.id %}" class="btn btn-sm btn-primary">Edit</a>
+                            <a href="{% url 'update_user' user.id %}" class="btn btn-sm btn-primary">Manage</a>
                             <a href="{% url 'toggle_user_status' user.id %}" class="btn btn-sm btn-warning">
                                 {% if user.is_active %}Deactivate{% else %}Activate{% endif %}
                             </a>
