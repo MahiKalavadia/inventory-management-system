@@ -1,9 +1,20 @@
 {% extends 'base_dashboard.html' %}
 {% load crispy_forms_tags %}
 {% block content %}
-    <h4><b><a href="{% url 'user_dashboard' %}" style="color: grey; font-size: 2rem;">
-        <i class="bi bi-arrow-left-circle-fill"></i></a> Add New User</b></h4>
-    <div class="card p-3">
+<div class="container-fluid mt-4">
+    <div class="card shadow-sm p-4">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <h3 class="mb-0"><b>Add New User</b></h3>
+            <div>
+              <a href="{% url 'user_dashboard' %}" class="btn btn-outline-secondary btn-sm">
+               <i class="bi bi-arrow-left-circle-fill"></i> Back
+               </a>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container-fluid mt-4">
+    <div class="card shadow-sm p-4">
         <form method="post">
             {% csrf_token %}
             {{ form|crispy}}
@@ -11,4 +22,5 @@
             <a href="{% url 'view_users' %}" class="btn btn-secondary">Cancel</a>
         </form>
     </div>
+</div>
 {% endblock %}
