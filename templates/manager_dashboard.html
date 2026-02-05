@@ -22,6 +22,12 @@
   </button>
 
   <ul class="dropdown-menu dropdown-menu-end p-2" style="width: 300px;">
+    <form method="POST" action="{% url 'notifications:mark_all_notifications_read' %}">
+  {% csrf_token %}
+  <button type="submit" class="btn btn-sm btn-link text-primary">
+    Mark all as read
+  </button>
+</form>
     {% for n in notifications %}
       <li class="mb-2">
         <a href="{% url 'notifications:mark_as_read' n.pk %}" class="dropdown-item small {% if not n.is_read %}bg-light{% endif %}">
