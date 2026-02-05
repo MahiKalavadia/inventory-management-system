@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     'notifications',
     'crispy_forms',
     'crispy_bootstrap5',
+    'django_apscheduler',
 ]
 
 MIDDLEWARE = [
