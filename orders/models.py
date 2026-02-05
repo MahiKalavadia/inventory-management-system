@@ -3,6 +3,7 @@ from inventory.models import Product
 from django.contrib.auth.models import User
 from datetime import timedelta
 from django.utils import timezone
+from django.db.models import Max
 # Create your models here.
 
 
@@ -83,8 +84,13 @@ class Order(models.Model):
 
     def save(self, *args, **kwargs):
         if not self.bill_number:
-            last_id = Order.objects.count() + 1
-            self.bill_number = f"BILL-{last_id:05d}"
+            last_bill = Order.objects.aggregate(Max('id'))['id__max']
+
+            if last_bill:
+                self.bill_number = f"BILL-{last_bill + 1:05d}"
+            else:
+                self.bill_number = "BILL-00001"
+
         super().save(*args, **kwargs)
 
 
