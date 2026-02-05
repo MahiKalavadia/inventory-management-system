@@ -1,14 +1,14 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Product, Category, StockLog
 from suppliers.models import Supplier
-from django.db.models import Q, F, Sum,  FloatField, ExpressionWrapper
+from django.db.models import Q, F, Sum,  FloatField, ExpressionWrapper, DecimalField, Value, Avg
 from django.core.paginator import Paginator
 from django.contrib.auth.decorators import login_required
 from .forms import ProductForm, CategoryForm, StockForm
 from django.db.models import Count
 from inventory.config import LOW_STOCK_THRESHOLD
 from django.contrib import messages
-from django.db.models.functions import TruncMonth
+from django.db.models.functions import TruncMonth, Coalesce
 
 
 @login_required
@@ -224,12 +224,45 @@ def category_dashboard(request):
         product_count=Count('product')
     ).filter(product_count=0).count()
 
+    # Charts
+    # Products per Category
+    products_per_category = Category.objects.annotate(
+        product_count=Count('product')
+    )
+    # Stock value per category(price * quantity )
+    stock_value = Category.objects.annotate(
+        total_stock_value=Coalesce(
+            Sum(
+                ExpressionWrapper(
+                    F('product__price') * F('product__quantity'),
+                    output_field=DecimalField(max_digits=12, decimal_places=2)
+                )
+            ),
+            Value(0, output_field=DecimalField(
+                max_digits=12, decimal_places=2))
+        )
+    )
+
+    # sales per category
+    sales_per_category = Category.objects.annotate(
+        total_sales=Coalesce(
+            Sum('product__orderitem__price',
+                output_field=DecimalField(max_digits=12, decimal_places=2)
+                ),
+            Value(0, output_field=DecimalField(
+                max_digits=12, decimal_places=2))
+        )
+    )
+
     context = {
         'categories': categories,
         'total_category': total_category,
         'categories_with_products': categories_with_products,
         'categories_without_products': categories_without_products,
         'search': search,
+        'products_per_category': products_per_category,
+        'stock_value': stock_value,
+        'sales_per_category': sales_per_category,
     }
 
     return render(request, "dashboards/category_dashboard.html", context)
@@ -384,8 +417,8 @@ def stock_dashboard(request):
         action='OUT').aggregate(Sum('quantity'))['quantity__sum'] or 0
 
     # ---------- LOW STOCK PRODUCTS ----------
-    low_qs = Product.objects.filter(quantity__lte=LOW_STOCK_THRESHOLD, quantity__gt=0, is_active=True)\
-                            .select_related('category', 'supplier')
+    low_qs = Product.objects.filter(
+        quantity__lte=LOW_STOCK_THRESHOLD, quantity__gt=0, is_active=True).select_related('category', 'supplier')
 
     # ---------- PAGINATION ----------
     product_paginator = Paginator(product_qs.order_by('name'), 5)
