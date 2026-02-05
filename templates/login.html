@@ -4,34 +4,70 @@
 <head>
 <meta charset="UTF-8">
 <title>Login</title>
-
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 
 <style>
 body {
     background: linear-gradient(to right, #f3f6ff, #f9fbff);
     height: 100vh;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-.login-card {
-    width: 420px;
-    border-radius: 14px;
-    box-shadow: 0px 20px 40px rgba(0,0,0,0.1);
-    padding: 35px;
+/* MAIN CARD */
+.main-card {
+    width: 1100px;              /* ⬅ BIGGER */
+    border-radius: 22px;        /* ⬅ SOFT CORNERS */
+    box-shadow: 0px 30px 60px rgba(0,0,0,0.08);
+    overflow: hidden;
     background: #fff;
 }
 
-.form-control {
-    height: 48px;
-    border-radius: 8px;
+/* LEFT IMAGE AREA */
+.left-panel {
+    background: #f8fbff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 60px;
 }
 
-.btn-login {
+.left-panel img {
+    max-width: 90%;
+}
+
+/* RIGHT LOGIN AREA */
+.login-panel {
+    padding: 70px 60px;
+}
+
+.login-panel h3 {
+    font-weight: 700;
+    font-size: 30px;
+}
+
+/* INPUTS */
+.form-control {
     height: 50px;
     border-radius: 10px;
-    font-weight: 500;
-    font-size: 16px;
+    border: 1px solid #e5e7eb;
 }
+
+/* BUTTON FIX */
+.btn-login {
+    height: 54px;
+    border-radius: 12px;
+    font-weight: 600;
+    font-size: 16px;
+    background-color: #1f2937;
+    color: white;                 /* ⬅ TEXT FIX */
+    border: none;
+}
+
+.btn-login:hover {
+    background-color: #111827;
+}
+
+/* PASSWORD ICON */
 .password-wrapper {
     position: relative;
 }
@@ -47,6 +83,14 @@ body {
     transform: translateY(-50%);
     cursor: pointer;
     font-size: 18px;
+    color: #6b7280;
+}
+.left-panel {
+    background-image: url("{% static 'images/3.png' %}");
+    background-position: center;    
+    background-size: cover;          
+    background-repeat: no-repeat;
+    min-height: 100%;               
 }
 
 </style>
@@ -55,43 +99,41 @@ body {
 <body>
 
 <div class="d-flex justify-content-center align-items-center h-100">
+    <div class="main-card row g-0">
 
-    <div class="login-card">
+        <!-- LEFT IMAGE -->
+        <div class="col-md-6 left-panel"></div>
 
-        <h3 class="text-center fw-bold mb-1">Login to Dashboard</h3>
-        <p class="text-center text-muted mb-4">Access your inventory system</p>
+        <!-- RIGHT FORM -->
+        <div class="col-md-6 login-panel">
+            <h3 class="fw-bold mb-1">Login</h3>
+            <p class="text-muted mb-4">Access your inventory system</p>
 
-        <form method="POST">
-            {% csrf_token %}
+            <form method="POST">
+                {% csrf_token %}
 
-            <div class="mb-3">
-                <label class="form-label">Username</label>
-                <input type="text" name="username" class="form-control" required>
-            </div>
+                <div class="mb-3">
+                    <label class="form-label">Username</label>
+                    <input type="text" name="username" class="form-control" required>
+                </div>
 
-            <div class="mb-4 password-wrapper">
-                <label class="form-label">Password</label>
-                <input type="password" name="password" id="password" class="form-control" required>
-                <span class="toggle-password" onclick="togglePassword(this)">👁️</span>
-            </div>
+                <div class="mb-4 password-wrapper">
+                    <label class="form-label">Password</label>
+                    <input type="password" name="password" id="password" class="form-control" required>
+                    <span class="toggle-password" onclick="togglePassword()">👁️</span>
+                </div>
 
-            <button class="btn btn-primary w-100 btn-login">
-                Login
-            </button>
-        </form>
+                <button class="btn w-100 btn-login">Login</button>
+            </form>
+        </div>
 
     </div>
-
 </div>
+
 <script>
 function togglePassword() {
     const passwordInput = document.getElementById("password");
-
-    if (passwordInput.type === "password") {
-        passwordInput.type = "text";
-    } else {
-        passwordInput.type = "password";
-    }
+    passwordInput.type = passwordInput.type === "password" ? "text" : "password";
 }
 </script>
 
