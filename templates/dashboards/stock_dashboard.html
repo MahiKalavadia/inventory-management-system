@@ -118,6 +118,8 @@
 
 
 <hr>
+<div class="row">
+    <div class="col md-6">
 <div class="card shadow-sm mb-4">
     <div class="card-header fw-bold">
         Inventory Snapshot
@@ -152,12 +154,10 @@
             </tbody>
         </table>
     </div>
-    <div class="p-3 d-flex justify-content-between align-items-center">
-    <div>
-        Showing {{ products.start_index }}–{{ products.end_index }} of {{ products.paginator.count }}
-    </div>
 
-    <ul class="pagination mb-0">
+
+ <div class="p-2 d-flex justify-content-end">
+    <ul class="pagination pagination-sm mb-0">
         {% if products.has_previous %}
             <li class="page-item">
                 <a class="page-link" href="?page_products={{ products.previous_page_number }}">‹</a>
@@ -176,7 +176,9 @@
     </ul>
 </div>
 </div>
-<div class="card shadow-sm mb-4">
+</div>
+<div class="col md-6">
+  <div class="card shadow-sm mb-4">
     <div class="card-header bg-warning text-dark fw-bold">
         Critical Stock Alerts
     </div>
@@ -223,8 +225,10 @@
             </li>
         {% endif %}
     </ul>
+    
 </div>
-
+</div>
     </div>
+</div>
 </div>
 {% endblock content %}
