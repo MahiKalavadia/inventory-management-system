@@ -41,12 +41,12 @@
             <td>{{ item.total_products }}</td>
             <td>
                 {% if request.user.is_superuser %}
-                <a href="{% url 'update_category' item.category.id %}" class="btn btn-sm btn-warning">Edit</a>
+                <a href="{% url 'update_category' item.category.id %}" class="btn btn-sm btn-warning">Manage</a>
                 <a href="{% url 'delete_category' item.category.id %}" class="btn btn-sm btn-danger">Delete</a>
                 {% elif request.user.groups.first.name == "Manager" %}
                 <a href="{% url 'update_category' item.category.id %}" class="btn btn-sm btn-warning">Edit</a>
                 {% else %}
-                View Only
+                Read-Only Access
                 {% endif %}
             </td>
         </tr>
