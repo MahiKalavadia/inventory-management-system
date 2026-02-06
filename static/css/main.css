@@ -277,6 +277,38 @@ body {
     color: #EF4444;
 }
 
+.icon-clipboard {
+    color: #2563eb;
+}
+
+.icon-glass {
+    color: #eab308;
+}
+
+.icon-checkcircle {
+    color: #16a34a;
+}
+
+.icon-octagonfill {
+    color: #dc2626;
+}
+
+.icon-bagcheck {
+    color: #4f46e5;
+}
+
+.icon-truckk {
+    color: #0ea5e9;
+}
+
+.icon-seamfill {
+    color: #10b981;
+}
+
+.icon-stackcash {
+    color: #f97316;
+}
+
 /* Optional subtle background */
 .icon-bg {
     background: rgba(0, 0, 0, 0.04);
