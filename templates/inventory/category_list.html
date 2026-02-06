@@ -44,7 +44,7 @@
                 <a href="{% url 'update_category' item.category.id %}" class="btn btn-sm btn-warning">Manage</a>
                 <a href="{% url 'delete_category' item.category.id %}" class="btn btn-sm btn-danger">Delete</a>
                 {% elif request.user.groups.first.name == "Manager" %}
-                <a href="{% url 'update_category' item.category.id %}" class="btn btn-sm btn-warning">Edit</a>
+                <a href="{% url 'update_category' item.category.id %}" class="btn btn-sm btn-warning">Manage</a>
                 {% else %}
                 Read-Only Access
                 {% endif %}
