@@ -145,5 +145,5 @@ def purchase_request_saved(sender, instance, created, **kwargs):
         message=f"{instance.product.name} request is {instance.status}",
         type="warning",
         notification_type="purchase",
-        roles=['admin', 'manager']  # Only admin and manager
+        roles=['admin']  # Only admin and manager
     )
