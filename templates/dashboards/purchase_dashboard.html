@@ -1,4 +1,5 @@
 {% extends 'base_dashboard.html' %}
+{% load humanize %}
 {% block content %}
 
 <div class="dashboard-header mb-4 d-flex justify-content-between align-items-center p-3 bg-light rounded shadow-sm">
@@ -8,104 +9,241 @@
 
 <div class="mb-3 d-flex gap-2">
     {% if request.user.is_superuser %}
-        <a href="#" class="btn btn-outline-secondary">📄 All Purchase Records</a>
-    {% else %}
-        <a href="#" class="btn btn-primary">➕ Create Purchase Request</a>
+        <a href="{% url 'records' %}" class="btn btn-outline-secondary">📄 All Purchase Records</a>
     {% endif %}
 </div>
 
-<div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 row-cols-xl-5 g-3 mb-4">
+<div class="row mb-4">
 
+    <div class="col-md-3 order-md-last">
+        <a href="#" class="text-decoration-none">
+          <div class="card shadow-sm p-4 text-center card-hover" style="border-left: 5px solid #2563eb">
+            <div class="card-icon mb-2">
+                <i class="bi bi-clipboard-data-fill icon-clipboard icon-bg"></i>
+            </div>
+            <h6 class="text-muted">Total Purchase Requests</h6>
+            <h3 class="fw-bold">{{ total_requests }}</h3>
+          </div>
+        </a>
+    </div>
 
-    {% comment %} Use flex-fill to make all 5 cards equal width {% endcomment %}
-    <div class="col">
-       <div class="card h-100 shadow-sm text-center p-4 card-hover" style="border-left: 5px solid #2563EB">
-         <div class="card-icon mb-2">
-            <i class="bi bi-receipt-cutoff icon-receipt icon-bg"></i>
-         </div>
-        <h6 class="text-muted">Purchase Orders</h6>
-        <h3 class="fw-bold">{{ total_purchases }}</h3>
-       </div>
-    </div>
-    
-    <div class="col">
-      <div class="card h-100 shadow-sm text-center p-4 card-hover" style="border-left: 5px solid #F59E0B">
-        <div class="card-icon mb-2">
-            <i class="bi bi-currency-rupee icon-clock icon-bg"></i>
+    <div class="col-md-3 order-md-last">
+        <a href="#" class="text-decoration-none">
+        <div class="card shadow-sm p-4 text-center card-hover" style="border-left: 5px solid #eab308">
+            <div class="card-icon mb-2">
+                <i class="bi bi-hourglass-split icon-glass icon-bg"></i>
+            </div>
+            <h6 class="text-muted">Total Pending Requests</h6>
+            <h3 class="fw-bold">{{ pending_requests }}</h3>
         </div>
-        <h6 class="text-muted">Total Expenditure</h6>
-        <h3 class="fw-bold"></h3>
+    </a>
     </div>
-    </div>
-    
-    <div class="col">
-      <div class="card h-100 shadow-sm text-center p-4 card-hover" style="border-left: 5px solid #14B8A6">
-        <div class="card-icon mb-2">
-            <i class="bi bi-hourglass-split icon-circle icon-bg"></i>
+
+    <div class="col-md-3 order-md-last">
+        <a href="#" class="text-decoration-none">
+        <div class="card shadow-sm p-4 text-center card-hover" style="border-left: 5px solid #16a34a">
+            <div class="card-icon mb-2">
+                <i class="bi bi-check-circle-fill icon-checkcircle icon-bg"></i>
+            </div>
+            <h6 class="text-muted">Total Approved Requests</h6>
+            <h3 class="fw-bold">{{ approved_requests }}</h3>
         </div>
-        <h6 class="text-muted">Purchase Order Placed</h6>
-        <h3 class="fw-bold">{{ order_placed }}</h3>
+    </a>
     </div>
-    </div>
-    
-    <div class="col">
-      <div class="card h-100 shadow-sm text-center p-4 card-hover" style="border-left: 5px solid #10B981">
-        <div class="card-icon mb-2">
-            <i class="bi bi-check-circle-fill icon-checkcircle icon-bg"></i>
+
+    <div class="col-md-3 order-md-last">
+        <a href="#" class="text-decoration-none">
+        <div class="card shadow-sm p-4 text-center card-hover" style="border-left: 5px solid #dc2626">
+            <div class="card-icon mb-2">
+                <i class="bi bi-x-octagon-fill icon-octagonfill icon-bg"></i>
+            </div>
+            <h6 class="text-muted">Total Rejected Requests</h6>
+            <h3 class="fw-bold">{{ rejected_requests }}</h3>
         </div>
-        <h6 class="text-muted">Received Orders</h6>
-        <h3 class="fw-bold">{{ completed_orders }}</h3>
+    </a>
     </div>
-    </div>
-    
-    <div class="col">
-      <div class="card h-100 shadow-sm p-4 text-center card-hover" style="border-left: 5px solid #EF4444">
-        <div class="card-icon mb-2">
-            <i class="bi bi-exclamation-triangle-fill icon-tri icon-bg"></i>
-        </div>
-        <h6 class="text-muted">Overdue Deliveries</h6>
-        <h3 class="fw-bold">{{ overdue }}</h3>
-    </div>
+
 </div>
+<div class="row mb-4">
+
+    <div class="col-md-3 order-md-last">
+        <a href="#" class="text-decoration-none">
+        <div class="card shadow-sm p-4 text-center card-hover" style="border-left: 5px solid #4f46e5">
+            <div class="card-icon mb-2">
+                <i class="bi bi-bag-check-fill icon-bagcheck icon-bg"></i>
+            </div>
+            <h6 class="text-muted">Total Orders</h6>
+            <h3 class="fw-bold">{{ total_orders }}</h3>
+        </div>
+    </a>
+    </div>
+
+    <div class="col-md-3 order-md-last">
+        <a href="#" class="text-decoration-none">
+        <div class="card shadow-sm p-4 text-center card-hover" style="border-left: 5px solid #0ea5e9">
+            <div class="card-icon mb-2">
+                <i class="bi bi-truck icon-truckk icon-bg"></i>
+            </div>
+            <h6 class="text-muted">In Transit</h6>
+            <h3 class="fw-bold">{{ in_transit }}</h3>
+        </div>
+    </a>
+    </div>
+
+    <div class="col-md-3 order-md-last">
+        <a href="#" class="text-decoration-none">
+        <div class="card shadow-sm p-4 text-center card-hover" style="border-left: 5px solid #10b981">
+            <div class="card-icon mb-2">
+                <i class="bi bi-box-seam-fill icon-seamfill icon-bg"></i>
+            </div>
+            <h6 class="text-muted">Delivered</h6>
+            <h3 class="fw-bold">{{ delivered }}</h3>
+        </div>
+    </a>
+    </div>
+
+    <div class="col-md-3 order-md-last">
+        <a href="#" class="text-decoration-none">
+        <div class="card shadow-sm p-4 text-center card-hover" style="border-left: 5px solid #f97316">
+            <div class="card-icon mb-2">
+                <i class="bi bi-cash-stack icon-stackcash icon-bg"></i>
+            </div>
+            <h6 class="text-muted">Total Purchase Costs</h6>
+            <h3 class="fw-bold">{{ total_purchase_cost|intcomma }}</h3>
+        </div>
+    </a>
+    </div>
+
 </div>
 <hr>
+<div class="row">
+  <div class="col md-6">
+    <div class="card shadow-sm mb-4">
+      <div class="card-header bg-light">
+         <div class="card-header d-flex justify-content-between align-items-center">
+            <span class= "fw-bold"><b>Manage Requests</b></span>
+            <div>
+              <a href="{% url 'manage_requests' %}" class="btn btn-sm btn-outline-primary">
+                  View All →
+              </a>
+            </div>
+        </div>
+        <div class="card-body">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>Product Name</th>
+                        <th>Quantity</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for r in reque %}
+                    <tr>
+                      <td>{{ r.product.name }}</td>
+                      <td>{{ r.quantity }}</td>
+                      <td>{{ r.status }}</td>
+                      <td>
+                      {% if r.status == "Pending" %}
+                      <a href="{% url 'approve_request' r.id %}" class="btn btn-success btn-sm">Approve</a>
+                      <a href="{% url 'reject_request' r.id %}" class="btn btn-danger btn-sm">Reject</a>
+                      {% else %}
+                      Completed
+                      {% endif %}
+                      </td>
+                     </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <nav class="mt-4">
+          <ul class="pagination justify-content-center">
 
-
-
- <div class="card shadow-sm mb-4">
-    <div class="card-header fw-bold bg-light">
-        📂 Purchase Request Received
-    </div>
-<table class="table table-hover align-middle bg-white shadow-sm rounded">
-    <tr>
-    <th>Product</th>
-    <th>Qty</th>
-    <th>Requested By</th>
-    <th>Status</th>
-    <th>Action</th>
-</tr>
-
-{% for r in requests %}
-<tr>
-    <td>{{ r.product.name }}</td>
-    <td>{{ r.quantity }}</td>
-    <td>{{ r.requested_by.username }}</td>
-    <td>
-        <span class="badge bg-{% if r.status == 'Approved' %}success{% elif r.status == 'Rejected' %}danger{% else %}warning{% endif %}">
-            {{ r.status }}
-        </span>
-    </td>
-
-    <td>
-    {% if user.is_superuser and r.status == "Pending" %}
-        <a href="{% url 'approve_purchase_request' r.id 'approve' %}" class="btn btn-success btn-sm">Approve Request</a>
-        <a href="{% url 'approve_purchase_request' r.id 'reject' %}" class="btn btn-danger btn-sm">Reject Request</a>
+    {% if reque.has_previous %}
+        <li class="page-item">
+            <a class="page-link" href="?page={{ reque.previous_page_number }}">Previous</a>
+        </li>
     {% endif %}
-    </td>
-</tr>
 
-{% endfor %}
-</table>
+    <li class="page-item active">
+        <span class="page-link">{{ reque.number }}</span>
+    </li>
+
+    {% if reque.has_next %}
+        <li class="page-item">
+            <a class="page-link" href="?page={{ reque.next_page_number }}">Next</a>
+        </li>
+    {% endif %}
+
+</ul>
+</nav>
 </div>
+</div>
+</div>
+<div class="col md-6">
+    <div class="card shadow-sm mb-4">
+      <div class="card-header bg-light">
+         <div class="card-header d-flex justify-content-between align-items-center">
+            <span class= "fw-bold"><b>Purchase Orders</b></span>
+            <div>
+              <a href="{% url 'purchase_orders' %}" class="btn btn-sm btn-outline-primary">
+                  View All →
+              </a>
+            </div>
+        </div>
+        <div class="card-body">
+            <table class="table table-hover">
+                <thead>
+                  <tr>
+                    <th>ID</th>
+                    <th>Product Name</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                    {% for po in urder %}
+                    <tr>
+                      <td>PO-{{ po.id }}</td>
+                      <td>{{ po.request.product.name }}</td>
+                      <td>{% if po.status != "delivered" %}
+                             {{ po.status }}
+                          {% else %}
+                             <span class="badge bg-success">Completed</span>
+                          {% endif %}
+                      </td>
+                      <td>
+                        <a href="{% url 'update_po_status' po.id %}" class="btn btn-dark btn-sm">Update</a>
+                     </td>
+                     </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <nav class="mt-4">
+          <ul class="pagination justify-content-center">
 
+    {% if urder.has_previous %}
+        <li class="page-item">
+            <a class="page-link" href="?page={{ urder.previous_page_number }}">Previous</a>
+        </li>
+    {% endif %}
+
+    <li class="page-item active">
+        <span class="page-link">{{ urder.number }}</span>
+    </li>
+
+    {% if urder.has_next %}
+        <li class="page-item">
+            <a class="page-link" href="?page={{ urder.next_page_number }}">Next</a>
+        </li>
+    {% endif %}
+
+</ul>
+</nav>
+</div>
+</div>
+</div>
+</div>
 {% endblock %}
