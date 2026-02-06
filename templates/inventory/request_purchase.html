@@ -1,0 +1,111 @@
+{% extends "base_dashboard.html" %}
+{% block content %}
+
+<div class="card">
+        <div class="card-header d-flex justify-content-between align-items-center">
+           <span><b>Request Purchase</b></span>
+           <div>
+              <a href="{% url 'purchase_dashboard2' %}" class="btn btn-outline-secondary btn-sm me-2">
+                 <i class="bi bi-arrow-left-circle-fill"></i> Back
+              </a>
+          </div>
+       </div>
+</div>
+<br>
+<!-- ===== LOW STOCK ===== -->
+<div class="card mb-4">
+  <div class="card-header fw-bold">⚠ Critical Stocks</div>
+  
+  <div class="card-body p-0">
+    <table class="table table-sm mb-0">
+      <tr>
+        <th>Product</th>
+        <th>Stock</th>
+        <th>Action</th>
+      </tr>
+      {% for p in low %}
+      <tr>
+        <td>{{ p.name }}</td>
+        <td class="text-warning fw-bold">{{ p.quantity }}</td>
+        <td>
+          <a href="{% url 'create_request' p.id %}"
+             class="btn btn-sm btn-outline-primary">
+            Request Stock
+          </a>
+        </td>
+      </tr>
+      {% empty %}
+      <tr><td colspan="3" class="text-center text-muted">No low stock</td></tr>
+      {% endfor %}
+    </table>
+     <div class="p-2 d-flex justify-content-end">
+    <ul class="pagination pagination-sm mb-0">
+        {% if low.has_previous %}
+            <li class="page-item">
+                <a class="page-link" href="?page_low={{ low.previous_page_number }}">‹</a>
+            </li>
+        {% endif %}
+
+        <li class="page-item active">
+            <span class="page-link">{{ low.number }}</span>
+        </li>
+
+        {% if low.has_next %}
+            <li class="page-item">
+                <a class="page-link" href="?page_low={{ low.next_page_number }}">›</a>
+            </li>
+        {% endif %}
+    </ul>
+    
+</div>
+  </div>
+</div>
+<!-- ===== OUT OF STOCK ===== -->
+<div class="card mb-4">
+  <div class="card-header fw-bold text-danger">❌ Stockouts</div>
+  <div class="card-body p-0">
+    <table class="table table-sm mb-0">
+      <tr>
+        <th>Product</th>
+        <th>Stock</th>
+        <th>Action</th>
+      </tr>
+      {% for p in out %}
+      <tr>
+        <td>{{ p.name }}</td>
+        <td class="text-danger fw-bold">{{ p.quantity }}</td>
+        <td>
+          <a href="{% url 'create_request' p.id %}"
+             class="btn btn-sm btn-danger">
+            Request Urgently
+          </a>
+        </td>
+      </tr>
+      {% empty %}
+      <tr><td class="text-center text-muted">No out of stock</td></tr>
+      {% endfor %}
+    </table>
+    <div class="p-2 d-flex justify-content-end">
+    <ul class="pagination pagination-sm mb-0">
+        {% if out.has_previous %}
+            <li class="page-item">
+                <a class="page-link" href="?page_out={{ out.previous_page_number }}">‹</a>
+            </li>
+        {% endif %}
+
+        <li class="page-item active">
+            <span class="page-link">{{ out.number }}</span>
+        </li>
+
+        {% if out.has_next %}
+            <li class="page-item">
+                <a class="page-link" href="?page_out={{ out.next_page_number }}">›</a>
+            </li>
+        {% endif %}
+    </ul>
+    
+</div>
+  </div>
+</div>
+
+{% endblock content %}
