@@ -106,13 +106,18 @@
             <td>{{ supplier.address }}</td>
             <td>
                 {% if request.user.is_superuser %}
-            <a href="{% url 'update_supplier' supplier.id %}" class="btn btn-sm btn-warning">Manage</a>
-            <a href="{% url 'delete_supplier' supplier.id %}" class="btn btn-sm btn-danger">Remove</a>
-            {% elif request.user.groups.first.name == "Manager" %}
-            <a href="{% url 'update_supplier' supplier.id %}" class="btn btn-sm btn-warning">Manage</a>
-        {% else %}
-            Read-Only Access
-        {% endif %}
+                   <a href="{% url 'update_supplier' supplier.id %}" class="btn btn-sm btn-warning">Manage</a>
+                   <a href="{% url 'delete_supplier' supplier.id %}" class="btn btn-sm btn-danger">Remove</a>
+                   {% if supplier.is_active %}
+                      <a href="{% url 'toggle_supplier_status' supplier.pk %}" class="btn btn-sm btn-outline-danger"> Deactivate</a>
+                   {% else %}
+                      <a href="{% url 'toggle_supplier_status' supplier.pk %}" class="btn btn-sm btn-outline-success"> Activate</a>
+                   {% endif %}
+                {% elif request.user.groups.first.name == "Manager" %}
+                   <a href="{% url 'update_supplier' supplier.id %}" class="btn btn-sm btn-warning">Manage</a>
+                {% else %}
+                    Read-Only Access
+                {% endif %}
             </td>
         </tr>
         {% empty %}
