@@ -51,7 +51,11 @@
                           {% endif %}
                       </td>
                       <td>
-                        <a href="{% url 'update_po_status' po.id %}" class="btn btn-dark btn-sm">Update</a>
+                        {% if po.status != "delivered" %}
+                           <a href="{% url 'update_po_status' po.id %}" class="btn btn-dark btn-sm">Update</a>
+                        {% else %}
+                           <span class="badge bg-success">Completed</span>
+                        {% endif %}
                      </td>
                      </tr>
                     {% endfor %}
