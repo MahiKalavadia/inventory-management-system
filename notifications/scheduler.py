@@ -4,7 +4,7 @@ from notifications.models import Notification
 
 
 def delete_old_notifications():
-    cutoff = timezone.now() - timedelta(days=15)
+    cutoff = timezone.now() - timedelta(days=5)
 
     Notification.objects.filter(
         notification_type__in=[
