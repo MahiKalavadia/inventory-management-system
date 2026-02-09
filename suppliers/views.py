@@ -5,6 +5,8 @@ from inventory.models import Product, Category
 from .forms import SupplierForm
 from django.core.paginator import Paginator
 from django.db.models import Q
+from django.contrib.admin.views.decorators import staff_member_required
+from django.contrib import messages
 
 
 def supplier_dashboard(request):
@@ -80,6 +82,19 @@ def inactive_supplier(request):
     page_obj = paginator.get_page(page_number)
 
     return render(request, "inventory/inactive_supplier.html", {'page_obj': page_obj})
+
+
+def toggle_supplier_status(request, pk):
+    supplier = get_object_or_404(Supplier, pk=pk)
+    supplier.is_active = not supplier.is_active
+    supplier.save()
+
+    if supplier.is_active:
+        messages.success(request, f"{supplier.name} activated.")
+    else:
+        messages.warning(request, f"{supplier.name} deactivated.")
+
+    return redirect('supplier_dashboard')
 
 
 def add_supplier(request):
