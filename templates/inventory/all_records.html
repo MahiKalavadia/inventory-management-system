@@ -54,6 +54,8 @@
                       {% if r.status == "Pending" %}
                       <a href="{% url 'approve_request' r.id %}" class="btn btn-success btn-sm">Approve</a>
                       <a href="{% url 'reject_request' r.id %}" class="btn btn-danger btn-sm">Reject</a>
+                      {% else %}
+                      Completed
                       {% endif %}
                       </td>
                      </tr>
@@ -110,7 +112,11 @@
                           {% endif %}
                       </td>
                       <td>
-                        <a href="{% url 'update_po_status' po.id %}" class="btn btn-dark btn-sm">Update</a>
+                         {% if po.status != "delivered" %}
+                          <a href="{% url 'update_po_status' po.id %}" class="btn btn-dark btn-sm">Update</a>
+                        {% else %}
+                          <span class="badge bg-success">Completed</span>
+                        {% endif %}
                      </td>
                      </tr>
                     {% endfor %}

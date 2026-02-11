@@ -1,0 +1,66 @@
+{% extends 'base_dashboard.html' %}
+{% load humanize %}
+{% block content %}
+<div class="card mb-4">
+<div class="card-header d-flex justify-content-between align-items-center">
+           <h3><b>⚠ Orders Requiring Attention</b></h3>
+           <div>
+              <a href="{% url 'order_dashboard' %}" class="btn btn-outline-secondary btn-sm me-2">
+                 <i class="bi bi-arrow-left-circle-fill"></i> Back
+              </a>
+          </div>
+        </div>
+
+<div class="card-body">
+        <table class="table table-striped">
+            <thead>
+                 <tr>
+                    <th>Order</th>
+                    <th>Issue</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+        {% for o in page_obj %}
+      <tr>
+        <td>#{{ o.id }}</td>
+        <td>Confirmed but payment pending</td>
+        <td>
+          <a href="{% url 'order_detail' o.id %}" class="btn btn-sm btn-outline-danger">
+            Review
+          </a>
+        </td>
+      </tr>
+      {% empty %}
+      <tr>
+        <td colspan="3" class="text-center text-muted">
+          No critical issues 🎉
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+        </table>
+    </div>
+</div>
+<nav class="mt-4">
+<ul class="pagination justify-content-center">
+
+    {% if page_obj.has_previous %}
+        <li class="page-item">
+            <a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous</a>
+        </li>
+    {% endif %}
+
+    <li class="page-item active">
+        <span class="page-link">{{ page_obj.number }}</span>
+    </li>
+
+    {% if page_obj.has_next %}
+        <li class="page-item">
+            <a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a>
+        </li>
+    {% endif %}
+
+</ul>
+</nav>
+{% endblock content %}

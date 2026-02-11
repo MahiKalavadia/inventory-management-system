@@ -1,18 +1,108 @@
 {% extends 'base_dashboard.html' %}
 {% load crispy_forms_tags %}
-
+{% load static %}
 {% block content %}
-<div class="container-fluid mt-4">
-    <div class="card shadow-sm p-4">
-<h3><b><a href="{% url 'product_dashboard' %}" style="color: grey; font-size: 2rem;">
-        <i class="bi bi-arrow-left-circle-fill"></i></a> Update Product</b></h3>
+<style>
+    .page-wrapper {
+        margin-top: 90px;
+    }
 
-<form method="POST" enctype="multipart/form-data">
-    {% csrf_token %}
-    {{ form|crispy }}
-    <button type="submit" class="btn btn-success">Update</button>
-    <a href="{% url 'product_dashboard' %}" class="btn btn-secondary">Cancel</a>
-</form>
+    .form-card {
+        max-width: 950px;
+        margin: auto;
+    }
+
+    .form-section {
+        background: #ffffff;
+        border-radius: 12px;
+        border: 1px solid #eee;
+        padding: 24px;
+    }
+
+    .form-control, .form-select {
+        border-radius: 8px;
+    }
+
+    .action-bar {
+        background: #fafafa;
+        border-top: 1px solid #eee;
+        padding: 16px 24px;
+        border-radius: 0 0 12px 12px;
+    }
+
+    .asteriskField { display: none; }
+</style>
+<div class="dashboard-topbar fixed-top d-flex justify-content-between align-items-center px-4 py-3 bg-white border-bottom"
+     style="left:260px; right:0; top:0; z-index:999;">
+
+    <div>
+        <div class="fw-semibold text-uppercase text-muted">
+            Update Inventory Item
+        </div>
+        <div class="text-muted small">
+            Update existing product in your inventory
+        </div>
+    </div>
+
+    <div class="d-flex align-items-center gap-3">
+        <a href="{% url 'product_dashboard' %}" class="btn btn-outline-secondary btn-sm">
+            <i class="bi bi-arrow-left-circle"></i> Back
+        </a>
+        <div class="text-end">
+                <div class="fw-medium small">{{ request.user.username }}</div>
+                <div class="text-muted small">Update Product Panel</div>
+            </div>
+        <img src="{% static 'images/admin.jpeg' %}"
+             class="rounded-circle border"
+             width="36"
+             height="36"
+             style="object-fit: cover;">
+    </div>
 </div>
-</div>
+
+<div class="card shadow-sm border-0 form-card">
+
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+
+            <div class="card-body p-4">
+
+                <!-- Section Header -->
+                <div class="mb-4">
+                    <h5 class="fw-bold mb-1">Product Information</h5>
+                    <p class="text-muted small mb-0">
+                        Update the details for this product.
+                    </p>
+                </div>
+
+                <!-- Form -->
+                <div class="form-section">
+                    {{ form|crispy }}
+                </div>
+
+            </div>
+
+            <!-- Footer Actions -->
+            <div class="action-bar d-flex justify-content-between align-items-center">
+
+                <div class="text-muted small">
+                    Fields marked required must contain values.
+                </div>
+
+                <div class="d-flex gap-2">
+                    <a href="{% url 'product_dashboard' %}" class="btn btn-light border px-4">
+                        Cancel
+                    </a>
+
+                    <button type="submit" class="btn btn-success px-4 fw-semibold">
+                        <i class="bi bi-check-circle me-1"></i>
+                        Update Product
+                    </button>
+                </div>
+
+            </div>
+
+        </form>
+
+    </div>
 {% endblock %}

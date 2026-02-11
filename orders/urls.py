@@ -15,6 +15,15 @@ urlpatterns = [
     path("receipt/<int:pk>/download/",
          views.download_receipt, name="download_receipt"),
     path("warranty-check/", views.warranty_check, name="warranty_check"),
+    path('orders/order-attention/', views.order_attention, name='order_attention'),
+    path('orders/pending-payments/',
+         views.pending_payments, name='pending_payments'),
+    path("orders/export/csv/", views.export_orders_csv,
+         name="export_orderlist_csv"),
+    path("orders/export/excel/", views.export_orders_excel,
+         name="export_orderlist_excel"),
+    path("orders/export/pdf/", views.export_orders_pdf,
+         name="export_orderlist_pdf"),
 
 
 ]

@@ -1,158 +1,274 @@
 {% extends 'base_dashboard.html' %}
+{% load static %}
 {% block extra_head %}
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 {% endblock %}
+
 {% block content %}
 
 <style>
-.product-card {
-    border-radius: 18px;
-    overflow: hidden;
-    transition: all 0.3s ease;
-    box-shadow: 0 6px 18px rgba(0,0,0,0.08);
-    cursor: pointer;
+.product-card{
+    border-radius:16px;
+    padding:14px;
+    background:#fff;
+    box-shadow:0 4px 14px rgba(0,0,0,0.06);
+    transition:.2s ease;
+    height:100%;
+}
+.product-card:hover{
+    transform:translateY(-4px);
+    box-shadow:0 10px 22px rgba(0,0,0,0.10);
 }
 
-.product-card:hover {
-    transform: translateY(-6px) scale(1.01);
-    box-shadow: 0 14px 30px rgba(0,0,0,0.15);
+/* IMAGE FIX */
+.product-img{
+    height:140px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    margin-bottom:8px;
+}
+.product-img img{
+    max-height:135px;
+    max-width:100%;
+    object-fit:contain;
 }
 
-/* Image Animation */
-.product-card img {
-    transition: transform 0.4s ease;
+/* STOCK BADGE */
+.stock-badge{
+    font-size:10px;
+    font-weight:600;
+    padding:4px 9px;
+    border-radius:30px;
+}
+.in-stock{ background:#dcfce7; color:#166534; }
+.low-stock{ background:#fef3c7; color:#92400e; }
+.out-stock{ background:#fee2e2; color:#991b1b; }
+
+/* META */
+.meta{
+    font-size:10px;
+    color:#6b7280;
+    text-transform:uppercase;
+    letter-spacing:.4px;
 }
 
-.product-card:hover img {
-    transform: scale(1.08);
+/* NAME */
+.product-card h6{
+    font-size:15px;
+    margin-top:4px;
+    margin-bottom:2px;
 }
 
+/* PRICES */
+.purchase{
+    font-size:13px;
+    color:#6b7280;
+    margin-top:6px;
+}
+
+.price{
+    font-size:18px;
+    font-weight:700;
+    color:#2563eb;
+    margin-top:2px;
+}
+
+/* PROFIT BOX */
+.profit-box{
+    background:#f3f4f6;
+    border-radius:10px;
+    padding:7px 10px;
+    display:flex;
+    justify-content:space-between;
+    margin-top:8px;
+    font-size:12px;
+}
+
+.profit{
+    color:#16a34a;
+    font-weight:600;
+}
+
+.margin{
+    color:#374151;
+}
 </style>
-<div class="card mb-4">
-<div class="card-header d-flex justify-content-between align-items-center">
-           <span><h3><b>Inventory Items</b></h3></span>
-           <div>
-              <a href="{% url 'product_dashboard' %}" class="btn btn-outline-secondary btn-sm me-2">
-                 <i class="bi bi-arrow-left-circle-fill"></i> Back
-              </a>
-          </div>
+
+<div class="dashboard-topbar fixed-top d-flex justify-content-between align-items-center px-4 py-3 bg-white border-bottom"
+     style="left:260px; right:0; top:0; z-index:999;">
+
+    <!-- Page Title --><div>
+    <div class="fw-semibold text-uppercase text-muted">
+        Inventory Items
+    </div>
+     <div class="text-muted small">
+            Manage your premium product catalog and stock levels.
         </div>
-   
+    </div>
+    <!-- Right Section -->
+    <div class="d-flex align-items-center gap-4">
 
+        <!-- Quick Actions -->
+        <div class="d-flex gap-2">
+        <a href="{% url 'product_dashboard' %}" class="btn btn-light btn-sm border">
+            ← Back
+        </a>
+
+        {% if request.user.is_superuser or request.user.groups.first.name == "Manager" %}
+        <a href="{% url 'add_product' %}" class="btn btn-primary btn-sm">
+            + New Product
+        </a>
+        {% endif %}
+    </div>
+
+        <!-- User -->
+        <div class="d-flex align-items-center gap-2">
+            <div class="text-end">
+                <div class="fw-medium small">{{ request.user.username }}</div>
+                <div class="text-muted small">Product List Panel</div>
+            </div>
+            <img src="{% static 'images/admin.jpeg' %}"
+                 class="rounded-circle border"
+                 width="36"
+                 height="36"
+                 style="object-fit: cover;">
+        </div>
+    </div>
+</div>
+<!-- HEADER -->
+<div class="mb-3">
 <!-- FILTER BAR -->
-<div class="card-body">
-<form method="get" class="row g-2 mb-4">
+<div class="card dashboard-card mb-4 shadow-sm border-0">
+    <div class="card-body">
 
-    <div class="col-md-4">
-        <input type="text" name="search" class="form-control"
-               placeholder="Search product..."
-               value="{{ request.GET.search }}">
+        <form method="get" class="row g-3 align-items-end">
+
+            <div class="col-md">
+                <label class="form-label small text-muted">Search</label>
+                <input type="text" name="search" value="{{ request.GET.search }}"
+                       class="form-control" placeholder="Product / Brand">
+            </div>
+
+            <div class="col-md">
+                <label class="form-label small text-muted">Category</label>
+                <select name="category" class="form-select">
+                    <option value="">All</option>
+                    {% for cat in categories %}
+                    <option value="{{ cat.id }}"
+                      {% if request.GET.category == cat.id|stringformat:"s" %}selected{% endif %}>
+                        {{ cat.name }}
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="col-md">
+                <label class="form-label small text-muted">Supplier</label>
+                <select name="supplier" class="form-select">
+                    <option value="">All</option>
+                    {% for sup in suppliers %}
+                    <option value="{{ sup.id }}"
+                      {% if request.GET.supplier == sup.id|stringformat:"s" %}selected{% endif %}>
+                        {{ sup.name }}
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="col-md">
+                <label class="form-label small text-muted">Stock Status</label>
+                <select name="status" class="form-select">
+                    <option value="">All</option>
+                    <option value="in">In Stock</option>
+                    <option value="low">Low</option>
+                    <option value="out">Out</option>
+                </select>
+            </div>
+
+            <div class="col-md-2">
+                <button class="btn btn-dark w-100">Apply Filters</button>
+            </div>
+
+        </form>
     </div>
+</div>
 
-    <div class="col-md-2">
-        <select name="category" class="form-select">
-            <option value="">Filter By Categories</option>
-            {% for cat in categories %}
-            <option value="{{ cat.id }}"
-                {% if request.GET.category == cat.id|stringformat:"s" %}selected{% endif %}>
-                {{ cat.name }}
-            </option>
-            {% endfor %}
-        </select>
-    </div>
 
-    <div class="col-md-2">
-        <select name="supplier" class="form-select">
-            <option value="">Filter By Suppliers</option>
-            {% for sup in suppliers %}
-            <option value="{{ sup.id }}"
-                {% if request.GET.supplier == sup.id|stringformat:"s" %}selected{% endif %}>
-                {{ sup.name }}
-            </option>
-            {% endfor %}
-        </select>
-    </div>
 
-    <div class="col-md-2">
-        <select name="status" class="form-select">
-            <option value="">Filter By Stock Status</option>
-            <option value="in">In Stock</option>
-            <option value="low">Low Stock</option>
-            <option value="out">Out of Stock</option>
-        </select>
-    </div>
+</div>
 
-    <div class="col-md-2">
-        <button class="btn btn-primary w-100">Apply Filters</button>
-    </div>
-
-</form>
-
-<!-- PRODUCT GRID -->
+<!-- GRID -->
 <div class="row g-4">
 
 {% for product in page_obj %}
 <div class="col-lg-3 col-md-4 col-sm-6">
-    <div class="card product-card h-100">
+    <div class="product-card">
 
-        {% if product.image %}
-            <img src="{{ product.image.url }}" class="card-img-top" style="height:180px; object-fit:contain;">
+        <!-- IMAGE -->
+        <div class="product-img">
+            {% if product.image %}
+                <img src="{{ product.image.url }}">
+            {% else %}
+                <span class="text-muted">No Image</span>
+            {% endif %}
+        </div>
+
+        <!-- STOCK STATUS -->
+        {% if product.quantity == 0 %}
+            <span class="stock-badge out-stock">OUT OF STOCK</span>
+        {% elif product.quantity <= low_stock_limit %}
+            <span class="stock-badge low-stock">LOW STOCK</span>
         {% else %}
-            <div class="text-center py-5 bg-light">No Image</div>
+            <span class="stock-badge in-stock">IN STOCK</span>
         {% endif %}
 
-        <div class="card-body">
-
-            <h6 class="fw-bold mb-1">{{ product.name }}</h6>
-            <small class="text-muted">{{ product.category.name }} • {{ product.brand }}</small>
-
-            <p class="mb-1 mt-2"><b>Vendor:</b> {{ product.supplier.name }}</p>
-            {% if request.user.groups.first.name != 'Staff' %}
-            <p class="mb-1 mt-2"><b>Purchase Price:</b>{{ product.purchase_price }}</p>
-            <p class="mb-1 mt-2"><b>Profit:</b>{{ product.profit }}</p>
-            <p class="mb-1 mt-2"><b>Margin:</b>{{ product.margin_percent }}</p>
-            {% endif %}
-            <p class="mb-1"><b>Price:</b> ₹{{ product.price }}</p>
-            <p class="mb-2"><b>Qty:</b> {{ product.quantity }}</p>
-            <p class="mb-2"><b>Warranty:</b> {{ product.warranty_months }} Months</p>
-            <div class="row">
-              {% if request.user.is_superuser or request.user.groups.first.name == "Manager" %}
-              <div class="col md-2">
-                <p class="mb-2"><b>Actions:</b></p>
-               </div>
-               <div class="col md-5">
-                  <a href="{% url 'update_product' product.id %}" class="badge bg-success"> Edit</a>
-                  <a href="{% url 'delete_product' product.id %}" class="badge bg-danger"> Delete</a>
-               </div>
-              {% endif %}
-            </div>
-            {% if product.quantity == 0 %}
-                <span class="badge bg-danger">Out of Stock</span>
-                {% if user.is_superuser or request.user.groups.first.name == "Manager" %}
-            <a href="{% url 'stock_in' product.id %}" class="badge bg-success"> Stock In</a>
-                {% endif %}
-            {% elif product.quantity <= low_stock_limit %}
-                <span class="badge bg-warning text-dark">Low Stock</span>
-                {% if user.is_superuser or request.user.groups.first.name == "Manager" %}
-            <a href="{% url 'stock_in' product.id  %}" class="badge bg-success"> Stock In</a>
-                {% endif %}
-            {% else %}
-                <span class="badge bg-success">In Stock</span>
-            {% endif %}
-
+        <!-- META -->
+        <div class="meta mt-2">
+            {{ product.category.name }} • {{ product.brand }}
+            <span class="float-end">Qty: {{ product.quantity }}</span>
         </div>
+
+        <!-- NAME -->
+        <h6 class="fw-bold mt-1">{{ product.name }}</h6>
+
+        <div class="text-muted" style="font-size:13px;">
+            Vendor: {{ product.supplier.name }}
+        </div>
+
+        <!-- PRICES -->
+        <div class="purchase mt-2">
+            Purchase Price<br>
+            ₹{{ product.purchase_price }}
+        </div>
+
+        <div class="price">
+            ₹{{ product.price }}
+        </div>
+
+        {% if request.user.groups.first.name != 'Staff' %}
+        <div class="profit-box">
+            <div>
+                <div class="meta">Profit</div>
+                <div class="profit">₹{{ product.profit }}</div>
+            </div>
+            <div>
+                <div class="meta">Margin</div>
+                <div class="margin">{{ product.margin_percent }}%</div>
+            </div>
+        </div>
+        {% endif %}
+
     </div>
 </div>
 {% empty %}
-    <p class="text-center">No products found</p>
+<p class="text-center">No products found</p>
 {% endfor %}
-
 </div>
 
 <!-- PAGINATION -->
 <nav class="mt-4">
 <ul class="pagination justify-content-center">
-
     {% if page_obj.has_previous %}
         <li class="page-item">
             <a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous</a>
@@ -168,11 +284,7 @@
             <a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a>
         </li>
     {% endif %}
-
 </ul>
 </nav>
-</div>
-</div>
-</div>
 
 {% endblock %}

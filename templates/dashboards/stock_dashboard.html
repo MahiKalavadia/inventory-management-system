@@ -1,234 +1,307 @@
 {% extends 'base_dashboard.html' %}
+{% load static %}
 {% block content %}
-<div class="dashboard-header mb-4 d-flex justify-content-between align-items-center p-3 bg-light rounded shadow-sm">
-    <div class="page-title fw-bold fs-5">
-        Inventory Management
+<style>
+.table th {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.table td {
+  padding: 12px;
+  font-size: 14px;
+}
+
+.badge {
+  font-weight: 500;
+  border-radius: 12px;
+  font-size: 12px;
+}
+
+
+</style>
+<div class="dashboard-topbar fixed-top d-flex justify-content-between align-items-center px-4 py-3 bg-white border-bottom"
+     style="left:260px; right:0; top:0; z-index:999;">
+
+    <!-- Page Title -->
+     <div>
+    <div class="fw-semibold text-uppercase text-muted">
+        Stock Management
     </div>
-    <div class="d-flex align-items-center">
-        <div class="header-right d-flex align-items-center">
-            <div class="welcome-text me-2">Overview of Inventory & Stock Levels</div>
+    <div class="text-muted small">
+            Overview of Inventory & Stock Levels
         </div>
     </div>
-</div>
-<div class="mb-3 d-flex gap-2">
 
-    {% if request.user.is_superuser or request.user.groups.first.name == "Manager" or request.user.groups.first.name == "Staff" %}
-        <a href="{% url 'stock_in_section' %}" class="btn btn-primary">➕ Add Stock</a>
-        <a href="{% url 'stock_history' %}" class="btn btn-dark">Stock History</a>
-        <a href="#" class="btn btn-outline-secondary">📄 Inventory Overview</a>
-    {% endif %}
+    <!-- Right Section -->
+    <div class="d-flex align-items-center gap-4">
+
+        <!-- Quick Actions -->
+        <div class="d-flex align-items-center gap-2">
+            {% if request.user.is_superuser or request.user.groups.first.name == "Manager" or request.user.groups.first.name == "Staff" %}
+                <a href="{% url 'stock_in_section' %}" class="btn btn-primary btn-sm">
+                    + Stock In
+                </a>
+            <a href="{% url 'stock_history' %}" class="btn btn-outline-dark btn-sm">
+                History
+            </a>
+            <a href="#" class="btn btn-outline-secondary btn-sm">Stock Forecasting </a>
+            {% endif %}
+        </div>
+
+        <!-- User -->
+        <div class="d-flex align-items-center gap-2">
+            <div class="text-end">
+                <div class="fw-medium small">{{ request.user.username }}</div>
+                <div class="text-muted small">Stock Panel</div>
+            </div>
+            <img src="{% static 'images/admin.jpeg' %}"
+                 class="rounded-circle border"
+                 width="36"
+                 height="36"
+                 style="object-fit: cover;">
+        </div>
+    </div>
 </div>
 <!--Stats-->
-<div class="row mb-4">
-
+<div class="row mb-3">
     <div class="col-md-3">
-        <a href="{% url 'product_list' %}" class="text-decoration-none">
-        <div class="card shadow-sm p-4 text-center card-hover" style="border-left: 5px solid #2563eb">
-            <div class="card-icon mb-2">
-                <i class="bi bi-box-fill icon-blue icon-bg"></i>
-            </div>
-            <h6 class="text-muted">Total Inventory Items</h6>
-            <h3 class="fw-bold">{{ total_products }}</h3>
-        </div>
-    </a>
+    <div class="stat-card">
+      <div class="stat-header">
+        <span class="stat-title">TOTAL INVENTORY ITEMS </span>
+        <i class="bi bi-box-fill text-primary"></i>
+      </div>
+      <h2>{{ total_products }}</h2>
+      <p class="stat-sub text-muted">
+        Inventory items present 
+      </p>
     </div>
+  </div>
 
-    <div class="col-md-3">
-        <a href="{% url 'in_stock' %}" class="text-decoration-none">
-        <div class="card shadow-sm p-4 text-center card-hover" style="border-left: 5px solid #16a34a">
-            <div class="card-icon mb-2">
-                <i class="bi bi-check-circle-fill icon-green icon-bg"></i>
-            </div>
-            <h6 class="text-muted">In-Stock Items</h6>
-            <h3 class="fw-bold">{{ in_stock }}</h3>
-        </div>
-    </a>
+  <div class="col-md-3">
+    <div class="stat-card">
+      <div class="stat-header">
+        <span class="stat-title">IN STOCK</span>
+        <i class="bi bi-check-circle-fill text-success"></i>
+      </div>
+      <h2>{{ in_stock }}</h2>
+      <p class="stat-sub text-success">
+        Items currently available
+      </p>
     </div>
+  </div>
 
-    <div class="col-md-3">
-        <a href="{% url 'low_stock' %}" class="text-decoration-none">
-        <div class="card shadow-sm p-4 text-center card-hover" style="border-left: 5px solid #f97316">
-            <div class="card-icon mb-2">
-                <i class="bi bi-exclamation-triangle-fill icon-orange icon-bg"></i>
-            </div>
-            <h6 class="text-muted">Reorder Alerts</h6>
-            <h3 class="fw-bold">{{ low_stock }}</h3>
-        </div>
-    </a>
+  <!-- VENDORS -->
+  <div class="col-md-3">
+    <div class="stat-card">
+      <div class="stat-header">
+        <span class="stat-title">REORDER ALERTS</span>
+        <i class="bi bi-exclamation-triangle-fill text-warning"></i>
+      </div>
+      <h2>{{ low_stock }}</h2>
+      <p class="stat-sub text-warning">
+        Critical Items identified.
+      </p>
     </div>
+  </div>
 
-    <div class="col-md-3">
-        <a href="{% url 'out_stock' %}" class="text-decoration-none">
-        <div class="card shadow-sm p-4 text-center card-hover" style="border-left: 5px solid #dc2626">
-            <div class="card-icon mb-2">
-                <i class="bi bi-x-circle-fill icon-red icon-bg"></i>
-            </div>
-            <h6 class="text-muted">Stockouts</h6>
-            <h3 class="fw-bold">{{ out_stock }}</h3>
-        </div>
-    </a>
+  <!-- REORDER ALERTS -->
+  <div class="col-md-3">
+    <div class="stat-card">
+      <div class="stat-header">
+        <span class="stat-title">STOCKOUTS</span>
+        <i class="bi bi-x-circle-fill text-danger"></i>
+      </div>
+      <h2>{{ out_stock }}</h2>
+      <p class="stat-sub text-danger">
+        Attention required
+      </p>
     </div>
-</div>
-<hr>
+  </div>
 
-    <form method="GET">
-        <div class="row g-2">
+<div>
+<br>
 
-            <div class="col-md-3">
-                <input type="text" name="q" value="{{ request.GET.q }}" class="form-control" placeholder="Search product or SKU">
+   <div class="card dashboard-card mb-4 shadow-sm border-0">
+    <div class="card-body">
+
+        <form method="get" class="row g-3 align-items-end">
+
+            <div class="col-md">
+                <label class="form-label small text-muted">Search</label>
+                <input type="text" name="search" value="{{ request.GET.search }}"
+                       class="form-control" placeholder="Product / Brand">
             </div>
 
-            <div class="col-md-2">
+            <div class="col-md">
+                <label class="form-label small text-muted">Category</label>
                 <select name="category" class="form-select">
-                    <option value="">All Categories</option>
-                    {% for c in categories %}
-                        <option value="{{ c.id }}" {% if request.GET.category == c.id|stringformat:"s" %}selected{% endif %}>
-                            {{ c.name }}
-                        </option>
+                    <option value="">All</option>
+                    {% for cat in categories %}
+                    <option value="{{ cat.id }}"
+                      {% if request.GET.category == cat.id|stringformat:"s" %}selected{% endif %}>
+                        {{ cat.name }}
+                    </option>
                     {% endfor %}
                 </select>
             </div>
 
-            <div class="col-md-2">
+            <div class="col-md">
+                <label class="form-label small text-muted">Supplier</label>
                 <select name="supplier" class="form-select">
-                    <option value="">All Suppliers</option>
-                    {% for s in suppliers %}
-                        <option value="{{ s.id }}" {% if request.GET.supplier == s.id|stringformat:"s" %}selected{% endif %}>
-                            {{ s.name }}
-                        </option>
+                    <option value="">All</option>
+                    {% for sup in suppliers %}
+                    <option value="{{ sup.id }}"
+                      {% if request.GET.supplier == sup.id|stringformat:"s" %}selected{% endif %}>
+                        {{ sup.name }}
+                    </option>
                     {% endfor %}
                 </select>
             </div>
 
-            <div class="col-md-2">
+            <div class="col-md">
+                <label class="form-label small text-muted">Stock Status</label>
                 <select name="status" class="form-select">
-                    <option value="">All Status</option>
-                    <option value="in" {% if request.GET.status == 'in' %}selected{% endif %}>In Stock</option>
-                    <option value="low" {% if request.GET.status == 'low' %}selected{% endif %}>Low Stock</option>
-                    <option value="out" {% if request.GET.status == 'out' %}selected{% endif %}>Out of Stock</option>
+                    <option value="">All</option>
+                    <option value="in">In Stock</option>
+                    <option value="low">Low Stock</option>
+                    <option value="out">Out Stock</option>
                 </select>
             </div>
 
-            <div class="col-md-3 d-flex">
-                <button class="btn btn-dark w-100">Filter Inventory</button>
+            <div class="col-md-2">
+                <button class="btn btn-dark w-100">Apply Filters</button>
             </div>
 
-        </div>
-    </form>
-
-
-<hr>
-<div class="row">
-    <div class="col md-6">
-<div class="card shadow-sm mb-4">
-    <div class="card-header fw-bold">
-        Inventory Snapshot
+        </form>
     </div>
-    <div class="card-body p-0">
-        <table class="table table-striped mb-0">
-            <thead>
-                <tr>
-                    <th>Product</th>
-                    <th>Category</th>
-                    <th>Qty</th>
-                    <th>Status</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for product in products %}
-                <tr>
-                    <td>{{ product.name }}</td>
-                    <td>{{ product.category.name }}</td>
-                    <td>{{ product.quantity }}</td>
-                    <td>
-                        {% if product.quantity == 0 %}
-                            <span class="badge bg-danger">Out</span>
-                        {% elif product.quantity <= 5 %}
-                            <span class="badge bg-warning text-dark">Low</span>
-                        {% else %}
-                            <span class="badge bg-success">In Stock</span>
-                        {% endif %}
-                    </td>
-                </tr>
-                {% endfor %}
-            </tbody>
+</div>
+
+
+<div class="row g-4">
+    <!-- Inventory Snapshot -->
+  <div class="col-md-6">
+    <div class="card shadow-sm border-0 rounded-4">
+      <div class="card-header bg-white fw-semibold d-flex justify-content-between align-items-center">
+        <span>📦 Inventory Snapshot</span>
+        <small class="text-muted">Latest stock overview</small>
+      </div>
+
+      <div class="card-body p-0">
+        <table class="table table-hover align-middle mb-0">
+          <thead class="table-light">
+            <tr>
+              <th>Product</th>
+              <th>Category</th>
+              <th class="text-center">Qty</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            {% for product in products %}
+            <tr>
+              <td class="fw-medium">{{ product.name }}</td>
+              <td class="text-muted">{{ product.category.name }}</td>
+              <td class="text-center">{{ product.quantity }}</td>
+              <td>
+                {% if product.quantity == 0 %}
+                  <span class="badge bg-danger-subtle text-danger px-3">Out of Stock</span>
+                {% elif product.quantity <= 5 %}
+                  <span class="badge bg-warning-subtle text-warning px-3">Low</span>
+                {% else %}
+                  <span class="badge bg-success-subtle text-success px-3">In Stock</span>
+                {% endif %}
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
         </table>
-    </div>
+      </div>
 
-
- <div class="p-2 d-flex justify-content-end">
-    <ul class="pagination pagination-sm mb-0">
-        {% if products.has_previous %}
+      <!-- Pagination -->
+      <div class="p-2 d-flex justify-content-end">
+        <ul class="pagination pagination-sm mb-0">
+          {% if products.has_previous %}
             <li class="page-item">
-                <a class="page-link" href="?page_products={{ products.previous_page_number }}">‹</a>
+              <a class="page-link" href="?page_products={{ products.previous_page_number }}">‹</a>
             </li>
-        {% endif %}
+          {% endif %}
 
-        <li class="page-item active">
+          <li class="page-item active">
             <span class="page-link">{{ products.number }}</span>
-        </li>
+          </li>
 
-        {% if products.has_next %}
+          {% if products.has_next %}
             <li class="page-item">
-                <a class="page-link" href="?page_products={{ products.next_page_number }}">›</a>
+              <a class="page-link" href="?page_products={{ products.next_page_number }}">›</a>
             </li>
-        {% endif %}
-    </ul>
-</div>
-</div>
-</div>
-<div class="col md-6">
-  <div class="card shadow-sm mb-4">
-    <div class="card-header bg-warning text-dark fw-bold">
-        Critical Stock Alerts
+          {% endif %}
+        </ul>
+      </div>
     </div>
-    <div class="card-body p-0">
-        <table class="table mb-0">
-            <thead>
-                <tr>
-                    <th>Product</th>
-                    <th>Category</th>
-                    <th>Supplier</th>
-                    <th>Qty</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for product in low_stock_products %}
-                <tr>
-                    <td>{{ product.name }}</td>
-                    <td>{{ product.category.name }}</td>
-                    <td>{{ product.supplier.name }}</td>
-                    <td class="text-danger fw-bold">{{ product.quantity }}</td>
-                </tr>
-                {% empty %}
-                <tr>
-                    <td colspan="4" class="text-center text-success">All products are safe 🎉</td>
-                </tr>
-                {% endfor %}
-            </tbody>
+  </div>
+  <div class="col-md-6">
+    <div class="card shadow-sm border-0 rounded-4">
+      <div class="card-header bg-danger-subtle text-danger fw-semibold">
+        ⚠️ Critical Stock Alerts
+      </div>
+
+      <div class="card-body p-0">
+        <table class="table table-hover align-middle mb-0">
+          <thead class="table-light">
+            <tr>
+              <th>Product</th>
+              <th>Category</th>
+              <th>Supplier</th>
+              <th class="text-center">Qty</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            {% for product in low_stock_products %}
+            <tr>
+              <td class="fw-medium">{{ product.name }}</td>
+              <td class="text-muted">{{ product.category.name }}</td>
+              <td>{{ product.supplier.name }}</td>
+              <td class="text-danger fw-bold text-center">{{ product.quantity }}</td>
+            </tr>
+
+            {% empty %}
+            <tr>
+              <td colspan="4" class="text-center text-success py-3">
+                ✅ All products are safe
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
         </table>
+
+        <!-- Pagination -->
         <div class="p-2 d-flex justify-content-end">
-    <ul class="pagination pagination-sm mb-0">
-        {% if low_stock_products.has_previous %}
-            <li class="page-item">
+          <ul class="pagination pagination-sm mb-0">
+            {% if low_stock_products.has_previous %}
+              <li class="page-item">
                 <a class="page-link" href="?page_low={{ low_stock_products.previous_page_number }}">‹</a>
+              </li>
+            {% endif %}
+
+            <li class="page-item active">
+              <span class="page-link">{{ low_stock_products.number }}</span>
             </li>
-        {% endif %}
 
-        <li class="page-item active">
-            <span class="page-link">{{ low_stock_products.number }}</span>
-        </li>
-
-        {% if low_stock_products.has_next %}
-            <li class="page-item">
+            {% if low_stock_products.has_next %}
+              <li class="page-item">
                 <a class="page-link" href="?page_low={{ low_stock_products.next_page_number }}">›</a>
-            </li>
-        {% endif %}
-    </ul>
-    
-</div>
-</div>
+              </li>
+            {% endif %}
+          </ul>
+        </div>
+
+      </div>
     </div>
+  </div>
+
 </div>
-</div>
+
 {% endblock content %}

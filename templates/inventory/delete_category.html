@@ -1,12 +1,116 @@
 {% extends 'base_dashboard.html' %}
 {% block content %}
-<h3><b>Delete Category</b></h3>
-<hr>
-<p>Are you sure you want to delete <strong>{{ category.name }}</strong>?</p>
+<style>
+    .delete-container{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  height:70vh;
+}
 
-<form method="POST">
-    {% csrf_token %}
-    <button type="submit" class="btn btn-danger">Yes, Delete</button>
-    <a href="{% url 'category_dashboard' %}" class="btn btn-secondary">Cancel</a>
-</form>
+.delete-box{
+  background:white;
+  padding:30px 40px;
+  border-radius:14px;
+  width:450px;
+  text-align:center;
+  box-shadow:0 20px 40px rgba(0,0,0,0.15);
+}
+
+.delete-icon{
+  font-size:40px;
+  color:#e11d48;
+  margin-bottom:10px;
+}
+
+.delete-box h2{
+  font-size:22px;
+  font-weight:600;
+}
+
+.delete-box p{
+  font-size:15px;
+  color:#555;
+  margin:15px 0;
+}
+
+.confirm-text{
+  display:block;
+  font-size:13px;
+  color:#444;
+  margin-bottom:18px;
+  text-align:left;
+}
+
+.delete-buttons{
+  display:flex;
+  gap:12px;
+}
+
+.btn-cancel{
+  flex:1;
+  padding:10px;
+  border:1px solid #ddd;
+  background:white;
+  border-radius:8px;
+  text-decoration:none;
+  text-align:center;
+  color:#333;
+}
+
+.btn-delete{
+  flex:1;
+  padding:10px;
+  background:#e11d48;
+  color:white;
+  border:none;
+  border-radius:8px;
+  font-weight:600;
+  cursor:pointer;
+}
+
+.btn-delete:hover{
+  background:#be123c;
+}
+
+</style>
+
+<div class="delete-container">
+
+  <div class="delete-box">
+    
+    <div class="delete-icon">⚠️</div>
+
+    <h2>Delete Category?</h2>
+
+    <p>
+      Are you sure you want to delete 
+      <strong>{{ category.name }}</strong>?  
+      This action cannot be undone and will permanently remove the category.
+    </p>
+
+    <form method="POST">
+      {% csrf_token %}
+
+      <label class="confirm-text">
+        <input type="checkbox" required>
+        I understand this will permanently delete this category.
+      </label>
+
+      <div class="delete-buttons">
+        <a href="{% url 'category_dashboard' %}" class="btn-cancel">
+          Cancel
+        </a>
+
+        <button type="submit" class="btn-delete">
+          Delete
+        </button>
+      </div>
+
+    </form>
+
+  </div>
+
+</div>
+
 {% endblock %}

@@ -5,11 +5,19 @@ from django.contrib import messages
 from django.http import HttpResponseForbidden, HttpResponse
 from .utils.pdf import build_receipt_pdf
 from .utils.email import send_receipt_email
-from django.db.models import Sum, F, ExpressionWrapper, DecimalField
+from django.db.models import Sum, F, ExpressionWrapper, DecimalField, Q
 from django.db import transaction
 from django.forms import inlineformset_factory
 from django.utils import timezone
 from datetime import date
+from django.core.paginator import Paginator
+from django.contrib.admin.views.decorators import staff_member_required
+from reportlab.lib.pagesizes import letter
+from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph, Spacer
+from reportlab.lib import colors
+from reportlab.lib.styles import getSampleStyleSheet
+from openpyxl import Workbook
+import csv
 # Create your views here.
 
 
@@ -106,6 +114,12 @@ def order_dashboard(request):
         .first()
     )
 
+    recent_orders = Order.objects.order_by('-created_at')[:5]
+    attention_orders = Order.objects.filter(
+        payment_status="Pending"
+    )[:5]
+    pending_payments = Order.objects.filter(payment_status='Pending')[:5]
+
     context = {
         'total_orders': total_orders,
         'draft_orders': draft_orders,
@@ -117,6 +131,9 @@ def order_dashboard(request):
         'pending_amount': pending_amount,
         'total_products_sold': total_products_sold,
         'top_product': top_product,
+        'recent_orders': recent_orders,
+        'attention_orders': attention_orders,
+        'pending_payments': pending_payments,
     }
 
     return render(request, "dashboards/order_dashboard.html", context)
@@ -124,7 +141,58 @@ def order_dashboard(request):
 
 def order_list(request):
     orders = Order.objects.all().order_by('-created_at')
-    return render(request, 'inventory/order_list.html', {'orders': orders})
+    total_orders = Order.objects.all().count()
+    total_sales = (
+        OrderItem.objects
+        .filter(order__payment_status='Paid')
+        .aggregate(total=Sum(
+            ExpressionWrapper(
+                F('quantity') * F('price'),
+                output_field=DecimalField()
+            )
+        ))['total'] or 0
+    )
+    pending_amount = (
+        OrderItem.objects
+        .filter(order__payment_status='Pending')
+        .aggregate(total=Sum(
+            ExpressionWrapper(
+                F('quantity') * F('price'),
+                output_field=DecimalField()
+            )
+        ))['total'] or 0
+    )
+
+    search = request.GET.get("search")
+    if search:
+        orders = orders.filter(
+            Q(customer_name__icontains=search) |
+            Q(bill_number__icontains=search) |
+            Q(customer_phonenumber__icontains=search)
+        )
+
+    # 🎯 Filters
+    status = request.GET.get("status")
+    if status:
+        orders = orders.filter(status=status)
+
+    payment = request.GET.get("payment")
+    if payment:
+        orders = orders.filter(payment_status=payment)
+
+    paginator = Paginator(orders, 15)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
+    context = {
+        'page_obj': page_obj,
+        'total_orders': total_orders,
+        'total_sales': total_sales,
+        'pending_amount': pending_amount,
+        'search': search,
+    }
+
+    return render(request, 'inventory/order_list.html', context)
 
 
 def order_detail(request, pk):
@@ -311,3 +379,146 @@ def warranty_check(request):
         "orders/warranty_check.html",
         {"items": items}
     )
+
+
+def order_attention(request):
+    attention_orders = Order.objects.filter(
+        payment_status="Pending"
+    )
+
+    paginator = Paginator(attention_orders, 15)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
+    context = {
+        'page_obj': page_obj,
+    }
+    return render(request, 'inventory/order_attention.html', context)
+
+
+def pending_payments(request):
+
+    pending_payments = Order.objects.filter(payment_status='Pending')
+
+    paginator = Paginator(pending_payments, 15)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
+    context = {
+        'page_obj': page_obj,
+    }
+
+    return render(request, 'inventory/pending_payments.html', context)
+
+
+@staff_member_required
+def export_orders_csv(request):
+    response = HttpResponse(content_type="text/csv")
+    response["Content-Disposition"] = 'attachment; filename="orders.csv"'
+
+    writer = csv.writer(response)
+    writer.writerow([
+        "Bill No", "Customer", "Email", "Phone",
+        "City", "State", "Status", "Payment Status",
+        "Total Amount", "Created At"
+    ])
+
+    for order in Order.objects.prefetch_related("items"):
+        writer.writerow([
+            order.bill_number,
+            order.customer_name,
+            order.customer_email,
+            order.customer_phonenumber,
+            order.city,
+            order.get_state_display(),
+            order.status,
+            order.payment_status,
+            order.total_amount,
+            order.created_at.strftime("%Y-%m-%d %H:%M"),
+        ])
+
+    return response
+
+
+@staff_member_required
+def export_orders_excel(request):
+    wb = Workbook()
+    ws = wb.active
+    ws.title = "Orders"
+
+    ws.append([
+        "Bill No", "Customer", "Email", "Phone",
+        "City", "State", "Status", "Payment Status",
+        "Total Amount", "Created At"
+    ])
+
+    for order in Order.objects.prefetch_related("items"):
+        ws.append([
+            order.bill_number,
+            order.customer_name,
+            order.customer_email,
+            order.customer_phonenumber,
+            order.city,
+            order.get_state_display(),
+            order.status,
+            order.payment_status,
+            float(order.total_amount),
+            order.created_at.strftime("%Y-%m-%d %H:%M"),
+        ])
+
+    response = HttpResponse(
+        content_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+    )
+    response["Content-Disposition"] = 'attachment; filename="orders.xlsx"'
+    wb.save(response)
+    return response
+
+
+@staff_member_required
+def export_orders_pdf(request):
+    response = HttpResponse(content_type="application/pdf")
+    response["Content-Disposition"] = 'attachment; filename="orders.pdf"'
+
+    doc = SimpleDocTemplate(response, pagesize=letter)
+    styles = getSampleStyleSheet()
+    elements = []
+
+    title = Paragraph("Order History Report", styles["Heading1"])
+    elements.append(title)
+    elements.append(Spacer(1, 12))
+
+    orders = Order.objects.prefetch_related("items", "items__product")
+
+    for order in orders:
+        # Order Header
+        elements.append(Paragraph(
+            f"<b>Bill:</b> {order.bill_number} | <b>Customer:</b> {order.customer_name} | <b>Total:</b> ₹{order.total_amount}",
+            styles["Normal"]
+        ))
+        elements.append(Spacer(1, 6))
+
+        # Table Header
+        data = [["Product", "Qty", "Price", "Total"]]
+
+        for item in order.items.all():
+            data.append([
+                item.product.name if item.product else "Deleted Product",
+                item.quantity,
+                item.price,
+                item.total,
+            ])
+
+        # Create Table
+        table = Table(data, colWidths=[200, 60, 80, 80])
+        table.setStyle(TableStyle([
+            ("BACKGROUND", (0, 0), (-1, 0), colors.grey),
+            ("TEXTCOLOR", (0, 0), (-1, 0), colors.white),
+            ("GRID", (0, 0), (-1, -1), 0.5, colors.black),
+            ("BACKGROUND", (0, 1), (-1, -1), colors.beige),
+        ]))
+
+        elements.append(table)
+        elements.append(Spacer(1, 15))
+
+    doc.build(elements)
+    return response

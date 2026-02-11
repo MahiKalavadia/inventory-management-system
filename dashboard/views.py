@@ -7,9 +7,10 @@ from django.contrib.auth.models import User
 from django.utils import timezone
 from datetime import timedelta
 from notifications.models import Notification
-from django.db.models import Sum, F, ExpressionWrapper, DecimalField
-from orders.models import OrderItem
+from django.db.models import Sum, F, ExpressionWrapper, DecimalField, Count
+from orders.models import OrderItem, Order
 from purchases.models import PurchaseRequest, PurchaseOrder
+from django.contrib.auth.decorators import login_required, user_passes_test
 
 
 def landing(request):
@@ -145,6 +146,17 @@ def admin_dashboard(request):
         'recent_activity': activities,
         'requests': requests,
         'orders': orders,
+        # quick actions
+        "unread_notifications_count": Notification.objects.filter(is_read=False).count(),
+
+        "pending_requests_count": PurchaseRequest.objects.filter(
+            status="Pending"
+        ).count(),
+
+        # Active = anything not delivered
+        "active_po_count": PurchaseOrder.objects.exclude(
+            status="delivered"
+        ).count(),
     }
 
     return render(request, "admin_dashboard.html", context)
@@ -240,3 +252,24 @@ def view_all(request):
     recent_logins = User.objects.order_by('-last_login')
     users = User.objects.all()
     return render(request, 'inventory/view_all.html', {'users': users, 'recent_logins': recent_logins})
+
+
+@login_required
+@user_passes_test(lambda u: u.is_superuser)
+def admin_orders(request):
+    status = request.GET.get("status")
+    payment_status = request.GET.get("payment_status")
+
+    orders = Order.objects.all()
+
+    if status:
+        orders = orders.filter(status__iexact=status)
+
+    if payment_status:
+        orders = orders.filter(payment_status__iexact=payment_status)
+
+    orders = orders.order_by("-created_at")
+
+    return render(request, "inventory/order_list.html", {
+        "orders": orders
+    })

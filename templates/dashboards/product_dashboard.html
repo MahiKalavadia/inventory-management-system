@@ -1,413 +1,462 @@
 {% extends 'base_dashboard.html' %}
-
+{% load static %}
 {% block content %}
-<style>
-    .table th {
-    background-color: #f8f9fa;
-    font-weight: 600;
-}
+<div class="dashboard-topbar fixed-top d-flex justify-content-between align-items-center px-4 py-3 bg-white border-bottom"
+     style="left:260px; right:0; top:0; z-index:999;">
 
-.table tbody tr:hover {
-    background-color: #f1f3f5;
-    }
-
-</style>
-<div class="dashboard-header mb-4 d-flex justify-content-between align-items-center p-3 bg-light rounded shadow-sm">
-    <div class="page-title fw-bold fs-5">
+    <!-- Page Title -->
+    <div class="fw-semibold text-uppercase text-muted">
         Product Insights Dashboard
     </div>
-    <div class="d-flex align-items-center">
-        <div class="header-right d-flex align-items-center">
-            <div class="welcome-text me-2">Welcome to the Product Insights Dashboard</div>
+
+    <!-- Right Section -->
+    <div class="d-flex align-items-center gap-4">
+
+        <!-- Quick Actions -->
+        <div class="d-flex align-items-center gap-2">
+            {% if request.user.is_superuser or request.user.groups.first.name == "Manager" %}
+                <a href="{% url 'add_product' %}" class="btn btn-primary btn-sm">
+                    + Add Item
+                </a>
+            {% endif %}
+            <a href="{% url 'product_list' %}" class="btn btn-outline-dark btn-sm">
+                Catalog
+            </a>
+        </div>
+
+        <!-- User -->
+        <div class="d-flex align-items-center gap-2">
+            <div class="text-end">
+                <div class="fw-medium small">{{ request.user.username }}</div>
+                <div class="text-muted small">Product Panel</div>
+            </div>
+            <img src="{% static 'images/admin.jpeg' %}"
+                 class="rounded-circle border"
+                 width="36"
+                 height="36"
+                 style="object-fit: cover;">
         </div>
     </div>
-</div>
-
-<!-- Top Actions -->
-<div class="mb-3 d-flex gap-2">
-    
-    {% if request.user.is_superuser or request.user.groups.first.name == "Manager" %}
-        <a href="{% url 'add_product' %}" class="btn btn-primary">➕ Add Inventory Items</a>
-    {% endif %}
-    <a href="{% url 'product_list' %}" class="btn btn-outline-secondary">📄 Product Catalog</a>
 </div>
 
 <!-- Stats -->
 <div class="row mb-4">
 
-    <div class="col-md-2">
-        <a href="{% url 'product_list' %}" class="text-decoration-none">
-        <div class="card shadow-sm p-4 text-center card-hover" style="border-left: 5px solid #2563eb">
-            <div class="card-icon mb-2">
-                <i class="bi bi-box-fill icon-blue icon-bg"></i>
-            </div>
-            <h6 class="text-muted">Total Inventory Items</h6>
-            <h3 class="fw-bold">{{ total_products }}</h3>
-        </div>
-    </a>
-    </div>
-
-    <div class="col-md-2">
-        <a href="{% url 'in_stock' %}" class="text-decoration-none">
-        <div class="card shadow-sm p-4 text-center card-hover" style="border-left: 5px solid #16a34a">
-            <div class="card-icon mb-2">
-                <i class="bi bi-check-circle-fill icon-green icon-bg"></i>
-            </div>
-            <h6 class="text-muted">Available Stock</h6>
-            <h3 class="fw-bold">{{ in_stock }}</h3>
-        </div>
-    </a>
-    </div>
-
-    <div class="col-md-2">
-        <a href="{% url 'low_stock' %}" class="text-decoration-none">
-        <div class="card shadow-sm p-4 text-center card-hover" style="border-left: 5px solid #f97316">
-            <div class="card-icon mb-2">
-                <i class="bi bi-exclamation-triangle-fill icon-orange icon-bg"></i>
-            </div>
-            <h6 class="text-muted">Reorder Alerts</h6>
-            <h3 class="fw-bold">{{ low_stock }}</h3>
-        </div>
-    </a>
-    </div>
-
-    <div class="col-md-2">
-        <a href="{% url 'out_stock' %}" class="text-decoration-none">
-        <div class="card shadow-sm p-4 text-center card-hover" style="border-left: 5px solid #dc2626">
-            <div class="card-icon mb-2">
-                <i class="bi bi-x-circle-fill icon-red icon-bg"></i>
-            </div>
-            <h6 class="text-muted">Stockouts</h6>
-            <h3 class="fw-bold">{{ out_of_stock }}</h3>
-        </div>
-    </a>
-    </div>
     
-    <div class="col-md-2">
-        <a href="{% url 'category_list' %}" class="text-decoration-none">
-        <div class="card shadow-sm p-4 text-center card-hover" style="border-left: 5px solid #7c3aed">
-            <div class="card-icon mb-2">
-                <i class="bi bi-grid-fill icon-purple icon-bg"></i>
-            </div>
-            <h6 class="text-muted">Product Categories</h6>
-            <h3 class="fw-bold">{{ total_categories }}</h3>
-        </div>
-    </a>
-    </div>
 
     <div class="col-md-2">
-        <a href="{% url 'supplier_list' %}" class="text-decoration-none">
-        <div class="card shadow-sm p-4 text-center card-hover" style="border-left: 5px solid #38bdf8">
-            <div class="card-icon mb-2">
-                <i class="bi bi-truck-front-fill icon-cyan icon-bg"></i>
-            </div>
-            <h6 class="text-muted">Vendors</h6>
-            <h3 class="fw-bold">{{ total_suppliers }}</h3>
-        </div>
-    </a>
+  <a href="{% url 'product_list' %}" class="text-decoration-none text-dark">
+    <div class="stat-card">
+      <div class="stat-header">
+        <span class="stat-title">TOTAL ITEMS</span>
+        <i class="bi bi-box-fill text-primary"></i>
+      </div>
+      <h2>{{ total_products }}</h2>
+      <p class="stat-sub text-muted">All inventory products</p>
     </div>
+  </a>
+</div>
+
+<div class="col-md-2">
+  <a href="{% url 'in_stock' %}" class="text-decoration-none text-dark">
+    <div class="stat-card">
+      <div class="stat-header">
+        <span class="stat-title">IN STOCK</span>
+        <i class="bi bi-check-circle-fill text-success"></i>
+      </div>
+      <h2>{{ in_stock }}</h2>
+      <p class="stat-sub text-success">Ready for sale</p>
+    </div>
+  </a>
+</div>
+
+<div class="col-md-2">
+  <a href="{% url 'low_stock' %}" class="text-decoration-none text-dark">
+    <div class="stat-card">
+      <div class="stat-header">
+        <span class="stat-title">LOW STOCK</span>
+        <i class="bi bi-exclamation-triangle-fill text-warning"></i>
+      </div>
+      <h2>{{ low_stock }}</h2>
+      <p class="stat-sub text-danger">Critical items identified</p>
+    </div>
+  </a>
+</div>
+
+<div class="col-md-2">
+  <a href="{% url 'out_stock' %}" class="text-decoration-none text-dark">
+    <div class="stat-card">
+      <div class="stat-header">
+        <span class="stat-title">STOCKOUTS</span>
+        <i class="bi bi-x-circle-fill text-danger"></i>
+      </div>
+      <h2>{{ out_of_stock }}</h2>
+      <p class="stat-sub text-danger">Attention Required</p>
+    </div>
+  </a>
+</div>
+
+<div class="col-md-2">
+  <a href="{% url 'category_list' %}" class="text-decoration-none text-dark">
+    <div class="stat-card">
+      <div class="stat-header">
+        <span class="stat-title">CATEGORIES</span>
+        <i class="bi bi-grid-fill text-purple"></i>
+      </div>
+      <h2>{{ total_categories }}</h2>
+      <p class="stat-sub text-muted">Product groups</p>
+    </div>
+  </a>
+</div>
+
+<div class="col-md-2">
+  <a href="{% url 'supplier_list' %}" class="text-decoration-none text-dark">
+    <div class="stat-card">
+      <div class="stat-header">
+        <span class="stat-title">SUPPLIERS</span>
+        <i class="bi bi-truck-front-fill text-info"></i>
+      </div>
+      <h2>{{ total_suppliers }}</h2>
+      <p class="stat-sub text-muted">Active vendors</p>
+    </div>
+  </a>
+</div>
+
     
 </div>
-<div class="row mb-4">
-
-    <!-- Stock Status -->
-    <div class="col-md-4">
-        <div class="card shadow-sm p-3 h-100">
-            <h6 class="fw-bold mb-3">Product Stock Distribution</h6>
-            <div style="height:240px;">
-                <canvas id="stockChart"></canvas>
-            </div>
-        </div>
+<!-- ===================== ANALYTICS OVERVIEW ===================== -->
+<div class="dashboard-section mb-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h5 class="fw-bold mb-0">Analytics Overview</h5>
+        <span class="text-muted small">Real-time inventory insights</span>
     </div>
 
-    <!-- Category Chart -->
-    <div class="col-md-4">
-        <div class="card shadow-sm p-3 h-100">
-            <h6 class="fw-bold mb-3">Category-wise Product Count</h6>
-            <div style="height:240px;">
-                <canvas id="categoryChart"></canvas>
-            </div>
+    <div class="row g-4">
+
+        <!-- Stock -->
+        <div class="col-lg-4">
+    <div class="card dashboard-card h-100 shadow-sm border-0">
+        <div class="card-body" style="height: 220px;">
+            <h6 class="fw-semibold mb-3">Stock Distribution</h6>
+            <canvas id="stockChart" height='200'></canvas>
         </div>
     </div>
-
-    <!-- Expensive Products -->
-    <div class="col-md-4">
-        <div class="card shadow-sm p-3 h-100">
-            <h6 class="fw-bold mb-3">High-Value Products</h6>
-            <div style="height:240px;">
-                <canvas id="expensiveChart"></canvas>
-            </div>
-        </div>
-    </div>
-
 </div>
-<div class="row mb-6">
+
+<!-- Category -->
+<div class="col-lg-4">
+    <div class="card dashboard-card h-100 shadow-sm border-0">
+        <div class="card-body" style="height: 220px;">
+            <h6 class="fw-semibold mb-3">Products by Category</h6>
+            <canvas id="categoryChart" height='200'></canvas>
+        </div>
+    </div>
+</div>
+
+<!-- Expensive -->
+<div class="col-lg-4">
+    <div class="card dashboard-card h-100 shadow-sm border-0">
+        <div class="card-body" style="height: 220px;">
+            <h6 class="fw-semibold mb-3">High-Value Products</h6>
+            <canvas id="expensiveChart" height='200'></canvas>
+        </div>
+    </div>
+</div>
+
+
+    </div>
+</div>
+
+<!-- ===================== TRENDS SECTION ===================== -->
+<div class="dashboard-section mb-4">
+    <h5 class="fw-bold mb-3">Trends & Valuation</h5>
+
+    <div class="row g-4">
+
         <div class="col-lg-6">
-        <div class="card shadow-sm h-100">
-            <div class="card-body">
-                <h6 class="fw-bold mb-3">Monthly Product Additions</h6>
-                <canvas id="trendChart" height="100px"></canvas>
+            <div class="card dashboard-card h-100 shadow-sm border-0">
+                <div class="card-body" style="height: 260px;">
+                    <h6 class="fw-semibold mb-3">Monthly Product Additions</h6>
+                    <canvas id="trendChart"></canvas>
+                </div>
             </div>
         </div>
+
+        <div class="col-lg-6">
+            <div class="card dashboard-card h-100 shadow-sm border-0">
+               <div class="card-body" style="height: 260px;">
+                    <h6 class="fw-semibold mb-2">Inventory Value by Category</h6>
+                    <div class="text-muted small mb-3">
+                        Total Inventory Value:
+                        <span class="fw-bold text-dark">₹ {{ total_inventory_value|floatformat:0 }}</span>
+                    </div>
+                    <canvas id="inventoryValueChart"></canvas>
+                </div>
+            </div>
+        </div>
+
     </div>
-     <div class="col-md-6">
-    <div class="card shadow-sm p-3">
-        <h6 class="fw-bold mb-2">Product Value by Category</h6>
-        <p class="text-muted small">
-           Categories with the highest inventory value. 
-           Total Inventory: <strong>₹ {{ total_inventory_value|floatformat:0 }}</strong>
-        </p>
-        <canvas id="inventoryValueChart" height="250px"></canvas>
+</div>
+<br>
+<!-- ===================== FILTER BAR ===================== -->
+<div class="card dashboard-card mb-4 shadow-sm border-0">
+    <div class="card-body">
+
+        <form method="get" class="row g-3 align-items-end">
+
+            <div class="col-md">
+                <label class="form-label small text-muted">Search</label>
+                <input type="text" name="search" value="{{ request.GET.search }}"
+                       class="form-control" placeholder="Product / Brand">
+            </div>
+
+            <div class="col-md">
+                <label class="form-label small text-muted">Category</label>
+                <select name="category" class="form-select">
+                    <option value="">All</option>
+                    {% for cat in categories %}
+                    <option value="{{ cat.id }}"
+                      {% if request.GET.category == cat.id|stringformat:"s" %}selected{% endif %}>
+                        {{ cat.name }}
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="col-md">
+                <label class="form-label small text-muted">Supplier</label>
+                <select name="supplier" class="form-select">
+                    <option value="">All</option>
+                    {% for sup in suppliers %}
+                    <option value="{{ sup.id }}"
+                      {% if request.GET.supplier == sup.id|stringformat:"s" %}selected{% endif %}>
+                        {{ sup.name }}
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="col-md">
+                <label class="form-label small text-muted">Stock Status</label>
+                <select name="status" class="form-select">
+                    <option value="">All</option>
+                    <option value="in">In Stock</option>
+                    <option value="low">Low Stock</option>
+                    <option value="out">Out Stock</option>
+                </select>
+            </div>
+
+            <div class="col-md-2">
+                <button class="btn btn-dark w-100">Apply Filters</button>
+            </div>
+
+        </form>
     </div>
 </div>
 
-</div>
-<hr>
+<!-- ===================== PRODUCT TABLE ===================== -->
+<div class="card dashboard-card shadow-sm border-0">
+    <div class="card-body">
 
-
-<!-- Filters -->
-<form method="get" class="row g-2 mb-3">
-    <div class="col">
-        <input type="text" name="search" value="{{ request.GET.search }}" class="form-control" placeholder="Search product or brand">
-    </div>
-
-    <div class="col">
-        <select name="category" class="form-select">
-            <option value="">Filter By Categories</option>
-            {% for cat in categories %}
-            <option value="{{ cat.id }}" {% if request.GET.category == cat.id|stringformat:"s" %}selected{% endif %}>
-                {{ cat.name }}
-            </option>
-            {% endfor %}
-        </select>
-    </div>
-
-    <div class="col">
-        <select name="supplier" class="form-select">
-            <option value="">Filter By Vendors</option>
-            {% for sup in suppliers %}
-            <option value="{{ sup.id }}" {% if request.GET.supplier == sup.id|stringformat:"s" %}selected{% endif %}>
-                {{ sup.name }}
-            </option>
-            {% endfor %}
-        </select>
-    </div>
-
-    <div class="col">
-        <select name="status" class="form-select">
-            <option value="">Filter By Status</option>
-            <option value="in">In Stock</option>
-            <option value="low">Low Stock</option>
-            <option value="out">Out of Stock</option>
-        </select>
-    </div>
-
-    <div class="col">
-        <button class="btn btn-dark w-100">Filter</button>
-    </div>
-</form>
-<hr>
-<!-- Product Table -->
- <div class="card shadow-sm mb-4">
-    <div class="card-header fw-bold bg-light">
-        📂 Products List
-    </div>
-<table class="table table-hover align-middle bg-white shadow-sm rounded">
-<tr>
-    <th>Product Name</th>
-    <th>Product Category</th>
-    <th>Vendor</th>
-    <th>Brand</th>
-    <th>Stock Qty</th>
-    <th>Unit Price</th>
-    <th>Stock Status</th>
-    <th>Actions</th>
-</tr>
-
-{% for product in products %}
-<tr>
-    <td>{{ product.name }}</td>
-    <td>{{ product.category.name }}</td>
-    <td>{{ product.supplier.name }}</td>
-    <td>{{ product.brand }}</td>
-    <td class="fw-bold 
-          {% if product.quantity == 0 %}text-danger
-          {% elif product.quantity <= low_stock_limit %}text-warning
-          {% else %}text-success
-          {% endif %}">
-              {{ product.quantity }}
-    </td>
-
-    <td>{{ product.price }}</td>
-    <td>
-        {% if product.quantity == 0 %}
-            🔴 Out
-        {% elif product.quantity <= low_stock_limit %}
-            🟡 Low
-        {% else %}
-            🟢 In
-        {% endif %}
-    </td>
-    
-    <td>
-        {% if request.user.is_superuser or request.user.groups.first.name == "Manager" %}
-            <a href="{% url 'update_product' product.id %}" class="btn btn-sm btn-warning">Manage</a>
-            <a href="{% url 'delete_product' product.id %}" class="btn btn-sm btn-danger">Delete</a>
-        {% else %}
-            Read-Only Access
-        {% endif %}
-    </td>
-</tr>
-
-{% endfor %}
-</table>
-</div>
-</div>
-<!-- Pagination -->
-<nav class="mt-4">
-    <ul class="pagination justify-content-center">
-
-        {% if products.has_previous %}
-        <li class="page-item">
-            <a class="page-link"
-               href="?page={{ products.previous_page_number }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}{% if request.GET.category %}&category={{ request.GET.category }}{% endif %}{% if request.GET.supplier %}&supplier={{ request.GET.supplier }}{% endif %}{% if request.GET.status %}&status={{ request.GET.status }}{% endif %}">
-                Previous
-            </a>
-        </li>
-        {% endif %}
-
-        <li class="page-item active">
-            <span class="page-link">
-                Page {{ products.number }} of {{ products.paginator.num_pages }}
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h6 class="fw-semibold mb-0">Product Directory</h6>
+            <span class="text-muted small">
+                Showing {{ products.paginator.count }} items
             </span>
-        </li>
+        </div>
 
-        {% if products.has_next %}
-        <li class="page-item">
-            <a class="page-link"
-               href="?page={{ products.next_page_number }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}{% if request.GET.category %}&category={{ request.GET.category }}{% endif %}{% if request.GET.supplier %}&supplier={{ request.GET.supplier }}{% endif %}{% if request.GET.status %}&status={{ request.GET.status }}{% endif %}">
-                Next
-            </a>
-        </li>
-        {% endif %}
+        <div class="table-responsive">
+            <table class="table align-middle table-hover">
+                <thead class="table-light">
+                    <tr>
+                        <th>Name</th>
+                        <th>Category</th>
+                        <th>Supplier</th>
+                        <th>Brand</th>
+                        <th>Qty</th>
+                        <th>Price</th>
+                        <th>Status</th>
+                        <th class="text-end"></th>
+                    </tr>
+                </thead>
+                <tbody>
 
-    </ul>
-</nav>
+                {% for product in products %}
+                <tr>
+                    <td class="fw-medium">{{ product.name }}</td>
+                    <td>{{ product.category.name }}</td>
+                    <td>{{ product.supplier.name }}</td>
+                    <td>{{ product.brand }}</td>
+
+                    <td class="fw-bold 
+                        {% if product.quantity == 0 %}text-danger
+                        {% elif product.quantity <= low_stock_limit %}text-warning
+                        {% else %}text-success
+                        {% endif %}">
+                        {{ product.quantity }}
+                    </td>
+
+                    <td class="fw-medium">₹ {{ product.price }}</td>
+
+                    <td>
+                        {% if product.quantity == 0 %}
+                            <span class="badge bg-danger-subtle text-danger">Out Stock</span>
+                        {% elif product.quantity <= low_stock_limit %}
+                            <span class="badge bg-warning-subtle text-warning">Low Stock</span>
+                        {% else %}
+                            <span class="badge bg-success-subtle text-success">In Stock</span>
+                        {% endif %}
+                    </td>
+
+                    <td class="text-end">
+                        {% if request.user.is_superuser or request.user.groups.first.name == "Manager" %}
+                            <a href="{% url 'update_product' product.id %}" class="btn btn-sm btn-outline-primary">Manage</a>
+                            <a href="{% url 'delete_product' product.id %}" class="btn btn-sm btn-outline-danger">Delete</a>
+                        {% else %}
+                            <span class="text-muted small">Read-only</span>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Pagination -->
+        <nav class="mt-4">
+            <ul class="pagination justify-content-center">
+
+                {% if products.has_previous %}
+                <li class="page-item">
+                    <a class="page-link"
+                       href="?page={{ products.previous_page_number }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}{% if request.GET.category %}&category={{ request.GET.category }}{% endif %}{% if request.GET.supplier %}&supplier={{ request.GET.supplier }}{% endif %}{% if request.GET.status %}&status={{ request.GET.status }}{% endif %}">
+                        Previous
+                    </a>
+                </li>
+                {% endif %}
+
+                <li class="page-item active">
+                    <span class="page-link">
+                        Page {{ products.number }} of {{ products.paginator.num_pages }}
+                    </span>
+                </li>
+
+                {% if products.has_next %}
+                <li class="page-item">
+                    <a class="page-link"
+                       href="?page={{ products.next_page_number }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}{% if request.GET.category %}&category={{ request.GET.category }}{% endif %}{% if request.GET.supplier %}&supplier={{ request.GET.supplier }}{% endif %}{% if request.GET.status %}&status={{ request.GET.status }}{% endif %}">
+                        Next
+                    </a>
+                </li>
+                {% endif %}
+
+            </ul>
+        </nav>
+    </div>
+</div>
+
+<!-- ===================== CHART JS ===================== -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
 <script>
-    // Stock Chart
-    const stockCtx = document.getElementById('stockChart');
-    new Chart(stockCtx, {
-        type: 'doughnut',
-        data: {
-            labels: ['In Stock', 'Low Stock', 'Out of Stock'],
-            datasets: [{
-                data: [{{ in_stock }}, {{ low_stock }}, {{ out_of_stock }}],
-                backgroundColor: ['#16a34a', '#f97316', '#dc2626'],
-                borderWidth: 1
-            }]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: {
-                legend: { position: 'bottom' }
-            },
-            scales: {
-                y: { beginAtZero: true }
-            }
-        }
+const stockChart = document.getElementById('stockChart');
+const categoryChart = document.getElementById('categoryChart');
+const expensiveChart = document.getElementById('expensiveChart');
+const trendChart = document.getElementById('trendChart');
+const inventoryValueChart = document.getElementById('inventoryValueChart');
 
-    });
+/* Stock Doughnut */
+new Chart(stockChart, {
+    type: 'doughnut',
+    data: {
+        labels: ['In Stock', 'Low Stock', 'Out of Stock'],
+        datasets: [{
+            data: [{{ in_stock }}, {{ low_stock }}, {{ out_of_stock }}],
+            backgroundColor: ['#16a34a','#f97316','#dc2626']
+        }]
+    },
+    options: {
+        maintainAspectRatio: false,
+        plugins: { legend: { position: 'bottom' }},
+        animation: { duration: 600 }
+    }
+});
 
-    // Category Chart
-    new Chart(document.getElementById('categoryChart'), {
+/* Category Chart */
+new Chart(categoryChart, {
     type: 'bar',
     data: {
         labels: {{ category_names|safe }},
         datasets: [{
-            label: 'Products',
             data: {{ category_counts|safe }},
-            borderRadius: 6,
-            barThickness: 18
+            borderRadius: 6
         }]
     },
     options: {
-        indexAxis: 'y',  
-        responsive: true,
         maintainAspectRatio: false,
-        plugins: {
-            legend: { display: false }
-        },
-        scales: {
-            x: { beginAtZero: true },
-            y: {
-                ticks: { font: { size: 12 } }
-            }
-        }
+        indexAxis: 'y',
+        plugins: { legend: { display: false }},
+        animation: { duration: 600 },
+        scales: { x: { beginAtZero: true }}
     }
 });
 
-    // Expensive Products Chart
-new Chart(document.getElementById('expensiveChart'), {
+/* Expensive Products */
+new Chart(expensiveChart, {
     type: 'bar',
     data: {
         labels: {{ expensive_names|safe }},
         datasets: [{
-            label: 'Price',
             data: {{ expensive_prices|safe }},
-            backgroundColor: '#6f42c1'
+            borderRadius: 6
         }]
     },
     options: {
-        responsive: true,
         maintainAspectRatio: false,
         plugins: { legend: { display: false }},
-        scales: {
-            y: { beginAtZero: true }
-        }
+        animation: { duration: 600 }
     }
 });
 
-new Chart(document.getElementById('trendChart'), {
+/* Monthly Trend */
+new Chart(trendChart, {
     type: 'line',
     data: {
         labels: {{ months|safe }},
         datasets: [{
-            label: 'Products Added',
             data: {{ monthly_counts|safe }},
-            fill: true,
-            tension: 0.4
+            tension: 0.4,
+            fill: true
         }]
     },
     options: {
+        maintainAspectRatio: false,
         plugins: { legend: { display: false }},
+        animation: { duration: 700 },
         scales: { y: { beginAtZero: true }}
     }
 });
 
-new Chart(document.getElementById('inventoryValueChart'), {
+/* Inventory Value */
+new Chart(inventoryValueChart, {
     type: 'bar',
     data: {
         labels: {{ category_value_labels|safe }},
         datasets: [{
-            label: 'Stock Value (₹)',
             data: {{ category_value_values|safe }},
-            borderWidth: 1
+            borderRadius: 6
         }]
     },
     options: {
-        indexAxis: 'y',  // 🔥 makes horizontal
-        responsive: true,
-        plugins: {
-            legend: { display: false }
-        },
-        scales: {
-            x: { beginAtZero: true }
-        }
+        maintainAspectRatio: false,
+        indexAxis: 'y',
+        plugins: { legend: { display: false }},
+        animation: { duration: 600 },
+        scales: { x: { beginAtZero: true }}
     }
 });
 </script>
+
+
 
 {% endblock %}

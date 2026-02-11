@@ -1,62 +1,143 @@
 {% extends 'base_dashboard.html' %}
-
+{% load group_tags %}
+{% load static %}
 {% block content %}
 <style>
-    .table th {
-    background-color: #f8f9fa;
+.stock-table th {
+    font-size: 12px;
+    text-transform: uppercase;
+    color: #6c757d;
+    background: #f8fafc;
+}
+
+.stock-row:hover {
+    background: #f8fafc;
+    transition: 0.2s;
+}
+
+.product-img {
+    width: 48px;
+    height: 48px;
+    border-radius: 10px;
+    object-fit: cover;
+    background: #f1f5f9;
+    padding: 6px;
+}
+
+.stock-progress {
+    height: 6px;
+    border-radius: 20px;
+}
+
+.qty-badge {
+    background: #fff3cd;
+    padding: 6px 12px;
+    border-radius: 20px;
     font-weight: 600;
 }
 
-.table tbody tr:hover {
-    background-color: #f1f3f5;
-    }
-
 </style>
-<div class="card mb-4">
-   <div class="card-header d-flex justify-content-between align-items-center">
-           <h3><b>Critical Stock Alerts</b></h3>
-           <div>
-              <a href="{% url 'stock_dashboard' %}" class="btn btn-outline-secondary btn-sm me-2">
-                 <i class="bi bi-arrow-left-circle-fill"></i> Back
-              </a>
-          </div>
+<div class="dashboard-topbar fixed-top d-flex justify-content-between align-items-center px-4 py-3 bg-white border-bottom"
+     style="left:260px; right:0; top:0; z-index:999;">
+
+    <div>
+        <div class="fw-semibold text-uppercase text-muted">
+            Critical Stock Alerts
         </div>
-    <div class="card-body">
-        <table class="table table-striped">
-            <thead>
-                 <tr>
-                    <th>Image</th>
-                    <th>Name</th>
-                    <th>Category</th>
-                    <th>Vendor</th>
-                    <th>Quantity</th>
-                 </tr>
-            </thead>
-            <tbody>
-        {% for product in page_obj %}
-        <tr class="table-warning">
-            <td>
-                {% if product.image %}
-                    <img src="{{ product.image.url }}" width="50">
-                {% endif %}
-            </td>
-            <td>{{ product.name }}</td>
-            <td>{{ product.category.name }}</td>
-            <td>{{ product.supplier.name }}</td>
-            <td><strong>{{ product.quantity }}</strong></td>
-        </tr>
-        {% empty %}
-        <tr>
-            <td colspan="5" class="text-center">No low stock products 🎉</td>
-        </tr>
-        {% endfor %}
-    </tbody>
-        </table>
+        <div class="text-muted small">
+            Products having less stock and need immediate attention
+        </div>
+    </div>
+
+    <div class="d-flex align-items-center gap-3">
+        <a href="{% url 'stock_dashboard' %}" class="btn btn-outline-secondary btn-sm">
+            <i class="bi bi-arrow-left-circle"></i> Back
+        </a>
+        {% if request.user|has_group:'Manager' or request.user|has_group:'Staff'%}
+        <a href="{% url 'purchase_request' %}" class="btn btn-primary btn-sm">
+                <i class="bi bi-cart-plus"></i> Request Purchase
+        </a>
+        {% endif %}
+        <div class="text-end">
+                <div class="fw-medium small">{{ request.user.username }}</div>
+                <div class="text-muted small">Low Stock Panel</div>
+            </div>
+        <img src="{% static 'images/admin.jpeg' %}"
+             class="rounded-circle border"
+             width="36"
+             height="36"
+             style="object-fit: cover;">
     </div>
 </div>
+   <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table align-middle mb-0 stock-table">
+                <thead>
+                    <tr>
+                        <th>Image</th>
+                        <th>Name</th>
+                        <th>Category</th>
+                        <th>Vendor</th>
+                        <th>Stock Level</th>
+                        <th>Qty</th>
+                    </tr>
+                </thead>
 
-<!--Pagination-->
-<nav class="mt-4">
+                <tbody>
+                {% for product in page_obj %}
+                <tr class="stock-row">
+
+                    <!-- Image -->
+                    <td>
+                        {% if product.image %}
+                            <img src="{{ product.image.url }}" class="product-img">
+                        {% else %}
+                            <img src="https://cdn-icons-png.flaticon.com/512/679/679922.png" class="product-img">
+                        {% endif %}
+                    </td>
+
+                    <!-- Name -->
+                    <td>
+                        <div class="fw-semibold">{{ product.name }}</div>
+                        <small class="text-muted">SKU: {{ product.id }}</small>
+                    </td>
+
+                    <td>{{ product.category.name }}</td>
+                    <td>{{ product.supplier.name }}</td>
+
+                    <!-- Stock Progress -->
+                   <td style="width:180px;">
+    <small class="text-danger fw-semibold">
+        Critical {{ product.stock_percent|floatformat:0 }}%
+    </small>
+
+    <div class="progress mt-1" style="height:6px;">
+        <div class="progress-bar bg-danger"
+             style="width: {{ product.stock_percent }}%;">
+        </div>
+    </div>
+</td>
+
+
+                    <!-- Qty Badge -->
+                    <td>
+                        <span class="qty-badge">{{ product.quantity }} units</span>
+                    </td>
+
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="6" class="text-center py-4 text-muted">
+                        🎉 No critical stock alerts
+                    </td>
+                </tr>
+                {% endfor %}
+                </tbody>
+
+            </table>
+        </div>
+    </div>
+  <nav class="mt-4">
 <ul class="pagination justify-content-center">
 
     {% if page_obj.has_previous %}
@@ -77,4 +158,6 @@
 
 </ul>
 </nav>
+</div>
+</div>
 {% endblock %}

@@ -136,20 +136,22 @@ def create_request(request, product_id):
         status="Pending"
     ).exists():
         messages.warning(request, "Request already pending for this product.")
-        return redirect("purchase_dashboard_ms")
+        return redirect("purchase_dashboard2")
 
     if request.method == "POST":
         quantity = request.POST.get("quantity")
+        description = request.POST.get("description")
 
         PurchaseRequest.objects.create(
             product=product,
             supplier=product.supplier,
             quantity=quantity,
+            description=description,
             requested_by=request.user,
         )
 
         messages.success(request, "Purchase request sent to admin.")
-        return redirect("purchase_dashboard_ms")
+        return redirect("purchase_dashboard2")
 
     return render(request, "inventory/create_request.html", {
         "product": product
@@ -183,26 +185,45 @@ def purchase_request(request):
 @login_required
 def manage_requests(request):
     requests = PurchaseRequest.objects.all().order_by("-created_at")
-    return render(request, "inventory/manage_request.html", {"requests": requests})
+
+    paginator = Paginator(requests, 9)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
+    return render(request, "inventory/manage_request.html", {"page_obj": page_obj})
 
 
 @login_required
 def approve_request(request, pk):
     req = get_object_or_404(PurchaseRequest, id=pk)
-    req.status = "Approved"
-    req.save()
 
-    # Create Purchase Order
-    PurchaseOrder.objects.create(
-        request=req,
-        supplier=req.supplier,
-        total_cost=req.quantity * req.product.purchase_price
-    )
+    # 🛑 Prevent double approval
+    if req.status == "Approved":
+        messages.info(request, "Request already approved.")
+        return redirect("manage_requests")
 
-    Notification.objects.create(
-        user_target=req.requested_by,
-        message=f"Your request for {req.product.name} was APPROVED"
-    )
+    try:
+        with transaction.atomic():
+            req.status = "Approved"
+            req.save()
+
+            PurchaseOrder.objects.get_or_create(
+                request=req,
+                defaults={
+                    "supplier": req.supplier,
+                    "total_cost": req.quantity * req.product.purchase_price
+                }
+            )
+
+            Notification.objects.create(
+                user_target=req.requested_by,
+                message=f"Your request for {req.product.name} was APPROVED"
+            )
+
+        messages.success(request, "Request approved successfully.")
+
+    except Exception:
+        messages.error(request, "Something went wrong. Please try again.")
 
     return redirect("manage_requests")
 
@@ -224,7 +245,12 @@ def reject_request(request, pk):
 # ================= PURCHASE ORDERS =================
 @staff_member_required
 def purchase_orders(request):
-    orders = PurchaseOrder.objects.all().order_by("-created_at")
+    order = PurchaseOrder.objects.all().order_by("-created_at")
+
+    paginator = Paginator(order, 10)
+    page_number = request.GET.get('page')
+    orders = paginator.get_page(page_number)
+
     return render(request, "inventory/purchase_orders.html", {"orders": orders})
 
 

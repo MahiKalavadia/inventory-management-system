@@ -1,68 +1,236 @@
 {% extends 'base_dashboard.html' %}
+{% load static %}
+{% load humanize %}
+{% load number_filters %}
 {% block content %}
+<style>
+    .stat-card {
+  border: 1px solid #eef1f5;
+  border-radius: 14px;
+}
 
-<div class="card mb-4">
-<div class="card-header d-flex justify-content-between align-items-center">
-           <h3><b>Order History</b></h3>
-           <div>
-              <a href="{% url 'order_dashboard' %}" class="btn btn-outline-secondary btn-sm me-2">
-                 <i class="bi bi-arrow-left-circle-fill"></i> Back
-              </a>
-          </div>
+.table th {
+  font-size: 13px;
+  font-weight: 600;
+  color: #6b7280;
+}
+
+.table td {
+  font-size: 14px;
+}
+
+.badge {
+  border-radius: 20px;
+  font-size: 12px;
+  padding: 4px 10px;
+}
+
+.card {
+  border-radius: 16px;
+}
+
+.card:hover {
+  box-shadow: 0 12px 30px rgba(0,0,0,0.05);
+}
+
+</style>
+<div class="dashboard-topbar fixed-top d-flex justify-content-between align-items-center px-4 py-3 bg-white border-bottom"
+     style="left:260px; right:0; top:0; z-index:999;">
+
+    <!-- Page Title --><div>
+    <div class="fw-semibold text-uppercase text-muted">
+        Order Details
+    </div>
+     <div class="text-muted small">
+            Manage orders here.
         </div>
+    </div>
+    <!-- Right Section -->
+    <div class="d-flex align-items-center gap-4">
 
-<div class="card-body">
-<div class="card shadow-sm">
-    <div class="table-responsive">
-        <table class="table table-hover align-middle mb-0">
-            <thead class="table-light">
-                <tr>
-                    <th>#</th>
-                    <th>Customer</th>
-                    <th>Status</th>
-                    <th>Payment</th>
-                    <th>Total</th>
-                    <th>Date</th>
-                    <th class="text-end">Action</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for order in orders %}
-                <tr>
-                    <td>{{ order.bill_number }}</td>
-                    <td>
-                        <strong>{{ order.customer_name }}</strong><br>
-                        <small class="text-muted">{{ order.customer_email }}</small>
-                    </td>
-                    <td><span class="badge bg-info">{{ order.status }}</span></td>
-                    <td>
-                        {% if order.payment_status == "Paid" %}
-                            <span class="badge bg-success">Paid</span>
-                        {% else %}
-                            <span class="badge bg-warning text-dark">{{ order.payment_status }}</span>
-                        {% endif %}
-                    </td>
-                    <td>₹ {{ order.total_amount|floatformat:2 }}</td>
-                    <td>{{ order.created_at|date:"d M Y" }}</td>
-                    <td class="text-end">
-                        {% if request.user.is_superuser or request.user.groups.first.name == "Manager" %}
-                            {% if order.payment_status == "Pending" %}
-                                <a href="{% url 'update_order' order.id %}" class="btn btn-sm btn-outline-primary">Edit</a>
-                            {% endif %}
-                            <a href="{% url 'delete_order' order.id %}" class="btn btn-sm btn-outline-danger">Delete</a>
-                        {% endif %}
-                        <a href="{% url 'order_detail' order.id %}" class="btn btn-sm btn-outline-primary">View</a>
-                    </td>
-                </tr>
-                {% empty %}
-                <tr>
-                    <td colspan="7" class="text-center text-muted py-4">No orders found</td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+        <!-- Quick Actions -->
+        <div class="d-flex gap-2">
+        <a href="{% url 'order_dashboard' %}" class="btn btn-light btn-sm border">
+            ← Back
+        </a>
+    </div>
+
+        <!-- User -->
+        <div class="d-flex align-items-center gap-2">
+            <div class="text-end">
+                <div class="fw-medium small">{{ request.user.username }}</div>
+                <div class="text-muted small">Order List Panel</div>
+            </div>
+            <img src="{% static 'images/admin.jpeg' %}"
+                 class="rounded-circle border"
+                 width="36"
+                 height="36"
+                 style="object-fit: cover;">
+        </div>
     </div>
 </div>
+        <!--Stats-->
+<div class="row mb-3">
+    <div class="col-md-4">
+  <a href="{% url 'category_list' %}" class="text-decoration-none text-dark">
+    <div class="stat-card">
+      <div class="stat-header">
+        <span class="stat-title">TOTAL ORDERS</span>
+        <i class="bi bi-cart-check-fill text-primary"></i>
+      </div>
+      <h2>{{ total_orders }}</h2>
+      <p class="stat-sub text-muted">Orders received till now</p>
+    </div>
+  </a>
+</div>
+
+<div class="col-md-4">
+  <a href="{% url 'category_with_products' %}" class="text-decoration-none text-dark">
+    <div class="stat-card">
+      <div class="stat-header">
+        <span class="stat-title">RECEIVED AMOUNT</span>
+        <i class="bi bi-wallet2 text-success"></i>
+      </div>
+      <h2>{{ total_sales|short_number }}</h2>
+      <p class="stat-sub text-success">Amount that has been received</p>
+    </div>
+  </a>
+</div>
+
+<div class="col-md-4">
+  <a href="{% url 'category_without_products' %}" class="text-decoration-none text-dark">
+    <div class="stat-card">
+      <div class="stat-header">
+        <span class="stat-title">PAYMENT PENDING</span>
+        <i class="bi bi-clock-history text-warning"></i>
+      </div>
+      <h2>{{ pending_amount|short_number }}</h2>
+      <p class="stat-sub text-warning">Amount yet to be received</p>
+    </div>
+  </a>
+</div>
+
+</div>
+<div class="card shadow-sm border-0 rounded-4 mb-3">
+  <div class="card-body d-flex justify-content-between align-items-center">
+
+    <!-- Search & Filters -->
+    <form method="GET" class="d-flex gap-2">
+      <input type="text" name="search" value="{{ search_query }}" 
+             class="form-control" placeholder="Search orders..." style="width:250px;">
+      <button class="btn btn-outline-secondary">
+        <i class="bi bi-funnel"></i> Search
+      </button>
+    </form>
+<div class="d-flex align-items-center gap-4">
+        <div class="d-flex align-items-center gap-2">
+                <a href="{% url 'order_list' %}" class="btn btn-light btn-sm border">
+                  ← Back
+                </a>
+                <a href="{% url 'create_order' %}" class="btn btn-primary btn-sm">
+                  <i class="bi bi-plus-lg"></i> Create Order
+                </a>
+                <div class="dropdown">
+            <button class="btn btn-outline-secondary btn-sm dropdown-toggle"
+                    data-bs-toggle="dropdown">
+                Export Order Details
+            </button>
+            <ul class="dropdown-menu">
+                <li><a class="dropdown-item" href="{% url 'export_orderlist_csv' %}">CSV</a></li>
+                <li><a class="dropdown-item" href="{% url 'export_orderlist_excel' %}">Excel</a></li>
+                <li><a class="dropdown-item" href="{% url 'export_orderlist_pdf' %}">PDF</a></li>
+            </ul>
+        </div>
+        </div>
+  </div>
+</div>
+
+
+
+<div class="card shadow-sm border-0 rounded-4">
+<div class="table-responsive">
+
+<table class="table table-hover align-middle mb-0">
+<thead class="table-light">
+<tr>
+  <th># ORDER ID</th>
+  <th>CUSTOMER</th>
+  <th>STATUS</th>
+  <th>PAYMENT</th>
+  <th class="text-end">TOTAL AMOUNT</th>
+  <th class="text-end">DATE</th>
+  <th class="text-end">ACTION</th>
+</tr>
+</thead>
+
+<tbody>
+{% for order in page_obj %}
+<tr>
+  <td class="fw-semibold text-primary">{{ order.bill_number }}</td>
+
+  <td>
+    <strong>{{ order.customer_name }}</strong><br>
+    <small class="text-muted">{{ order.customer_email }}</small>
+  </td>
+
+  <td>
+    <span class="badge bg-info-subtle text-info">{{ order.status }}</span>
+  </td>
+
+  <td>
+    {% if order.payment_status == "Paid" %}
+      <span class="badge bg-success-subtle text-success">Paid</span>
+    {% else %}
+      <span class="badge bg-warning-subtle text-warning">Pending</span>
+    {% endif %}
+  </td>
+
+  <td class="text-end fw-semibold">₹ {{ order.total_amount|intcomma }}</td>
+
+  <td class="text-end text-muted small">{{ order.created_at|date:"d M Y" }}</td>
+
+  <td class="text-end">
+    <a href="{% url 'order_detail' order.id %}" class="btn btn-sm btn-outline-primary">View</a>
+    {% if order.payment_status == 'Pending' %}
+     <a href="{% url 'update_order' order.id %}" class="btn btn-sm btn-outline-danger">Edit</a>
+     {% endif %}
+    {% if request.user.is_superuser %}
+    <a href="{% url 'delete_order' order.id %}" class="btn btn-sm btn-outline-danger">Delete</a>
+    {% endif %}
+  </td>
+</tr>
+{% empty %}
+<tr>
+  <td colspan="7" class="text-center text-muted py-4">No orders found</td>
+</tr>
+{% endfor %}
+</tbody>
+
+</table>
 </div>
 </div>
+<div class="d-flex justify-content-between align-items-center mt-2">
+  <small class="text-muted">
+    Showing {{ page_obj.start_index }} to {{ page_obj.end_index }} of {{ page_obj.paginator.count }} entries
+  </small>
+
+  <ul class="pagination pagination-sm mb-0">
+    {% if page_obj.has_previous %}
+      <li class="page-item">
+        <a class="page-link" href="?page={{ page_obj.previous_page_number }}">‹</a>
+      </li>
+    {% endif %}
+
+    <li class="page-item active">
+      <span class="page-link">{{ page_obj.number }}</span>
+    </li>
+
+    {% if page_obj.has_next %}
+      <li class="page-item">
+        <a class="page-link" href="?page={{ page_obj.next_page_number }}">›</a>
+      </li>
+    {% endif %}
+  </ul>
+</div>
+
 {% endblock %}

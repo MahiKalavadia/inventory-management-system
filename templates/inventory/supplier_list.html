@@ -1,75 +1,186 @@
 {% extends 'base_dashboard.html' %}
-
+{% load static %}
 {% block content %}
+
 <style>
-    .table th {
-    background-color: #f8f9fa;
+/* Card Styling */
+.dashboard-card {
+    border: none;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+}
+
+/* Table Styling */
+.table thead th {
+    background: #f8fafc;
     font-weight: 600;
+    font-size: 14px;
+    border-bottom: 2px solid #e5e7eb;
 }
 
 .table tbody tr:hover {
-    background-color: #f1f3f5;
-    }
+    background-color: #f1f5f9;
+    transition: 0.2s ease;
+}
 
+.table td {
+    vertical-align: middle;
+    font-size: 14px;
+}
+
+/* Action Buttons */
+.action-btn {
+    padding: 4px 10px;
+    font-size: 12px;
+    border-radius: 6px;
+}
+
+/* Header */
+.page-title {
+    font-size: 18px;
+    font-weight: 600;
+}
+
+/* Pagination */
+.pagination .page-link {
+    border-radius: 6px;
+    margin: 0 3px;
+}
+
+/* Badge Style */
+.badge-custom {
+    font-size: 12px;
+    padding: 4px 8px;
+}
 </style>
-<div class="card mb-4">
-    <div class="card-header d-flex justify-content-between align-items-center">
-           <span><b>Vendors List</b></span>
-           <div>
-              <a href="{% url 'supplier_dashboard' %}" class="btn btn-outline-secondary btn-sm me-2">
-                 <i class="bi bi-arrow-left-circle-fill"></i> Back
-              </a>
-          </div>
+<div class="dashboard-topbar fixed-top d-flex justify-content-between align-items-center px-4 py-3 bg-white border-bottom"
+     style="left:260px; right:0; top:0; z-index:999;">
+
+    <!-- Page Title --><div>
+    <div class="fw-semibold text-uppercase text-muted">
+        Vendors Details
     </div>
-    <div class="card-body">
-        <table class="table table-striped">
+     <div class="text-muted small">
+            Manage vendor details here.
+        </div>
+    </div>
+    <!-- Right Section -->
+    <div class="d-flex align-items-center gap-4">
+
+        <!-- Quick Actions -->
+        <div class="d-flex gap-2">
+        <a href="{% url 'supplier_dashboard' %}" class="btn btn-light btn-sm border">
+            ← Back
+        </a>
+
+        {% if request.user.is_superuser or request.user.groups.first.name == "Manager" %}
+        <a href="{% url 'add_supplier' %}" class="btn btn-primary btn-sm">
+            + Add Vendor
+        </a>
+        {% endif %}
+    </div>
+
+        <!-- User -->
+        <div class="d-flex align-items-center gap-2">
+            <div class="text-end">
+                <div class="fw-medium small">{{ request.user.username }}</div>
+                <div class="text-muted small">Vendor List Panel</div>
+            </div>
+            <img src="{% static 'images/admin.jpeg' %}"
+                 class="rounded-circle border"
+                 width="36"
+                 height="36"
+                 style="object-fit: cover;">
+        </div>
+    </div>
+</div>
+<div class="card dashboard-card mb-4">
+
+    <!-- TABLE -->
+    <div class="card-body p-0">
+        <table class="table table-hover align-middle mb-0">
             <thead>
-                 <tr>
-                     <th>ID</th>
-                     <th>Name</th>
-                     <th>Categories Supplied</th>
-                     <th>Brands Supplied</th>
-                     <th>Total Products</th>
-                     <th>Phone</th>
-                     <th>Actions</th>
-                 </tr>
+                <tr>
+                    <th>#</th>
+                    <th>Vendor Name</th>
+                    <th>Categories</th>
+                    <th>Brands</th>
+                    <th>Total Products</th>
+                    <th>Phone</th>
+                    <th class="text-center">Actions</th>
+                </tr>
             </thead>
+
             <tbody>
-        {% for item in page_obj %}
-        <tr>
-            <td>{{ item.supplier.id }}</td>
-            <td>{{ item.supplier.name }}</td>
-            <td>{{ item.categories }}</td>
-            <td>{{ item.brands }}</td>
-            <td>{{ item.total_products }}</td>
-            <td>{{ item.supplier.phone }}</td>
-            <td>
-                {% if request.user.is_superuser %}
-                <a href="{% url 'update_supplier' item.supplier.id %}" class="btn btn-sm btn-warning">Manage</a>
-                <a href="{% url 'delete_supplier' item.supplier.id %}" class="btn btn-sm btn-danger">Delete</a>
-                {% elif request.user.groups.first.name == "Manager" %}
-                <a href="{% url 'update_supplier' item.supplier.id %}" class="btn btn-sm btn-warning">Edit</a>
-                {% else %}
-                Read-Only Access
-                {% endif %}
-            </td>
-        </tr>
-        {% empty %}
-        <tr>
-            <td colspan="5" class="text-center">No suppliers found</td>
-        </tr>
-        {% endfor %}
-    </tbody>
+                {% for item in page_obj %}
+                <tr>
+                    <td>{{ item.supplier.id }}</td>
+                    <td><b>{{ item.supplier.name }}</b></td>
+                    <td>{{ item.categories }}</td>
+                    <td>{{ item.brands }}</td>
+                    <td>
+                        <span class="badge bg-primary badge-custom">
+                            {{ item.total_products }}
+                        </span>
+                    </td>
+                    <td>{{ item.supplier.phone }}</td>
+
+                    <td class="text-center">
+                        {% if request.user.is_superuser %}
+
+                            <a href="{% url 'update_supplier' item.supplier.id %}" 
+                               class="btn btn-warning btn-sm action-btn">
+                               <i class="bi bi-pencil-square"></i>
+                            </a>
+
+                            <a href="{% url 'delete_supplier' item.supplier.id %}" 
+                               class="btn btn-danger btn-sm action-btn">
+                               <i class="bi bi-trash"></i>
+                            </a>
+
+                            {% if item.supplier.is_active %}
+                                <a href="{% url 'toggle_supplier_status' item.supplier.pk %}" 
+                                   class="btn btn-outline-danger btn-sm action-btn">
+                                   Deactivate
+                                </a>
+                            {% else %}
+                                <a href="{% url 'toggle_supplier_status' item.supplier.pk %}" 
+                                   class="btn btn-outline-success btn-sm action-btn">
+                                   Activate
+                                </a>
+                            {% endif %}
+
+                        {% elif request.user.groups.first.name == "Manager" %}
+                            <a href="{% url 'update_supplier' item.supplier.id %}" 
+                               class="btn btn-warning btn-sm action-btn">
+                               Edit
+                            </a>
+                        {% else %}
+                            <span class="text-muted">Read Only</span>
+                        {% endif %}
+                    </td>
+                </tr>
+
+                {% empty %}
+                <tr>
+                    <td colspan="7" class="text-center text-muted py-4">
+                        No vendors found
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
         </table>
     </div>
 </div>
-<nav class="mt-4">
+
+<!-- PAGINATION -->
+<nav class="mt-3">
 <ul class="pagination justify-content-center">
 
     {% if page_obj.has_previous %}
-        <li class="page-item">
-            <a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous</a>
-        </li>
+    <li class="page-item">
+        <a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous</a>
+    </li>
     {% endif %}
 
     <li class="page-item active">
@@ -77,11 +188,12 @@
     </li>
 
     {% if page_obj.has_next %}
-        <li class="page-item">
-            <a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a>
-        </li>
+    <li class="page-item">
+        <a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a>
+    </li>
     {% endif %}
 
 </ul>
 </nav>
+
 {% endblock %}

@@ -549,6 +549,11 @@ def in_stock_products(request):
     products = Product.objects.filter(
         quantity__gt=LOW_STOCK_THRESHOLD, is_active=True)
 
+    MAX_STOCK = 100
+
+    for p in products:
+        p.stock_percent = (p.quantity / MAX_STOCK) * 100
+
     paginator = Paginator(products, 12)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
@@ -560,6 +565,11 @@ def in_stock_products(request):
 def low_stock_products(request):
     products = Product.objects.filter(
         quantity__lte=LOW_STOCK_THRESHOLD, quantity__gt=0, is_active=True)
+
+    MAX_STOCK = 10
+
+    for p in products:
+        p.stock_percent = (p.quantity / MAX_STOCK) * 100
 
     paginator = Paginator(products, 12)
     page_number = request.GET.get('page')
