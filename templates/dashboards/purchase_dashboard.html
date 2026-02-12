@@ -1,119 +1,156 @@
 {% extends 'base_dashboard.html' %}
+{% load static %}
 {% load humanize %}
 {% load number_filters %}
 {% block content %}
+<div class="dashboard-topbar fixed-top d-flex justify-content-between align-items-center px-4 py-3 bg-white border-bottom"
+     style="left:260px; right:0; top:0; z-index:999;">
 
-<div class="dashboard-header mb-4 d-flex justify-content-between align-items-center p-3 bg-light rounded shadow-sm">
-    <div class="page-title fw-bold fs-5">Procurement Management</div>
-    <div class="welcome-text">Overview of Purchase Requests & Orders</div>
+    <!-- Page Title -->
+     <div>
+    <div class="fw-semibold text-uppercase text-muted">
+        Procurement Management
+    </div>
+    <div class="text-muted small">
+            Overview of Purchase Requests & Orders
+        </div>
+    </div>
+
+    <!-- Right Section -->
+    <div class="d-flex align-items-center gap-4">
+
+        <!-- Quick Actions -->
+        <div class="d-flex align-items-center gap-2">
+            {% if request.user.is_superuser %}
+                <a href="{% url 'records' %}" class="btn btn-outline-secondary btn-sm">📄 All Purchase Records</a>
+            {% endif %}
+        </div>
+
+        <!-- User -->
+        <div class="d-flex align-items-center gap-2">
+            <div class="text-end">
+                <div class="fw-medium small">{{ request.user.username }}</div>
+                <div class="text-muted small">Purchase Panel</div>
+            </div>
+            <img src="{% static 'images/admin.jpeg' %}"
+                 class="rounded-circle border"
+                 width="36"
+                 height="36"
+                 style="object-fit: cover;">
+        </div>
+    </div>
+</div>
+<div class="row g-3 mb-4">
+
+  <!-- TOTAL ITEMS -->
+  <div class="col-md-3">
+    <div class="stat-card">
+      <div class="stat-header">
+        <span class="stat-title">TOTAL PURCHASE REQUESTS</span>
+        <i class="bi bi-clipboard-data-fill text-primary"></i>
+      </div>
+      <h2>{{ total_requests }}</h2>
+      <p class="stat-sub text-primary">
+        Requests received
+      </p>
+    </div>
+  </div>
+
+  <!-- CATEGORIES -->
+  <div class="col-md-3">
+    <div class="stat-card">
+      <div class="stat-header">
+        <span class="stat-title">TOTAL PENDING REQUESTS</span>
+        <i class="bi bi-hourglass-split text-warning"></i>
+      </div>
+      <h2>{{ pending_requests }}</h2>
+      <p class="stat-sub text-warning">
+        Requests approval/rejection remaining
+      </p>
+    </div>
+  </div>
+
+  <!-- VENDORS -->
+  <div class="col-md-3">
+    <div class="stat-card">
+      <div class="stat-header">
+        <span class="stat-title">TOTAL APPROVED REQUESTS</span>
+        <i class="bi bi-check-circle-fill text-success"></i>
+      </div>
+      <h2>{{ approved_requests }}</h2>
+      <p class="stat-sub text-success">
+        Approved Requests
+      </p>
+    </div>
+  </div>
+
+  <!-- REORDER ALERTS -->
+  <div class="col-md-3">
+    <div class="stat-card">
+      <div class="stat-header">
+        <span class="stat-title">TOTAL REJECTED REQUESTS</span>
+        <i class="bi bi-x-octagon-fill text-danger"></i>
+      </div>
+      <h2>{{ rejected_requests }}</h2>
+      <p class="stat-sub text-danger">
+        Rejected Requests
+      </p>
+    </div>
+  </div>
+
 </div>
 
-<div class="mb-3 d-flex gap-2">
-    {% if request.user.is_superuser %}
-        <a href="{% url 'records' %}" class="btn btn-outline-secondary">📄 All Purchase Records</a>
-    {% endif %}
-</div>
 
-<div class="row mb-4">
+<!-- ================= ROW 2 ================= -->
+<div class="row g-3 mb-4">
 
-    <div class="col-md-3 order-md-last">
-        <a href="#" class="text-decoration-none">
-          <div class="card shadow-sm p-4 text-center card-hover" style="border-left: 5px solid #2563eb">
-            <div class="card-icon mb-2">
-                <i class="bi bi-clipboard-data-fill icon-clipboard icon-bg"></i>
-            </div>
-            <h6 class="text-muted">Total Purchase Requests</h6>
-            <h3 class="fw-bold">{{ total_requests }}</h3>
-          </div>
-        </a>
+  <!-- STOCKOUTS -->
+  <div class="col-md-3">
+    <div class="stat-card">
+      <div class="stat-header">
+        <span class="stat-title">TOTAL ORDERS</span>
+        <i class="bi bi-bag-check-fill text-muted"></i>
+      </div>
+      <h2>{{ total_orders }}</h2>
+      <p class="stat-sub text-muted">Orders Received</p>
     </div>
+  </div>
 
-    <div class="col-md-3 order-md-last">
-        <a href="#" class="text-decoration-none">
-        <div class="card shadow-sm p-4 text-center card-hover" style="border-left: 5px solid #eab308">
-            <div class="card-icon mb-2">
-                <i class="bi bi-hourglass-split icon-glass icon-bg"></i>
-            </div>
-            <h6 class="text-muted">Total Pending Requests</h6>
-            <h3 class="fw-bold">{{ pending_requests }}</h3>
-        </div>
-    </a>
+  <!-- REVENUE -->
+  <div class="col-md-3">
+    <div class="stat-card">
+      <div class="stat-header">
+        <span class="stat-title">IN TRANSIT</span>
+        <i class="bi bi-truck text-muted"></i>
+      </div>
+      <h2>{{ in_transit }}</h2>
+      <p class="stat-sub text-muted">In Transit</p>
     </div>
+  </div>
 
-    <div class="col-md-3 order-md-last">
-        <a href="#" class="text-decoration-none">
-        <div class="card shadow-sm p-4 text-center card-hover" style="border-left: 5px solid #16a34a">
-            <div class="card-icon mb-2">
-                <i class="bi bi-check-circle-fill icon-checkcircle icon-bg"></i>
-            </div>
-            <h6 class="text-muted">Total Approved Requests</h6>
-            <h3 class="fw-bold">{{ approved_requests }}</h3>
-        </div>
-    </a>
+  <!-- COGS -->
+  <div class="col-md-3">
+    <div class="stat-card">
+      <div class="stat-header">
+        <span class="stat-title">DELIVERED</span>
+        <i class="bi bi-box-seam-fill text-muted"></i>
+      </div>
+      <h2>{{ delivered }}</h2>
+      <p class="stat-sub text-muted">Order received</p>
     </div>
+  </div>
 
-    <div class="col-md-3 order-md-last">
-        <a href="#" class="text-decoration-none">
-        <div class="card shadow-sm p-4 text-center card-hover" style="border-left: 5px solid #dc2626">
-            <div class="card-icon mb-2">
-                <i class="bi bi-x-octagon-fill icon-octagonfill icon-bg"></i>
-            </div>
-            <h6 class="text-muted">Total Rejected Requests</h6>
-            <h3 class="fw-bold">{{ rejected_requests }}</h3>
-        </div>
-    </a>
+  <!-- GROSS MARGIN -->
+  <div class="col-md-3">
+    <div class="stat-card">
+      <div class="stat-header">
+        <span class="stat-title">TOTAL PURCHASE COST</span>
+        <i class="bi bi-cash-stack text-muted"></i>
+      </div>
+      <h2>{{ total_purchase_cost|short_number }}</h2>
+      <p class="stat-sub text-muted">Cost required to buy stock</p>
     </div>
-
-</div>
-<div class="row mb-4">
-
-    <div class="col-md-3 order-md-last">
-        <a href="#" class="text-decoration-none">
-        <div class="card shadow-sm p-4 text-center card-hover" style="border-left: 5px solid #4f46e5">
-            <div class="card-icon mb-2">
-                <i class="bi bi-bag-check-fill icon-bagcheck icon-bg"></i>
-            </div>
-            <h6 class="text-muted">Total Orders</h6>
-            <h3 class="fw-bold">{{ total_orders }}</h3>
-        </div>
-    </a>
-    </div>
-
-    <div class="col-md-3 order-md-last">
-        <a href="#" class="text-decoration-none">
-        <div class="card shadow-sm p-4 text-center card-hover" style="border-left: 5px solid #0ea5e9">
-            <div class="card-icon mb-2">
-                <i class="bi bi-truck icon-truckk icon-bg"></i>
-            </div>
-            <h6 class="text-muted">In Transit</h6>
-            <h3 class="fw-bold">{{ in_transit }}</h3>
-        </div>
-    </a>
-    </div>
-
-    <div class="col-md-3 order-md-last">
-        <a href="#" class="text-decoration-none">
-        <div class="card shadow-sm p-4 text-center card-hover" style="border-left: 5px solid #10b981">
-            <div class="card-icon mb-2">
-                <i class="bi bi-box-seam-fill icon-seamfill icon-bg"></i>
-            </div>
-            <h6 class="text-muted">Delivered</h6>
-            <h3 class="fw-bold">{{ delivered }}</h3>
-        </div>
-    </a>
-    </div>
-
-    <div class="col-md-3 order-md-last">
-        <a href="#" class="text-decoration-none">
-        <div class="card shadow-sm p-4 text-center card-hover" style="border-left: 5px solid #f97316">
-            <div class="card-icon mb-2">
-                <i class="bi bi-cash-stack icon-stackcash icon-bg"></i>
-            </div>
-            <h6 class="text-muted">Total Purchase Costs</h6>
-            <h3 class="fw-bold">{{ total_purchase_cost|short_number }}</h3>
-        </div>
-    </a>
-    </div>
+  </div>
 
 </div>
 <hr>

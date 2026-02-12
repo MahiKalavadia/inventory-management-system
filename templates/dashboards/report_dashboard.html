@@ -1,20 +1,40 @@
 {% extends 'base_dashboard.html' %}
+{% load static %}
 {% block content %}
-<div class="dashboard-header mb-4 d-flex justify-content-between align-items-center p-3 bg-light rounded shadow-sm">
-    <div class="page-title fw-bold fs-5">
-        Reports Overview
+<div class="dashboard-topbar fixed-top d-flex justify-content-between align-items-center px-4 py-3 bg-white border-bottom"
+     style="left:260px; right:0; top:0; z-index:999;">
+
+    <!-- Page Title -->
+     <div>
+    <div class="fw-semibold text-uppercase text-muted">
+        Report and Analysis Dashboard
     </div>
-    <div class="d-flex align-items-center">
-        <div class="header-right d-flex align-items-center">
-            <div class="welcome-text me-2">Welcome to Report Dashboard</div>
+    </div>
+
+    <!-- Right Section -->
+    <div class="d-flex align-items-center gap-4">
+
+        <!-- Quick Actions -->
+        <div class="d-flex align-items-center gap-2">
+            {% if request.user.is_superuser %}
+            <a href="#" class="btn btn-outline-dark btn-sm">
+                View Reports
+            </a>
+            {% endif %}
+        </div>
+
+        <!-- User -->
+        <div class="d-flex align-items-center gap-2">
+            <div class="text-end">
+                <div class="fw-medium small">{{ request.user.username }}</div>
+                <div class="text-muted small">Reports Panel</div>
+            </div>
+            <img src="{% static 'images/admin.jpeg' %}"
+                 class="rounded-circle border"
+                 width="36"
+                 height="36"
+                 style="object-fit: cover;">
         </div>
     </div>
-</div>
-<div class="mb-3 d-flex gap-2">
-    
-    {% if request.user.is_superuser %}
-        <a href="#" class="btn btn-primary">➕ Create New Report</a>
-    {% endif %}
-    <a href="#" class="btn btn-outline-secondary">📄 View All Report</a>
 </div>
 {% endblock content %}

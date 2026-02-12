@@ -2,158 +2,254 @@
 {% load humanize tz %}
 {% load static %}
 {% block content %}
-<div class="dashboard-header mb-4 d-flex justify-content-between align-items-center p-3 bg-light rounded shadow-sm">
-    <div class="page-title fw-bold fs-5">
+<style>
+
+.card {
+  border-radius: 14px !important;
+}
+
+thead th {
+  font-size: 12px;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+</style>
+<div class="dashboard-topbar fixed-top d-flex justify-content-between align-items-center px-4 py-3 bg-white border-bottom"
+     style="left:260px; right:0; top:0; z-index:999;">
+
+    <!-- Page Title -->
+     <div>
+    <div class="fw-semibold text-uppercase text-muted">
         User Management
     </div>
-    <div class="d-flex align-items-center">
-        <div class="header-right d-flex align-items-center">
-            <div class="welcome-text me-2">Overview of Users & Activity</div>
+    <div class="text-muted small">
+            Overview of Users & Activity
         </div>
     </div>
-</div>
-<div class="mb-3 d-flex gap-2">
-    
-    {% if request.user.is_superuser %}
-        <a href="{% url 'add_user' %}" class="btn btn-primary">➕ Create New User</a>
-    {% endif %}
-    <a href="{% url 'view_users' %}" class="btn btn-outline-secondary">📄 All Users</a>
+    <!-- Right Section -->
+    <div class="d-flex align-items-center gap-4">
+
+        <!-- Quick Actions -->
+        <div class="d-flex align-items-center gap-2">
+            {% if request.user.is_superuser %}
+                <a href="{% url 'add_user' %}" class="btn btn-primary btn-sm">➕ Create New User</a>
+            {% endif %}
+                 <a href="{% url 'view_users' %}" class="btn btn-outline-secondary btn-sm">Catalog</a>
+        </div>
+        <!-- User -->
+        <div class="d-flex align-items-center gap-2">
+            <div class="text-end">
+                <div class="fw-medium small">{{ request.user.username }}</div>
+                <div class="text-muted small">User Panel</div>
+            </div>
+            <img src="{% static 'images/admin.jpeg' %}"
+                 class="rounded-circle border"
+                 width="36"
+                 height="36"
+                 style="object-fit: cover;">
+        </div>
+    </div>
 </div>
 
-<div class="container-fluid mt-4">
-    <!-- Stats Cards -->
-    <div class="row mb-3">
-      <div class="col-md-3">
-        <div class="card shadow-sm p-4 text-center card-hover" style="border-left: 5px solid #0ea5e9">
-            <div class="card-icon mb-2">
-                <i class="bi bi-people-fill icon-people icon-bg"></i>
-            </div>
-            <h6 class="text-muted">Total Active Users</h6>
-            <h3 class="fw-bold">{{ total_users }}</h3>
-        </div>
-    </div>
+<!--Stats-->
+<div class="row mb-3">
     <div class="col-md-3">
-        <div class="card shadow-sm p-4 text-center card-hover" style="border-left: 5px solid #16a34a">
-            <div class="card-icon mb-2">
-                <i class="bi bi-person-badge-fill icon-personbadge icon-bg"></i>
-            </div>
-            <h6 class="text-muted">Managers</h6>
-            <h3 class="fw-bold">{{ total_managers }}</h3>
-        </div>
+    <div class="stat-card">
+      <div class="stat-header">
+        <span class="stat-title">TOTAL ACTIVE USERS</span>
+        <i class="bi bi-people-fill text-muted"></i>
+      </div>
+      <h2>{{ total_users }}</h2>
+      <p class="stat-sub text-muted">
+        Users currently using inventory
+      </p>
     </div>
-    <div class="col-md-3">
-        <div class="card shadow-sm p-4 text-center card-hover" style="border-left: 5px solid #f59e0b">
-            <div class="card-icon mb-2">
-                <i class="bi bi-person-fill icon-amber icon-bg"></i>
-            </div>
-            <h6 class="text-muted">Staff Members</h6>
-            <h3 class="fw-bold">{{ total_staff }}</h3>
-        </div>
+  </div>
+
+  <div class="col-md-3">
+    <div class="stat-card">
+      <div class="stat-header">
+        <span class="stat-title">MANAGERS</span>
+        <i class="bi bi-person-badge-fill text-muted"></i>
+      </div>
+      <h2>{{ total_managers }}</h2>
+      <p class="stat-sub text-muted">
+        Inventory Manager
+      </p>
     </div>
-    <div class="col-md-3">
-        <div class="card shadow-sm p-4 text-center card-hover" style="border-left: 5px solid #ef4444">
-            <div class="card-icon mb-2">
-                <i class="bi bi-person-x-fill icon-xfill icon-bg"></i>
-            </div>
-            <h6 class="text-muted">Deactivated Accounts</h6>
-            <h3 class="fw-bold">{{ inactive_users }}</h3>
-        </div>
+  </div>
+
+  <!-- VENDORS -->
+  <div class="col-md-3">
+    <div class="stat-card">
+      <div class="stat-header">
+        <span class="stat-title">STAFF MEMBERS</span>
+        <i class="bi bi-person-fill text-muted"></i>
+      </div>
+      <h2>{{ total_staff }}</h2>
+      <p class="stat-sub text-muted">
+        Inventory staff
+      </p>
     </div>
+  </div>
+
+  <!-- REORDER ALERTS -->
+  <div class="col-md-3">
+    <div class="stat-card">
+      <div class="stat-header">
+        <span class="stat-title">DEACTIVATED ACCOUNTS</span>
+        <i class="bi bi-person-x-fill text-muted"></i>
+      </div>
+      <h2>{{ inactive_users }}</h2>
+      <p class="stat-sub text-muted">
+        Accounts no longer using inventory
+      </p>
+    </div>
+  </div>
+
 <div>
-<hr>
+<br>
     <!-- Recent Logins -->
 <div class="row">
-<div class="card mb-4">
-    <div class="card-header d-flex justify-content-between align-items-center">
-           <span><b>Recent User Activitys</b></span>
-           <div>
-             <a href="{% url 'view_all' %}" class="btn btn-sm btn-outline-primary">Full Login History →</a>
-          </div>
-        </div>
-    <div class="card-body">
-        <table class="table table-striped">
-            <thead>
-                <tr>
-                    <th>Username</th>
-                    <th>Role</th>
-                    <th>Last Login</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for user in recent_logins %}
-                <tr>
-                    <td>{{ user.username }}</td>
-                    <td>
-                        {% if user.groups.all %}
-                            {{ user.groups.first.name }}
-                        {% else %}
-                            None
-                        {% endif %}
-                    </td>
-                    <td>
-                        {% if user.last_login %}
-                            {{ user.last_login|localtime|naturaltime }}
-                        {% else %}
-                            Never
-                        {% endif %}
-                    </td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+
+<!-- ================= Recent User Activity ================= -->
+<div class="col-12 mb-4">
+  <div class="card shadow-sm border-0 rounded-4">
+
+    <div class="card-header bg-white d-flex justify-content-between align-items-center px-4 py-3 border-bottom">
+      <div>
+        <h6 class="fw-bold mb-0">👤 Recent User Activity</h6>
+        <small class="text-muted">Latest login activity in the system</small>
+      </div>
+
+      <a href="{% url 'view_all' %}" class="btn btn-sm btn-outline-primary">
+        View Full History →
+      </a>
     </div>
+
+    <div class="card-body p-0">
+      <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+          <thead class="bg-light text-muted small">
+            <tr>
+              <th>USER</th>
+              <th>ROLE</th>
+              <th>LAST LOGIN</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for user in recent_logins %}
+            <tr class="border-bottom">
+              <td class="fw-semibold">{{ user.username }}</td>
+
+              <td>
+                {% if user.groups.all %}
+                  <span class="badge bg-secondary">{{ user.groups.first.name }}</span>
+                {% else %}
+                  <span class="badge bg-light text-dark">None</span>
+                {% endif %}
+              </td>
+
+              <td class="text-muted">
+                {% if user.last_login %}
+                  {{ user.last_login|localtime|naturaltime }}
+                {% else %}
+                  Never
+                {% endif %}
+              </td>
+            </tr>
+            {% empty %}
+            <tr>
+              <td colspan="3" class="text-center text-muted py-3">No activity yet</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
 </div>
-<hr>
-    <!-- User List -->
-    <div class="card mt-3">
-    <div class="card-header d-flex justify-content-between align-items-center">
-        <span><b>User Directory</b></span>
-        <a href="{% url 'view_users' %}" class="btn btn-sm btn-outline-primary">See All Users →</a>
+
+
+<!-- ================= User Directory ================= -->
+<div class="col-12">
+  <div class="card shadow-sm border-0 rounded-4">
+
+    <div class="card-header bg-white d-flex justify-content-between align-items-center px-4 py-3 border-bottom">
+      <div>
+        <h6 class="fw-bold mb-0">👥 User Directory</h6>
+        <small class="text-muted">Manage system users and permissions</small>
+      </div>
+
+      <a href="{% url 'view_users' %}" class="btn btn-sm btn-outline-primary">
+        See All Users →
+      </a>
     </div>
-    <div class="card-body">
-        <table class="table table-hover">
-            <thead>
-                <tr>
-                    <th>Username</th>
-                    <th>Email</th>
-                    <th>Role</th>
-                    <th>Status</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for user in users %}
-                <tr>
-                    <td>{{ user.username }}</td>
-                    <td>{{ user.email }}</td>
-                    <td>
-                        {% if user.groups.all %}
-                            {{ user.groups.first.name }}
-                        {% else %}
-                            None
-                        {% endif %}
-                    </td>
-                    <td>
-                        {% if user.is_active %}
-                            <span class="badge bg-success">Active</span>
-                        {% else %}
-                            <span class="badge bg-danger">Inactive</span>
-                        {% endif %}
-                    </td>
-                    <td>
-                        <a href="{% url 'update_user' user.id %}" class="btn btn-sm btn-primary">Manage</a>
-                        <a href="{% url 'toggle_user_status' user.id %}" class="btn btn-sm btn-warning">
-                            {% if user.is_active %}Deactivate{% else %}Activate{% endif %}
-                        </a>
-                        <a href="{% url 'reset_user_password' user.id %}" class="btn btn-sm btn-secondary">Password Reset</a>
-                    </td>
-                </tr>
-                {% endfor %}
-            </tbody>
+
+    <div class="card-body p-0">
+      <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+          <thead class="bg-light text-muted small">
+            <tr>
+              <th>USER</th>
+              <th>EMAIL</th>
+              <th>ROLE</th>
+              <th>STATUS</th>
+              <th class="text-end">ACTIONS</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            {% for user in users %}
+            <tr class="border-bottom">
+              <td class="fw-semibold">{{ user.username }}</td>
+              <td class="text-muted">{{ user.email|default:"-" }}</td>
+
+              <td>
+                {% if user.groups.all %}
+                  <span class="badge bg-info">{{ user.groups.first.name }}</span>
+                {% else %}
+                  <span class="badge bg-light text-dark">None</span>
+                {% endif %}
+              </td>
+
+              <td>
+                {% if user.is_active %}
+                  <span class="badge bg-success px-3">Active</span>
+                {% else %}
+                  <span class="badge bg-danger px-3">Inactive</span>
+                {% endif %}
+              </td>
+
+              <td class="text-end">
+                <a href="{% url 'update_user' user.id %}" class="btn btn-sm btn-outline-primary">Manage</a>
+
+                <a href="{% url 'toggle_user_status' user.id %}"
+                   class="btn btn-sm {% if user.is_active %}btn-outline-warning{% else %}btn-outline-success{% endif %}">
+                  {% if user.is_active %}Deactivate{% else %}Activate{% endif %}
+                </a>
+
+                <a href="{% url 'reset_user_password' user.id %}" class="btn btn-sm btn-outline-secondary">
+                  Reset Password
+                </a>
+              </td>
+            </tr>
+            {% empty %}
+            <tr>
+              <td colspan="5" class="text-center text-muted py-3">No users found</td>
+            </tr>
+            {% endfor %}
+          </tbody>
         </table>
+      </div>
     </div>
+
+  </div>
 </div>
 
 </div>
+
 
 {% endblock %}
