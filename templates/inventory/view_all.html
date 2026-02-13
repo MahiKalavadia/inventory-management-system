@@ -1,46 +1,135 @@
 {% extends 'base_dashboard.html' %}
 {% load humanize tz %}
+{% load static %}
 {% block content %}
-<div class="card mb-4">
-   <div class="card-header d-flex justify-content-between align-items-center">
-           <span><b>User Login Activity</b></span>
-           <div>
-              <a href="{% url 'user_dashboard' %}" class="btn btn-outline-secondary btn-sm me-2">
-                 <i class="bi bi-arrow-left-circle-fill"></i> Back
-              </a>
-          </div>
+<style>
+    .bg-soft-primary {
+    background: rgba(13,110,253,0.12);
+    padding: 5px 10px;
+    border-radius: 8px;
+    font-size: 12px;
+}
+
+</style>
+<div class="dashboard-topbar fixed-top d-flex justify-content-between align-items-center px-4 py-3 bg-white border-bottom"
+     style="left:260px; right:0; top:0; z-index:999;">
+
+    <!-- Page Title --><div>
+    <div class="fw-semibold text-uppercase text-muted">
+        User login activity
+    </div>
+    </div>
+    <!-- Right Section -->
+    <div class="d-flex align-items-center gap-4">
+
+        <!-- Quick Actions -->
+        <div class="d-flex gap-2">
+        <a href="{% url 'user_dashboard' %}" class="btn btn-light btn-sm border">
+            ← Back
+        </a>
+    </div>
+
+        <!-- User -->
+        <div class="d-flex align-items-center gap-2">
+            <div class="text-end">
+                <div class="fw-medium small">{{ request.user.username }}</div>
+                <div class="text-muted small">User Activity Panel</div>
+            </div>
+
+{% if user.is_superuser %}
+    <img src="{% static 'images/admin.jpeg' %}"
+         class="rounded-circle border"
+         width="36"
+         height="36"
+         style="object-fit: cover;">
+
+{% elif user.groups.first.name == "Manager" %}
+    <img src="{% static 'images/manager.png' %}"
+         class="rounded-circle border"
+         width="36"
+         height="36"
+         style="object-fit: cover;">
+
+{% elif user.groups.first.name == "Staff" %}
+    <img src="{% static 'images/staff.png' %}"
+         class="rounded-circle border"
+         width="36"
+         height="36"
+         style="object-fit: cover;">
+         {% endif %}
         </div>
-    <div class="card-body">
-        <table class="table table-striped">
-            <thead>
-                <tr>
-                    <th>User</th>
-                    <th>Role Access</th>
-                    <th>Last Login Time</th>
-                </tr>
-            </thead>
-            <tbody>
+    </div>
+</div>
+<div class="card shadow-sm border-0">
+    <div class="card-header bg-white d-flex justify-content-between align-items-center">
+        <h5 class="mb-0 fw-bold">
+            <i class="bi bi-people text-primary"></i>
+            Recent User Activity
+        </h5>
+
+        <span class="badge bg-primary">
+            {{ recent_logins|length }} Active Users
+        </span>
+    </div>
+
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="table-light text-uppercase small">
+                    <tr>
+                        <th>User</th>
+                        <th>Role Access</th>
+                        <th>Last Login</th>
+                    </tr>
+                </thead>
+
+                <tbody>
                 {% for user in recent_logins %}
                 <tr>
-                    <td>{{ user.username }}</td>
+                    <!-- Username -->
+                    <td class="fw-semibold">
+                        <i class="bi bi-person-circle text-secondary"></i>
+                        {{ user.username }}
+                    </td>
+
+                    <!-- Role Badge -->
                     <td>
                         {% if user.groups.all %}
-                            {{ user.groups.first.name }}
+                            <span class="badge bg-soft-primary text-primary">
+                                {{ user.groups.first.name }}
+                            </span>
                         {% else %}
-                            None
+                            <span class="badge bg-light text-muted">
+                                No Role
+                            </span>
                         {% endif %}
                     </td>
+
+                    <!-- Last Login -->
                     <td>
                         {% if user.last_login %}
-                            {{ user.last_login|localtime|naturaltime }}
+                            <span class="text-muted">
+                                {{ user.last_login|localtime|naturaltime }}
+                            </span>
                         {% else %}
-                            Never
+                            <span class="text-danger small">
+                                Never Logged In
+                            </span>
                         {% endif %}
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="3" class="text-center text-muted py-4">
+                        No recent user activity
                     </td>
                 </tr>
                 {% endfor %}
-            </tbody>
-        </table>
+                </tbody>
+
+            </table>
+        </div>
     </div>
 </div>
+
 {% endblock %}

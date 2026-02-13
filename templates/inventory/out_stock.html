@@ -50,23 +50,56 @@
     </div>
 
     <div class="d-flex align-items-center gap-3">
+        <div>
         <a href="{% url 'stock_dashboard' %}" class="btn btn-outline-secondary btn-sm">
             <i class="bi bi-arrow-left-circle"></i> Back
         </a>
+    </div>
+    <div>
         {% if request.user|has_group:'Manager' or request.user|has_group:'Staff'%}
         <a href="{% url 'purchase_request' %}" class="btn btn-primary btn-sm">
                 <i class="bi bi-cart-plus"></i> Request Purchase
         </a>
         {% endif %}
+    </div>
+    <div>
+        <div class="dropdown">
+            <button class="btn btn-outline-secondary btn-sm dropdown-toggle"
+                    data-bs-toggle="dropdown">
+                Export Out of Stock List
+            </button>
+            <ul class="dropdown-menu">
+                <li><a class="dropdown-item" href="{% url 'export_outstock_csv' %}">CSV</a></li>
+                <li><a class="dropdown-item" href="{% url 'export_outstock_excel' %}">Excel</a></li>
+                <li><a class="dropdown-item" href="{% url 'export_outstock_pdf' %}">PDF</a></li>
+            </ul>
+        </div>
+    </div>
         <div class="text-end">
                 <div class="fw-medium small">{{ request.user.username }}</div>
                 <div class="text-muted small">Out Stock Panel</div>
             </div>
-        <img src="{% static 'images/admin.jpeg' %}"
-             class="rounded-circle border"
-             width="36"
-             height="36"
-             style="object-fit: cover;">
+        {% if user.is_superuser %}
+    <img src="{% static 'images/admin.jpeg' %}"
+         class="rounded-circle border"
+         width="36"
+         height="36"
+         style="object-fit: cover;">
+
+{% elif user.groups.first.name == "Manager" %}
+    <img src="{% static 'images/manager.png' %}"
+         class="rounded-circle border"
+         width="36"
+         height="36"
+         style="object-fit: cover;">
+
+{% elif user.groups.first.name == "Staff" %}
+    <img src="{% static 'images/staff.png' %}"
+         class="rounded-circle border"
+         width="36"
+         height="36"
+         style="object-fit: cover;">
+         {% endif %}
     </div>
 </div>
     <div class="card-body">

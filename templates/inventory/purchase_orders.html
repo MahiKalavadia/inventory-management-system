@@ -28,11 +28,27 @@
                 <div class="fw-medium small">{{ request.user.username }}</div>
                 <div class="text-muted small">Purchase Order Panel</div>
             </div>
-        <img src="{% static 'images/admin.jpeg' %}"
-             class="rounded-circle border"
-             width="36"
-             height="36"
-             style="object-fit: cover;">
+        {% if user.is_superuser %}
+    <img src="{% static 'images/admin.jpeg' %}"
+         class="rounded-circle border"
+         width="36"
+         height="36"
+         style="object-fit: cover;">
+
+{% elif user.groups.first.name == "Manager" %}
+    <img src="{% static 'images/manager.png' %}"
+         class="rounded-circle border"
+         width="36"
+         height="36"
+         style="object-fit: cover;">
+
+{% elif user.groups.first.name == "Staff" %}
+    <img src="{% static 'images/staff.png' %}"
+         class="rounded-circle border"
+         width="36"
+         height="36"
+         style="object-fit: cover;">
+         {% endif %}
     </div>
 </div>
 <div class="card shadow-sm border-0 rounded-4 mb-4">
@@ -46,16 +62,6 @@
     </div>
 
     <div class="d-flex gap-2">
-
-      {% if request.user.is_superuser %}
-      <a href="{% url 'purchase_dashboard' %}" class="btn btn-outline-secondary btn-sm">
-        <i class="bi bi-arrow-left"></i> Back
-      </a>
-      {% elif request.user.groups.first.name == 'Manager' or request.user.groups.first.name == 'Staff' %}
-      <a href="{% url 'purchase_dashboard2' %}" class="btn btn-outline-secondary btn-sm">
-        <i class="bi bi-arrow-left"></i> Back
-      </a>
-      {% endif %}
 
       <div class="dropdown">
         <button class="btn btn-outline-primary btn-sm dropdown-toggle" data-bs-toggle="dropdown">
@@ -98,16 +104,13 @@
 
             <!-- STATUS -->
             <td>
-              {% if po.status == "pending" %}
-                <span class="badge bg-warning text-dark px-3">Pending</span>
-              {% elif po.status == "approved" %}
-                <span class="badge bg-info px-3">Approved</span>
-              {% elif po.status == "delivered" %}
-                <span class="badge bg-success px-3">Completed</span>
-              {% else %}
-                <span class="badge bg-secondary px-3">{{ po.status }}</span>
-              {% endif %}
-            </td>
+              {% if po.status == "delivered" %}
+                  <span class="badge bg-success">Completed</span>
+                {% elif po.status == "pending" %}
+                  <span class="badge bg-warning text-dark">Pending</span>
+                {% else %}
+                  <span class="badge bg-info text-dark">{{ po.status }}</span>
+                {% endif %}
 
             <!-- ACTION -->
             <td class="text-end">

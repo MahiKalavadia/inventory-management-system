@@ -1,101 +1,162 @@
 {% extends 'base_dashboard.html' %}
 {% block content %}
 
-<div class="container-fluid mt-4">
-    <div class="card">
-        <div class="card-header d-flex justify-content-between align-items-center">
-           <span><b>{{order.bill_number}}</b></span>
-           <div>
-              <a href="{% url 'order_list' %}" class="btn btn-outline-secondary btn-sm me-2">
-                 <i class="bi bi-arrow-left-circle-fill"></i> Back
-              </a>
-              {% if order.status == "Draft" %}
-    {% if request.user.is_superuser %}
-        <a href="{% url 'confirm_order' order.id %}" class="btn btn-warning">Confirm</a>
-    {% elif request.user.groups.all|length > 0 and request.user.groups.first.name == "Manager" %}
-        <a href="{% url 'confirm_order' order.id %}" class="btn btn-warning">Confirm</a>
-    {% endif %}
-{% endif %}
+<style>
+.order-header {
+    background: #ffffff;
+    border-radius: 14px;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.05);
+}
 
-{% if order.status == "Confirmed" and order.payment_status == "Pending" %}
-    {% if request.user.is_superuser %}
-        <a href="{% url 'mark_paid' order.id %}" class="btn btn-success">Mark Paid</a>
-    {% elif request.user.groups.all|length > 0 and request.user.groups.first.name == "Manager" %}
-        <a href="{% url 'mark_paid' order.id %}" class="btn btn-success">Mark Paid</a>
-    {% endif %}
-{% endif %}
-              {% if order.payment_status == "Paid" %}
-                <a href="{% url 'order_receipt' order.id %}" class="btn btn-success">⬇ Download Receipt</a>
-              {% endif %}
-             
-          </div>
-        </div>
+.order-card {
+    border-radius: 14px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+}
 
+.table th {
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: .5px;
+}
 
+.badge-status {
+    font-size: 12px;
+    padding: 6px 12px;
+    border-radius: 20px;
+}
+
+.summary-box {
+    background: #f9fafb;
+    border-radius: 12px;
+    padding: 15px;
+}
+</style>
+<div class="dashboard-topbar fixed-top d-flex justify-content-between align-items-center px-4 py-3 bg-white border-bottom"
+     style="left:260px; right:0; top:0; z-index:999;">
+
+    <!-- Page Title -->
+     <div>
+    <div class="fw-semibold text-uppercase text-muted">
+        Receipt generation
+    </div>
+    </div>
 </div>
+<div class="container-fluid mt-4">
 
-<div class="row">
-    <div class="col-md-4">
-        <div class="card shadow-sm p-3 mb-3">
-            <h6 class="fw-bold">Customer Details</h6>
-            <p><strong>Name:</strong> {{ order.customer_name }}</p>
-            <p><strong>Email:</strong> {{ order.customer_email }}</p>
-            <p><strong>Phone:</strong> {{ order.customer_phonenumber }}</p>
+    <!-- 🔹 ORDER HEADER -->
+    <div class="order-header p-3 d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h5 class="fw-bold mb-1">Invoice #{{ order.bill_number }}</h5>
+            <small class="text-muted">Order ID: {{ order.id }}</small>
         </div>
-        <div class="card shadow-sm p-3">
-            <h6 class="fw-bold">Delivery Address</h6>
-            <p>{{ order.customer_address }}</p>
-            <p>{{ order.city }} - {{ order.pincode }}</p>
-            <p>{{ order.get_state_display }}</p>
+
+        <div class="d-flex gap-2">
+            <a href="{% url 'order_list' %}" class="btn btn-outline-secondary btn-sm">
+                <i class="bi bi-arrow-left-circle"></i> Back
+            </a>
+
+            {% if order.status == "Draft" %}
+                {% if request.user.is_superuser or request.user.groups.first.name == "Manager" %}
+                    <a href="{% url 'confirm_order' order.id %}" class="btn btn-warning btn-sm">Confirm Order</a>
+                {% endif %}
+            {% endif %}
+
+            {% if order.status == "Confirmed" and order.payment_status == "Pending" %}
+                {% if request.user.is_superuser or request.user.groups.first.name == "Manager" %}
+                    <a href="{% url 'mark_paid' order.id %}" class="btn btn-success btn-sm">Mark Paid</a>
+                {% endif %}
+            {% endif %}
+
+            {% if order.payment_status == "Paid" %}
+                <a href="{% url 'order_receipt' order.id %}" class="btn btn-primary btn-sm">
+                    <i class="bi bi-download"></i> Receipt
+                </a>
+            {% endif %}
         </div>
     </div>
 
-    <div class="col-md-8">
-        <div class="card shadow-sm">
-            <table class="table mb-0">
-                <thead class="table-light">
-                    <tr>
-                        <th>Product</th>
-                        <th>Price</th>
-                        <th>Qty</th>
-                        <th>Warranty</th>
-                        <th>Total</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for item in order.items.all %}
-                    <tr>
-                        <td>{{ item.product }}</td>
-                        <td>₹ {{ item.price|floatformat:2 }}</td>
-                        <td>{{ item.quantity }}</td>
-                        <td>
-                            {{ item.warranty_months }} months <br>
+    <!-- 🔹 STATUS ROW -->
+    <div class="mb-3 d-flex gap-2">
+        <span class="badge badge-status bg-info">Status: {{ order.status }}</span>
+        <span class="badge badge-status {% if order.payment_status == 'Paid' %}bg-success{% else %}bg-danger{% endif %}">
+            Payment: {{ order.payment_status }}
+        </span>
+    </div>
 
-                            {% if item.warranty_end %}
-                                Valid till: {{ item.warranty_end }} <br>
+    <div class="row g-4">
 
-                                {% if item.is_under_warranty %}
-                                    <span class="badge bg-success">Under Warranty</span>
-                                {% else %}
-                                    <span class="badge bg-danger">Warranty Expired</span>
-                                {% endif %}
-                            {% else %}
-                                <span class="text-muted">Warranty not started</span>
-                            {% endif %}
-                        </td>
+        <!-- 🔹 CUSTOMER INFO -->
+        <div class="col-md-4">
+            <div class="card order-card p-3 mb-3">
+                <h6 class="fw-bold">Customer Details</h6>
+                <hr>
+                <p><strong>Name:</strong> {{ order.customer_name }}</p>
+                <p><strong>Email:</strong> {{ order.customer_email }}</p>
+                <p><strong>Phone:</strong> {{ order.customer_phonenumber }}</p>
+            </div>
 
-                        <td>₹ {{ item.total|floatformat:2 }}</td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-                <tfoot class="table-light">
-                    <tr>
-                        <th colspan="3" class="text-end">Grand Total</th>
-                        <th>₹ {{ order.total_amount|floatformat:2 }}</th>
-                    </tr>
-                </tfoot>
-            </table>
+            <div class="card order-card p-3">
+                <h6 class="fw-bold">Delivery Address</h6>
+                <hr>
+                <p>{{ order.customer_address }}</p>
+                <p>{{ order.city }} - {{ order.pincode }}</p>
+                <p>{{ order.get_state_display }}</p>
+            </div>
         </div>
+
+        <!-- 🔹 ORDER ITEMS -->
+        <div class="col-md-8">
+            <div class="card order-card">
+                <div class="card-header bg-white fw-bold">
+                    Order Items
+                </div>
+
+                <div class="table-responsive">
+                    <table class="table align-middle mb-0">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Product</th>
+                                <th>Price</th>
+                                <th>Qty</th>
+                                <th>Warranty</th>
+                                <th class="text-end">Total</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for item in order.items.all %}
+                            <tr>
+                                <td class="fw-semibold">{{ item.product }}</td>
+                                <td>₹ {{ item.price|floatformat:2 }}</td>
+                                <td>{{ item.quantity }}</td>
+                                <td>
+                                    {{ item.warranty_months }} months <br>
+
+                                    {% if item.warranty_end %}
+                                        <small class="text-muted">Valid till {{ item.warranty_end }}</small><br>
+
+                                        {% if item.is_under_warranty %}
+                                            <span class="badge bg-success">Under Warranty</span>
+                                        {% else %}
+                                            <span class="badge bg-danger">Expired</span>
+                                        {% endif %}
+                                    {% else %}
+                                        <span class="text-muted">Not Started</span>
+                                    {% endif %}
+                                </td>
+                                <td class="text-end fw-bold">₹ {{ item.total|floatformat:2 }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- 🔹 ORDER SUMMARY -->
+                <div class="summary-box text-end">
+                    <h5 class="fw-bold">Grand Total: ₹ {{ order.total_amount|floatformat:2 }}</h5>
+                </div>
+            </div>
+        </div>
+
     </div>
 </div>
 

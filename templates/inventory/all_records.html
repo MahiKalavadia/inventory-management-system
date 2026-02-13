@@ -1,129 +1,204 @@
 {% extends "base_dashboard.html" %}
+{% load static %}
 {% block content %}
-<div class="card">
-        <div class="card-header d-flex justify-content-between align-items-center">
-           <span><b>Purchase Records</b></span>
-           <div>
+<div class="dashboard-topbar fixed-top d-flex justify-content-between align-items-center px-4 py-3 bg-white border-bottom"
+     style="left:260px; right:0; top:0; z-index:999;">
+
+    <div>
+        <div class="fw-semibold text-uppercase text-muted">
+            Purchase Records
+        </div>
+        <div class="text-muted small">
+            All records related to purchases
+        </div>
+    </div>
+
+    <div class="d-flex align-items-center gap-3">
+        {% if request.user.is_superuser %}
               <a href="{% url 'purchase_dashboard' %}" class="btn btn-outline-secondary btn-sm me-2">
                  <i class="bi bi-arrow-left-circle-fill"></i> Back
               </a>
-          </div>
-       </div>
+              {% elif request.user.groups.first.name == 'Manager' or request.user.groups.first.name == 'Staff' %}
+              <a href="{% url 'purchase_dashboard2' %}" class="btn btn-outline-secondary btn-sm me-2">
+                 <i class="bi bi-arrow-left-circle-fill"></i> Back
+              </a>
+              {% endif %}
+        <div class="text-end">
+                <div class="fw-medium small">{{ request.user.username }}</div>
+                <div class="text-muted small">Purchase Record Panel</div>
+            </div>
+        {% if user.is_superuser %}
+    <img src="{% static 'images/admin.jpeg' %}"
+         class="rounded-circle border"
+         width="36"
+         height="36"
+         style="object-fit: cover;">
+
+{% elif user.groups.first.name == "Manager" %}
+    <img src="{% static 'images/manager.png' %}"
+         class="rounded-circle border"
+         width="36"
+         height="36"
+         style="object-fit: cover;">
+
+{% elif user.groups.first.name == "Staff" %}
+    <img src="{% static 'images/staff.png' %}"
+         class="rounded-circle border"
+         width="36"
+         height="36"
+         style="object-fit: cover;">
+         {% endif %}
+    </div>
 </div>
 <div class="container-fluid mt-4">
-    <div class="card">
-        <div class="card-header d-flex justify-content-between align-items-center">
-           <span><b>Manage Requests</b></span>
-          <div class="d-flex gap-2">
-           <div>
-              <a href="{% url 'manage_requests' %}" class="btn btn-sm btn-outline-primary">
-                  View All →
-              </a>
-            </div>
-        <!-- Requests Export -->
+
+
+
+<!-- ================= Manage Requests ================= -->
+
+  <div class="card shadow-sm border-0 h-100">
+
+    <div class="card-header bg-white d-flex justify-content-between align-items-center">
+      <h6 class="mb-0 fw-bold">Manage Requests</h6>
+
+      <div class="d-flex gap-2">
+        <a href="{% url 'manage_requests' %}" class="btn btn-sm btn-outline-primary">
+          View All →
+        </a>
+
         <div class="dropdown">
-            <button class="btn btn-outline-secondary btn-sm dropdown-toggle"
-                    data-bs-toggle="dropdown">
-                Export Requests
-            </button>
-            <ul class="dropdown-menu">
-                <li><a class="dropdown-item" href="{% url 'export_requests_csv' %}">CSV</a></li>
-                <li><a class="dropdown-item" href="{% url 'export_requests_excel' %}">Excel</a></li>
-                <li><a class="dropdown-item" href="{% url 'export_requests_pdf' %}">PDF</a></li>
-            </ul>
-        </div>
-    </div>
-        </div>
-        <div class="card-body">
-            <table class="table table-hover">
-                <thead>
-                    <tr>
-                        <th>Product Name</th>
-                        <th>Quantity</th>
-                        <th>Status</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for r in requests %}
-                    <tr>
-                      <td>{{ r.product.name }}</td>
-                      <td>{{ r.quantity }}</td>
-                      <td>{{ r.status }}</td>
-                      <td>
-                      {% if r.status == "Pending" %}
-                      <a href="{% url 'approve_request' r.id %}" class="btn btn-success btn-sm">Approve</a>
-                      <a href="{% url 'reject_request' r.id %}" class="btn btn-danger btn-sm">Reject</a>
-                      {% else %}
-                      Completed
-                      {% endif %}
-                      </td>
-                     </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div>
-    </div>
-   </div>
-    <div class="container-fluid mt-4">
-    <div class="card">
-        <div class="card-header d-flex justify-content-between align-items-center">
-           <span><b>Purchase Orders</b></span>
-          <div class="d-flex gap-2">
-           <div>
-              <a href="{% url 'purchase_orders' %}" class="btn btn-sm btn-outline-primary">
-                  View All →
-              </a>
-            </div>
-        <!--Orders Export -->
-        <div class="dropdown">
-            <button class="btn btn-outline-secondary btn-sm dropdown-toggle"
-                    data-bs-toggle="dropdown">
-                Export Orders
-            </button>
-            <ul class="dropdown-menu">
-                <li><a class="dropdown-item" href="{% url 'export_orders_csv' %}">CSV</a></li>
-                <li><a class="dropdown-item" href="{% url 'export_orders_excel' %}">Excel</a></li>
-                <li><a class="dropdown-item" href="{% url 'export_orders_pdf' %}">PDF</a></li>
-            </ul>
+          <button class="btn btn-sm btn-outline-secondary dropdown-toggle" data-bs-toggle="dropdown">
+            Export
+          </button>
+          <ul class="dropdown-menu dropdown-menu-end">
+            <li><a class="dropdown-item" href="{% url 'export_requests_csv' %}">CSV</a></li>
+            <li><a class="dropdown-item" href="{% url 'export_requests_excel' %}">Excel</a></li>
+            <li><a class="dropdown-item" href="{% url 'export_requests_pdf' %}">PDF</a></li>
+          </ul>
         </div>
       </div>
-   </div>
-    <div class="card-body">
-        <table class="table table-striped">
-            <thead>
-                <tr>
-                  <th>ID</th>
-                  <th>Product Name</th>
-                  <th>Status</th>
-                  <th>Action</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tbody>
-                    {% for po in orders %}
-                    <tr>
-                      <td>PO-{{ po.id }}</td>
-                      <td>{{ po.request.product.name }}</td>
-                      <td>{% if po.status != "delivered" %}
-                             {{ po.status }}
-                          {% else %}
-                             <span class="badge bg-success">Completed</span>
-                          {% endif %}
-                      </td>
-                      <td>
-                         {% if po.status != "delivered" %}
-                          <a href="{% url 'update_po_status' po.id %}" class="btn btn-dark btn-sm">Update</a>
-                        {% else %}
-                          <span class="badge bg-success">Completed</span>
-                        {% endif %}
-                     </td>
-                     </tr>
-                    {% endfor %}
-                </tbody>
-        </table>
     </div>
+
+    <div class="card-body p-0">
+      <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+          <thead class="table-light">
+            <tr>
+              <th>Product</th>
+              <th>Qty</th>
+              <th>Status</th>
+              <th class="text-end">Action</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            {% for r in requests %}
+            <tr>
+              <td class="fw-medium">{{ r.product.name }}</td>
+              <td>{{ r.quantity }}</td>
+
+              <td>
+                {% if r.status == "Pending" %}
+                  <span class="badge bg-warning text-dark">Pending</span>
+                {% elif r.status == "Approved" %}
+                  <span class="badge bg-success">Approved</span>
+                {% elif r.status == "Rejected" %}
+                  <span class="badge bg-danger">Rejected</span>
+                {% endif %}
+              </td>
+
+              <td class="text-end">
+                {% if r.status == "Pending" %}
+                  <a href="{% url 'approve_request' r.id %}" class="btn btn-sm btn-success">Approve</a>
+                  <a href="{% url 'reject_request' r.id %}" class="btn btn-sm btn-outline-danger">Reject</a>
+                {% else %}
+                  <span class="text-muted small">Completed</span>
+                {% endif %}
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+
+        </table>
+      </div>
+    </div>
+
+  </div>
+
+<br>
+<!-- ================= Purchase Orders ================= -->
+
+  <div class="card shadow-sm border-0 h-100">
+
+    <div class="card-header bg-white d-flex justify-content-between align-items-center">
+      <h6 class="mb-0 fw-bold">Purchase Orders</h6>
+
+      <div class="d-flex gap-2">
+        <a href="{% url 'purchase_orders' %}" class="btn btn-sm btn-outline-primary">
+          View All →
+        </a>
+
+        <div class="dropdown">
+          <button class="btn btn-sm btn-outline-secondary dropdown-toggle" data-bs-toggle="dropdown">
+            Export
+          </button>
+          <ul class="dropdown-menu dropdown-menu-end">
+            <li><a class="dropdown-item" href="{% url 'export_orders_csv' %}">CSV</a></li>
+            <li><a class="dropdown-item" href="{% url 'export_orders_excel' %}">Excel</a></li>
+            <li><a class="dropdown-item" href="{% url 'export_orders_pdf' %}">PDF</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="card-body p-0">
+      <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+          <thead class="table-light">
+            <tr>
+              <th>ID</th>
+              <th>Product</th>
+              <th>Status</th>
+              <th class="text-end">Action</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            {% for po in orders %}
+            <tr>
+              <td class="fw-bold text-muted">PO-{{ po.id }}</td>
+              <td>{{ po.request.product.name }}</td>
+
+              <td>
+                {% if po.status == "delivered" %}
+                  <span class="badge bg-success">Completed</span>
+                {% elif po.status == "pending" %}
+                  <span class="badge bg-warning text-dark">Pending</span>
+                {% else %}
+                  <span class="badge bg-info text-dark">{{ po.status }}</span>
+                {% endif %}
+              </td>
+
+              <td class="text-end">
+                {% if po.status != "delivered" %}
+                  <a href="{% url 'update_po_status' po.id %}" class="btn btn-sm btn-dark">Update</a>
+                {% else %}
+                  <span class="text-muted small">Completed</span>
+                {% endif %}
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+
+        </table>
+      </div>
+    </div>
+
+  </div>
 </div>
+
 </div>
+
+
 
 {% endblock %}

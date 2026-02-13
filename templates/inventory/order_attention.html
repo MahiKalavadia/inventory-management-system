@@ -1,66 +1,153 @@
 {% extends 'base_dashboard.html' %}
 {% load humanize %}
+{% load static %}
 {% block content %}
-<div class="card mb-4">
-<div class="card-header d-flex justify-content-between align-items-center">
-           <h3><b>⚠ Orders Requiring Attention</b></h3>
-           <div>
-              <a href="{% url 'order_dashboard' %}" class="btn btn-outline-secondary btn-sm me-2">
-                 <i class="bi bi-arrow-left-circle-fill"></i> Back
-              </a>
-          </div>
-        </div>
+<style>
+  .bg-soft-danger {
+    background: rgba(220,53,69,0.12);
+    padding: 5px 10px;
+    border-radius: 8px;
+    font-size: 12px;
+}
 
-<div class="card-body">
-        <table class="table table-striped">
-            <thead>
-                 <tr>
-                    <th>Order</th>
-                    <th>Issue</th>
-                    <th>Action</th>
+</style>
+<div class="dashboard-topbar fixed-top d-flex justify-content-between align-items-center px-4 py-3 bg-white border-bottom"
+     style="left:260px; right:0; top:0; z-index:999;">
+
+    <!-- Page Title --><div>
+    <div class="fw-semibold text-uppercase text-muted">
+        Orders Requiring Attention
+    </div>
+     <div class="text-muted small">
+            Orders that need to be looked upon.
+        </div>
+    </div>
+    <!-- Right Section -->
+    <div class="d-flex align-items-center gap-4">
+
+        <!-- Quick Actions -->
+        <div class="d-flex gap-2">
+        <a href="{% url 'order_dashboard' %}" class="btn btn-light btn-sm border">
+            ← Back
+        </a>
+    </div>
+
+        <!-- User -->
+        <div class="d-flex align-items-center gap-2">
+            <div class="text-end">
+                <div class="fw-medium small">{{ request.user.username }}</div>
+                <div class="text-muted small">Attention Required </div>
+            </div>
+            {% if user.is_superuser %}
+    <img src="{% static 'images/admin.jpeg' %}"
+         class="rounded-circle border"
+         width="36"
+         height="36"
+         style="object-fit: cover;">
+
+{% elif user.groups.first.name == "Manager" %}
+    <img src="{% static 'images/manager.png' %}"
+         class="rounded-circle border"
+         width="36"
+         height="36"
+         style="object-fit: cover;">
+
+{% elif user.groups.first.name == "Staff" %}
+    <img src="{% static 'images/staff.png' %}"
+         class="rounded-circle border"
+         width="36"
+         height="36"
+         style="object-fit: cover;">
+         {% endif %}
+        </div>
+    </div>
+</div>
+<div class="card shadow-sm border-0">
+    <div class="card-header bg-white d-flex justify-content-between align-items-center">
+        <h5 class="mb-0 fw-bold">
+            <i class="bi bi-exclamation-triangle text-danger"></i>
+            Critical Order Issues
+        </h5>
+
+        <span class="badge bg-danger">
+            {{ page_obj.paginator.count }} Alerts
+        </span>
+    </div>
+
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="table-light text-uppercase small">
+                    <tr>
+                        <th>Order ID</th>
+                        <th>Issue</th>
+                        <th class="text-center">Action</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                {% for o in page_obj %}
+                <tr>
+                    <td class="fw-semibold text-primary">
+                        #{{ o.id }}
+                    </td>
+
+                    <td>
+                        <span class="badge bg-soft-danger text-danger">
+                            Payment Pending
+                        </span>
+                        <div class="small text-muted">
+                            Confirmed but payment not received
+                        </div>
+                    </td>
+
+                    <td class="text-center">
+                        <a href="{% url 'order_detail' o.id %}"
+                           class="btn btn-sm btn-outline-primary">
+                            <i class="bi bi-eye"></i> Review
+                        </a>
+                    </td>
                 </tr>
-            </thead>
-            <tbody>
-        {% for o in page_obj %}
-      <tr>
-        <td>#{{ o.id }}</td>
-        <td>Confirmed but payment pending</td>
-        <td>
-          <a href="{% url 'order_detail' o.id %}" class="btn btn-sm btn-outline-danger">
-            Review
-          </a>
-        </td>
-      </tr>
-      {% empty %}
-      <tr>
-        <td colspan="3" class="text-center text-muted">
-          No critical issues 🎉
-        </td>
-      </tr>
-      {% endfor %}
-    </tbody>
-        </table>
+                {% empty %}
+                <tr>
+                    <td colspan="3" class="text-center text-muted py-4">
+                        <i class="bi bi-check-circle text-success"></i>
+                        No critical issues
+                    </td>
+                </tr>
+                {% endfor %}
+                </tbody>
+
+            </table>
+        </div>
     </div>
 </div>
 <nav class="mt-4">
-<ul class="pagination justify-content-center">
+    <ul class="pagination justify-content-center pagination-sm">
 
-    {% if page_obj.has_previous %}
+        {% if page_obj.has_previous %}
         <li class="page-item">
-            <a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous</a>
+            <a class="page-link" href="?page={{ page_obj.previous_page_number }}">
+                <i class="bi bi-chevron-left"></i>
+            </a>
         </li>
-    {% endif %}
+        {% endif %}
 
-    <li class="page-item active">
-        <span class="page-link">{{ page_obj.number }}</span>
-    </li>
+        <li class="page-item active">
+            <span class="page-link fw-bold">
+                {{ page_obj.number }}
+            </span>
+        </li>
 
-    {% if page_obj.has_next %}
+        {% if page_obj.has_next %}
         <li class="page-item">
-            <a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a>
+            <a class="page-link" href="?page={{ page_obj.next_page_number }}">
+                <i class="bi bi-chevron-right"></i>
+            </a>
         </li>
-    {% endif %}
+        {% endif %}
 
-</ul>
+    </ul>
 </nav>
+
 {% endblock content %}

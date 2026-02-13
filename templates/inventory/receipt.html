@@ -4,80 +4,179 @@
     <title>Order Receipt</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
-            background: #f3f4f6;
-            padding: 20px;
+            font-family: "Inter", Arial, sans-serif;
+            background: #f4f6f9;
+            padding: 30px;
+            color: #111827;
         }
+
         .container {
-            width: 750px;
+            width: 820px;
             margin: auto;
-            background: #fff;
-            padding: 25px;
-            border-radius: 8px;
+            background: #ffffff;
+            padding: 30px 35px;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
         }
+
+        /* Header */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid #f3f4f6;
+            padding-bottom: 15px;
+            margin-bottom: 20px;
+        }
+
         h2 {
-            text-align: center;
-            margin-bottom: 10px;
+            font-size: 22px;
+            font-weight: 700;
         }
+
+        .status {
+            padding: 6px 14px;
+            background: #dcfce7;
+            color: #166534;
+            font-weight: 600;
+            border-radius: 20px;
+            font-size: 13px;
+        }
+
+        /* Meta Info */
         .meta {
             display: flex;
             justify-content: space-between;
+            font-size: 14px;
             margin-bottom: 20px;
         }
+
+        .meta p {
+            margin: 3px 0;
+        }
+
+        /* Customer Box */
+        .customer-box {
+            background: #f9fafb;
+            padding: 12px 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+
+        /* Table */
         table {
             width: 100%;
             border-collapse: collapse;
             margin-top: 15px;
+            font-size: 14px;
         }
+
         th, td {
-            border: 1px solid #ddd;
+            border: 1px solid #e5e7eb;
             padding: 10px;
-            text-align: center;
         }
+
         th {
             background: #f3f4f6;
+            font-weight: 600;
+            text-align: center;
         }
+
+        td {
+            text-align: center;
+        }
+
+        td:first-child {
+            text-align: left;
+            font-weight: 500;
+        }
+
         .total-row th {
-            background: #e5e7eb;
+            background: #111827;
+            color: white;
             font-size: 16px;
         }
+
+        /* Warranty badges */
+        .badge {
+            padding: 4px 10px;
+            border-radius: 14px;
+            font-size: 12px;
+            font-weight: 600;
+            display: inline-block;
+        }
+
+        .bg-success {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .bg-danger {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .text-muted {
+            color: #6b7280;
+        }
+
+        /* Footer */
         .footer {
             margin-top: 25px;
             text-align: center;
-            font-size: 14px;
-            color: #555;
+            font-size: 13px;
+            color: #6b7280;
         }
+
+        /* Button */
         .btn {
             display: inline-block;
             margin-top: 20px;
-            padding: 10px 18px;
+            padding: 10px 20px;
             background: #2563eb;
             color: #fff;
             text-decoration: none;
             border-radius: 6px;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .btn:hover {
+            background: #1d4ed8;
         }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <h2>Order Receipt</h2>
 
+    <!-- Header -->
+    <div class="header">
+        <h2>Order Receipt</h2>
+        <span class="status">PAID</span>
+    </div>
+
+    <!-- Order Meta -->
     <div class="meta">
         <div>
-            <p><strong>Order ID:</strong> {{ order.id }}</p>
+            <p><strong>Order ID:</strong> #{{ order.id }}</p>
             <p><strong>Date:</strong> {{ order.created_at|date:"d M Y" }}</p>
         </div>
         <div>
-            <p><strong>Status:</strong> PAID</p>
+            <p><strong>Total Items:</strong> {{ order.items.count }}</p>
         </div>
     </div>
 
-    <h4>Customer</h4>
-    <p>{{ order.customer_name }}</p>
-    <p>{{ order.customer_address }}, {{ order.city }} - {{ order.pincode }}</p>
-    <p>{{ order.get_state_display }}</p>
+    <!-- Customer Info -->
+    <div class="customer-box">
+        <strong>Customer Details</strong><br>
+        {{ order.customer_name }} <br>
+        {{ order.customer_address }}, {{ order.city }} - {{ order.pincode }} <br>
+        {{ order.get_state_display }}
+    </div>
 
+    <!-- Order Table -->
     <table>
         <tr>
             <th>Product</th>
@@ -86,42 +185,46 @@
             <th>Warranty</th>
             <th>Total</th>
         </tr>
+
         {% for item in order.items.all %}
         <tr>
             <td>{{ item.product }}</td>
             <td>₹ {{ item.price }}</td>
             <td>{{ item.quantity }}</td>
             <td>
-                            {{ item.warranty_months }} months <br>
+                {{ item.warranty_months }} months <br>
 
-                            {% if item.warranty_end %}
-                                Valid till: {{ item.warranty_end }} <br>
+                {% if item.warranty_end %}
+                    Valid till: {{ item.warranty_end }} <br>
 
-                                {% if item.is_under_warranty %}
-                                    <span class="badge bg-success">Under Warranty</span>
-                                {% else %}
-                                    <span class="badge bg-danger">Warranty Expired</span>
-                                {% endif %}
-                            {% else %}
-                                <span class="text-muted">Warranty not started</span>
-                            {% endif %}
+                    {% if item.is_under_warranty %}
+                        <span class="badge bg-success">Under Warranty</span>
+                    {% else %}
+                        <span class="badge bg-danger">Expired</span>
+                    {% endif %}
+                {% else %}
+                    <span class="text-muted">Not Started</span>
+                {% endif %}
             </td>
             <td>₹ {{ item.total }}</td>
         </tr>
         {% endfor %}
+
         <tr class="total-row">
             <th colspan="4">Grand Total</th>
             <th>₹ {{ order.total_amount }}</th>
         </tr>
     </table>
 
+    <!-- Footer -->
     <div class="footer">
-        Thank you for your purchase!
+        This is a system-generated receipt. No signature required.
     </div>
 
     <a href="{% url 'download_receipt' order.id %}" class="btn">
-        Download Receipt (PDF)
+        Download PDF Receipt
     </a>
+
 </div>
 
 </body>

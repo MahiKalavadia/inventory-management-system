@@ -38,15 +38,19 @@
 
         <!-- Quick Actions -->
         <div class="d-flex align-items-center gap-2">
-            {% if request.user.is_superuser or request.user.groups.first.name == "Manager" or request.user.groups.first.name == "Staff" %}
+          <div>
                 <a href="{% url 'stock_in_section' %}" class="btn btn-primary btn-sm">
                     + Stock In
                 </a>
+              </div>
+              <div>
             <a href="{% url 'stock_history' %}" class="btn btn-outline-dark btn-sm">
                 History
             </a>
+          </div>
+          <div>
             <a href="#" class="btn btn-outline-secondary btn-sm">Stock Forecasting </a>
-            {% endif %}
+          </div>
         </div>
 
         <!-- User -->
@@ -55,11 +59,27 @@
                 <div class="fw-medium small">{{ request.user.username }}</div>
                 <div class="text-muted small">Stock Panel</div>
             </div>
-            <img src="{% static 'images/admin.jpeg' %}"
-                 class="rounded-circle border"
-                 width="36"
-                 height="36"
-                 style="object-fit: cover;">
+            {% if user.is_superuser %}
+    <img src="{% static 'images/admin.jpeg' %}"
+         class="rounded-circle border"
+         width="36"
+         height="36"
+         style="object-fit: cover;">
+
+{% elif user.groups.first.name == "Manager" %}
+    <img src="{% static 'images/manager.png' %}"
+         class="rounded-circle border"
+         width="36"
+         height="36"
+         style="object-fit: cover;">
+
+{% elif user.groups.first.name == "Staff" %}
+    <img src="{% static 'images/staff.png' %}"
+         class="rounded-circle border"
+         width="36"
+         height="36"
+         style="object-fit: cover;">
+         {% endif %}
         </div>
     </div>
 </div>
