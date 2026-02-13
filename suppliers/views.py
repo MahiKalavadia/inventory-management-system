@@ -7,6 +7,8 @@ from django.core.paginator import Paginator
 from django.db.models import Q
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib import messages
+from django.http import HttpResponse
+import csv
 
 
 def supplier_dashboard(request):
@@ -132,3 +134,30 @@ def delete_supplier(request, pk):
     return render(request, 'inventory/delete_supplier.html', {
         'category': supplier
     })
+
+
+def export_supplier_csv(request):
+    response = HttpResponse(content_type="text/csv")
+    response["Content-Disposition"] = 'attachment; filename="supplies.csv"'
+
+    writer = csv.writer(response)
+    writer.writerow([
+        "Name", "Contact Person", "Phone", "Email", "Address", "Categories Supplies"
+    ])
+
+    for supplier in Supplier.objects.prefetch_related("categories_supplies"):
+        categories = ", ".join(
+            cat.name for cat in supplier.categories_supplies.all())
+        writer.writerow([
+            supplier.name, supplier.contact_person, supplier.phone, supplier.email, supplier.address, categories
+        ])
+
+    return response
+
+
+def export_supplier_excel(request):
+    pass
+
+
+def export_supplier_pdf(request):
+    pass
