@@ -9,6 +9,13 @@ from django.db.models import Count
 from inventory.config import LOW_STOCK_THRESHOLD
 from django.contrib import messages
 from django.db.models.functions import TruncMonth, Coalesce
+from django.http import HttpResponse
+import csv
+from openpyxl import Workbook
+from reportlab.lib.pagesizes import landscape, A4
+from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph, Spacer
+from reportlab.lib import colors
+from reportlab.lib.styles import getSampleStyleSheet
 
 
 @login_required
@@ -200,6 +207,128 @@ def delete_product(request, pk):
     return render(request, 'inventory/delete_product.html', {'product': product})
 
 
+def export_product_csv(request):
+    response = HttpResponse(content_type="text/csv")
+    response["Content-Disposition"] = 'attachment; filename="products.csv"'
+
+    writer = csv.writer(response)
+    writer.writerow([
+        "SKU", "Name", "Brand", "Purchase Price", "Selling Price", "Profit", "Quantity", "Category", "Supplier", "Warranty Months"
+    ])
+
+    for product in Product.objects.all():
+        writer.writerow([
+            product.sku, product.name, product.brand, product.purchase_price, product.price, product.profit, product.quantity, product.category, product.supplier, product.warranty_months
+        ])
+
+    return response
+
+
+def export_product_excel(request):
+    wb = Workbook()
+    ws = wb.active
+    ws.title = "Products"
+
+    ws.append(["SKU", "Name", "Brand", "Purchase Price", "Selling Price",
+              "Profit", "Quantity", "Category", "Supplier", "Warranty Months"])
+
+    for product in Product.objects.all():
+        ws.append([
+            product.sku,
+            product.name,
+            product.brand,
+            product.purchase_price,
+            product.price,
+            product.profit,
+            product.quantity,
+            product.category.name,
+            product.supplier.name,
+            product.warranty_months,
+        ])
+
+    response = HttpResponse(
+        content_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+    response["Content-Disposition"] = 'attachment; filename="products.xlsx"'
+
+    wb.save(response)
+    return response
+
+
+def export_product_pdf(request):
+    response = HttpResponse(content_type="application/pdf")
+    response["Content-Disposition"] = 'attachment; filename="products.pdf"'
+
+    doc = SimpleDocTemplate(response, pagesize=landscape(A4))  # landscape mode
+    styles = getSampleStyleSheet()
+    elements = []
+
+    # Title
+    elements.append(Paragraph("PRODUCT LIST", styles["Heading1"]))
+    elements.append(Spacer(1, 10))
+
+    # Table Header
+    data = [["SKU", "Name", "Brand", "Purchase Price", "Price",
+             "Profit", "Qty", "Category", "Supplier", "Warranty (Months)"]]
+
+    products = Product.objects.all()
+    for item in products:
+        data.append([
+            item.sku,
+            item.name,
+            item.brand,
+            item.purchase_price,
+            item.price,
+            item.profit,
+            item.quantity,
+            item.category.name if item.category else "",
+            item.supplier.name if item.supplier else "",
+            item.warranty_months,
+        ])
+
+    # Column widths for landscape
+    col_widths = [60, 150, 80, 80, 80, 80, 50, 100, 100, 60]
+
+    table = Table(data, colWidths=col_widths, repeatRows=1)
+
+    table.setStyle(TableStyle([
+
+        # Header Style
+        ("BACKGROUND", (0, 0), (-1, 0), colors.HexColor("#2F3E46")),
+        ("TEXTCOLOR", (0, 0), (-1, 0), colors.white),
+        ("FONTNAME", (0, 0), (-1, 0), "Helvetica-Bold"),
+        ("FONTSIZE", (0, 0), (-1, 0), 11),
+        ("ALIGN", (0, 0), (-1, 0), "CENTER"),
+        ("BOTTOMPADDING", (0, 0), (-1, 0), 10),
+
+        # Body Style
+        ("FONTNAME", (0, 1), (-1, -1), "Helvetica"),
+        ("FONTSIZE", (0, 1), (-1, -1), 10),
+        ("BACKGROUND", (0, 1), (-1, -1), colors.white),
+
+        # Row alternating light grey
+        ("ROWBACKGROUNDS", (0, 1), (-1, -1),
+         [colors.white, colors.HexColor("#F7F9FB")]),
+
+        # Align price column right
+        ("ALIGN", (3, 1), (-1, -1), "RIGHT"),
+
+        # Subtle grid
+        ("LINEBELOW", (0, 0), (-1, 0), 1, colors.HexColor("#B0BEC5")),
+        ("LINEBELOW", (0, 1), (-1, -1), 0.3, colors.HexColor("#E0E0E0")),
+
+        # Padding
+        ("LEFTPADDING", (0, 0), (-1, -1), 8),
+        ("RIGHTPADDING", (0, 0), (-1, -1), 8),
+        ("TOPPADDING", (0, 0), (-1, -1), 6),
+        ("BOTTOMPADDING", (0, 0), (-1, -1), 6),
+
+    ]))
+
+    elements.append(table)
+    doc.build(elements)
+    return response
+
+
 @login_required
 def category_dashboard(request):
     categories_qs = Category.objects.annotate(
@@ -372,6 +501,104 @@ def delete_category(request, pk):
     return render(request, 'inventory/delete_category.html', {
         'category': category
     })
+
+
+def export_category_csv(request):
+    response = HttpResponse(content_type="text/csv")
+    response["Content-Disposition"] = 'attachment; filename="category.csv"'
+
+    writer = csv.writer(response)
+    writer.writerow(["Name"])
+
+    for cate in Category.objects.all():
+        writer.writerow([
+            cate.name,
+        ])
+
+    return response
+
+
+def export_category_excel(request):
+    wb = Workbook()
+    ws = wb.active
+    ws.title = "Categories"
+
+    ws.append(["Name"])
+
+    for category in Category.objects.all():
+        ws.append([category.name])
+
+    response = HttpResponse(
+        content_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+    response["Content-Disposition"] = 'attachment; filename="categories.xlsx"'
+
+    wb.save(response)
+    return response
+
+
+def export_category_pdf(request):
+    response = HttpResponse(content_type="application/pdf")
+    response["Content-Disposition"] = 'attachment; filename="category.pdf"'
+
+    doc = SimpleDocTemplate(response, pagesize=landscape(A4))  # landscape mode
+    styles = getSampleStyleSheet()
+    elements = []
+
+    # Title
+    elements.append(Paragraph("CATEGORY LIST", styles["Heading1"]))
+    elements.append(Spacer(1, 10))
+
+    # Table Header
+    data = [["Name"]]
+
+    category = Category.objects.all()
+    for cat in category:
+        data.append([
+            cat.name,
+        ])
+
+    # Column widths for landscape
+    col_widths = [300]
+
+    table = Table(data, colWidths=col_widths, repeatRows=1)
+
+    table.setStyle(TableStyle([
+
+        # Header Style
+        ("BACKGROUND", (0, 0), (-1, 0), colors.HexColor("#2F3E46")),
+        ("TEXTCOLOR", (0, 0), (-1, 0), colors.white),
+        ("FONTNAME", (0, 0), (-1, 0), "Helvetica-Bold"),
+        ("FONTSIZE", (0, 0), (-1, 0), 11),
+        ("ALIGN", (0, 0), (-1, 0), "CENTER"),
+        ("BOTTOMPADDING", (0, 0), (-1, 0), 10),
+
+        # Body Style
+        ("FONTNAME", (0, 1), (-1, -1), "Helvetica"),
+        ("FONTSIZE", (0, 1), (-1, -1), 10),
+        ("BACKGROUND", (0, 1), (-1, -1), colors.white),
+
+        # Row alternating light grey
+        ("ROWBACKGROUNDS", (0, 1), (-1, -1),
+         [colors.white, colors.HexColor("#F7F9FB")]),
+
+        # Align price column right
+        ("ALIGN", (3, 1), (-1, -1), "RIGHT"),
+
+        # Subtle grid
+        ("LINEBELOW", (0, 0), (-1, 0), 1, colors.HexColor("#B0BEC5")),
+        ("LINEBELOW", (0, 1), (-1, -1), 0.3, colors.HexColor("#E0E0E0")),
+
+        # Padding
+        ("LEFTPADDING", (0, 0), (-1, -1), 8),
+        ("RIGHTPADDING", (0, 0), (-1, -1), 8),
+        ("TOPPADDING", (0, 0), (-1, -1), 6),
+        ("BOTTOMPADDING", (0, 0), (-1, -1), 6),
+
+    ]))
+
+    elements.append(table)
+    doc.build(elements)
+    return response
 
 
 @login_required
@@ -587,6 +814,412 @@ def out_stock_products(request):
     page_obj = paginator.get_page(page_number)
 
     return render(request, "inventory/out_stock.html", {"page_obj": page_obj})
+
+
+def export_instock_csv(request):
+    response = HttpResponse(content_type="text/csv")
+    response["Content-Disposition"] = 'attachment; filname="instock.csv"'
+
+    writer = csv.writer(response)
+    writer.writerow([
+        "SKU", "Name", "Brand", "Purchase Price", "Selling Price",
+        "Profit", "Quantity", "Category", "Supplier", "Warranty Months"
+    ])
+
+    for instock in Product.objects.filter(quantity__gt=LOW_STOCK_THRESHOLD).all():
+        writer.writerow([
+            instock.sku,
+            instock.name,
+            instock.brand,
+            instock.purchase_price,
+            instock.price,
+            instock.profit,
+            instock.quantity,
+            instock.category,
+            instock.supplier,
+            instock.warranty_months,
+        ])
+
+    return response
+
+
+def export_instock_excel(request):
+    wb = Workbook()
+    ws = wb.active
+    ws.title = "Instock"
+
+    ws.append(["SKU", "Name", "Brand", "Purchase Price", "Selling Price",
+               "Profit", "Quantity", "Category", "Supplier", "Warranty Months"
+               ])
+
+    for instock in Product.objects.filter(quantity__gt=LOW_STOCK_THRESHOLD).all():
+        ws.append([
+            instock.sku,
+            instock.name,
+            instock.brand,
+            instock.purchase_price,
+            instock.price,
+            instock.profit,
+            instock.quantity,
+            instock.category.name,
+            instock.supplier.name,
+            instock.warranty_months,
+        ])
+
+    response = HttpResponse(
+        content_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+    response["Content-Disposition"] = 'attachment; filename="instock.xlsx"'
+
+    wb.save(response)
+    return response
+
+
+def export_instock_pdf(request):
+    response = HttpResponse(content_type="application/pdf")
+    response["Content-Disposition"] = 'attachment; filename="products-instock.pdf"'
+
+    doc = SimpleDocTemplate(response, pagesize=landscape(A4))  # landscape mode
+    styles = getSampleStyleSheet()
+    elements = []
+
+    # Title
+    elements.append(Paragraph("PRODUCTS IN STOCK LIST", styles["Heading1"]))
+    elements.append(Spacer(1, 10))
+
+    # Table Header
+    data = [["SKU", "Name", "Brand", "Purchase Price", "Price",
+             "Profit", "Qty", "Category", "Supplier", "Warranty (Months)"]]
+
+    products = Product.objects.filter(quantity__gt=LOW_STOCK_THRESHOLD).all()
+    for item in products:
+        data.append([
+            item.sku,
+            item.name,
+            item.brand,
+            item.purchase_price,
+            item.price,
+            item.profit,
+            item.quantity,
+            item.category.name if item.category else "",
+            item.supplier.name if item.supplier else "",
+            item.warranty_months,
+        ])
+
+    # Column widths for landscape
+    col_widths = [60, 150, 80, 80, 80, 80, 50, 100, 100, 60]
+
+    table = Table(data, colWidths=col_widths, repeatRows=1)
+
+    table.setStyle(TableStyle([
+
+        # Header Style
+        ("BACKGROUND", (0, 0), (-1, 0), colors.HexColor("#2F3E46")),
+        ("TEXTCOLOR", (0, 0), (-1, 0), colors.white),
+        ("FONTNAME", (0, 0), (-1, 0), "Helvetica-Bold"),
+        ("FONTSIZE", (0, 0), (-1, 0), 11),
+        ("ALIGN", (0, 0), (-1, 0), "CENTER"),
+        ("BOTTOMPADDING", (0, 0), (-1, 0), 10),
+
+        # Body Style
+        ("FONTNAME", (0, 1), (-1, -1), "Helvetica"),
+        ("FONTSIZE", (0, 1), (-1, -1), 10),
+        ("BACKGROUND", (0, 1), (-1, -1), colors.white),
+
+        # Row alternating light grey
+        ("ROWBACKGROUNDS", (0, 1), (-1, -1),
+         [colors.white, colors.HexColor("#F7F9FB")]),
+
+        # Align price column right
+        ("ALIGN", (3, 1), (-1, -1), "RIGHT"),
+
+        # Subtle grid
+        ("LINEBELOW", (0, 0), (-1, 0), 1, colors.HexColor("#B0BEC5")),
+        ("LINEBELOW", (0, 1), (-1, -1), 0.3, colors.HexColor("#E0E0E0")),
+
+        # Padding
+        ("LEFTPADDING", (0, 0), (-1, -1), 8),
+        ("RIGHTPADDING", (0, 0), (-1, -1), 8),
+        ("TOPPADDING", (0, 0), (-1, -1), 6),
+        ("BOTTOMPADDING", (0, 0), (-1, -1), 6),
+
+    ]))
+
+    elements.append(table)
+    doc.build(elements)
+    return response
+
+
+def export_lowstock_csv(request):
+    response = HttpResponse(content_type="text/csv")
+    response["Content-Disposition"] = 'attachment; filename="lowstock.csv"'
+
+    writer = csv.writer(response)
+    writer.writerow([
+        "SKU", "Name", "Brand", "Purchase Price", "Selling Price",
+               "Profit", "Quantity", "Category", "Supplier", "Warranty Months"
+    ])
+
+    for lowstock in Product.objects.filter(quantity__gt=0, quantity__lte=LOW_STOCK_THRESHOLD,
+                                           ).all():
+        writer.writerow([
+            lowstock.sku,
+            lowstock.name,
+            lowstock.brand,
+            lowstock.purchase_price,
+            lowstock.price,
+            lowstock.profit,
+            lowstock.quantity,
+            lowstock.category,
+            lowstock.supplier,
+            lowstock.warranty_months,
+        ])
+
+    return response
+
+
+def export_lowstock_excel(request):
+    wb = Workbook()
+    ws = wb.active
+    ws.title = "LowStock"
+
+    ws.append([
+        "SKU", "Name", "Brand", "Purchase Price", "Selling Price",
+               "Profit", "Quantity", "Category", "Supplier", "Warranty Months"
+    ])
+
+    for lowstock in Product.objects.filter(quantity__gt=0, quantity__lte=LOW_STOCK_THRESHOLD).all():
+        ws.append([
+            lowstock.sku,
+            lowstock.name,
+            lowstock.brand,
+            lowstock.purchase_price,
+            lowstock.price,
+            lowstock.profit,
+            lowstock.quantity,
+            lowstock.category.name,
+            lowstock.supplier.name,
+            lowstock.warranty_months,
+        ])
+
+    response = HttpResponse(
+        content_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+    response["Content-Disposition"] = 'attachment; filename="lowstock.xlsx"'
+
+    wb.save(response)
+    return response
+
+
+def export_lowstock_pdf(request):
+    response = HttpResponse(content_type="application/pdf")
+    response["Content-Disposition"] = 'attachment; filename="products-lowstock.pdf"'
+
+    doc = SimpleDocTemplate(response, pagesize=landscape(A4))  # landscape mode
+    styles = getSampleStyleSheet()
+    elements = []
+
+    # Title
+    elements.append(
+        Paragraph("PRODUCTS LOW IN STOCK LIST", styles["Heading1"]))
+    elements.append(Spacer(1, 10))
+
+    # Table Header
+    data = [["SKU", "Name", "Brand", "Purchase Price", "Price",
+             "Profit", "Qty", "Category", "Supplier", "Warranty (Months)"]]
+
+    products = Product.objects.filter(
+        quantity__gt=0, quantity__lte=LOW_STOCK_THRESHOLD).all()
+    for item in products:
+        data.append([
+            item.sku,
+            item.name,
+            item.brand,
+            item.purchase_price,
+            item.price,
+            item.profit,
+            item.quantity,
+            item.category.name if item.category else "",
+            item.supplier.name if item.supplier else "",
+            item.warranty_months,
+        ])
+
+    # Column widths for landscape
+    col_widths = [60, 150, 80, 80, 80, 80, 50, 100, 100, 60]
+
+    table = Table(data, colWidths=col_widths, repeatRows=1)
+
+    table.setStyle(TableStyle([
+
+        # Header Style
+        ("BACKGROUND", (0, 0), (-1, 0), colors.HexColor("#2F3E46")),
+        ("TEXTCOLOR", (0, 0), (-1, 0), colors.white),
+        ("FONTNAME", (0, 0), (-1, 0), "Helvetica-Bold"),
+        ("FONTSIZE", (0, 0), (-1, 0), 11),
+        ("ALIGN", (0, 0), (-1, 0), "CENTER"),
+        ("BOTTOMPADDING", (0, 0), (-1, 0), 10),
+
+        # Body Style
+        ("FONTNAME", (0, 1), (-1, -1), "Helvetica"),
+        ("FONTSIZE", (0, 1), (-1, -1), 10),
+        ("BACKGROUND", (0, 1), (-1, -1), colors.white),
+
+        # Row alternating light grey
+        ("ROWBACKGROUNDS", (0, 1), (-1, -1),
+         [colors.white, colors.HexColor("#F7F9FB")]),
+
+        # Align price column right
+        ("ALIGN", (3, 1), (-1, -1), "RIGHT"),
+
+        # Subtle grid
+        ("LINEBELOW", (0, 0), (-1, 0), 1, colors.HexColor("#B0BEC5")),
+        ("LINEBELOW", (0, 1), (-1, -1), 0.3, colors.HexColor("#E0E0E0")),
+
+        # Padding
+        ("LEFTPADDING", (0, 0), (-1, -1), 8),
+        ("RIGHTPADDING", (0, 0), (-1, -1), 8),
+        ("TOPPADDING", (0, 0), (-1, -1), 6),
+        ("BOTTOMPADDING", (0, 0), (-1, -1), 6),
+
+    ]))
+
+    elements.append(table)
+    doc.build(elements)
+    return response
+
+
+def export_outstock_csv(request):
+    response = HttpResponse(content_type="text/csv")
+    response["Content-Disposition"] = 'attachment; filename="outstock.csv"'
+
+    writer = csv.writer(response)
+    writer.writerow([
+        "SKU", "Name", "Brand", "Purchase Price", "Selling Price",
+               "Profit", "Quantity", "Category", "Supplier", "Warranty Months"
+    ])
+
+    for outstock in Product.objects.filter(quantity=0
+                                           ).all():
+        writer.writerow([
+            outstock.sku,
+            outstock.name,
+            outstock.brand,
+            outstock.purchase_price,
+            outstock.price,
+            outstock.profit,
+            outstock.quantity,
+            outstock.category,
+            outstock.supplier,
+            outstock.warranty_months,
+        ])
+
+    return response
+
+
+def export_outstock_excel(request):
+    wb = Workbook()
+    ws = wb.active
+    ws.title = "outStock"
+
+    ws.append([
+        "SKU", "Name", "Brand", "Purchase Price", "Selling Price",
+               "Profit", "Quantity", "Category", "Supplier", "Warranty Months"
+    ])
+
+    for outstock in Product.objects.filter(quantity=0).all():
+        ws.append([
+            outstock.sku,
+            outstock.name,
+            outstock.brand,
+            outstock.purchase_price,
+            outstock.price,
+            outstock.profit,
+            outstock.quantity,
+            outstock.category.name,
+            outstock.supplier.name,
+            outstock.warranty_months,
+        ])
+
+    response = HttpResponse(
+        content_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+    response["Content-Disposition"] = 'attachment; filename="outstock.xlsx"'
+
+    wb.save(response)
+    return response
+
+
+def export_outstock_pdf(request):
+    response = HttpResponse(content_type="application/pdf")
+    response["Content-Disposition"] = 'attachment; filename="products-outstock.pdf"'
+
+    doc = SimpleDocTemplate(response, pagesize=landscape(A4))  # landscape mode
+    styles = getSampleStyleSheet()
+    elements = []
+
+    # Title
+    elements.append(
+        Paragraph("PRODUCTS OUT OF STOCK LIST", styles["Heading1"]))
+    elements.append(Spacer(1, 10))
+
+    # Table Header
+    data = [["SKU", "Name", "Brand", "Purchase Price", "Price",
+             "Profit", "Qty", "Category", "Supplier", "Warranty (Months)"]]
+
+    products = Product.objects.filter(quantity=0).all()
+    for item in products:
+        data.append([
+            item.sku,
+            item.name,
+            item.brand,
+            item.purchase_price,
+            item.price,
+            item.profit,
+            item.quantity,
+            item.category.name if item.category else "",
+            item.supplier.name if item.supplier else "",
+            item.warranty_months,
+        ])
+
+    # Column widths for landscape
+    col_widths = [60, 150, 80, 80, 80, 80, 50, 100, 100, 60]
+
+    table = Table(data, colWidths=col_widths, repeatRows=1)
+
+    table.setStyle(TableStyle([
+
+        # Header Style
+        ("BACKGROUND", (0, 0), (-1, 0), colors.HexColor("#2F3E46")),
+        ("TEXTCOLOR", (0, 0), (-1, 0), colors.white),
+        ("FONTNAME", (0, 0), (-1, 0), "Helvetica-Bold"),
+        ("FONTSIZE", (0, 0), (-1, 0), 11),
+        ("ALIGN", (0, 0), (-1, 0), "CENTER"),
+        ("BOTTOMPADDING", (0, 0), (-1, 0), 10),
+
+        # Body Style
+        ("FONTNAME", (0, 1), (-1, -1), "Helvetica"),
+        ("FONTSIZE", (0, 1), (-1, -1), 10),
+        ("BACKGROUND", (0, 1), (-1, -1), colors.white),
+
+        # Row alternating light grey
+        ("ROWBACKGROUNDS", (0, 1), (-1, -1),
+         [colors.white, colors.HexColor("#F7F9FB")]),
+
+        # Align price column right
+        ("ALIGN", (3, 1), (-1, -1), "RIGHT"),
+
+        # Subtle grid
+        ("LINEBELOW", (0, 0), (-1, 0), 1, colors.HexColor("#B0BEC5")),
+        ("LINEBELOW", (0, 1), (-1, -1), 0.3, colors.HexColor("#E0E0E0")),
+
+        # Padding
+        ("LEFTPADDING", (0, 0), (-1, -1), 8),
+        ("RIGHTPADDING", (0, 0), (-1, -1), 8),
+        ("TOPPADDING", (0, 0), (-1, -1), 6),
+        ("BOTTOMPADDING", (0, 0), (-1, -1), 6),
+
+    ]))
+
+    elements.append(table)
+    doc.build(elements)
+    return response
 
 
 @login_required
