@@ -507,14 +507,14 @@ def export_orders_pdf(request):
                 item.price,
                 item.total,
             ])
-
+        colWidths = [200, 60, 80, 80]
         # Create Table
         table = Table(data, colWidths=[200, 60, 80, 80])
         table.setStyle(TableStyle([
             ("BACKGROUND", (0, 0), (-1, 0), colors.grey),
             ("TEXTCOLOR", (0, 0), (-1, 0), colors.white),
             ("GRID", (0, 0), (-1, -1), 0.5, colors.black),
-            ("BACKGROUND", (0, 1), (-1, -1), colors.beige),
+            ("BACKGROUND", (0, 1), (-1, -1), colors.white),
         ]))
 
         elements.append(table)
@@ -522,3 +522,13 @@ def export_orders_pdf(request):
 
     doc.build(elements)
     return response
+
+    # c = canvas.Canvas("test.pdf")
+    # c.drawString(100,750 , "Hello ReportLab")
+    # c.save()
+
+    # c = canvas.Canvas("test.pdf", pagesize = A4)
+    # width , height = A4
+
+    # c.setFont("", 22)
+    # c.drawCenteredString(width/2, height-100, "Hello"). ( here eidth/2 meansa aligned horizontally and height-100 means 100 point below starting point)
