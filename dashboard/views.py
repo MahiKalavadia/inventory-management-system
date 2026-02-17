@@ -7,14 +7,48 @@ from django.contrib.auth.models import User
 from django.utils import timezone
 from datetime import timedelta
 from notifications.models import Notification
-from django.db.models import Sum, F, ExpressionWrapper, DecimalField, Count
+from django.db.models import Sum, F, ExpressionWrapper, DecimalField, Count, FloatField
 from orders.models import OrderItem, Order
 from purchases.models import PurchaseRequest, PurchaseOrder
 from django.contrib.auth.decorators import login_required, user_passes_test
+from django.core.paginator import Paginator
 
 
 def landing(request):
     return render(request, "landing.html")
+
+
+def get_user_notifications(user, limit=5):
+
+    if not user.is_authenticated:
+        return Notification.objects.none()
+
+    user_role = get_user_role(user)
+
+    if not user_role:
+        return Notification.objects.none()
+
+    unread_notifications = Notification.objects.filter(
+        is_read=False
+    ).order_by('-created_at')
+
+    filtered = [
+        n for n in unread_notifications
+        if user_role in n.allowed_roles
+    ]
+
+    return filtered[:limit]
+
+
+def get_user_role(user):
+    if not user.is_authenticated:
+        return None
+
+    if user.is_superuser:
+        return "admin"
+
+    group = user.groups.first()
+    return group.name.lower() if group else None
 
 
 @role_required("Admin")
@@ -68,9 +102,9 @@ def admin_dashboard(request):
         quantity__gt=LOW_STOCK_THRESHOLD, is_active=True).count()
     out_stock_bar = Product.objects.filter(
         quantity__lte=0, is_active=True).count()
-    notifications = Notification.objects.filter(
-        is_read=False).order_by('-created_at')[:5]
-    notifications_count = notifications.count()
+    notifications = get_user_notifications(request.user, 5)
+    notifications_count = len(notifications)
+
     # recent activities
     recent_products = Product.objects.order_by('-created_at')[:3]
     recent_stock_log = StockLog.objects.select_related(
@@ -79,6 +113,27 @@ def admin_dashboard(request):
     recent_suppliers = Supplier.objects.order_by('-id')[:2]
     requests = PurchaseRequest.objects.order_by('-created_at')[:3]
     orders = PurchaseOrder.objects.order_by('-created_at')[:3]
+
+    top_suppliers = Supplier.objects.annotate(
+        value=Sum(F('product__purchase_price') *
+                  F('product__quantity'), output_field=FloatField())
+    ).order_by('-value')
+
+    top_value_products = Product.objects.annotate(
+        value=ExpressionWrapper(
+            F('purchase_price') * F('quantity'),
+            output_field=FloatField()
+        )
+    ).order_by('-value')
+
+    paginator = Paginator(top_suppliers, 5)
+    suppliers = request.GET.get('page_s')
+    supply = paginator.get_page(suppliers)
+
+    paginator = Paginator(top_value_products, 5)
+    page_number = request.GET.get('page')
+    productt = paginator.get_page(page_number)
+
     activities = []
 
     for p in recent_products:
@@ -147,7 +202,9 @@ def admin_dashboard(request):
         'requests': requests,
         'orders': orders,
         # quick actions
-        "unread_notifications_count": Notification.objects.filter(is_read=False).count(),
+        "unread_notifications_count": notifications_count,
+        'supply': supply,
+        'productt': productt,
 
         "pending_requests_count": PurchaseRequest.objects.filter(
             status="Pending"
@@ -184,9 +241,8 @@ def manager_dashboard(request):
     recent_stock_logs = StockLog.objects.select_related(
         'product').order_by('-created_at')[:5]
 
-    notifications = Notification.objects.filter(
-        is_read=False)[:5]  # latest 10 unread
-    notifications_count = notifications.count()
+    notifications = get_user_notifications(request.user, 5)
+    notifications_count = len(notifications)
 
     # Inventory health %
     total_products = total_products if total_products else 1
@@ -220,7 +276,7 @@ def staff_dashboard(request):
     in_stock = Product.objects.filter(
         quantity__gt=LOW_STOCK_THRESHOLD, is_active=True).count()
     low_stock = Product.objects.filter(
-        quantity__lte=LOW_STOCK_THRESHOLD, is_active=True).count()
+        quantity__lte=LOW_STOCK_THRESHOLD, quantity__gt=0, is_active=True).count()
     out_stock = Product.objects.filter(quantity=0, is_active=True).count()
     low_stock_products = Product.objects.filter(
         quantity__lte=LOW_STOCK_THRESHOLD,
@@ -231,9 +287,8 @@ def staff_dashboard(request):
         'product'
     ).order_by('-created_at')[:5]
 
-    notifications = Notification.objects.filter(
-        is_read=False)[:5]  # latest 10 unread
-    notifications_count = notifications.count()
+    notifications = get_user_notifications(request.user, 5)
+    notifications_count = len(notifications)
 
     context = {
         'total_products': total_products,
