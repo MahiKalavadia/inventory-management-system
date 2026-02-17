@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Product, Category, StockLog
 from suppliers.models import Supplier
-from django.db.models import Q, F, Sum,  FloatField, ExpressionWrapper, DecimalField, Value, Avg
+from django.db.models import Q, F, Sum,  FloatField, ExpressionWrapper, DecimalField, Value, Avg, Max
 from django.core.paginator import Paginator
 from django.contrib.auth.decorators import login_required
 from .forms import ProductForm, CategoryForm, StockForm
@@ -16,6 +16,9 @@ from reportlab.lib.pagesizes import landscape, A4
 from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph, Spacer
 from reportlab.lib import colors
 from reportlab.lib.styles import getSampleStyleSheet
+from django.utils.timezone import now
+from datetime import timedelta
+from orders.models import Order
 
 
 @login_required
@@ -1224,4 +1227,884 @@ def export_outstock_pdf(request):
 
 @login_required
 def report_dashboard(request):
-    return render(request, "dashboards/report_dashboard.html")
+    total_products = Product.objects.count()
+    total_orders = Order.objects.count()
+
+    in_stock_products = Product.objects.filter(
+        quantity__gt=LOW_STOCK_THRESHOLD,
+        is_active=True
+    )
+
+    in_stock = in_stock_products.count()
+
+    avg_price = Product.objects.aggregate(
+        average_price=Avg('purchase_price')
+    )['average_price'] or 0
+
+    reorder_products = Product.objects.filter(
+        quantity__lte=LOW_STOCK_THRESHOLD,
+        is_active=True
+    )
+
+    reorder_count = reorder_products.count()
+
+    reorder_cost = reorder_products.aggregate(
+        total_reorder=Sum(
+            ExpressionWrapper(
+                (LOW_STOCK_THRESHOLD - F('quantity')) * F('purchase_price'),
+                output_field=DecimalField()
+            )
+        )
+    )['total_reorder'] or 0
+
+    total_inventory_value = Product.objects.aggregate(
+        value=Sum(
+            ExpressionWrapper(
+                F('price') * F('quantity'),
+                output_field=DecimalField()
+            )
+        )
+    )['value'] or 0
+
+    total_inventory_count = Product.objects.aggregate(
+        total=Sum('quantity')
+    )['total'] or 0
+
+    def percent(count):
+        return round((count / total_products) * 100, 1) if total_products else 0
+
+    context = {
+        'total_products': total_products,
+        'total_orders': total_orders,
+        'in_stock': in_stock,
+        'in_stock_bar': percent(in_stock),
+        'avg_price': avg_price,
+        'reorder_count': reorder_count,
+        'reorder_cost': reorder_cost,
+        'total_inventory_value': total_inventory_value,
+        'total_inventory_count': total_inventory_count,
+    }
+
+    return render(request, "dashboards/report_dashboard.html", context)
+
+
+@login_required
+def stock_report(request):
+    products = Product.objects.filter(is_active=True)
+
+    return render(request, "inventory/stock_report.html", {
+        "products": products
+    })
+
+
+@login_required
+def export_stock_report_csv(request):
+    products = Product.objects.filter(is_active=True)
+
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = 'attachment; filename="stock_report.csv"'
+
+    writer = csv.writer(response)
+    writer.writerow([
+        "SKU", "Name", "Brand", "Quantity", "Price", "Stock Value"
+    ])
+
+    for product in products:
+        writer.writerow([
+            product.sku,
+            product.name,
+            product.brand,
+            product.quantity,
+            product.price,
+            product.stock_value,
+        ])
+
+    return response
+
+
+@login_required
+def export_stock_report_excel(request):
+    wb = Workbook()
+    ws = wb.active
+    ws.title = "Stock Report"
+
+    products = Product.objects.filter(is_active=True)
+
+    ws.append(["SKU", "Name", "Brand", "Quantity", "Price", "Stock Value"])
+    for product in products:
+        ws.append([
+            product.sku,
+            product.name,
+            product.brand,
+            product.quantity,
+            product.price,
+            product.stock_value,
+        ])
+
+    response = HttpResponse(
+        content_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+    response['Content-Disposition'] = 'attachment;filename="stock_report.xlsx"'
+
+    wb.save(response)
+    return response
+
+
+@login_required
+def export_stock_report_pdf(request):
+    response = HttpResponse(content_type="application/pdf")
+    response["Content-Disposition"] = 'attachment; filename="stock_report.pdf"'
+
+    doc = SimpleDocTemplate(response, pagesize=landscape(A4))  # landscape mode
+    styles = getSampleStyleSheet()
+    elements = []
+
+    # Title
+    elements.append(
+        Paragraph("STOCK REPORT", styles["Heading1"]))
+    elements.append(Spacer(1, 10))
+
+    # Table Header
+    data = [["SKU", "Name", "Brand", "Quantity", "Price",
+             "Stock Value"]]
+
+    products = Product.objects.filter(is_active=True)
+    for item in products:
+        data.append([
+            item.sku,
+            item.name,
+            item.brand,
+            item.quantity,
+            item.price,
+            item.stock_value,
+        ])
+
+    # Column widths for landscape
+    col_widths = [60, 150, 120, 80, 80, 80]
+
+    table = Table(data, colWidths=col_widths, repeatRows=1)
+
+    table.setStyle(TableStyle([
+
+        # Header Style
+        ("BACKGROUND", (0, 0), (-1, 0), colors.HexColor("#2F3E46")),
+        ("TEXTCOLOR", (0, 0), (-1, 0), colors.white),
+        ("FONTNAME", (0, 0), (-1, 0), "Helvetica-Bold"),
+        ("FONTSIZE", (0, 0), (-1, 0), 11),
+        ("ALIGN", (0, 0), (-1, 0), "CENTER"),
+        ("BOTTOMPADDING", (0, 0), (-1, 0), 10),
+
+        # Body Style
+        ("FONTNAME", (0, 1), (-1, -1), "Helvetica"),
+        ("FONTSIZE", (0, 1), (-1, -1), 10),
+        ("BACKGROUND", (0, 1), (-1, -1), colors.white),
+
+        # Row alternating light grey
+        ("ROWBACKGROUNDS", (0, 1), (-1, -1),
+         [colors.white, colors.HexColor("#F7F9FB")]),
+
+        # Align price column right
+        ("ALIGN", (3, 1), (-1, -1), "RIGHT"),
+
+        # Subtle grid
+        ("LINEBELOW", (0, 0), (-1, 0), 1, colors.HexColor("#B0BEC5")),
+        ("LINEBELOW", (0, 1), (-1, -1), 0.3, colors.HexColor("#E0E0E0")),
+
+        # Padding
+        ("LEFTPADDING", (0, 0), (-1, -1), 8),
+        ("RIGHTPADDING", (0, 0), (-1, -1), 8),
+        ("TOPPADDING", (0, 0), (-1, -1), 6),
+        ("BOTTOMPADDING", (0, 0), (-1, -1), 6),
+
+    ]))
+
+    elements.append(table)
+    doc.build(elements)
+    return response
+
+
+@login_required
+def reorder_report(request):
+    products = Product.objects.filter(
+        quantity__lte=LOW_STOCK_THRESHOLD,
+        is_active=True
+    )
+
+    return render(request, "inventory/reorder_report.html", {
+        "products": products,
+        "threshold": LOW_STOCK_THRESHOLD
+    })
+
+
+@login_required
+def export_reorder_csv(request):
+    products = Product.objects.filter(
+        quantity__lte=LOW_STOCK_THRESHOLD,
+        is_active=True
+    )
+
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = 'attachment; filename="reorder_report.csv"'
+
+    writer = csv.writer(response)
+    writer.writerow([
+        "SKU",
+        "Product Name",
+        "Quantity",
+        "Purchase Price"
+    ])
+
+    for product in products:
+        writer.writerow([
+            product.sku,
+            product.name,
+            product.quantity,
+            product.purchase_price
+        ])
+
+    return response
+
+
+@login_required
+def export_reorder_report_excel(request):
+    wb = Workbook()
+    ws = wb.active
+    ws.title = "Reorder Report"
+
+    products = Product.objects.filter(
+        quantity__lte=LOW_STOCK_THRESHOLD,
+        is_active=True
+    )
+
+    ws.append([
+        "SKU", "Name", "Quantity", "Purchase Price"
+    ])
+
+    for product in products:
+        ws.append([
+            product.sku,
+            product.name,
+            product.quantity,
+            product.purchase_price,
+        ])
+
+    response = HttpResponse(
+        content_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+    response['Content-Disposition'] = 'attachment;filename="reorder_report.xlsx"'
+
+    wb.save(response)
+    return response
+
+
+@login_required
+def export_reorder_report_pdf(request):
+    response = HttpResponse(content_type='application/pdf')
+    response['Content-Disposition'] = 'attachment;filename="reorder_report.pdf"'
+
+    doc = SimpleDocTemplate(response, pagesize=landscape(A4))  # landscape mode
+    styles = getSampleStyleSheet()
+    elements = []
+
+    # Title
+    elements.append(
+        Paragraph("REORDER REPORT", styles["Heading1"]))
+    elements.append(Spacer(1, 10))
+
+    # Table Header
+    data = [["SKU", "Name",  "Quantity", "Purchase Price",
+             ]]
+
+    products = Product.objects.filter(
+        quantity__lte=LOW_STOCK_THRESHOLD,
+        is_active=True
+    )
+    for item in products:
+        data.append([
+            item.sku,
+            item.name,
+            item.quantity,
+            item.purchase_price,
+        ])
+
+    # Column widths for landscape
+    col_widths = [80, 150, 60, 80]
+
+    table = Table(data, colWidths=col_widths, repeatRows=1)
+
+    table.setStyle(TableStyle([
+
+        # Header Style
+        ("BACKGROUND", (0, 0), (-1, 0), colors.HexColor("#2F3E46")),
+        ("TEXTCOLOR", (0, 0), (-1, 0), colors.white),
+        ("FONTNAME", (0, 0), (-1, 0), "Helvetica-Bold"),
+        ("FONTSIZE", (0, 0), (-1, 0), 11),
+        ("ALIGN", (0, 0), (-1, 0), "CENTER"),
+        ("BOTTOMPADDING", (0, 0), (-1, 0), 10),
+
+        # Body Style
+        ("FONTNAME", (0, 1), (-1, -1), "Helvetica"),
+        ("FONTSIZE", (0, 1), (-1, -1), 10),
+        ("BACKGROUND", (0, 1), (-1, -1), colors.white),
+
+        # Row alternating light grey
+        ("ROWBACKGROUNDS", (0, 1), (-1, -1),
+         [colors.white, colors.HexColor("#F7F9FB")]),
+
+        # Align price column right
+        ("ALIGN", (3, 1), (-1, -1), "RIGHT"),
+
+        # Subtle grid
+        ("LINEBELOW", (0, 0), (-1, 0), 1, colors.HexColor("#B0BEC5")),
+        ("LINEBELOW", (0, 1), (-1, -1), 0.3, colors.HexColor("#E0E0E0")),
+
+        # Padding
+        ("LEFTPADDING", (0, 0), (-1, -1), 8),
+        ("RIGHTPADDING", (0, 0), (-1, -1), 8),
+        ("TOPPADDING", (0, 0), (-1, -1), 6),
+        ("BOTTOMPADDING", (0, 0), (-1, -1), 6),
+
+    ]))
+
+    elements.append(table)
+    doc.build(elements)
+    return response
+
+
+@login_required
+def inventory_value_report(request):
+    products = Product.objects.annotate(
+        total_value=ExpressionWrapper(
+            F('price') * F('quantity'),
+            output_field=DecimalField()
+        )
+    )
+
+    total_value = products.aggregate(
+        total=Sum(
+            ExpressionWrapper(
+                F('price') * F('quantity'),
+                output_field=DecimalField()
+            )
+        )
+    )['total'] or 0
+
+    return render(request, "inventory/inventory_value_report.html", {
+        "products": products,
+        "total_value": total_value
+    })
+
+
+@login_required
+def export_inventory_report_csv(request):
+    products = Product.objects.annotate(
+        total_value=ExpressionWrapper(
+            F('price') * F('quantity'),
+            output_field=DecimalField(max_digits=12, decimal_places=2)
+        )
+    )
+
+    total_value = products.aggregate(
+        total=Sum('total_value')
+    )['total'] or 0
+
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = 'attachment; filename="inventory_report.csv"'
+
+    writer = csv.writer(response)
+    writer.writerow([
+        "Product", "Quantity", "Price", "Total Value"
+    ])
+
+    for inventory in products:
+        writer.writerow([
+            inventory.name,
+            inventory.quantity,
+            inventory.price,
+            inventory.total_value,
+        ])
+
+    writer.writerow([])
+    writer.writerow(["Grand Total", "", "", total_value])
+
+    return response
+
+
+@login_required
+def export_inventory_report_excel(request):
+    wb = Workbook()
+    ws = wb.active
+    ws.title = "Inventory Report"
+
+    ws.append(["Name", "Quantity", "Price", "Total Value"])
+    products = Product.objects.annotate(
+        total_value=ExpressionWrapper(
+            F('price') * F('quantity'),
+            output_field=DecimalField(max_digits=12, decimal_places=2)
+        )
+    )
+
+    total_value = products.aggregate(
+        total=Sum('total_value')
+    )['total'] or 0
+
+    for inventory in products:
+        ws.append([
+            inventory.name,
+            inventory.quantity,
+            inventory.price,
+            inventory.total_value,
+        ])
+
+    ws.append([])
+    ws.append(["Grand Total", "", "", total_value])
+
+    response = HttpResponse(
+        content_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+    response['Content-Disposition'] = 'attachment;filename="inventory_report.xlsx"'
+
+    wb.save(response)
+    return response
+
+
+@login_required
+def export_inventory_report_pdf(request):
+    response = HttpResponse(content_type='application/pdf')
+    response['Content-Disposition'] = 'attachment;filename="inventory_report.pdf"'
+
+    doc = SimpleDocTemplate(response, pagesize=landscape(A4))  # landscape mode
+    styles = getSampleStyleSheet()
+    elements = []
+
+    # Title
+    elements.append(
+        Paragraph("INVENTORY REPORT", styles["Heading1"]))
+    elements.append(Spacer(1, 10))
+
+    # Table Header
+    data = [["Name",  "Quantity", "Price", "Total Value"
+             ]]
+
+    products = Product.objects.annotate(
+        total_value=ExpressionWrapper(
+            F('price') * F('quantity'),
+            output_field=DecimalField(max_digits=12, decimal_places=2)
+        )
+    )
+
+    total_value = products.aggregate(
+        total=Sum('total_value')
+    )['total'] or 0
+
+    for item in products:
+        data.append([
+            item.name,
+            item.quantity,
+            item.price,
+            item.total_value,
+        ])
+
+        data.append([])
+        data.append(["Total Inventory Value", "", "", total_value])
+
+    # Column widths for landscape
+    col_widths = [150, 60, 100, 100]
+
+    table = Table(data, colWidths=col_widths, repeatRows=1)
+
+    table.setStyle(TableStyle([
+
+        # Header Style
+        ("BACKGROUND", (0, 0), (-1, 0), colors.HexColor("#2F3E46")),
+        ("TEXTCOLOR", (0, 0), (-1, 0), colors.white),
+        ("FONTNAME", (0, 0), (-1, 0), "Helvetica-Bold"),
+        ("FONTSIZE", (0, 0), (-1, 0), 11),
+        ("ALIGN", (0, 0), (-1, 0), "CENTER"),
+        ("BOTTOMPADDING", (0, 0), (-1, 0), 10),
+
+        # Body Style
+        ("FONTNAME", (0, 1), (-1, -1), "Helvetica"),
+        ("FONTSIZE", (0, 1), (-1, -1), 10),
+        ("BACKGROUND", (0, 1), (-1, -1), colors.white),
+
+        # Row alternating light grey
+        ("ROWBACKGROUNDS", (0, 1), (-1, -1),
+         [colors.white, colors.HexColor("#F7F9FB")]),
+
+        # Align price column right
+        ("ALIGN", (3, 1), (-1, -1), "RIGHT"),
+
+        # Subtle grid
+        ("LINEBELOW", (0, 0), (-1, 0), 1, colors.HexColor("#B0BEC5")),
+        ("LINEBELOW", (0, 1), (-1, -1), 0.3, colors.HexColor("#E0E0E0")),
+
+        # Padding
+        ("LEFTPADDING", (0, 0), (-1, -1), 8),
+        ("RIGHTPADDING", (0, 0), (-1, -1), 8),
+        ("TOPPADDING", (0, 0), (-1, -1), 6),
+        ("BOTTOMPADDING", (0, 0), (-1, -1), 6),
+
+    ]))
+
+    elements.append(table)
+    doc.build(elements)
+    return response
+
+
+@login_required
+def average_price_report(request):
+    products = Product.objects.filter(is_active=True)
+
+    avg_price = products.aggregate(
+        average_price=Avg('purchase_price')
+    )['average_price'] or 0
+
+    return render(request, "inventory/average_price_report.html", {
+        "products": products,
+        "avg_price": avg_price
+    })
+
+
+@login_required
+def export_averageprice_report_csv(request):
+    products = Product.objects.filter(is_active=True)
+
+    avg_price = products.aggregate(
+        average_price=Avg('purchase_price')
+    )['average_price'] or 0
+
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = 'attachment; filename="average_price.csv"'
+
+    writer = csv.writer(response)
+    writer.writerow([
+        "Name", "Purchase Price"
+    ])
+
+    for average in products:
+        writer.writerow([
+            average.name,
+            average.purchase_price,
+        ])
+
+    writer.writerow([])
+    writer.writerow(["Total Average Price", avg_price])
+
+    return response
+
+
+@login_required
+def export_averageprice_report_excel(request):
+    wb = Workbook()
+    ws = wb.active
+    ws.title = "Average Price"
+
+    ws.append(["Name", "Purchase Price"])
+    products = Product.objects.filter(is_active=True)
+
+    avg_price = products.aggregate(
+        average_price=Avg('purchase_price')
+    )['average_price'] or 0
+
+    for avg in products:
+        ws.append([
+            avg.name,
+            avg.purchase_price,
+        ])
+
+        ws.append([])
+        ws.append(["Average Price", avg_price])
+
+    response = HttpResponse(
+        content_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+    response['Content-Disposition'] = 'attachment;filename="averageprice_report.xlsx"'
+
+    wb.save(response)
+    return response
+
+
+@login_required
+def export_averageprice_report_pdf(request):
+    response = HttpResponse(content_type='application/pdf')
+    response['Content-Disposition'] = 'attachment;filename="average_price.pdf"'
+
+    doc = SimpleDocTemplate(response, pagesize=landscape(A4))  # landscape mode
+    styles = getSampleStyleSheet()
+    elements = []
+
+    # Title
+    elements.append(
+        Paragraph("INVENTORY REPORT", styles["Heading1"]))
+    elements.append(Spacer(1, 10))
+
+    # Table Header
+    data = [["Name", "Purchase Price"
+             ]]
+
+    products = Product.objects.filter(is_active=True)
+
+    avg_price = products.aggregate(
+        average_price=Avg('purchase_price')
+    )['average_price'] or 0
+
+    for item in products:
+        data.append([
+            item.name,
+            item.purchase_price
+        ])
+
+        data.append([])
+        data.append(["Average Price", avg_price])
+
+    # Column widths for landscape
+    col_widths = [150, 120]
+
+    table = Table(data, colWidths=col_widths, repeatRows=1)
+
+    table.setStyle(TableStyle([
+
+        # Header Style
+        ("BACKGROUND", (0, 0), (-1, 0), colors.HexColor("#2F3E46")),
+        ("TEXTCOLOR", (0, 0), (-1, 0), colors.white),
+        ("FONTNAME", (0, 0), (-1, 0), "Helvetica-Bold"),
+        ("FONTSIZE", (0, 0), (-1, 0), 11),
+        ("ALIGN", (0, 0), (-1, 0), "CENTER"),
+        ("BOTTOMPADDING", (0, 0), (-1, 0), 10),
+
+        # Body Style
+        ("FONTNAME", (0, 1), (-1, -1), "Helvetica"),
+        ("FONTSIZE", (0, 1), (-1, -1), 10),
+        ("BACKGROUND", (0, 1), (-1, -1), colors.white),
+
+        # Row alternating light grey
+        ("ROWBACKGROUNDS", (0, 1), (-1, -1),
+         [colors.white, colors.HexColor("#F7F9FB")]),
+
+        # Align price column right
+        ("ALIGN", (3, 1), (-1, -1), "RIGHT"),
+
+        # Subtle grid
+        ("LINEBELOW", (0, 0), (-1, 0), 1, colors.HexColor("#B0BEC5")),
+        ("LINEBELOW", (0, 1), (-1, -1), 0.3, colors.HexColor("#E0E0E0")),
+
+        # Padding
+        ("LEFTPADDING", (0, 0), (-1, -1), 8),
+        ("RIGHTPADDING", (0, 0), (-1, -1), 8),
+        ("TOPPADDING", (0, 0), (-1, -1), 6),
+        ("BOTTOMPADDING", (0, 0), (-1, -1), 6),
+
+    ]))
+
+    elements.append(table)
+    doc.build(elements)
+    return response
+
+
+@login_required
+def dead_stock_report(request):
+    sixty_days_ago = now() - timedelta(days=60)
+
+    recent_products = StockLog.objects.filter(
+        created_at__gte=sixty_days_ago
+    ).values_list('product_id', flat=True)
+
+    products = Product.objects.exclude(
+        id__in=recent_products
+    ).filter(is_active=True)
+
+    return render(request, "inventory/dead_stock_report.html", {
+        "products": products,
+        "days": 60
+    })
+
+
+@login_required
+def export_deadstock_report_csv(request):
+    sixty_days_ago = now() - timedelta(days=60)
+
+    recent_products = StockLog.objects.filter(
+        created_at__gte=sixty_days_ago
+    ).values_list('product_id', flat=True)
+
+    products = Product.objects.exclude(
+        id__in=recent_products
+    ).filter(is_active=True)
+
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = 'attachment;filename="deadstock_report.csv"'
+
+    writer = csv.writer(response)
+    writer.writerow([
+        "SKU", "Name", "Quantity", "Stock Value"
+    ])
+
+    for dead in products:
+        writer.writerow([
+            dead.sku,
+            dead.name,
+            dead.quantity,
+            dead.stock_value,
+        ])
+
+    return response
+
+
+@login_required
+def export_deadstock_report_excel(request):
+    wb = Workbook()
+    ws = wb.active
+    ws.title = "Dead Stock"
+
+    ws.append(["SKU", "Name", "Quantity", "Stock Value"])
+    sixty_days_ago = now() - timedelta(days=60)
+
+    recent_products = StockLog.objects.filter(
+        created_at__gte=sixty_days_ago
+    ).values_list('product_id', flat=True)
+
+    products = Product.objects.exclude(
+        id__in=recent_products
+    ).filter(is_active=True)
+
+    for dead in products:
+        ws.append([
+            dead.sku,
+            dead.name,
+            dead.quantity,
+            dead.stock_value
+        ])
+
+    response = HttpResponse(
+        content_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+    response['Content-Disposition'] = 'attachment;filename="deadstock_report.xlsx'
+
+    wb.save(response)
+    return response
+
+
+@login_required
+def export_deadstock_report_pdf(request):
+    response = HttpResponse(content_type='application/pdf')
+    response['Content-Disposition'] = 'attachment;filename="deadstock_report.pdf"'
+
+    doc = SimpleDocTemplate(response, pagesize=landscape(A4))  # landscape mode
+    styles = getSampleStyleSheet()
+    elements = []
+
+    # Title
+    elements.append(
+        Paragraph("INVENTORY REPORT", styles["Heading1"]))
+    elements.append(Spacer(1, 10))
+
+    # Table Header
+    data = [["SKU", "Name", "Quantity" "Stock Value"
+             ]]
+
+    sixty_days_ago = now() - timedelta(days=60)
+
+    recent_products = StockLog.objects.filter(
+        created_at__gte=sixty_days_ago
+    ).values_list('product_id', flat=True)
+
+    products = Product.objects.exclude(
+        id__in=recent_products
+    ).filter(is_active=True)
+
+    for item in products:
+        data.append([
+            item.sku,
+            item.name,
+            item.quantity,
+            item.stock_value,
+        ])
+
+    # Column widths for landscape
+    col_widths = [100, 150, 80, 100]
+
+    table = Table(data, colWidths=col_widths, repeatRows=1)
+
+    table.setStyle(TableStyle([
+
+        # Header Style
+        ("BACKGROUND", (0, 0), (-1, 0), colors.HexColor("#2F3E46")),
+        ("TEXTCOLOR", (0, 0), (-1, 0), colors.white),
+        ("FONTNAME", (0, 0), (-1, 0), "Helvetica-Bold"),
+        ("FONTSIZE", (0, 0), (-1, 0), 11),
+        ("ALIGN", (0, 0), (-1, 0), "CENTER"),
+        ("BOTTOMPADDING", (0, 0), (-1, 0), 10),
+
+        # Body Style
+        ("FONTNAME", (0, 1), (-1, -1), "Helvetica"),
+        ("FONTSIZE", (0, 1), (-1, -1), 10),
+        ("BACKGROUND", (0, 1), (-1, -1), colors.white),
+
+        # Row alternating light grey
+        ("ROWBACKGROUNDS", (0, 1), (-1, -1),
+         [colors.white, colors.HexColor("#F7F9FB")]),
+
+        # Align price column right
+        ("ALIGN", (3, 1), (-1, -1), "RIGHT"),
+
+        # Subtle grid
+        ("LINEBELOW", (0, 0), (-1, 0), 1, colors.HexColor("#B0BEC5")),
+        ("LINEBELOW", (0, 1), (-1, -1), 0.3, colors.HexColor("#E0E0E0")),
+
+        # Padding
+        ("LEFTPADDING", (0, 0), (-1, -1), 8),
+        ("RIGHTPADDING", (0, 0), (-1, -1), 8),
+        ("TOPPADDING", (0, 0), (-1, -1), 6),
+        ("BOTTOMPADDING", (0, 0), (-1, -1), 6),
+
+    ]))
+
+    elements.append(table)
+    doc.build(elements)
+    return response
+
+
+@login_required
+def view_all_reports(request):
+    total_products = Product.objects.count()
+    total_orders = Order.objects.count()
+
+    avg_price = Product.objects.aggregate(
+        average_price=Avg('purchase_price')
+    )['average_price'] or 0
+
+    reorder_products = Product.objects.filter(
+        quantity__lte=LOW_STOCK_THRESHOLD,
+        is_active=True
+    )
+
+    reorder_count = reorder_products.count()
+
+    reorder_cost = reorder_products.aggregate(
+        total_reorder=Sum(
+            ExpressionWrapper(
+                (LOW_STOCK_THRESHOLD - F('quantity')) * F('purchase_price'),
+                output_field=DecimalField()
+            )
+        )
+    )['total_reorder'] or 0
+
+    total_inventory_value = Product.objects.aggregate(
+        value=Sum(
+            ExpressionWrapper(
+                F('price') * F('quantity'),
+                output_field=DecimalField()
+            )
+        )
+    )['value'] or 0
+
+    total_inventory_count = Product.objects.aggregate(
+        total=Sum('quantity')
+    )['total'] or 0
+
+    context = {
+        'total_products': total_products,
+        'total_orders': total_orders,
+        'avg_price': avg_price,
+        'reorder_count': reorder_count,
+        'reorder_cost': reorder_cost,
+        'total_inventory_value': total_inventory_value,
+        'total_inventory_count': total_inventory_count,
+    }
+    return render(request, 'inventory/view_all_reports.html', context)
