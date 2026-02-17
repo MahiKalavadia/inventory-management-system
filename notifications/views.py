@@ -1,13 +1,14 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
-from .models import Notification
 from django.core.paginator import Paginator
 from django.views.decorators.http import require_POST
+from .models import Notification
 
 
 def get_user_role(user):
     if user.is_superuser:
         return "admin"
+
     group = user.groups.first()
     return group.name.lower() if group else "staff"
 
@@ -16,14 +17,17 @@ def get_user_role(user):
 def dashboard_notifications(request):
     user_role = get_user_role(request.user)
 
-    if user_role == 'admin':
-        notifications = Notification.objects.all().order_by('-created_at')
-    else:
-        notifications = Notification.objects.filter(
-            role_target__iexact=user_role
-        ).order_by('-created_at')
+    all_notifications = Notification.objects.all().order_by('-created_at')
 
-    notifications_count = notifications.filter(is_read=False).count()
+    if user_role == "admin":
+        notifications = all_notifications
+    else:
+        notifications = [
+            n for n in all_notifications
+            if user_role in n.allowed_roles
+        ]
+
+    notifications_count = len([n for n in notifications if not n.is_read])
     top_notifications = notifications[:5]
 
     return render(request, 'inventory/dashboard_notifications.html', {
@@ -37,7 +41,8 @@ def mark_as_read(request, pk):
     notif = get_object_or_404(Notification, pk=pk)
     user_role = get_user_role(request.user)
 
-    if notif.role_target.lower() == user_role or user_role == 'admin':
+    # Admin can mark anything
+    if user_role == "admin" or user_role in notif.allowed_roles:
         notif.is_read = True
         notif.save()
 
@@ -46,52 +51,52 @@ def mark_as_read(request, pk):
 
 @login_required
 def all_notifications(request):
-    # Determine user role
-    if request.user.is_superuser:
-        user_role = 'admin'
-    else:
-        # Use getattr safely; default to 'staff' if 'role' doesn't exist
-        user_role = getattr(request.user, 'role', 'staff')
+    user_role = get_user_role(request.user)
 
-    # Fetch notifications
-    if user_role == 'admin':
-        notifications = Notification.objects.all().order_by('-created_at')
+    all_notifications = Notification.objects.all().order_by('-created_at')
+
+    if user_role == "admin":
+        notifications = all_notifications
     else:
-        notifications = Notification.objects.filter(
-            role_target=user_role).order_by('-created_at')
+        notifications = [
+            n for n in all_notifications
+            if user_role in n.allowed_roles
+        ]
 
     paginator = Paginator(notifications, 15)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
 
-    return render(request, 'inventory/all_notifications.html', {'page_obj': page_obj})
+    return render(request, 'inventory/all_notifications.html', {
+        'page_obj': page_obj
+    })
 
 
 @login_required
 def delete_notfification(request, pk):
     notify = get_object_or_404(Notification, pk=pk)
+    user_role = get_user_role(request.user)
+
     if request.method == "POST":
-        if notify.user_target == request.user or notify.user_target is None:
+        if user_role == "admin" or user_role in notify.allowed_roles:
             notify.delete()
             return redirect('notifications:all_notifications')
 
-    return render(request, 'inventory/delete_notification.html', {'notify': notify})
+    return render(request, 'inventory/delete_notification.html', {
+        'notify': notify
+    })
 
 
 @login_required
 @require_POST
 def mark_all_notifications_read(request):
-    user = request.user
-    user_role = get_user_role(user)
+    user_role = get_user_role(request.user)
 
-    Notification.objects.filter(
-        role_target__iexact=user_role,
-        is_read=False
-    ).update(is_read=True)
+    all_notifications = Notification.objects.filter(is_read=False)
 
-    Notification.objects.filter(
-        user_target=user,
-        is_read=False
-    ).update(is_read=True)
+    for notif in all_notifications:
+        if user_role == "admin" or user_role in notif.allowed_roles:
+            notif.is_read = True
+            notif.save()
 
     return redirect(request.META.get('HTTP_REFERER', '/'))

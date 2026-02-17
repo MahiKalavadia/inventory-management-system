@@ -3,33 +3,31 @@ from django.dispatch import receiver
 from inventory.models import Product, Category, StockLog
 from suppliers.models import Supplier
 from orders.models import Order
-from purchases.models import PurchaseRequest
 from .models import Notification
 
-# Utility function to create notifications for multiple roles
 
+# ================= UTILITY FUNCTION =================
 
-def create_notification(title, message, type, notification_type, roles):
-    for role in roles:
-        Notification.objects.create(
-            title=title,
-            message=message,
-            type=type,
-            notification_type=notification_type,
-            role_target=role
-        )
+def create_notification(title, message, type, notification_type, roles, user=None):
+    Notification.objects.create(
+        title=title,
+        message=message,
+        type=type,
+        notification_type=notification_type,
+        allowed_roles=roles,
+        created_by=user  # can be None
+    )
+
 
 # ================= PRODUCT =================
 
-
 @receiver(post_save, sender=Product)
 def product_saved(sender, instance, created, **kwargs):
-    roles = ['admin', 'manager', 'staff'] if created else [
-        'admin', 'manager', 'staff']
-    action = "added to" if created else "updated"
+    roles = ['admin', 'manager', 'staff']
+
     create_notification(
         title=f"Product {'Added' if created else 'Updated'}",
-        message=f"{instance.name} was {action} inventory.",
+        message=f"{instance.name} was {'added' if created else 'updated'} in inventory.",
         type="success" if created else "info",
         notification_type="product",
         roles=roles
@@ -46,18 +44,17 @@ def product_deleted(sender, instance, **kwargs):
         roles=['admin', 'manager', 'staff']
     )
 
-# ================= CATEGORY =================
 
+# ================= CATEGORY =================
 
 @receiver(post_save, sender=Category)
 def category_saved(sender, instance, created, **kwargs):
-    roles = ['admin', 'manager']
     create_notification(
         title=f"Category {'Added' if created else 'Updated'}",
         message=f"{instance.name} was {'added to' if created else 'updated in'} inventory.",
         type="success" if created else "info",
         notification_type="category",
-        roles=roles
+        roles=['admin', 'manager', 'staff']
     )
 
 
@@ -68,21 +65,20 @@ def category_deleted(sender, instance, **kwargs):
         message=f"{instance.name} was removed from inventory.",
         type="danger",
         notification_type="category",
-        roles=['admin', 'manager']
+        roles=['admin', 'manager', 'staff']
     )
+
 
 # ================= SUPPLIER =================
 
-
 @receiver(post_save, sender=Supplier)
 def supplier_saved(sender, instance, created, **kwargs):
-    roles = ['admin', 'manager']
     create_notification(
         title=f"Supplier {'Added' if created else 'Updated'}",
         message=f"{instance.name} was {'added to' if created else 'updated in'} inventory.",
         type="success" if created else "info",
         notification_type="supplier",
-        roles=roles
+        roles=['admin', 'manager']
     )
 
 
@@ -96,32 +92,37 @@ def supplier_deleted(sender, instance, **kwargs):
         roles=['admin', 'manager']
     )
 
-# ================= STOCK =================
 
+# ================= STOCK =================
 
 @receiver(post_save, sender=StockLog)
 def stock_log_created(sender, instance, created, **kwargs):
     if created:
         create_notification(
             title="Stock Movement",
-            message=f"{instance.quantity} units {'added to' if instance.action == 'IN' else 'removed from'} {instance.product.name}",
+            message=f"{instance.quantity} units "
+            f"{'added to' if instance.action == 'IN' else 'removed from'} "
+            f"{instance.product.name}",
             type="warning",
             notification_type="stock",
             roles=['admin', 'manager', 'staff']
         )
 
-# ================= ORDER =================
 
+# ================= ORDER =================
 
 @receiver(post_save, sender=Order)
 def order_saved(sender, instance, created, **kwargs):
-    roles = ['admin', 'manager', 'staff']
     create_notification(
         title=f"Order {'Created' if created else 'Updated'}",
-        message=f"Order #{instance.id} for {instance.customer_name if created else 'status: ' + instance.status}",
+        message=(
+            f"Order #{instance.id} for {instance.customer_name}"
+            if created
+            else f"Order #{instance.id} status updated to {instance.status}"
+        ),
         type="success" if created else "info",
         notification_type="order",
-        roles=roles
+        roles=['admin', 'manager', 'staff']
     )
 
 
@@ -133,17 +134,4 @@ def order_deleted(sender, instance, **kwargs):
         type="danger",
         notification_type="order",
         roles=['admin', 'manager', 'staff']
-    )
-
-# ================= PURCHASE REQUEST =================
-
-
-@receiver(post_save, sender=PurchaseRequest)
-def purchase_request_saved(sender, instance, created, **kwargs):
-    create_notification(
-        title="Purchase Request",
-        message=f"{instance.product.name} request is {instance.status}",
-        type="warning",
-        notification_type="purchase",
-        roles=['admin']  # Only admin and manager
     )

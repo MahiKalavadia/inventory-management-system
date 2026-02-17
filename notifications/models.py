@@ -20,25 +20,18 @@ class Notification(models.Model):
         ('danger', 'Danger'),
     ]
 
-    ROLE_CHOICES = [
-        ('admin', 'Admin'),
-        ('manager', 'Manager'),
-        ('staff', 'Staff'),
-    ]
-
     title = models.CharField(max_length=255, default="Notification")
     message = models.TextField()
     type = models.CharField(
         max_length=10, choices=TYPE_CHOICES, default='info')
 
-    role_target = models.CharField(
-        max_length=10, choices=ROLE_CHOICES, default='Staff')
-    user_target = models.ForeignKey(
-        User, null=True, blank=True, on_delete=models.CASCADE)
+    notification_type = models.CharField(max_length=20, choices=NOTIFY_CHOICES)
 
-    link = models.CharField(max_length=255, blank=True, null=True)
-    notification_type = models.CharField(
-        max_length=20, choices=NOTIFY_CHOICES, blank=True, null=True)
+    created_by = models.ForeignKey(
+        User, on_delete=models.SET_NULL, null=True, blank=True)
+
+    allowed_roles = models.CharField(max_length=100)  # 🔥 IMPORTANT
+
     is_read = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
 
