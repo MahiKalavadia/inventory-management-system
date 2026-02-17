@@ -33,15 +33,17 @@ class PurchaseOrder(models.Model):
     supplier = models.ForeignKey(Supplier, on_delete=models.CASCADE)
 
     STATUS = [
+        ('draft', 'draft'),
         ('ordered', 'Ordered'),
         ('shipped', 'Shipped'),
-        ('In transit', 'In Transit'),
+        ('in_transit', 'In Transit'),
         ('delivered', 'Delivered'),
         ('delayed', 'Delayed'),
     ]
-    status = models.CharField(max_length=20, choices=STATUS, default='ordered')
+    status = models.CharField(max_length=20, choices=STATUS, default='draft')
     expected_delivery = models.DateField(null=True, blank=True)
     actual_delivery = models.DateField(null=True, blank=True)
+    warehouse_address = models.TextField(default='Ahmedabad , Gujarat')
 
     total_cost = models.DecimalField(
         max_digits=10, decimal_places=2, default=0)

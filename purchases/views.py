@@ -17,6 +17,7 @@ from django.http import HttpResponse
 import csv
 from openpyxl import Workbook
 from reportlab.pdfgen import canvas
+from django.db import transaction
 
 
 def is_manager_or_staff(user):
@@ -195,54 +196,88 @@ def manage_requests(request):
 
 @login_required
 def approve_request(request, pk):
+    # Get the purchase request
     req = get_object_or_404(PurchaseRequest, id=pk)
 
-    # 🛑 Prevent double approval
-    if req.status == "Approved":
-        messages.info(request, "Request already approved.")
-        return redirect("manage_requests")
+    if req.status != "Approved":
+        # Approve the request
+        req.status = "Approved"
+        req.save()
 
-    try:
-        with transaction.atomic():
-            req.status = "Approved"
-            req.save()
+        # Get or create the PurchaseOrder for this request
+        po, created = PurchaseOrder.objects.get_or_create(
+            request=req,
+            defaults={
+                'supplier': req.supplier,
+                'total_cost': req.quantity * req.product.purchase_price,
+                'status': 'draft',
+            }
+        )
 
-            PurchaseOrder.objects.get_or_create(
-                request=req,
-                defaults={
-                    "supplier": req.supplier,
-                    "total_cost": req.quantity * req.product.purchase_price
-                }
-            )
+        # Redirect to edit page
+        return redirect('edit_purchase_order', pk=po.pk)
 
-            Notification.objects.create(
-                user_target=req.requested_by,
-                message=f"Your request for {req.product.name} was APPROVED"
-            )
-
-        messages.success(request, "Request approved successfully.")
-
-    except Exception:
-        messages.error(request, "Something went wrong. Please try again.")
-
+    # If already approved, just go back to manage requests
     return redirect("manage_requests")
 
 
 @login_required
 def reject_request(request, pk):
     req = get_object_or_404(PurchaseRequest, id=pk)
-    req.status = "Rejected"
-    req.save()
 
-    Notification.objects.create(
-        user_target=req.requested_by,
-        message=f"Your request for {req.product.name} was REJECTED"
-    )
+    if req.status != "Rejected":
+        req.status = "Rejected"
+        req.save()
 
     return redirect("manage_requests")
 
 
+def edit_purchase_order(request, pk):
+    po = get_object_or_404(PurchaseOrder, pk=pk)
+
+    if po.status != 'draft':
+        messages.success(
+            request, "Filling details is only avaible for draft orders.")
+        return redirect('purchase_order_detail', pk=po.pk)
+
+    if request.method == 'POST':
+        form = PurchaseOrderForm(request.POST, instance=po)
+        if form.is_valid():
+            po = form.save(commit=False)
+
+            # Check if user clicked "Place Order" button
+            if 'place_order' in request.POST:
+                po.status = 'ordered'
+
+            po.save()
+
+            # Redirect to detail page
+            return redirect('purchase_order_detail', pk=po.pk)
+    else:
+        form = PurchaseOrderForm(instance=po)
+
+    return render(request, 'inventory/edit_purchase_order.html', {'form': form, 'po': po})
+
+
+@login_required
+def purchase_order_detail(request, pk):
+    order = get_object_or_404(
+        PurchaseOrder.objects.select_related(
+            "request",
+            "request__product",
+            "request__requested_by",
+            "supplier"
+        ),
+        pk=pk
+    )
+
+    context = {
+        "order": order,
+    }
+    return render(request, "inventory/purchase_order_detail.html", context)
 # ================= PURCHASE ORDERS =================
+
+
 @staff_member_required
 def purchase_orders(request):
     order = PurchaseOrder.objects.all().order_by("-created_at")
@@ -254,32 +289,17 @@ def purchase_orders(request):
     return render(request, "inventory/purchase_orders.html", {"orders": orders})
 
 
-@staff_member_required  # Only admin/staff
+@staff_member_required
 def update_po_status(request, pk):
     po = get_object_or_404(PurchaseOrder, id=pk)
 
     if request.method == "POST":
         new_status = request.POST.get("status")
-        old_status = po.status  # store previous state
 
-        # Update status
-        po.status = new_status
+        if new_status and new_status != po.status:
+            po.status = new_status
+            po.save()  # signal handles stock + notifications
 
-        # 📦 Add stock ONLY when changing to delivered
-        if new_status == "delivered" and old_status != "delivered":
-            product = po.request.product
-            product.quantity += po.request.quantity
-            product.save()
-
-            po.actual_delivery = now().date()
-
-            # Notify requester
-            Notification.objects.create(
-                user_target=po.request.requested_by,
-                message=f"Stock for {product.name} ({po.request.quantity}) has arrived and added to inventory."
-            )
-
-        po.save()
         return redirect("purchase_orders")
 
     return render(request, "inventory/update_po.html", {"po": po})

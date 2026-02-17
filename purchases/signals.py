@@ -1,14 +1,71 @@
 from django.db.models.signals import post_save, pre_save
 from django.dispatch import receiver
+from decimal import Decimal
+from django.utils.timezone import now
+
 from .models import PurchaseOrder, PurchaseRequest
 from notifications.models import Notification
-from django.contrib.auth import get_user_model
-from decimal import Decimal
-from inventory.models import Product
-User = get_user_model()
 
 
-# Store old status
+# ==========================================
+# STORE OLD STATUS FOR REQUEST
+# ==========================================
+@receiver(pre_save, sender=PurchaseRequest)
+def store_old_request_status(sender, instance, **kwargs):
+    if instance.pk:
+        old = PurchaseRequest.objects.get(pk=instance.pk)
+        instance._old_status = old.status
+    else:
+        instance._old_status = None
+
+
+# ==========================================
+# PURCHASE REQUEST LOGIC
+# ==========================================
+@receiver(post_save, sender=PurchaseRequest)
+def purchase_request_signal(sender, instance, created, **kwargs):
+
+    if created:
+        Notification.objects.create(
+            title="New Purchase Request",
+            message=f"{instance.requested_by.username} requested {instance.product.name}",
+            type="warning",
+            notification_type="purchase",
+            allowed_roles="admin"
+        )
+        return
+
+    if instance._old_status != instance.status:
+
+        group = instance.requested_by.groups.first()
+        creator_role = group.name.lower() if group else "staff"
+
+        # ✅ APPROVED
+        if instance.status == "Approved":
+
+            Notification.objects.create(
+                title="Request Approved",
+                message=f"Your request for {instance.product.name} was approved",
+                type="success",
+                notification_type="purchase",
+                allowed_roles=creator_role
+            )
+
+        # ❌ REJECTED
+        elif instance.status == "Rejected":
+
+            Notification.objects.create(
+                title="Request Rejected",
+                message=f"Your request for {instance.product.name} was rejected",
+                type="danger",
+                notification_type="purchase",
+                allowed_roles=creator_role
+            )
+
+
+# ==========================================
+# STORE OLD STATUS FOR PO
+# ==========================================
 @receiver(pre_save, sender=PurchaseOrder)
 def store_old_po_status(sender, instance, **kwargs):
     if instance.pk:
@@ -18,94 +75,73 @@ def store_old_po_status(sender, instance, **kwargs):
         instance._old_status = None
 
 
+# ==========================================
+# PURCHASE ORDER LOGIC
+# ==========================================
 @receiver(post_save, sender=PurchaseOrder)
-def purchase_order_notifications(sender, instance, created, **kwargs):
+def purchase_order_signal(sender, instance, created, **kwargs):
 
-    # 🆕 PO CREATED → Notify Admin
     if created:
-        admins = User.objects.filter(is_superuser=True)
-        for admin in admins:
-            Notification.objects.create(
-                user_target=admin,
-                title="Purchase Order Created",
-                message=f"PO-{instance.id} created for {instance.request.product.name}"
-            )
+        return  # no notification on creation
 
-    # 🔁 STATUS CHANGED
-    elif instance._old_status != instance.status:
+    if instance._old_status != instance.status:
 
-        managers = User.objects.filter(groups__name="Manager")
-        staff = User.objects.filter(groups__name="Staff")
+        notify_roles = "manager,staff"
 
         # 🚚 SHIPPED
         if instance.status == "shipped":
-            for user in managers:
-                Notification.objects.create(
-                    user_target=user,
-                    title="Order Shipped",
-                    message=f"PO-{instance.id} for {instance.request.product.name} has been shipped"
-                )
+            Notification.objects.create(
+                title="Order Shipped",
+                message=f"PO-{instance.id} for {instance.request.product.name} has been shipped",
+                type="info",
+                notification_type="order",
+                allowed_roles=notify_roles
+            )
 
         # 🚛 IN TRANSIT
         elif instance.status == "in_transit":
-            for user in managers:
-                Notification.objects.create(
-                    user_target=user,
-                    title="Order In Transit",
-                    message=f"PO-{instance.id} is on the way"
-                )
+            Notification.objects.create(
+                title="Order In Transit",
+                message=f"PO-{instance.id} is on the way",
+                type="info",
+                notification_type="order",
+                allowed_roles=notify_roles
+            )
 
         # 📦 DELIVERED
         elif instance.status == "delivered":
-            for user in list(managers) + list(staff):
-                Notification.objects.create(
-                    user_target=user,
-                    title="Order Delivered",
-                    message=f"{instance.request.product.name} has arrived in inventory"
-                )
+
+            product = instance.request.product
+            qty = instance.request.quantity
+
+            # Increase stock safely
+            product.quantity += qty
+            product.save(update_fields=["quantity"])
+
+            # Update cost safely (no signal recursion)
+            PurchaseOrder.objects.filter(pk=instance.pk).update(
+                total_cost=(product.purchase_price or Decimal("0")) * qty
+            )
+
+            # Save delivery date
+            PurchaseOrder.objects.filter(pk=instance.pk).update(
+                actual_delivery=now().date()
+            )
+
+            Notification.objects.create(
+                title="Order Delivered",
+                message=f"{product.name} has arrived in inventory",
+                type="success",
+                notification_type="order",
+                allowed_roles=notify_roles
+            )
 
         # ⏳ DELAYED
         elif instance.status == "delayed":
-            for user in managers:
-                Notification.objects.create(
-                    user_target=user,
-                    title="Order Delayed",
-                    message=f"PO-{instance.id} delivery is delayed"
-                )
-
-    elif instance.status == "delivered":
-
-        product = instance.request.product
-        quantity_received = instance.request.quantity
-
-        # ✅ 1. Increase stock
-        product.quantity += quantity_received
-        product.save()
-
-        # ✅ 2. Calculate total purchase cost
-        purchase_price = product.purchase_price or Decimal("0")
-        instance.total_cost = purchase_price * quantity_received
-        instance.save(update_fields=["total_cost"])
-
-        # ✅ 3. Notify Manager + Staff
-        managers = User.objects.filter(groups__name="Manager")
-        staff = User.objects.filter(groups__name="Staff")
-
-        for user in list(managers) + list(staff):
             Notification.objects.create(
-                user_target=user,
-                title="Stock Updated",
-                message=f"{product.name} stock increased by {quantity_received} (PO-{instance.id} delivered)"
-            )
-
-
-@receiver(post_save, sender=PurchaseRequest)
-def create_po_after_approval(sender, instance, **kwargs):
-    if instance.status == "Approved":
-        # Avoid duplicate PO
-        if not hasattr(instance, "purchaseorder"):
-            PurchaseOrder.objects.create(
-                request=instance,
-                supplier=instance.supplier,
-                total_cost=instance.quantity * instance.product.purchase_price
+                title="Order Delayed",
+                message=f"PO-{instance.id} delivery is delayed",
+                type="warning",
+                notification_type="order",
+                allowed_roles=notify_roles
             )

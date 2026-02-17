@@ -11,4 +11,9 @@ class PurchaseRequestForm(forms.ModelForm):
 class PurchaseOrderForm(forms.ModelForm):
     class Meta:
         model = PurchaseOrder
-        fields = ['expected_delivery']
+        fields = [
+            "status",
+            "expected_delivery",]
+        widgets = {
+            "expected_delivery": forms.DateInput(attrs={'type': 'Date'}),
+        }
