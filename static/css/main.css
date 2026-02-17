@@ -125,11 +125,6 @@ body {
     transition: 0.2s ease;
 }
 
-.stat-card:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
-}
-
 .stat-header {
     display: flex;
     justify-content: space-between;
@@ -491,165 +486,30 @@ body {
     cursor: pointer;
 }
 
+.dashboard-topbar {
+    padding-left: 260px;
+}
+
+@media (max-width: 992px) {
+    .dashboard-topbar {
+        padding-left: 0;
+    }
+}
+
+.dashboard-topbar {
+    left: 260px;
+    right: 0;
+    top: 0;
+    transition: all 0.3s ease;
+    z-index: 999;
+}
+
+/* When sidebar collapsed */
+.sidebar-collapsed .dashboard-topbar {
+    left: 80px;
+    /* match collapsed sidebar width */
+}
+
 .card-icon i {
     font-size: 1.2rem;
-}
-
-/* Icon colors */
-.icon-blue {
-    color: #2563eb;
-}
-
-.icon-purple {
-    color: #7c3aed;
-}
-
-.icon-cyan {
-    color: #38bdf8;
-}
-
-.icon-green {
-    color: #16a34a;
-}
-
-.icon-orange {
-    color: #f97316;
-}
-
-.icon-red {
-    color: #dc2626;
-}
-
-.icon-greeny {
-    color: #16a34a;
-}
-
-.icon-orangey {
-    color: #f97316;
-}
-
-.icon-gree {
-    fill: #22c55e;
-    color: #22c55e;
-}
-
-.icon-redd {
-    color: #ef4444;
-}
-
-.icon-bluish {
-    color: #3b82f6;
-}
-
-.icon-receipt {
-    color: #2563EB;
-}
-
-.icon-clock {
-    color: #F59E0B;
-}
-
-.icon-xcircle {
-    color: #EF4444;
-}
-
-.icon-stack {
-    color: #8B5CF6;
-}
-
-.icon-dollar {
-    color: #22C55E;
-}
-
-.icon-circle {
-    color: #14B8A6;
-}
-
-.icon-sale {
-    color: #16A34A;
-}
-
-.icon-cost {
-    color: #DC2626;
-}
-
-.icon-profit {
-    color: #4F46E5;
-}
-
-.icon-hourglass {
-    color: #FBBF24;
-}
-
-.icon-calendar {
-    color: #3B82F6;
-}
-
-.icon-week {
-    color: #8B5CF6;
-}
-
-.icon-box {
-    color: #10B981;
-}
-
-.icon-people {
-    color: #0ea5e9;
-}
-
-.icon-personbadge {
-    color: #16a34a;
-}
-
-.icon-amber {
-    color: #f59e0b;
-}
-
-.icon-xfill {
-    color: #ef4444;
-}
-
-.icon-checkcircle {
-    color: #10B981;
-}
-
-.icon-tri {
-    color: #EF4444;
-}
-
-.icon-clipboard {
-    color: #2563eb;
-}
-
-.icon-glass {
-    color: #eab308;
-}
-
-.icon-checkcircle {
-    color: #16a34a;
-}
-
-.icon-octagonfill {
-    color: #dc2626;
-}
-
-.icon-bagcheck {
-    color: #4f46e5;
-}
-
-.icon-truckk {
-    color: #0ea5e9;
-}
-
-.icon-seamfill {
-    color: #10b981;
-}
-
-.icon-stackcash {
-    color: #f97316;
-}
-
-/* Optional subtle background */
-.icon-bg {
-    background: rgba(0, 0, 0, 0.04);
 }
