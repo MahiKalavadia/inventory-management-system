@@ -1,6 +1,5 @@
 {% extends 'base_dashboard.html' %}
-{% load humanize tz %}
-{% load humanize %}
+{% load humanize tz%}
 {% load static %}
 {% load number_filters %}
 {% block content %}
@@ -80,27 +79,18 @@
                 <div class="fw-medium small">Administrator</div>
                 <div class="text-muted small">Admin</div>
             </div>
-            {% if user.is_superuser %}
-    <img src="{% static 'images/admin.jpeg' %}"
-         class="rounded-circle border"
-         width="36"
-         height="36"
-         style="object-fit: cover;">
+            {% with user.groups.first as role %}
+    {% if user.is_superuser %}
+        <img src="{% static 'images/admin.jpeg' %}" class="rounded-circle border" width="36" height="36">
+    {% elif role and role.name == "Manager" %}
+        <img src="{% static 'images/manager.png' %}" class="rounded-circle border" width="36" height="36">
+    {% elif role and role.name == "Staff" %}
+        <img src="{% static 'images/staff.png' %}" class="rounded-circle border" width="36" height="36">
+    {% else %}
+        <img src="{% static 'images/default.png' %}" class="rounded-circle border" width="36" height="36">
+    {% endif %}
+{% endwith %}
 
-{% elif user.groups.first.name == "Manager" %}
-    <img src="{% static 'images/manager.png' %}"
-         class="rounded-circle border"
-         width="36"
-         height="36"
-         style="object-fit: cover;">
-
-{% elif user.groups.first.name == "Staff" %}
-    <img src="{% static 'images/staff.png' %}"
-         class="rounded-circle border"
-         width="36"
-         height="36"
-         style="object-fit: cover;">
-         {% endif %}
         </div>
     </div>
 </div>
@@ -110,20 +100,23 @@
 
   <!-- TOTAL ITEMS -->
   <div class="col-md-3">
+    <a href="{% url 'product_list' %}" class="text-decoration-none text-dark">
     <div class="stat-card">
       <div class="stat-header">
         <span class="stat-title">TOTAL ITEMS</span>
-        <i class="bi bi-box text-primary"></i>
+        <i class="bi bi-box text-muted"></i>
       </div>
       <h2>{{ total_products }}</h2>
-      <p class="stat-sub text-success">
+      <p class="stat-sub text-muted">
         Inventory Total
       </p>
     </div>
+</a>
   </div>
 
   <!-- CATEGORIES -->
   <div class="col-md-3">
+    <a href="{% url 'category_list' %}" class="text-decoration-none text-dark">
     <div class="stat-card">
       <div class="stat-header">
         <span class="stat-title">CATEGORIES</span>
@@ -134,10 +127,12 @@
         Spanning 5 departments
       </p>
     </div>
+</a>
   </div>
 
   <!-- VENDORS -->
   <div class="col-md-3">
+    <a href="{% url 'supplier_list' %}" class="text-decoration-none text-dark">
     <div class="stat-card">
       <div class="stat-header">
         <span class="stat-title">VENDORS</span>
@@ -155,10 +150,12 @@
         </p>
       {% endif %}
     </div>
+</a>
   </div>
 
   <!-- REORDER ALERTS -->
   <div class="col-md-3">
+    <a href="{% url 'low_stock' %}" class="text-decoration-none text-dark">
     <div class="stat-card">
       <div class="stat-header">
         <span class="stat-title">REORDER ALERTS</span>
@@ -169,6 +166,8 @@
         Critical items identified
       </p>
     </div>
+
+</a>
   </div>
 
 </div>
@@ -179,6 +178,7 @@
 
   <!-- STOCKOUTS -->
   <div class="col-md-3">
+    <a href="{% url 'out_stock' %}" class="text-decoration-none text-dark">
     <div class="stat-card">
       <div class="stat-header">
         <span class="stat-title">STOCKOUTS</span>
@@ -187,42 +187,49 @@
       <h2>{{ out_of_stock }}</h2>
       <p class="stat-sub text-danger">Attention required</p>
     </div>
+</a>
   </div>
 
   <!-- REVENUE -->
   <div class="col-md-3">
+    <a href="{% url 'order_list' %}" class="text-decoration-none text-dark">
     <div class="stat-card">
       <div class="stat-header">
         <span class="stat-title">TOTAL REVENUE</span>
         <i class="bi bi-currency-rupee"></i>
       </div>
-      <h2>{{ total_sales|short_number }}</h2>
+      <h2>₹{{ total_sales|short_number }}</h2>
       <p class="stat-sub text-muted">MTD performance</p>
     </div>
+</a>
   </div>
 
   <!-- COGS -->
   <div class="col-md-3">
+    <a href="#" class="text-decoration-none text-dark">
     <div class="stat-card">
       <div class="stat-header">
         <span class="stat-title">COGS</span>
         <i class="fa-solid fa-file-invoice-dollar"></i>
       </div>
-      <h2>{{ total_cogs|floatformat:2|short_number }}</h2>
+      <h2>₹{{ total_cogs|floatformat:2|short_number }}</h2>
       <p class="stat-sub text-muted">Cost of goods sold</p>
     </div>
+</a>
   </div>
 
   <!-- GROSS MARGIN -->
   <div class="col-md-3">
+    <a href="#" class="text-decoration-none text-dark">
     <div class="stat-card">
       <div class="stat-header">
         <span class="stat-title">GROSS MARGIN</span>
         <i class="fas fa-chart-line"></i>
       </div>
-      <h2>{{ gross_margin|floatformat:2|short_number }}</h2>
-      <p class="stat-sub text-primary">13.5% net margin</p>
+      <h2>₹{{ gross_margin|floatformat:2|short_number }}</h2>
+      <p class="stat-sub text-primary">Profit earned</p>
     </div>
+</a>
   </div>
 
 </div>
@@ -301,58 +308,81 @@
 
 <br>
 <div class="row">
-  <div class="col-md-6">
+<div class="col-12 col-md-6 mb-4">
     <div class="card shadow-sm border-0 rounded-3">
         <!-- Header -->
-        <div class="px-4 py-3 border-bottom bg-light">
-            <h6 class="mb-0 text-uppercase fw-semibold text-muted">
-                Inventory by Category
+        <div class="d-flex justify-content-between align-items-center px-4 py-3 border-bottom bg-light">
+            <h6 class="mb-0 text-uppercase fw-bold text-secondary">
+                Top Value Products
             </h6>
+           
         </div>
 
         <!-- Body -->
-        <div class="card-body px-4">
-            <!-- In Stock -->
-            <div class="d-flex justify-content-between small text-muted mb-1">
-                <span>In Stock</span>
-                <span>{{ in_stock_bar }}%</span>
-            </div>
-            <div class="progress mb-3" style="height: 8px;">
-                <div class="progress-bar bg-success"
-                     style="width: {{ in_stock_bar }}%">
-                </div>
-            </div>
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="table-light">
+                        <tr class="text-muted small text-uppercase">
+                            <th class="ps-4">Product</th>
+                            <th>Supplier</th>
+                            <th class="text-end pe-4">Stock Value (₹)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for product in productt %}
+                        <tr>
+                            <td class="ps-4 fw-medium">{{ product.name }}</td>
+                            <td>
+                                {% if product.supplier %}
+                                    {{ product.supplier.name }}
+                                {% else %}
+                                    <span class="text-muted">No Supplier</span>
+                                {% endif %}
+                            </td>
+                            <td class="text-end pe-4 fw-semibold text-success">
+                                ₹{{ product.value|default:"0"|short_number }}
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="3" class="text-center py-4 text-muted">
+                                No products found
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                 <div class="p-2 d-flex justify-content-end">
+          <ul class="pagination pagination-sm mb-0">
+            {% if productt.has_previous %}
+              <li class="page-item">
+                <a class="page-link" href="?page={{ productt.previous_page_number }}">‹</a>
+              </li>
+            {% endif %}
 
-            <!-- Low Stock -->
-            <div class="d-flex justify-content-between small text-muted mb-1">
-                <span>Low Stock</span>
-                <span>{{ low_stock_bar }}%</span>
-            </div>
-            <div class="progress mb-3" style="height: 8px;">
-                <div class="progress-bar bg-warning"
-                     style="width: {{ low_stock_bar }}%">
-                </div>
-            </div>
+            <li class="page-item active">
+              <span class="page-link">{{ productt.number }}</span>
+            </li>
 
-            <!-- Out of Stock -->
-            <div class="d-flex justify-content-between small text-muted mb-1">
-                <span>Out of Stock</span>
-                <span>{{ out_stock_bar }}%</span>
-            </div>
-            <div class="progress" style="height: 8px;">
-                <div class="progress-bar bg-danger"
-                     style="width: {{ out_stock_bar }}%">
-                </div>
+            {% if productt.has_next %}
+              <li class="page-item">
+                <a class="page-link" href="?page={{ productt.next_page_number }}">›</a>
+              </li>
+            {% endif %}
+          </ul>
+        </div>
             </div>
         </div>
     </div>
 </div>
 
-           <div class="col-md-6">
+
+           <div class="col-12 col-md-6 mb-4">
     <div class="card shadow-sm border-0 rounded-3">
         <!-- Header -->
         <div class="d-flex justify-content-between align-items-center px-4 py-3 border-bottom bg-light">
-            <h6 class="mb-0 text-uppercase fw-semibold text-muted">
+            <h6 class="mb-0 text-uppercase fw-bold text-secondary">
                 Top Suppliers by Value
             </h6>
         </div>
@@ -362,34 +392,57 @@
             <div class="table-responsive">
                 <table class="table table-hover align-middle mb-0">
                     <thead class="table-light">
-                        <tr class="text-muted small">
+                        <tr class="text-muted small text-uppercase">
                             <th class="ps-4">Supplier Name</th>
+                            <th class="text-end pe-4">Value (₹)</th>
                         </tr>
                     </thead>
                     <tbody>
-                        {% for supplier in top_suppliers %}
+                        {% for supplier in supply %}
                         <tr>
-                            <td class="ps-4 fw-medium">
-                                <i class="bi bi-truck me-2 text-secondary"></i>
+                            <td class="ps-4 fw-medium d-flex align-items-center">
                                 {{ supplier.name }}
+                            </td>
+                            <td class="text-end pe-4 fw-semibold text-success">
+                                ₹{{ supplier.value|default:"0"|short_number }}
                             </td>
                         </tr>
                         {% empty %}
                         <tr>
-                            <td class="text-center py-4 text-muted">
+                            <td colspan="2" class="text-center py-4 text-muted">
                                 No supplier data available
                             </td>
                         </tr>
                         {% endfor %}
                     </tbody>
                 </table>
+                 <div class="p-2 d-flex justify-content-end">
+          <ul class="pagination pagination-sm mb-0">
+            {% if supply.has_previous %}
+              <li class="page-item">
+                <a class="page-link" href="?page_s={{ supply.previous_page_number }}">‹</a>
+              </li>
+            {% endif %}
+
+            <li class="page-item active">
+              <span class="page-link">{{ supply.number }}</span>
+            </li>
+
+            {% if supply.has_next %}
+              <li class="page-item">
+                <a class="page-link" href="?page_s={{ supply.next_page_number }}">›</a>
+              </li>
+            {% endif %}
+          </ul>
+        </div>
             </div>
         </div>
     </div>
 </div>
 
+
         </div>
-        <br>
+
         <!-- LOW + OUT STOCK ROW -->
         <div class="row">
 
@@ -863,27 +916,4 @@
     </div>
 </div>
 
-
-<!--Pagination-->
-<!--<nav class="mt-4">
-<ul class="pagination justify-content-center">
-
-    {% if page_obj.has_previous %}
-        <li class="page-item">
-            <a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous</a>
-        </li>
-    {% endif %}
-
-    <li class="page-item active">
-        <span class="page-link">{{ page_obj.number }}</span>
-    </li>
-
-    {% if page_obj.has_next %}
-        <li class="page-item">
-            <a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a>
-        </li>
-    {% endif %}
-
-</ul>
-</nav>-->
 {% endblock %}

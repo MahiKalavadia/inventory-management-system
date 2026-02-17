@@ -1,5 +1,6 @@
 {% extends 'base_dashboard.html' %}
 {% load group_tags %}  
+{% load custom_filters %}
 {% load static %}
 {% block content %}
 <style>
@@ -134,9 +135,9 @@
                         </td>
 
                         <td>
-                            <span class="badge bg-dark-subtle text-dark">
-                                {{ notif.role_target|title }}
-                            </span>
+                           {% for role in notif.allowed_roles|cut:" "|split:"," %}
+                              <span class="badge bg-secondary">{{ role|title }}</span>
+                           {% endfor %}
                         </td>
 
                         <td class="text-end">

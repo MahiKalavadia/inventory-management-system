@@ -2,184 +2,270 @@
 {% load humanize tz %}
 {% load static %}
 {% block content %}
-<div class="dashboard-header mb-4 d-flex justify-content-between align-items-center p-3 bg-light rounded shadow-sm">
-    <div class="page-title fw-bold fs-5">
-        Staff Dashboard
-    </div>
-    <div class="d-flex align-items-center">
-        <form method="GET" action="{% url 'product_list' %}" class="d-flex me-3">
-            <input type="text" name="q" class="form-control me-2" placeholder="Search products..." value="{{ request.GET.q }}">
-            <button class="btn btn-primary" type="submit">Search</button>
-        </form>
-        <div class="dropdown me-3">
-  <button class="btn btn-link position-relative p-0" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-    <i class="bi bi-bell fs-4"></i>
-    {% if notifications_count > 0 %}
-      <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-        {{ notifications_count }}
-      </span>
-    {% endif %}
-  </button>
 
-  <ul class="dropdown-menu dropdown-menu-end p-2" style="width: 300px;">
-    <form method="POST" action="{% url 'notifications:mark_all_notifications_read' %}">
-  {% csrf_token %}
-  <button type="submit" class="btn btn-sm btn-link text-primary">
-    Mark all as read
-  </button>
-</form>
-    {% for n in notifications %}
-      <li class="mb-2">
-        <a href="{% url 'notifications:mark_as_read' n.pk %}" class="dropdown-item small {% if not n.is_read %}bg-light{% endif %}">
-          <b>{{ n.title }}</b><br>
-          <span>{{ n.message }}</span><br>
-          <small class="text-muted">{{ n.created_at|naturaltime }}</small>
-        </a>
-      </li>
-    {% empty %}
-      <li class="text-center small text-muted">No notifications</li>
-    {% endfor %}
-    <li class="text-center"><a href="{% url 'notifications:all_notifications' %}">See All →</a></li>
-  </ul>
-</div>
-        <div class="header-right d-flex align-items-center">
-            <div class="welcome-text me-2">Welcome back, Staff</div>
-            <img src="{% static 'images/staff.png' %}" class="profile-img rounded-circle" alt="Profile" width="40" height="40">
-        </div>
-    </div>
-</div>
-<div class="row mb-4">
+<style>
+/* Hover shadow for cards & list items */
+.hover-shadow:hover {
+    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+    transition: 0.2s;
+}
+.card a.card {
+    color: inherit;
+}
+</style>
+<div class="dashboard-topbar fixed-top d-flex justify-content-between align-items-center px-4 py-3 bg-white border-bottom"
+     style="left:260px; right:0; top:0; z-index:999;">
 
-    <div class="col-md-3 order-md-last">
-        <a href="{% url 'product_list' %}" class="text-decoration-none">
-        <div class="card shadow-sm p-4 text-center card-hover" style="border-left: 5px solid #2563eb">
-            <div class="card-icon mb-2">
-                <i class="bi bi-box-fill icon-blue icon-bg"></i>
-            </div>
-            <h6 class="text-muted">Inventory Items</h6>
-            <h3 class="fw-bold">{{ total_products }}</h3>
-        </div>
-    </a>
+
+    <!-- Page Title -->
+    <div class="fw-semibold text-uppercase text-muted">
+        Inventory Staff Dashboard
     </div>
 
-    <div class="col-md-3 order-md-last">
-        <a href="{% url 'in_stock' %}" class="text-decoration-none">
-        <div class="card shadow-sm p-4 text-center card-hover" style="border-left: 5px solid #16a34a">
-            <div class="card-icon mb-2">
-                <i class="bi bi-check-circle-fill icon-green icon-bg"></i>
-            </div>
-            <h6 class="text-muted">Available Stock</h6>
-            <h3 class="fw-bold">{{ in_stock }}</h3>
-        </div>
-    </a>
-    </div>
+    <!-- Right Section -->
+    <div class="d-flex align-items-center gap-4">
 
-    <div class="col-md-3 order-md-last">
-        <a href="{% url 'low_stock' %}" class="text-decoration-none">
-        <div class="card shadow-sm p-4 text-center card-hover" style="border-left: 5px solid #f97316">
-            <div class="card-icon mb-2">
-                <i class="bi bi-exclamation-triangle-fill icon-orange icon-bg"></i>
-            </div>
-            <h6 class="text-muted">Reorder Alerts</h6>
-            <h3 class="fw-bold">{{ low_stock }}</h3>
-        </div>
-    </a>
-    </div>
+        <!-- Notifications -->
+        <div class="dropdown">
+            <button class="btn btn-link position-relative p-0 text-dark"
+                    type="button"
+                    data-bs-toggle="dropdown"
+                    aria-expanded="false">
+                <i class="bi bi-bell fs-5"></i>
 
-    <div class="col-md-3 order-md-last">
-        <a href="{% url 'out_stock' %}" class="text-decoration-none">
-        <div class="card shadow-sm p-4 text-center card-hover" style="border-left: 5px solid #dc2626">
-            <div class="card-icon mb-2">
-                <i class="bi bi-x-circle-fill icon-red icon-bg"></i>
-            </div>
-            <h6 class="text-muted">Stockouts</h6>
-            <h3 class="fw-bold">{{ out_stock }}</h3>
-        </div>
-    </a>
-    </div>
-</div>
-<hr>
-<div class="row mb-4">
+                {% if notifications_count > 0 %}
+                   <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                   {{ notifications_count }}
+                   </span>
+                {% endif %}
+            </button>
 
-    <div class="col-md-3">
-        <a href="{% url 'product_list' %}" class="btn btn-primary w-100 p-3 shadow-sm">
-            <i class="bi bi-search"></i> View Inventory Items
-        </a>
-    </div>
+            <ul class="dropdown-menu dropdown-menu-end shadow-sm p-2"
+                style="width: 320px; max-height: 380px; overflow-y: auto;">
 
-    <div class="col-md-3">
-        <a href="{% url 'stock_in_section' %}" class="btn btn-success w-100 p-3 shadow-sm">
-            <i class="bi bi-plus-circle"></i> Stock In
-        </a>
-    </div>
+                <!-- Header -->
+                <li class="d-flex justify-content-between align-items-center px-2 mb-2">
+                    <span class="fw-semibold small text-muted">Notifications</span>
+                    <form method="POST" action="{% url 'notifications:mark_all_notifications_read' %}">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-sm btn-link p-0">
+                            Mark all
+                        </button>
+                    </form>
+                </li>
 
-    <div class="col-md-3">
-        <a href="{% url 'stock_out' %}" class="btn btn-danger w-100 p-3 shadow-sm">
-            <i class="bi bi-dash-circle"></i> Stock Out
-        </a>
-    </div>
+                <li><hr class="dropdown-divider"></li>
 
-    <div class="col-md-3">
-        <a href="{% url 'stock_history' %}" class="btn btn-dark w-100 p-3 shadow-sm">
-            <i class="bi bi-clock-history"></i> Stock Log
-        </a>
-    </div>
-
-</div>
-<div class="row">
-    <div class="col-md-6">
-       <div class="card mb-4 shadow-sm">
-          <div class="card-header d-flex justify-content-between align-items-center">
-                        <span><b>Critical Stock Items</b></span>
-                        <a href="{% url 'low_stock' %}" class="btn btn-sm btn-outline-primary">View All →</a>
-                    </div>
-          <div class="card-body p-0">
-             <table class="table mb-0">
-                <thead class="table-light">
-                  <tr>
-                     <th>Product</th>
-                     <th>Current Qty</th>
-                     <th>Supplier</th>
-                 </tr>
-               </thead>
-               <tbody>
-                 {% for product in low_stock_products %}
-                 <tr>
-                     <td>{{ product.name }}</td>
-                     <td class="fw-bold text-danger">{{ product.quantity }}</td>
-                     <td>{{ product.supplier.name }}</td>
-                 </tr>
+                {% for n in notifications %}
+                <li>
+                    <a href="{% url 'notifications:mark_as_read' n.pk %}"
+                       class="dropdown-item rounded small {% if not n.is_read %}bg-light{% endif %}">
+                        <div class="fw-semibold">{{ n.title }}</div>
+                        <div class="text-muted small">{{ n.message }}</div>
+                        <div class="text-muted small">{{ n.created_at|naturaltime }}</div>
+                    </a>
+                </li>
                 {% empty %}
-                 <tr>
-                     <td colspan="3" class="text-center text-muted">No low stock items 🎉</td>
-                 </tr>
+                <li class="text-center text-muted small py-3">
+                    No notifications
+                </li>
                 {% endfor %}
-                </tbody>
-             </table>
-         </div>
+
+                <li><hr class="dropdown-divider"></li>
+                <li class="text-center">
+                    <a href="{% url 'notifications:all_notifications' %}" class="small">
+                        See all →
+                    </a>
+                </li>
+            </ul>
         </div>
-    
-</div>
-<div class="col-md-6">
-<div class="card shadow-sm">
-    <div class="card-header d-flex justify-content-between align-items-center">
-                        <span><b>Recent Inventory Transactions</b></span>
-                        <a href="{% url 'stock_history' %}" class="btn btn-sm btn-outline-primary">View All →</a>
-                    </div>
-    <div class="card-body">
-        
-        <ul class="list-group list-group-flush">
-            {% for log in recent_stock_logs %}
-            <li class="list-group-item d-flex justify-content-between">
-                <span>
-                    {{ log.product.name }} — {{ log.action }} ({{ log.quantity }})
-                </span>
-                <small class="text-muted">{{ log.created_at }}</small>
-            </li>
-            {% endfor %}
-        </ul>
+
+        <!-- User -->
+        <div class="d-flex align-items-center gap-2">
+            <div class="text-end">
+                <div class="fw-medium small">staff1</div>
+                <div class="text-muted small">Inventory Staff</div>
+            </div>
+            {% if user.is_superuser %}
+    <img src="{% static 'images/admin.jpeg' %}"
+         class="rounded-circle border"
+         width="36"
+         height="36"
+         style="object-fit: cover;">
+
+{% elif user.groups.first.name == "Manager" %}
+    <img src="{% static 'images/manager.png' %}"
+         class="rounded-circle border"
+         width="36"
+         height="36"
+         style="object-fit: cover;">
+
+{% elif user.groups.first.name == "Staff" %}
+    <img src="{% static 'images/staff.png' %}"
+         class="rounded-circle border"
+         width="36"
+         height="36"
+         style="object-fit: cover;">
+         {% endif %}
+        </div>
     </div>
 </div>
+
+<div class="row g-3 mb-4">
+
+  <!-- TOTAL ITEMS -->
+  <div class="col-md-3">
+    <a href="{% url 'product_list' %}" class="text-decoration-none text-dark">
+    <div class="stat-card">
+      <div class="stat-header">
+        <span class="stat-title">TOTAL ITEMS</span>
+        <i class="bi bi-box text-primary"></i>
+      </div>
+      <h2>{{ total_products }}</h2>
+      <p class="stat-sub text-muted">
+        Inventory Total
+      </p>
+    </div>
+</a>
+  </div>
+
+    <div class="col-md-3">
+    <a href="{% url 'in_stock' %}" class="text-decoration-none text-dark">
+    <div class="stat-card">
+      <div class="stat-header">
+        <span class="stat-title">IN STOCK</span>
+        <i class="bi bi-check-circle-fill text-success"></i>
+      </div>
+      <h2>{{ in_stock }}</h2>
+      <p class="stat-sub text-success">
+        Items currently available
+      </p>
+    </div>
+  </a>
+  </div>
+
+    <div class="col-md-3">
+    <a href="{% url 'low_stock' %}" class="text-decoration-none text-dark">
+    <div class="stat-card">
+      <div class="stat-header">
+        <span class="stat-title">REORDER ALERTS</span>
+        <i class="bi bi-exclamation-triangle text-warning"></i>
+      </div>
+      <h2>{{ low_stock }}</h2>
+      <p class="stat-sub text-warning">
+        Critical items identified
+      </p>
+    </div>
+
+</a>
+  </div>
+
+    <div class="col-md-3">
+    <a href="{% url 'out_stock' %}" class="text-decoration-none text-dark">
+    <div class="stat-card">
+      <div class="stat-header">
+        <span class="stat-title">STOCKOUTS</span>
+        <i class="bi bi-x-circle text-danger"></i>
+      </div>
+      <h2>{{ out_stock }}</h2>
+      <p class="stat-sub text-danger">Attention required</p>
+    </div>
+</a>
+  </div>
 </div>
-</div>
+
+
+
+    <!-- QUICK ACTIONS AS SMALL CARDS -->
+    <div class="row g-3 mb-4">
+        <div class="col-md-3 col-6">
+            <a href="{% url 'product_list' %}" class="card text-center text-decoration-none shadow-sm py-3 hover-shadow">
+                <i class="bi bi-search fs-3 text-primary"></i>
+                <p class="mb-0 mt-2 fw-semibold text-dark">View Inventory</p>
+            </a>
+        </div>
+        <div class="col-md-3 col-6">
+            <a href="{% url 'stock_in_section' %}" class="card text-center text-decoration-none shadow-sm py-3 hover-shadow">
+                <i class="bi bi-plus-circle fs-3 text-success"></i>
+                <p class="mb-0 mt-2 fw-semibold text-dark">Stock In</p>
+            </a>
+        </div>
+        <div class="col-md-3 col-6">
+            <a href="{% url 'stock_out' %}" class="card text-center text-decoration-none shadow-sm py-3 hover-shadow">
+                <i class="bi bi-dash-circle fs-3 text-danger"></i>
+                <p class="mb-0 mt-2 fw-semibold text-dark">Stock Out</p>
+            </a>
+        </div>
+        <div class="col-md-3 col-6">
+            <a href="{% url 'stock_history' %}" class="card text-center text-decoration-none shadow-sm py-3 hover-shadow">
+                <i class="bi bi-clock-history fs-3 text-dark"></i>
+                <p class="mb-0 mt-2 fw-semibold text-dark">Stock Log</p>
+            </a>
+        </div>
+    </div>
+
+    <!-- MAIN CARDS -->
+    <div class="row g-3">
+
+        <!-- CRITICAL STOCK ITEMS -->
+        <div class="col-lg-6 col-12">
+            <div class="card shadow-sm border-0">
+                <div class="card-header d-flex justify-content-between align-items-center bg-white border-bottom">
+                    <h6 class="mb-0 fw-bold">Critical Stock Items</h6>
+                    <a href="{% url 'low_stock' %}" class="btn btn-sm btn-outline-primary">View All →</a>
+                </div>
+                <div class="card-body p-0">
+                    <table class="table table-hover mb-0">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Product</th>
+                                <th>Current Qty</th>
+                                <th>Supplier</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for product in low_stock_products %}
+                            <tr>
+                                <td>{{ product.name }}</td>
+                                <td class="fw-bold text-danger">{{ product.quantity }}</td>
+                                <td>{{ product.supplier.name }}</td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="3" class="text-center text-muted">No low stock items 🎉</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- RECENT TRANSACTIONS -->
+        <div class="col-lg-6 col-12">
+            <div class="card shadow-sm border-0">
+                <div class="card-header d-flex justify-content-between align-items-center bg-white border-bottom">
+                    <h6 class="mb-0 fw-bold">Recent Inventory Transactions</h6>
+                    <a href="{% url 'stock_history' %}" class="btn btn-sm btn-outline-primary">View All →</a>
+                </div>
+                <div class="card-body p-0">
+                    <ul class="list-group list-group-flush">
+                        {% for log in recent_stock_logs %}
+                        <li class="list-group-item d-flex justify-content-between align-items-center hover-shadow">
+                            <div>
+                                <span class="fw-semibold">{{ log.product.name }}</span> — {{ log.action }} 
+                                <span class="badge bg-secondary ms-2">{{ log.quantity }}</span>
+                            </div>
+                            <small class="text-muted">{{ log.created_at|date:"M d, Y H:i" }}</small>
+                        </li>
+                        {% empty %}
+                        <li class="list-group-item text-center text-muted">No recent transactions.</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
 {% endblock %}

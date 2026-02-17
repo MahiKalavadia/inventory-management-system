@@ -89,6 +89,7 @@
 <!--Stats-->
 <div class="row mb-3">
     <div class="col-md-3">
+        <a href="{% url 'supplier_list' %}" class="text-decoration-none text-dark">
     <div class="stat-card">
       <div class="stat-header">
         <span class="stat-title">VENDORS</span>
@@ -99,9 +100,11 @@
         Total Vendors
       </p>
     </div>
+</a>
   </div>
 
   <div class="col-md-3">
+    <a href="{% url 'active_supplier' %}" class="text-decoration-none text-dark">
     <div class="stat-card">
       <div class="stat-header">
         <span class="stat-title">ACTIVE VENDOR</span>
@@ -112,10 +115,12 @@
         Vendors supplyting products.
       </p>
     </div>
+</a>
   </div>
 
   <!-- VENDORS -->
   <div class="col-md-3">
+    <a href="{% url 'inactive_supplier' %}" class="text-decoration-none text-dark">
     <div class="stat-card">
       <div class="stat-header">
         <span class="stat-title">INACTIVE VENDORS</span>
@@ -126,10 +131,12 @@
         Vendors who aren't supplying anymore.
       </p>
     </div>
+</a>
   </div>
 
   <!-- REORDER ALERTS -->
   <div class="col-md-3">
+    <a href="{% url 'product_list' %}" class="text-decoration-none text-dark">
     <div class="stat-card">
       <div class="stat-header">
         <span class="stat-title">PRODUCTS SUPPLIED</span>
@@ -140,6 +147,7 @@
         Total products being supplied by vendors
       </p>
     </div>
+</a>
   </div>
 
 <div>

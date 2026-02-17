@@ -60,6 +60,7 @@
 
   <!-- TOTAL ITEMS -->
   <div class="col-md-3">
+    <a href="{% url 'manage_requests' %}" class="text-decoration-none text-dark">
     <div class="stat-card">
       <div class="stat-header">
         <span class="stat-title">TOTAL PURCHASE REQUESTS</span>
@@ -70,6 +71,7 @@
         Requests received
       </p>
     </div>
+  </a>
   </div>
 
   <!-- CATEGORIES -->
@@ -122,6 +124,7 @@
 
   <!-- STOCKOUTS -->
   <div class="col-md-3">
+    <a href="{% url 'purchase_orders' %}" class="text-decoration-none text-dark">
     <div class="stat-card">
       <div class="stat-header">
         <span class="stat-title">TOTAL ORDERS</span>
@@ -130,6 +133,7 @@
       <h2>{{ total_orders }}</h2>
       <p class="stat-sub text-muted">Orders Received</p>
     </div>
+  </a>
   </div>
 
   <!-- REVENUE -->
@@ -163,7 +167,7 @@
         <span class="stat-title">TOTAL PURCHASE COST</span>
         <i class="bi bi-cash-stack text-muted"></i>
       </div>
-      <h2>{{ total_purchase_cost|short_number }}</h2>
+      <h2>₹{{ total_purchase_cost|short_number }}</h2>
       <p class="stat-sub text-muted">Cost required to buy stock</p>
     </div>
   </div>

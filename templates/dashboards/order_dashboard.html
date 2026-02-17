@@ -125,7 +125,7 @@
         <span class="stat-title">OUTSTANDING PAYMENTS</span>
         <i class="bi bi-hourglass-split text-danger"></i>
       </div>
-      <h2>{{ pending_amount|short_number }}</h2>
+      <h2>₹{{ pending_amount|short_number }}</h2>
       <p class="stat-sub text-danger">
         Payments not yet received.
       </p>
@@ -137,7 +137,7 @@
         <span class="stat-title">TOTAL REVENUE</span>
         <i class="bi bi-currency-rupee text-success"></i>
       </div>
-      <h2>{{ total_sales|short_number }}</h2>
+      <h2>₹{{ total_sales|short_number }}</h2>
       <p class="stat-sub text-success">
         MTD Performance
       </p>
@@ -149,7 +149,7 @@
         <span class="stat-title">REVENUE TODAY</span>
         <i class="bi bi-calendar-day text-muted"></i>
       </div>
-      <h2>{{ today_sales|short_number }}</h2>
+      <h2>₹{{ today_sales|short_number }}</h2>
       <p class="stat-sub text-muted">
         Performance rate today
       </p>
@@ -161,7 +161,7 @@
         <span class="stat-title">REVENUE THIS MONTH</span>
         <i class="bi bi-calendar-week text-success"></i>
       </div>
-      <h2>{{ monthly_sales|short_number }}</h2>
+      <h2>₹{{ monthly_sales|short_number }}</h2>
       <p class="stat-sub text-success">
         Performance in this month
       </p>
@@ -198,6 +198,7 @@
     </div>
   </div>
   <div class="col-md-3">
+    <a href="{% url 'order_list' %}" class="text-decoration-none text-dark">
     <div class="stat-card">
       <div class="stat-header">
         <span class="stat-title">ALL ORDERS</span>
@@ -208,6 +209,7 @@
         Orders Received
       </p>
     </div>
+  </a>
   </div>
 
 </div>

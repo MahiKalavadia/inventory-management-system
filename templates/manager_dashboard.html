@@ -2,203 +2,282 @@
 {% load humanize tz %}
 {% load static %}
 {% block content %}
-<div class="dashboard-header mb-4 d-flex justify-content-between align-items-center p-3 bg-light rounded shadow-sm">
-    <div class="page-title fw-bold fs-5">
+<style>
+.hover-shadow:hover {
+    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+    transition: 0.2s;
+}
+</style>
+
+<div class="dashboard-topbar fixed-top d-flex justify-content-between align-items-center px-4 py-3 bg-white border-bottom"
+     style="left:260px; right:0; top:0; z-index:999;">
+
+
+    <!-- Page Title -->
+    <div class="fw-semibold text-uppercase text-muted">
         Inventory Manager Dashboard
     </div>
-    <div class="d-flex align-items-center">
-        <form method="GET" action="{% url 'product_list' %}" class="d-flex me-3">
-            <input type="text" name="q" class="form-control me-2" placeholder="Search products..." value="{{ request.GET.q }}">
-            <button class="btn btn-primary" type="submit">Search</button>
-        </form>
-       <div class="dropdown me-3">
-  <button class="btn btn-link position-relative p-0" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-    <i class="bi bi-bell fs-4"></i>
-    {% if notifications_count > 0 %}
-      <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-        {{ notifications_count }}
-      </span>
-    {% endif %}
-  </button>
 
-  <ul class="dropdown-menu dropdown-menu-end p-2" style="width: 300px;">
-    <form method="POST" action="{% url 'notifications:mark_all_notifications_read' %}">
-  {% csrf_token %}
-  <button type="submit" class="btn btn-sm btn-link text-primary">
-    Mark all as read
-  </button>
-</form>
-    {% for n in notifications %}
-      <li class="mb-2">
-        <a href="{% url 'notifications:mark_as_read' n.pk %}" class="dropdown-item small {% if not n.is_read %}bg-light{% endif %}">
-          <b>{{ n.title }}</b><br>
-          <span>{{ n.message }}</span><br>
-          <small class="text-muted">{{ n.created_at|naturaltime }}</small>
-        </a>
-      </li>
-    {% empty %}
-      <li class="text-center small text-muted">No notifications</li>
-    {% endfor %}
-    <li class="text-center"><a href="{% url 'notifications:all_notifications' %}">See All →</a></li>
-  </ul>
-</div>
-        <div class="header-right d-flex align-items-center">
-            <div class="welcome-text me-2">Welcome back, Inventory Manager</div>
-            <img src="{% static 'images/manager.png' %}" class="profile-img rounded-circle" alt="Profile" width="40" height="40">
+    <!-- Right Section -->
+    <div class="d-flex align-items-center gap-4">
+
+        <!-- Notifications -->
+        <div class="dropdown">
+            <button class="btn btn-link position-relative p-0 text-dark"
+                    type="button"
+                    data-bs-toggle="dropdown"
+                    aria-expanded="false">
+                <i class="bi bi-bell fs-5"></i>
+
+                {% if notifications_count > 0 %}
+                   <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                   {{ notifications_count }}
+                   </span>
+                {% endif %}
+            </button>
+
+            <ul class="dropdown-menu dropdown-menu-end shadow-sm p-2"
+                style="width: 320px; max-height: 380px; overflow-y: auto;">
+
+                <!-- Header -->
+                <li class="d-flex justify-content-between align-items-center px-2 mb-2">
+                    <span class="fw-semibold small text-muted">Notifications</span>
+                    <form method="POST" action="{% url 'notifications:mark_all_notifications_read' %}">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-sm btn-link p-0">
+                            Mark all
+                        </button>
+                    </form>
+                </li>
+
+                <li><hr class="dropdown-divider"></li>
+
+                {% for n in notifications %}
+                <li>
+                    <a href="{% url 'notifications:mark_as_read' n.pk %}"
+                       class="dropdown-item rounded small {% if not n.is_read %}bg-light{% endif %}">
+                        <div class="fw-semibold">{{ n.title }}</div>
+                        <div class="text-muted small">{{ n.message }}</div>
+                        <div class="text-muted small">{{ n.created_at|naturaltime }}</div>
+                    </a>
+                </li>
+                {% empty %}
+                <li class="text-center text-muted small py-3">
+                    No notifications
+                </li>
+                {% endfor %}
+
+                <li><hr class="dropdown-divider"></li>
+                <li class="text-center">
+                    <a href="{% url 'notifications:all_notifications' %}" class="small">
+                        See all →
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+        <!-- User -->
+        <div class="d-flex align-items-center gap-2">
+            <div class="text-end">
+                <div class="fw-medium small">manager1</div>
+                <div class="text-muted small">Inventory Manager</div>
+            </div>
+            {% if user.is_superuser %}
+    <img src="{% static 'images/admin.jpeg' %}"
+         class="rounded-circle border"
+         width="36"
+         height="36"
+         style="object-fit: cover;">
+
+{% elif user.groups.first.name == "Manager" %}
+    <img src="{% static 'images/manager.png' %}"
+         class="rounded-circle border"
+         width="36"
+         height="36"
+         style="object-fit: cover;">
+
+{% elif user.groups.first.name == "Staff" %}
+    <img src="{% static 'images/staff.png' %}"
+         class="rounded-circle border"
+         width="36"
+         height="36"
+         style="object-fit: cover;">
+         {% endif %}
         </div>
     </div>
 </div>
+
 <div class="row mb-4">
 
-    <div class="col-md-2 order-md-last">
-        <a href="{% url 'product_list' %}" class="text-decoration-none">
-        <div class="card shadow-sm p-4 text-center card-hover" style="border-left: 5px solid #2563eb">
-            <div class="card-icon mb-2">
-                <i class="bi bi-box-fill icon-blue icon-bg"></i>
-            </div>
-            <h6 class="text-muted">Inventory Items</h6>
-            <h3 class="fw-bold">{{ total_products }}</h3>
-        </div>
-    </a>
-    </div>
+    
 
-    <div class="col-md-2 order-md-last">
-        <a href="{% url 'category_list' %}" class="text-decoration-none">
-        <div class="card shadow-sm p-4 text-center card-hover" style="border-left: 5px solid #7c3aed">
-            <div class="card-icon mb-2">
-                <i class="bi bi-grid-fill icon-purple icon-bg"></i>
-            </div>
-            <h6 class="text-muted">Product Categories</h6>
-            <h3 class="fw-bold">{{ total_categories }}</h3>
-        </div>
-    </a>
+    <div class="col-md-2">
+  <a href="{% url 'product_list' %}" class="text-decoration-none text-dark">
+    <div class="stat-card">
+      <div class="stat-header">
+        <span class="stat-title">TOTAL ITEMS</span>
+        <i class="bi bi-box-fill text-primary"></i>
+      </div>
+      <h2>{{ total_products }}</h2>
+      <p class="stat-sub text-muted">All inventory products</p>
     </div>
-
-    <div class="col-md-2 order-md-last">
-        <a href="{% url 'supplier_list' %}" class="text-decoration-none">
-        <div class="card shadow-sm p-4 text-center card-hover" style="border-left: 5px solid #38bdf8">
-            <div class="card-icon mb-2">
-                <i class="bi bi-truck-front-fill icon-cyan icon-bg"></i>
-            </div>
-            <h6 class="text-muted">Vendors</h6>
-            <h3 class="fw-bold">{{ total_suppliers }}</h3>
-        </div>
-    </a>
-    </div>
-
-    <div class="col-md-2 order-md-last">
-        <a href="{% url 'in_stock' %}" class="text-decoration-none">
-        <div class="card shadow-sm p-4 text-center card-hover" style="border-left: 5px solid #16a34a">
-            <div class="card-icon mb-2">
-                <i class="bi bi-check-circle-fill icon-green icon-bg"></i>
-            </div>
-            <h6 class="text-muted">Available Stock</h6>
-            <h3 class="fw-bold">{{ in_stock }}</h3>
-        </div>
-    </a>
-    </div>
-
-    <div class="col-md-2 order-md-last">
-        <a href="{% url 'low_stock' %}" class="text-decoration-none">
-        <div class="card shadow-sm p-4 text-center card-hover" style="border-left: 5px solid #f97316">
-            <div class="card-icon mb-2">
-                <i class="bi bi-exclamation-triangle-fill icon-orange icon-bg"></i>
-            </div>
-            <h6 class="text-muted">Reorder Alerts</h6>
-            <h3 class="fw-bold">{{ low_stock }}</h3>
-        </div>
-    </a>
-    </div>
-
-    <div class="col-md-2 order-md-last">
-        <a href="{% url 'out_stock' %}" class="text-decoration-none">
-        <div class="card shadow-sm p-4 text-center card-hover" style="border-left: 5px solid #dc2626">
-            <div class="card-icon mb-2">
-                <i class="bi bi-x-circle-fill icon-red icon-bg"></i>
-            </div>
-            <h6 class="text-muted">Stockouts</h6>
-            <h3 class="fw-bold">{{ out_stock }}</h3>
-        </div>
-    </a>
-    </div>
-
-</div>
-<hr>
-<div class="card shadow-sm mb-4">
-    <div class="card-header fw-bold">Quick Actions</div>
-    <div class="card-body d-flex gap-2 flex-wrap">
-        <a href="{% url 'add_product' %}" class="btn btn-primary">Add Inventory Item</a>
-        <a href="{% url 'stock_in_section' %}" class="btn btn-success">Stock In</a>
-        <a href="{% url 'stock_history' %}" class="btn btn-dark">Stock Log</a><!--stock history-->
-    </div>
+  </a>
 </div>
 
-<!-- LOW + OUT STOCK -->
-<div class="row">
-
-    <div class="col-md-6">
-        <div class="card shadow-sm mb-4">
-            <div class="card-header d-flex justify-content-between">
-                <b>Critical Stock Items</b>
-                <a href="{% url 'low_stock' %}" class="btn btn-sm btn-outline-primary">View All</a>
-            </div>
-            <table class="table">
-                {% for p in l_stock %}
-                <tr>
-                    <td>{{ p.name }}</td>
-                    <td class="text-warning fw-bold">{{ p.quantity }}</td>
-                </tr>
-                {% empty %}
-                <tr><td>No low stock items</td></tr>
-                {% endfor %}
-            </table>
-        </div>
+<div class="col-md-2">
+  <a href="{% url 'in_stock' %}" class="text-decoration-none text-dark">
+    <div class="stat-card">
+      <div class="stat-header">
+        <span class="stat-title">IN STOCK</span>
+        <i class="bi bi-check-circle-fill text-success"></i>
+      </div>
+      <h2>{{ in_stock }}</h2>
+      <p class="stat-sub text-success">Ready for sale</p>
     </div>
-
-    <div class="col-md-6">
-        <div class="card shadow-sm mb-4">
-            <div class="card-header d-flex justify-content-between">
-                <b>Stockout Items</b>
-                <a href="{% url 'out_stock' %}" class="btn btn-sm btn-outline-danger">View All</a>
-            </div>
-            <table class="table">
-                {% for p in o_stock %}
-                <tr>
-                    <td>{{ p.name }}</td>
-                    <td class="text-danger">Out</td>
-                </tr>
-                {% empty %}
-                <tr><td>Everything stocked</td></tr>
-                {% endfor %}
-            </table>
-        </div>
-    </div>
-
+  </a>
 </div>
 
-<!-- RECENT STOCK ACTIVITY -->
-<div class="card shadow-sm mb-4">
-    <div class="card-header fw-bold">Recent Inventory Transactions</div>
-    <ul class="list-group list-group-flush">
-        {% for log in recent_stock_logs %}
-        <li class="list-group-item d-flex justify-content-between">
-            <span>{{ log.product.name }} — {{ log.action }} ({{ log.quantity }})</span>
-            <small>{{ log.created_at }}</small>
-        </li>
-        {% empty %}
-        <li class="list-group-item">No recent activity</li>
-        {% endfor %}
-    </ul>
+<div class="col-md-2">
+  <a href="{% url 'low_stock' %}" class="text-decoration-none text-dark">
+    <div class="stat-card">
+      <div class="stat-header">
+        <span class="stat-title">LOW STOCK</span>
+        <i class="bi bi-exclamation-triangle-fill text-warning"></i>
+      </div>
+      <h2>{{ low_stock }}</h2>
+      <p class="stat-sub text-warning">Critical items identified</p>
+    </div>
+  </a>
 </div>
 
-<!-- INVENTORY HEALTH -->
-<div class="card shadow-sm mb-4">
-    <div class="card-header fw-bold">Inventory Status</div>
-    <div class="card-body">
-        <div class="progress" style="height: 20px;">
-            <div class="progress-bar bg-success" style="width: {{ in_stock_bar }}%">In</div>
-            <div class="progress-bar bg-warning" style="width: {{ low_stock_bar }}%">Low</div>
-            <div class="progress-bar bg-danger" style="width: {{ out_stock_bar }}%">Out</div>
+<div class="col-md-2">
+  <a href="{% url 'out_stock' %}" class="text-decoration-none text-dark">
+    <div class="stat-card">
+      <div class="stat-header">
+        <span class="stat-title">STOCKOUTS</span>
+        <i class="bi bi-x-circle-fill text-danger"></i>
+      </div>
+      <h2>{{ out_stock }}</h2>
+      <p class="stat-sub text-danger">Attention Required</p>
+    </div>
+  </a>
+</div>
+
+<div class="col-md-2">
+  <a href="{% url 'category_list' %}" class="text-decoration-none text-dark">
+    <div class="stat-card">
+      <div class="stat-header">
+        <span class="stat-title">CATEGORIES</span>
+        <i class="bi bi-grid-fill text-purple"></i>
+      </div>
+      <h2>{{ total_categories }}</h2>
+      <p class="stat-sub text-muted">Product groups</p>
+    </div>
+  </a>
+</div>
+
+<div class="col-md-2">
+  <a href="{% url 'supplier_list' %}" class="text-decoration-none text-dark">
+    <div class="stat-card">
+      <div class="stat-header">
+        <span class="stat-title">SUPPLIERS</span>
+        <i class="bi bi-truck-front-fill text-info"></i>
+      </div>
+      <h2>{{ total_suppliers }}</h2>
+      <p class="stat-sub text-muted">Active vendors</p>
+    </div>
+  </a>
+</div>
+
+    
+</div>
+ <div class="card shadow-sm mb-4">
+                <div class="card-header fw-bold bg-light">Inventory Status</div>
+                <div class="card-body">
+                    <div class="progress" style="height: 25px;">
+                        <div class="progress-bar bg-success" style="width: {{ in_stock_bar }}%">In</div>
+                        <div class="progress-bar bg-warning" style="width: {{ low_stock_bar }}%">Low</div>
+                        <div class="progress-bar bg-danger" style="width: {{ out_stock_bar }}%">Out</div>
+                    </div>
+                </div>
+            </div>
+   <div class="row g-3">
+        <!-- LEFT: MAIN DASHBOARD CONTENT -->
+        <div class="col-lg-9 col-12">
+            <!-- CRITICAL + STOCKOUT TABLES -->
+            <div class="row g-3 mb-4">
+                <div class="col-md-6 col-12">
+                    <div class="card shadow-sm">
+                        <div class="card-header d-flex justify-content-between align-items-center bg-light">
+                            <b>Critical Stock Items</b>
+                            <a href="{% url 'low_stock' %}" class="btn btn-sm btn-outline-primary">View All</a>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="table table-hover mb-0">
+                                {% for p in l_stock %}
+                                <tr>
+                                    <td>{{ p.name }}</td>
+                                    <td class="text-warning fw-bold">{{ p.quantity }}</td>
+                                </tr>
+                                {% empty %}
+                                <tr><td colspan="2" class="text-center text-muted">No low stock items</td></tr>
+                                {% endfor %}
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6 col-12">
+                    <div class="card shadow-sm">
+                        <div class="card-header d-flex justify-content-between align-items-center bg-light">
+                            <b>Stockout Items</b>
+                            <a href="{% url 'out_stock' %}" class="btn btn-sm btn-outline-danger">View All</a>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="table table-hover mb-0">
+                                {% for p in o_stock %}
+                                <tr>
+                                    <td>{{ p.name }}</td>
+                                    <td class="text-danger">Out</td>
+                                </tr>
+                                {% empty %}
+                                <tr><td colspan="2" class="text-center text-muted">Everything stocked</td></tr>
+                                {% endfor %}
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- RECENT STOCK ACTIVITY -->
+            <div class="card shadow-sm mb-4">
+                <div class="card-header fw-bold bg-light">Recent Inventory Transactions</div>
+                <ul class="list-group list-group-flush">
+                    {% for log in recent_stock_logs %}
+                    <li class="list-group-item d-flex justify-content-between align-items-center hover-shadow">
+                        <div>
+                            <span class="fw-semibold">{{ log.product.name }}</span> — {{ log.action }} 
+                            <span class="badge bg-secondary ms-2">{{ log.quantity }}</span>
+                        </div>
+                        <small class="text-muted">{{ log.created_at|date:"M d, Y H:i" }}</small>
+                    </li>
+                    {% empty %}
+                    <li class="list-group-item text-center text-muted">No recent activity</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+
+        <!-- RIGHT: QUICK ACTIONS SIDEBAR -->
+        <div class="col-lg-3 col-12">
+            <div class="card shadow-sm sticky-top" style="top: 90px;">
+                <div class="card-header fw-bold bg-light">Quick Actions</div>
+                <div class="card-body d-flex flex-column gap-3">
+                    <a href="{% url 'add_product' %}" class="btn btn-primary w-100">Add Item</a>
+                    <a href="{% url 'stock_in_section' %}" class="btn btn-success w-100">Stock In</a>
+                    <a href="{% url 'stock_history' %}" class="btn btn-dark w-100">Stock Log</a>
+                </div>
+            </div>
         </div>
     </div>
 </div>

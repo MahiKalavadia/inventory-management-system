@@ -5,66 +5,109 @@
 <meta charset="UTF-8">
 <title>Login</title>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
 <style>
 body {
-    background: linear-gradient(to right, #f3f6ff, #f9fbff);
+    background: linear-gradient(135deg, #e6ecf0ff, #e3e9f0ff);
     height: 100vh;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: 'Inter', sans-serif;
 }
 
 /* MAIN CARD */
 .main-card {
-    width: 1100px;              /* ⬅ BIGGER */
-    border-radius: 22px;        /* ⬅ SOFT CORNERS */
-    box-shadow: 0px 30px 60px rgba(0,0,0,0.08);
+    width: 1100px;
+    border-radius: 24px;
     overflow: hidden;
-    background: #fff;
+    background: #ffffff;
+    box-shadow: 0 30px 70px rgba(0, 0, 0, 0.08);
 }
 
-/* LEFT IMAGE AREA */
+/* LEFT PANEL WITH IMAGE */
 .left-panel {
-    background: #f8fbff;
+    position: relative;
+    background-image: url("{% static 'images/land.png' %}");
+    background-size: cover;
+    background-position: center;
+    min-height: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
     padding: 60px;
+    color: white;
 }
 
-.left-panel img {
-    max-width: 90%;
+/* DARK OVERLAY */
+.left-panel::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+        to bottom right,
+        rgba(64, 87, 138, 0.8),
+        rgba(48, 46, 95, 0.8)
+    );
 }
 
-/* RIGHT LOGIN AREA */
+.left-content {
+    position: relative;
+    z-index: 2;
+    text-align: left;
+}
+
+.left-content h2 {
+    font-size: 34px;
+    font-weight: 700;
+}
+
+.left-content p {
+    margin-top: 15px;
+    font-size: 15px;
+    opacity: 0.95;
+}
+
+/* RIGHT PANEL */
 .login-panel {
-    padding: 70px 60px;
+    padding: 80px 70px;
 }
 
 .login-panel h3 {
     font-weight: 700;
     font-size: 30px;
+    color: #1e293b;
 }
 
-/* INPUTS */
+.login-panel p {
+    color: #64748b;
+}
+
+/* INPUT FIELDS */
 .form-control {
-    height: 50px;
-    border-radius: 10px;
-    border: 1px solid #e5e7eb;
+    height: 52px;
+    border-radius: 12px;
+    border: 1px solid #e2e8f0;
+    transition: 0.3s ease;
 }
 
-/* BUTTON FIX */
+.form-control:focus {
+    border-color: #bcc5d9ff;
+    box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.15);
+}
+
+/* BUTTON */
 .btn-login {
     height: 54px;
-    border-radius: 12px;
+    border-radius: 14px;
     font-weight: 600;
     font-size: 16px;
-    background-color: #1f2937;
-    color: white;                 /* ⬅ TEXT FIX */
+    background: linear-gradient(135deg, #333f5cff, #89889fff);
     border: none;
+    color: white;
+    transition: 0.3s ease;
 }
 
 .btn-login:hover {
-    background-color: #111827;
+    transform: translateY(-2px);
+    box-shadow: 0 12px 30px rgba(65, 65, 79, 0.85);
 }
 
 /* PASSWORD ICON */
@@ -78,22 +121,25 @@ body {
 
 .toggle-password {
     position: absolute;
-    right: 12px;
+    right: 15px;
     top: 70%;
     transform: translateY(-50%);
     cursor: pointer;
     font-size: 18px;
-    color: #6b7280;
-}
-.left-panel {
-    background-image: url("{% static 'images/3.png' %}");
-    background-position: center;    
-    background-size: cover;          
-    background-repeat: no-repeat;
-    min-height: 100%;               
+    color: #94a3b8;
 }
 
+/* FADE ANIMATION */
+.main-card {
+    animation: fadeIn 0.5s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
 </style>
+
 </head>
 
 <body>
@@ -102,7 +148,12 @@ body {
     <div class="main-card row g-0">
 
         <!-- LEFT IMAGE -->
-        <div class="col-md-6 left-panel"></div>
+        <div class="col-md-6 left-panel">
+    <div class="left-content">
+        <h2>Smart Inventory</h2>
+        <p>Smart inventory management & AI-driven stock forecasting system for modern businesses.</p>
+    </div>
+</div>
 
         <!-- RIGHT FORM -->
         <div class="col-md-6 login-panel">
@@ -118,10 +169,13 @@ body {
                 </div>
 
                 <div class="mb-4 password-wrapper">
-                    <label class="form-label">Password</label>
-                    <input type="password" name="password" id="password" class="form-control" required>
-                    <span class="toggle-password" onclick="togglePassword()">👁️</span>
-                </div>
+    <label class="form-label">Password</label>
+    <input type="password" name="password" id="password" class="form-control" required>
+    <span class="toggle-password" id="togglePassword" onclick="togglePassword()">
+        <i class="bi bi-eye-slash"></i>
+    </span>
+</div>
+
 
                 <button class="btn w-100 btn-login">Login</button>
             </form>
@@ -133,7 +187,17 @@ body {
 <script>
 function togglePassword() {
     const passwordInput = document.getElementById("password");
-    passwordInput.type = passwordInput.type === "password" ? "text" : "password";
+    const toggleIcon = document.getElementById("togglePassword").firstElementChild;
+
+    if (passwordInput.type === "password") {
+        passwordInput.type = "text";        
+        toggleIcon.classList.remove("bi-eye-slash");
+        toggleIcon.classList.add("bi-eye"); 
+    } else {
+        passwordInput.type = "password";    
+        toggleIcon.classList.remove("bi-eye");
+        toggleIcon.classList.add("bi-eye-slash"); 
+    }
 }
 </script>
 

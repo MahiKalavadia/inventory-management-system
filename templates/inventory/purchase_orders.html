@@ -113,14 +113,23 @@
                 {% endif %}
 
             <!-- ACTION -->
-            <td class="text-end">
-              {% if po.status != "delivered" %}
-                <a href="{% url 'update_po_status' po.id %}" class="btn btn-sm btn-outline-dark">
-                  Update
-                </a>
-              {% else %}
+             <td class="text-end">
+               {% if po.status == 'draft' %}
+                 <a href="{% url 'edit_purchase_order' po.pk %}" class="btn btn-sm btn-outline-dark">
+                  Fill Details
+                 </a>
+               {% endif %}
+               {% if po.status != 'delivered' %}
+               <a href="{% url 'update_po_status' po.pk %}" class="btn btn-sm btn-outline-dark">
+                  Update Status
+                 </a>
+               {% endif %}
+               {% if po.status == 'delivered' %}
                 <span class="text-success fw-semibold">✔ Done</span>
-              {% endif %}
+               {% endif %}
+               <a href="{% url 'purchase_order_detail' po.pk %}" class="btn btn-sm btn-outline-primary ms-1">
+                Details
+               </a>
             </td>
 
           </tr>

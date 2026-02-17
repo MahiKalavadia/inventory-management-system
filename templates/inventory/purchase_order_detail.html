@@ -1,0 +1,147 @@
+{% extends "base_dashboard.html" %}
+{% load static %}
+{% block content %}
+<div class="dashboard-topbar fixed-top d-flex justify-content-between align-items-center px-4 py-3 bg-white border-bottom"
+     style="left:260px; right:0; top:0; z-index:999;">
+
+    <div>
+        <div class="fw-semibold text-uppercase text-muted">
+            Purchase Orders Details
+        </div>
+    </div>
+
+    <div class="d-flex align-items-center gap-3">
+        <div class="text-end">
+                <div class="fw-medium small">{{ request.user.username }}</div>
+                <div class="text-muted small">Purchase Order Detail Panel</div>
+            </div>
+        {% if user.is_superuser %}
+    <img src="{% static 'images/admin.jpeg' %}"
+         class="rounded-circle border"
+         width="36"
+         height="36"
+         style="object-fit: cover;">
+
+{% elif user.groups.first.name == "Manager" %}
+    <img src="{% static 'images/manager.png' %}"
+         class="rounded-circle border"
+         width="36"
+         height="36"
+         style="object-fit: cover;">
+
+{% elif user.groups.first.name == "Staff" %}
+    <img src="{% static 'images/staff.png' %}"
+         class="rounded-circle border"
+         width="36"
+         height="36"
+         style="object-fit: cover;">
+         {% endif %}
+    </div>
+</div>
+<div class="container mt-5">
+
+    <div class="card shadow border-0 rounded-4">
+
+        <!-- Header -->
+        <div class="card-header bg-white border-bottom d-flex justify-content-between align-items-center py-3 px-4">
+            <div>
+                <h5 class="fw-bold mb-0">Purchase Order</h5>
+                <small class="text-muted">PO-{{ order.id }}</small>
+            </div>
+
+            <div class="d-flex align-items-center gap-2">
+
+                <!-- Status Badge -->
+                {% if order.status == "draft" %}
+                    <span class="badge bg-secondary px-3 py-2">Draft</span>
+                {% elif order.status == "ordered" %}
+                    <span class="badge bg-primary px-3 py-2">Ordered</span>
+                {% elif order.status == "shipped" %}
+                    <span class="badge bg-info px-3 py-2">Shipped</span>
+                {% elif order.status == "in_transit" %}
+                    <span class="badge bg-warning text-dark px-3 py-2">In Transit</span>
+                {% elif order.status == "delivered" %}
+                    <span class="badge bg-success px-3 py-2">Delivered</span>
+                {% elif order.status == "delayed" %}
+                    <span class="badge bg-danger px-3 py-2">Delayed</span>
+                {% endif %}
+
+                {% if order.status == "draft" %}
+                    <a href="{% url 'edit_purchase_order' order.id %}" 
+                       class="btn btn-outline-warning btn-sm">
+                        Edit
+                    </a>
+                {% endif %}
+
+            </div>
+        </div>
+
+        <!-- Body -->
+        <div class="card-body p-4">
+
+            <div class="row g-4">
+
+                <!-- Product Section -->
+                <div class="col-md-6">
+                    <div class="p-3 border rounded-3 bg-light">
+                        <h6 class="fw-bold mb-3">📦 Product Details</h6>
+                        <p class="mb-1"><strong>Product:</strong> {{ order.request.product.name }}</p>
+                        <p class="mb-1"><strong>Quantity:</strong> {{ order.request.quantity }}</p>
+                        <p class="mb-0"><strong>Requested By:</strong> {{ order.request.requested_by.username }}</p>
+                    </div>
+                </div>
+
+                <!-- Supplier Section -->
+                <div class="col-md-6">
+                    <div class="p-3 border rounded-3 bg-light">
+                        <h6 class="fw-bold mb-3">🏢 Supplier Details</h6>
+                        <p class="mb-0"><strong>Supplier:</strong> {{ order.supplier.name }}</p>
+                    </div>
+                </div>
+
+                <!-- Delivery Section -->
+                <div class="col-md-6">
+                    <div class="p-3 border rounded-3 bg-light">
+                        <h6 class="fw-bold mb-3">🚚 Delivery Information</h6>
+                        <p class="mb-1">
+                            <strong>Expected Delivery:</strong>
+                            {{ order.expected_delivery|default:"Not Set" }}
+                        </p>
+                        <p class="mb-0">
+                            <strong>Actual Delivery:</strong>
+                            {{ order.actual_delivery|default:"Not Delivered Yet" }}
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Cost Section -->
+                <div class="col-md-6">
+                    <div class="p-3 border rounded-3 bg-light">
+                        <h6 class="fw-bold mb-3">💰 Cost Information</h6>
+                        <p class="mb-1">
+                            <strong>Total Cost:</strong> 
+                            <span class="fw-semibold text-success">₹ {{ order.total_cost }}</span>
+                        </p>
+                        <p class="mb-0">
+                            <strong>Created At:</strong> {{ order.created_at }}
+                        </p>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- Footer -->
+        <div class="card-footer bg-white border-top text-end px-4 py-3">
+            <a href="{% url 'purchase_orders' %}" class="btn btn-outline-secondary">
+                Back to Orders
+            </a>
+        </div>
+
+    </div>
+
+</div>
+
+
+{% endblock %}

@@ -1,111 +1,199 @@
 {% extends "base_dashboard.html" %}
+{% load static %}
 {% block content %}
+<style>
+/* Table hover effect */
+.table-hover tbody tr:hover {
+  background-color: #f8f9fa;
+  transition: 0.15s;
+}
 
-<div class="card">
-        <div class="card-header d-flex justify-content-between align-items-center">
-           <span><b>Request Purchase</b></span>
-           <div>
-              <a href="{% url 'purchase_dashboard2' %}" class="btn btn-outline-secondary btn-sm me-2">
-                 <i class="bi bi-arrow-left-circle-fill"></i> Back
-              </a>
-          </div>
-       </div>
+/* Card header subtle background */
+.card-header {
+  font-size: 1rem;
+  background-color: #f8f9fa;
+}
+
+/* Buttons minimal style */
+.btn-outline-secondary {
+  font-size: 0.8rem;
+  padding: 0.25rem 0.5rem;
+}
+
+/* Text muted for stock num*
+.text-muted {
+  font-weight: 500;
+}
+
+/* Responsive table scroll */
+.table-responsive {
+  overflow-x: auto;
+}
+</style>
+<div class="dashboard-topbar fixed-top d-flex justify-content-between align-items-center px-4 py-3 bg-white border-bottom"
+     style="left:260px; right:0; top:0; z-index:999;">
+
+    <!-- Page Title -->
+     <div>
+    <div class="fw-semibold text-uppercase text-muted">
+        Request Purchase
+    </div>
+    <div class="text-muted small">
+            Request for stock to admin
+        </div>
+    </div>
+
+    <!-- Right Section -->
+    <div class="d-flex align-items-center gap-4">
+
+        <!-- Quick Actions -->
+        <div class="d-flex align-items-center gap-2">
+                <a href="{% url 'purchase_dashboard2' %}" class="btn btn-outline-secondary btn-sm"><i class="bi bi-arrow-left-circle"></i> Back</a>
+        </div>
+
+        <!-- User -->
+        <div class="d-flex align-items-center gap-2">
+            <div class="text-end">
+                <div class="fw-medium small">{{ request.user.username }}</div>
+                <div class="text-muted small">Request Panel</div>
+            </div>
+            {% if user.is_superuser %}
+    <img src="{% static 'images/admin.jpeg' %}"
+         class="rounded-circle border"
+         width="36"
+         height="36"
+         style="object-fit: cover;">
+
+{% elif user.groups.first.name == "Manager" %}
+    <img src="{% static 'images/manager.png' %}"
+         class="rounded-circle border"
+         width="36"
+         height="36"
+         style="object-fit: cover;">
+
+{% elif user.groups.first.name == "Staff" %}
+    <img src="{% static 'images/staff.png' %}"
+         class="rounded-circle border"
+         width="36"
+         height="36"
+         style="object-fit: cover;">
+         {% endif %}
+        </div>
+    </div>
 </div>
-<br>
-<!-- ===== LOW STOCK ===== -->
-<div class="card mb-4">
-  <div class="card-header fw-bold">⚠ Critical Stocks</div>
-  
-  <div class="card-body p-0">
-    <table class="table table-sm mb-0">
-      <tr>
-        <th>Product</th>
-        <th>Stock</th>
-        <th>Action</th>
-      </tr>
-      {% for p in low %}
-      <tr>
-        <td>{{ p.name }}</td>
-        <td class="text-warning fw-bold">{{ p.quantity }}</td>
-        <td>
-          <a href="{% url 'create_request' p.id %}"
-             class="btn btn-sm btn-outline-primary">
-            Request Stock
-          </a>
-        </td>
-      </tr>
-      {% empty %}
-      <tr><td colspan="3" class="text-center text-muted">No low stock</td></tr>
-      {% endfor %}
-    </table>
-     <div class="p-2 d-flex justify-content-end">
-    <ul class="pagination pagination-sm mb-0">
-        {% if low.has_previous %}
+<div class="row g-3 mb-4">
+  <!-- ===== CRITICAL STOCKS ===== -->
+  <div class="col-lg-6 col-12">
+    <div class="card shadow-sm h-100">
+      <div class="card-header fw-semibold d-flex justify-content-between align-items-center">
+        ⚠ Critical Stocks
+        <a href="{% url 'low_stock' %}" class="text-decoration-none small text-muted">View All</a>
+      </div>
+      <div class="card-body p-0">
+        <div class="table-responsive">
+          <table class="table table-sm table-hover mb-0">
+            <thead class="table-light">
+              <tr>
+                <th>Product</th>
+                <th>Stock</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for p in low %}
+              <tr>
+                <td>{{ p.name }}</td>
+                <td class="fw-semibold text-muted">{{ p.quantity }}</td>
+                <td>
+                  <a href="{% url 'create_request' p.id %}" class="btn btn-sm btn-outline-secondary">
+                    Request
+                  </a>
+                </td>
+              </tr>
+              {% empty %}
+              <tr>
+                <td colspan="3" class="text-center text-muted">No low stock items</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+        <div class="p-2 d-flex justify-content-end">
+          <ul class="pagination pagination-sm mb-0">
+            {% if low.has_previous %}
             <li class="page-item">
-                <a class="page-link" href="?page_low={{ low.previous_page_number }}">‹</a>
+              <a class="page-link" href="?page_low={{ low.previous_page_number }}">‹</a>
             </li>
-        {% endif %}
-
-        <li class="page-item active">
-            <span class="page-link">{{ low.number }}</span>
-        </li>
-
-        {% if low.has_next %}
+            {% endif %}
+            <li class="page-item active">
+              <span class="page-link">{{ low.number }}</span>
+            </li>
+            {% if low.has_next %}
             <li class="page-item">
-                <a class="page-link" href="?page_low={{ low.next_page_number }}">›</a>
+              <a class="page-link" href="?page_low={{ low.next_page_number }}">›</a>
             </li>
-        {% endif %}
-    </ul>
-    
-</div>
+            {% endif %}
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== STOCKOUTS ===== -->
+  <div class="col-lg-6 col-12">
+    <div class="card shadow-sm h-100">
+      <div class="card-header fw-semibold d-flex justify-content-between align-items-center">
+        ❌ Stockouts
+        <a href="{% url 'out_stock' %}" class="text-decoration-none small text-muted">View All</a>
+      </div>
+      <div class="card-body p-0">
+        <div class="table-responsive">
+          <table class="table table-sm table-hover mb-0">
+            <thead class="table-light">
+              <tr>
+                <th>Product</th>
+                <th>Stock</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for p in out %}
+              <tr>
+                <td>{{ p.name }}</td>
+                <td class="fw-semibold text-muted">{{ p.quantity }}</td>
+                <td>
+                  <a href="{% url 'create_request' p.id %}" class="btn btn-sm btn-outline-secondary">
+                    Request
+                  </a>
+                </td>
+              </tr>
+              {% empty %}
+              <tr>
+                <td colspan="3" class="text-center text-muted">No out of stock items</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+        <div class="p-2 d-flex justify-content-end">
+          <ul class="pagination pagination-sm mb-0">
+            {% if out.has_previous %}
+            <li class="page-item">
+              <a class="page-link" href="?page_out={{ out.previous_page_number }}">‹</a>
+            </li>
+            {% endif %}
+            <li class="page-item active">
+              <span class="page-link">{{ out.number }}</span>
+            </li>
+            {% if out.has_next %}
+            <li class="page-item">
+              <a class="page-link" href="?page_out={{ out.next_page_number }}">›</a>
+            </li>
+            {% endif %}
+          </ul>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
-<!-- ===== OUT OF STOCK ===== -->
-<div class="card mb-4">
-  <div class="card-header fw-bold text-danger">❌ Stockouts</div>
-  <div class="card-body p-0">
-    <table class="table table-sm mb-0">
-      <tr>
-        <th>Product</th>
-        <th>Stock</th>
-        <th>Action</th>
-      </tr>
-      {% for p in out %}
-      <tr>
-        <td>{{ p.name }}</td>
-        <td class="text-danger fw-bold">{{ p.quantity }}</td>
-        <td>
-          <a href="{% url 'create_request' p.id %}"
-             class="btn btn-sm btn-danger">
-            Request Urgently
-          </a>
-        </td>
-      </tr>
-      {% empty %}
-      <tr><td class="text-center text-muted">No out of stock</td></tr>
-      {% endfor %}
-    </table>
-    <div class="p-2 d-flex justify-content-end">
-    <ul class="pagination pagination-sm mb-0">
-        {% if out.has_previous %}
-            <li class="page-item">
-                <a class="page-link" href="?page_out={{ out.previous_page_number }}">‹</a>
-            </li>
-        {% endif %}
-
-        <li class="page-item active">
-            <span class="page-link">{{ out.number }}</span>
-        </li>
-
-        {% if out.has_next %}
-            <li class="page-item">
-                <a class="page-link" href="?page_out={{ out.next_page_number }}">›</a>
-            </li>
-        {% endif %}
-    </ul>
-    
-</div>
-  </div>
-</div>
-
 {% endblock content %}

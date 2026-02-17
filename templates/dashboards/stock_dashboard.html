@@ -86,6 +86,7 @@
 <!--Stats-->
 <div class="row mb-3">
     <div class="col-md-3">
+      <a href="{% url 'product_list' %}" class="text-decoration-none text-dark">
     <div class="stat-card">
       <div class="stat-header">
         <span class="stat-title">TOTAL INVENTORY ITEMS </span>
@@ -96,9 +97,11 @@
         Inventory items present 
       </p>
     </div>
+  </a>
   </div>
 
   <div class="col-md-3">
+    <a href="{% url 'in_stock' %}" class="text-decoration-none text-dark">
     <div class="stat-card">
       <div class="stat-header">
         <span class="stat-title">IN STOCK</span>
@@ -109,10 +112,12 @@
         Items currently available
       </p>
     </div>
+  </a>
   </div>
 
   <!-- VENDORS -->
   <div class="col-md-3">
+    <a href="{% url 'low_stock' %}" class="text-decoration-none text-dark">
     <div class="stat-card">
       <div class="stat-header">
         <span class="stat-title">REORDER ALERTS</span>
@@ -123,10 +128,12 @@
         Critical Items identified.
       </p>
     </div>
+  </a>
   </div>
 
   <!-- REORDER ALERTS -->
   <div class="col-md-3">
+    <a href="{% url 'out_stock' %}" class="text-decoration-none text-dark">
     <div class="stat-card">
       <div class="stat-header">
         <span class="stat-title">STOCKOUTS</span>
@@ -137,6 +144,7 @@
         Attention required
       </p>
     </div>
+  </a>
   </div>
 
 <div>
