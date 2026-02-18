@@ -6,9 +6,31 @@ from django.conf import settings
 import os
 
 
+def get_company_info():
+    try:
+        from settings_app.models import SystemSettings
+        s = SystemSettings.load()
+        return {
+            'name': s.company_name,
+            'address': s.company_address,
+            'email': s.company_email,
+            'phone': s.company_phone,
+            'currency': s.currency_symbol,
+        }
+    except Exception:
+        return {
+            'name': 'Smart Inventory System',
+            'address': 'Surat, Gujarat, India',
+            'email': 'support@smartinventory.com',
+            'phone': '+91 9876543210',
+            'currency': '\u20b9',
+        }
+
+
 def build_receipt_pdf(buffer, order):
     styles = getSampleStyleSheet()
     elements = []
+    company = get_company_info()
 
     # ================= HEADER =================
     logo_path = os.path.join(settings.BASE_DIR, "static/images/image.png")
@@ -18,13 +40,13 @@ def build_receipt_pdf(buffer, order):
     if os.path.exists(logo_path):
         logo = Image(logo_path, width=90, height=45)
     else:
-        logo = Paragraph("<b>SMART INVENTORY SYSTEM</b>", styles["Title"])
+        logo = Paragraph(f"<b>{company['name'].upper()}</b>", styles["Title"])
 
-    company_info = Paragraph("""
-        <b>SMART INVENTORY SYSTEM</b><br/>
-        Surat, Gujarat, India<br/>
-        Email: support@smartinventory.com<br/>
-        Phone: +91 9876543210
+    company_info = Paragraph(f"""
+        <b>{company['name'].upper()}</b><br/>
+        {company['address']}<br/>
+        Email: {company['email']}<br/>
+        Phone: {company['phone']}
     """, styles["Normal"])
 
     header_table_data.append([logo, company_info])
@@ -72,15 +94,15 @@ def build_receipt_pdf(buffer, order):
 
         table_data.append([
             str(item.product),
-            f"₹ {item.price:.2f}",
+            f"{company['currency']} {item.price:.2f}",
             str(item.quantity),
             Paragraph(warranty_text, info_style),
-            f"₹ {item.total:.2f}",
+            f"{company['currency']} {item.total:.2f}",
         ])
 
     # Total Row
     table_data.append(["", "", "", "<b>Grand Total</b>",
-                      f"₹ {order.total_amount:.2f}"])
+                      f"{company['currency']} {order.total_amount:.2f}"])
 
     table = Table(table_data, colWidths=[200, 80, 40, 120, 80])
 
