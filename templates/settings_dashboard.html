@@ -1,52 +1,451 @@
 {% extends 'base_dashboard.html' %}
 {% load static %}
 {% block content %}
+<style>
+.settings-card {
+    border: none;
+    border-radius: 14px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+}
+
+.settings-card .card-header {
+    border-radius: 14px 14px 0 0 !important;
+    border-bottom: 1px solid #eef2f7;
+}
+
+.nav-pills .nav-link {
+    border-radius: 10px;
+    padding: 10px 18px;
+    font-size: 14px;
+    font-weight: 500;
+    color: #475569;
+    transition: all 0.2s ease;
+}
+
+.nav-pills .nav-link:hover {
+    background: #f1f5f9;
+}
+
+.nav-pills .nav-link.active {
+    background: #2563eb;
+    color: #fff;
+}
+
+.nav-pills .nav-link i {
+    font-size: 16px;
+}
+
+.form-label {
+    font-weight: 600;
+    font-size: 13px;
+    color: #334155;
+    letter-spacing: 0.02em;
+}
+
+.form-text {
+    font-size: 12px;
+    color: #94a3b8;
+}
+
+.form-control:focus {
+    border-color: #2563eb;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+.form-check-input:checked {
+    background-color: #2563eb;
+    border-color: #2563eb;
+}
+
+.notification-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 16px;
+    border-radius: 10px;
+    border: 1px solid #e2e8f0;
+    margin-bottom: 10px;
+    transition: all 0.2s ease;
+}
+
+.notification-toggle:hover {
+    background: #f8fafc;
+    border-color: #cbd5e1;
+}
+
+.section-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+}
+
+.save-bar {
+    position: sticky;
+    bottom: 0;
+    background: white;
+    border-top: 1px solid #e2e8f0;
+    padding: 16px 24px;
+    border-radius: 0 0 14px 14px;
+    z-index: 10;
+}
+
+.tab-content > .tab-pane {
+    display: none;
+}
+.tab-content > .tab-pane.active {
+    display: block;
+}
+</style>
+
 <div class="dashboard-topbar fixed-top d-flex justify-content-between align-items-center px-4 py-3 bg-white border-bottom"
      style="left:260px; right:0; top:0; z-index:999;">
 
-    <!-- Page Title -->
-     <div>
-    <div class="fw-semibold text-uppercase text-muted">
-        Settings configuration
-    </div>
+    <div>
+        <div class="fw-semibold text-uppercase text-muted">System Configuration</div>
+        <div class="text-muted small">Manage global settings & preferences</div>
     </div>
 
-    <!-- Right Section -->
     <div class="d-flex align-items-center gap-4">
-
-        <!-- Quick Actions -->
-        <div class="d-flex align-items-center gap-2">
-
-        </div>
-
-        <!-- User -->
         <div class="d-flex align-items-center gap-2">
             <div class="text-end">
                 <div class="fw-medium small">{{ request.user.username }}</div>
                 <div class="text-muted small">Configuration Panel</div>
             </div>
             {% if user.is_superuser %}
-    <img src="{% static 'images/admin.jpeg' %}"
-         class="rounded-circle border"
-         width="36"
-         height="36"
-         style="object-fit: cover;">
-
-{% elif user.groups.first.name == "Manager" %}
-    <img src="{% static 'images/manager.png' %}"
-         class="rounded-circle border"
-         width="36"
-         height="36"
-         style="object-fit: cover;">
-
-{% elif user.groups.first.name == "Staff" %}
-    <img src="{% static 'images/staff.png' %}"
-         class="rounded-circle border"
-         width="36"
-         height="36"
-         style="object-fit: cover;">
-         {% endif %}
+            <img src="{% static 'images/admin.jpeg' %}"
+                 class="rounded-circle border" width="36" height="36" style="object-fit: cover;">
+            {% endif %}
         </div>
     </div>
 </div>
+
+{% if messages %}
+<div class="row mb-3">
+    <div class="col-12">
+        {% for message in messages %}
+        <div class="alert alert-{{ message.tags }} alert-dismissible fade show rounded-3" role="alert">
+            <i class="bi bi-check-circle-fill me-2"></i> {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endif %}
+
+<div class="row">
+    <!-- Sidebar Navigation -->
+    <div class="col-md-3 mb-4">
+        <div class="card settings-card">
+            <div class="card-body p-3">
+                <h6 class="fw-bold text-muted small text-uppercase mb-3 px-2">Settings</h6>
+                <nav class="nav nav-pills flex-column gap-1">
+                    <a class="nav-link active" data-bs-toggle="pill" href="#general">
+                        <i class="bi bi-building me-2"></i> General
+                    </a>
+                    <a class="nav-link" data-bs-toggle="pill" href="#inventory">
+                        <i class="bi bi-box-seam me-2"></i> Inventory
+                    </a>
+                    <a class="nav-link" data-bs-toggle="pill" href="#notifications">
+                        <i class="bi bi-bell me-2"></i> Notifications
+                    </a>
+                    <a class="nav-link" data-bs-toggle="pill" href="#warehouse">
+                        <i class="bi bi-truck me-2"></i> Warehouse
+                    </a>
+                </nav>
+            </div>
+
+            <div class="card-footer bg-transparent border-top px-3 py-3">
+                <div class="text-muted small">
+                    <i class="bi bi-clock me-1"></i>
+                    Last updated: {{ settings_obj.updated_at|timesince }} ago
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Settings Content -->
+    <div class="col-md-9">
+        <form method="POST">
+            {% csrf_token %}
+
+            <div class="tab-content">
+
+                <!-- ================= GENERAL ================= -->
+                <div class="tab-pane fade show active" id="general">
+                    <div class="card settings-card mb-4">
+                        <div class="card-header bg-white px-4 py-3">
+                            <div class="d-flex align-items-center gap-3">
+                                <div class="section-icon bg-primary-subtle text-primary">
+                                    <i class="bi bi-building"></i>
+                                </div>
+                                <div>
+                                    <h6 class="fw-bold mb-0">Business Information</h6>
+                                    <small class="text-muted">Company details used in invoices, emails & receipts</small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body p-4">
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <label class="form-label">{{ form.company_name.label }}</label>
+                                    {{ form.company_name }}
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">{{ form.company_email.label }}</label>
+                                    {{ form.company_email }}
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">{{ form.company_phone.label }}</label>
+                                    {{ form.company_phone }}
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">{{ form.currency_symbol.label }}</label>
+                                    {{ form.currency_symbol }}
+                                </div>
+                                <div class="col-12">
+                                    <label class="form-label">{{ form.company_address.label }}</label>
+                                    {{ form.company_address }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ================= INVENTORY ================= -->
+                <div class="tab-pane fade" id="inventory">
+                    <div class="card settings-card mb-4">
+                        <div class="card-header bg-white px-4 py-3">
+                            <div class="d-flex align-items-center gap-3">
+                                <div class="section-icon bg-success-subtle text-success">
+                                    <i class="bi bi-box-seam"></i>
+                                </div>
+                                <div>
+                                    <h6 class="fw-bold mb-0">Inventory Preferences</h6>
+                                    <small class="text-muted">Control stock thresholds, warranties & display options</small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body p-4">
+                            <div class="row g-4">
+                                <div class="col-md-4">
+                                    <div class="p-3 rounded-3 border">
+                                        <div class="d-flex align-items-center gap-2 mb-2">
+                                            <i class="bi bi-exclamation-triangle text-warning"></i>
+                                            <label class="form-label mb-0">{{ form.low_stock_threshold.label }}</label>
+                                        </div>
+                                        {{ form.low_stock_threshold }}
+                                        <div class="form-text">{{ form.low_stock_threshold.help_text }}</div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="p-3 rounded-3 border">
+                                        <div class="d-flex align-items-center gap-2 mb-2">
+                                            <i class="bi bi-shield-check text-info"></i>
+                                            <label class="form-label mb-0">{{ form.default_warranty_months.label }}</label>
+                                        </div>
+                                        {{ form.default_warranty_months }}
+                                        <div class="form-text">Default warranty for new products</div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="p-3 rounded-3 border">
+                                        <div class="d-flex align-items-center gap-2 mb-2">
+                                            <i class="bi bi-list-ol text-secondary"></i>
+                                            <label class="form-label mb-0">{{ form.items_per_page.label }}</label>
+                                        </div>
+                                        {{ form.items_per_page }}
+                                        <div class="form-text">{{ form.items_per_page.help_text }}</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ================= NOTIFICATIONS ================= -->
+                <div class="tab-pane fade" id="notifications">
+                    <div class="card settings-card mb-4">
+                        <div class="card-header bg-white px-4 py-3">
+                            <div class="d-flex align-items-center gap-3">
+                                <div class="section-icon bg-warning-subtle text-warning">
+                                    <i class="bi bi-bell"></i>
+                                </div>
+                                <div>
+                                    <h6 class="fw-bold mb-0">Notification Preferences</h6>
+                                    <small class="text-muted">Control which notifications are generated & retention</small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body p-4">
+                            <div class="row g-4">
+                                <div class="col-md-6">
+                                    <div class="p-3 rounded-3 border mb-3">
+                                        <div class="d-flex align-items-center gap-2 mb-2">
+                                            <i class="bi bi-clock-history text-danger"></i>
+                                            <label class="form-label mb-0">{{ form.notification_retention_days.label }}</label>
+                                        </div>
+                                        {{ form.notification_retention_days }}
+                                        <div class="form-text">{{ form.notification_retention_days.help_text }}</div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6"></div>
+
+                                <div class="col-12">
+                                    <h6 class="fw-semibold text-muted small text-uppercase mb-3">Notification Channels</h6>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <div class="notification-toggle">
+                                        <div class="d-flex align-items-center gap-2">
+                                            <i class="bi bi-box text-primary"></i>
+                                            <span class="fw-medium small">Product Activity</span>
+                                        </div>
+                                        <div class="form-check form-switch mb-0">
+                                            {{ form.enable_product_notifications }}
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <div class="notification-toggle">
+                                        <div class="d-flex align-items-center gap-2">
+                                            <i class="bi bi-boxes text-success"></i>
+                                            <span class="fw-medium small">Stock Movements</span>
+                                        </div>
+                                        <div class="form-check form-switch mb-0">
+                                            {{ form.enable_stock_notifications }}
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <div class="notification-toggle">
+                                        <div class="d-flex align-items-center gap-2">
+                                            <i class="bi bi-receipt text-info"></i>
+                                            <span class="fw-medium small">Order Activity</span>
+                                        </div>
+                                        <div class="form-check form-switch mb-0">
+                                            {{ form.enable_order_notifications }}
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <div class="notification-toggle">
+                                        <div class="d-flex align-items-center gap-2">
+                                            <i class="bi bi-truck text-warning"></i>
+                                            <span class="fw-medium small">Supplier Activity</span>
+                                        </div>
+                                        <div class="form-check form-switch mb-0">
+                                            {{ form.enable_supplier_notifications }}
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <div class="notification-toggle">
+                                        <div class="d-flex align-items-center gap-2">
+                                            <i class="bi bi-tags text-secondary"></i>
+                                            <span class="fw-medium small">Category Activity</span>
+                                        </div>
+                                        <div class="form-check form-switch mb-0">
+                                            {{ form.enable_category_notifications }}
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <div class="notification-toggle">
+                                        <div class="d-flex align-items-center gap-2">
+                                            <i class="bi bi-cart text-danger"></i>
+                                            <span class="fw-medium small">Purchase Activity</span>
+                                        </div>
+                                        <div class="form-check form-switch mb-0">
+                                            {{ form.enable_purchase_notifications }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ================= WAREHOUSE ================= -->
+                <div class="tab-pane fade" id="warehouse">
+                    <div class="card settings-card mb-4">
+                        <div class="card-header bg-white px-4 py-3">
+                            <div class="d-flex align-items-center gap-3">
+                                <div class="section-icon bg-info-subtle text-info">
+                                    <i class="bi bi-truck"></i>
+                                </div>
+                                <div>
+                                    <h6 class="fw-bold mb-0">Warehouse & Purchase Defaults</h6>
+                                    <small class="text-muted">Default values for purchase orders & delivery</small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body p-4">
+                            <div class="row g-4">
+                                <div class="col-md-6">
+                                    <label class="form-label">{{ form.default_warehouse_address.label }}</label>
+                                    {{ form.default_warehouse_address }}
+                                    <div class="form-text">Used as default address on new purchase orders</div>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">{{ form.default_supplier_lead_days.label }}</label>
+                                    {{ form.default_supplier_lead_days }}
+                                    <div class="form-text">{{ form.default_supplier_lead_days.help_text }}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Save Button Bar -->
+            <div class="d-flex justify-content-end gap-2 mb-4">
+                <a href="{% url 'setting_dashboard' %}" class="btn btn-outline-secondary px-4">
+                    <i class="bi bi-arrow-counterclockwise me-1"></i> Reset
+                </a>
+                <button type="submit" class="btn btn-primary px-4">
+                    <i class="bi bi-check-lg me-1"></i> Save Settings
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
 {% endblock content %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    if (typeof bootstrap === 'undefined' || !bootstrap.Tab) {
+        var tabLinks = document.querySelectorAll('.nav-pills .nav-link[data-bs-toggle="pill"]');
+        var tabPanes = document.querySelectorAll('.tab-content > .tab-pane');
+
+        tabLinks.forEach(function(link) {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+
+                tabLinks.forEach(function(l) { l.classList.remove('active'); });
+                tabPanes.forEach(function(p) {
+                    p.classList.remove('show', 'active');
+                });
+
+                link.classList.add('active');
+                var target = document.querySelector(link.getAttribute('href'));
+                if (target) {
+                    target.classList.add('show', 'active');
+                }
+            });
+        });
+    }
+});
+</script>
+{% endblock extra_js %}
