@@ -6,6 +6,14 @@ from suppliers.models import Supplier
 User = get_user_model()
 
 
+def get_default_warehouse_address():
+    try:
+        from settings_app.models import SystemSettings
+        return SystemSettings.load().default_warehouse_address
+    except Exception:
+        return 'Ahmedabad, Gujarat'
+
+
 class PurchaseRequest(models.Model):
     STATUS_CHOICES = [
         ('Pending', 'Pending'),
@@ -43,7 +51,7 @@ class PurchaseOrder(models.Model):
     status = models.CharField(max_length=20, choices=STATUS, default='draft')
     expected_delivery = models.DateField(null=True, blank=True)
     actual_delivery = models.DateField(null=True, blank=True)
-    warehouse_address = models.TextField(default='Ahmedabad , Gujarat')
+    warehouse_address = models.TextField(default='Ahmedabad, Gujarat')
 
     total_cost = models.DecimalField(
         max_digits=10, decimal_places=2, default=0)
