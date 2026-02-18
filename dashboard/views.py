@@ -60,7 +60,8 @@ def admin_dashboard(request):
         quantity__lte=get_low_stock_threshold(), quantity__gt=0, is_active=True)
     low_stock = low_stock_products.count()
     out_of_stock = Product.objects.filter(quantity__lte=0).count()
-    in_stock = Product.objects.filter(quantity__gt=get_low_stock_threshold()).count()
+    in_stock = Product.objects.filter(
+        quantity__gt=get_low_stock_threshold()).count()
     # total sales
     total_sales = (
         OrderItem.objects
@@ -126,11 +127,11 @@ def admin_dashboard(request):
         )
     ).order_by('-value')
 
-    paginator = Paginator(top_suppliers, 5)
+    paginator = Paginator(top_suppliers, 3)
     suppliers = request.GET.get('page_s')
     supply = paginator.get_page(suppliers)
 
-    paginator = Paginator(top_value_products, 5)
+    paginator = Paginator(top_value_products, 3)
     page_number = request.GET.get('page')
     productt = paginator.get_page(page_number)
 
