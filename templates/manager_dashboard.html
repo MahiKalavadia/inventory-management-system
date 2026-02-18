@@ -251,7 +251,10 @@
 
             <!-- RECENT STOCK ACTIVITY -->
             <div class="card shadow-sm mb-4">
-                <div class="card-header fw-bold bg-light">Recent Inventory Transactions</div>
+                <div class="card-header d-flex justify-content-between align-items-center bg-light">
+                            <b>Stock Logs</b>
+                            <a href="{% url 'stock_history' %}" class="btn btn-sm btn-outline-secondary">View All</a>
+                        </div>
                 <ul class="list-group list-group-flush">
                     {% for log in recent_stock_logs %}
                     <li class="list-group-item d-flex justify-content-between align-items-center hover-shadow">
