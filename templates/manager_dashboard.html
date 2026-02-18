@@ -191,97 +191,239 @@
 
     
 </div>
- <div class="card shadow-sm mb-4">
-                <div class="card-header fw-bold bg-light">Inventory Status</div>
-                <div class="card-body">
-                    <div class="progress" style="height: 25px;">
-                        <div class="progress-bar bg-success" style="width: {{ in_stock_bar }}%">In</div>
-                        <div class="progress-bar bg-warning" style="width: {{ low_stock_bar }}%">Low</div>
-                        <div class="progress-bar bg-danger" style="width: {{ out_stock_bar }}%">Out</div>
-                    </div>
-                </div>
-            </div>
-   <div class="row g-3">
-        <!-- LEFT: MAIN DASHBOARD CONTENT -->
-        <div class="col-lg-9 col-12">
-            <!-- CRITICAL + STOCKOUT TABLES -->
-            <div class="row g-3 mb-4">
-                <div class="col-md-6 col-12">
-                    <div class="card shadow-sm">
-                        <div class="card-header d-flex justify-content-between align-items-center bg-light">
-                            <b>Critical Stock Items</b>
-                            <a href="{% url 'low_stock' %}" class="btn btn-sm btn-outline-primary">View All</a>
+
+  <div class="row g-4">
+
+    <!-- LEFT SIDE -->
+    <div class="col-lg-9 col-12">
+
+        <!-- CRITICAL + STOCKOUT -->
+        <div class="row g-4 mb-4">
+
+            <!-- Critical Stock -->
+            <div class="col-md-6">
+                <div class="card dashboard-card h-100">
+                    <div class="card-header dashboard-header">
+                        <div class="d-flex align-items-center gap-2">
+                            <i class="bi bi-exclamation-triangle-fill text-warning"></i>
+                            <span class="fw-semibold">Critical Stock</span>
                         </div>
-                        <div class="table-responsive">
-                            <table class="table table-hover mb-0">
+                        <a href="{% url 'low_stock' %}" 
+                           class="btn btn-sm btn-light rounded-pill px-3">
+                           View All
+                        </a>
+                    </div>
+
+                    <div class="card-body p-0">
+                        <table class="table table-hover align-middle mb-0">
+                            <tbody>
                                 {% for p in l_stock %}
                                 <tr>
-                                    <td>{{ p.name }}</td>
-                                    <td class="text-warning fw-bold">{{ p.quantity }}</td>
+                                    <td class="fw-medium ps-3">{{ p.name }}</td>
+                                    <td class="text-end pe-3">
+                                        <span>
+                                            {{ p.quantity }}
+                                        </span>
+                                    </td>
                                 </tr>
                                 {% empty %}
-                                <tr><td colspan="2" class="text-center text-muted">No low stock items</td></tr>
+                                <tr>
+                                    <td colspan="2" class="text-center text-muted py-4">
+                                        No low stock items
+                                    </td>
+                                </tr>
                                 {% endfor %}
-                            </table>
-                        </div>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
+            </div>
 
-                <div class="col-md-6 col-12">
-                    <div class="card shadow-sm">
-                        <div class="card-header d-flex justify-content-between align-items-center bg-light">
-                            <b>Stockout Items</b>
-                            <a href="{% url 'out_stock' %}" class="btn btn-sm btn-outline-danger">View All</a>
+            <!-- Stockout -->
+            <div class="col-md-6">
+                <div class="card dashboard-card h-100">
+                    <div class="card-header dashboard-header">
+                        <div class="d-flex align-items-center gap-2">
+                            <i class="bi bi-x-circle-fill text-danger"></i>
+                            <span class="fw-semibold">Stockout Items</span>
                         </div>
-                        <div class="table-responsive">
-                            <table class="table table-hover mb-0">
+                        <a href="{% url 'out_stock' %}" 
+                           class="btn btn-sm btn-light rounded-pill px-3">
+                           View All
+                        </a>
+                    </div>
+
+                    <div class="card-body p-0">
+                        <table class="table table-hover align-middle mb-0">
+                            <tbody>
                                 {% for p in o_stock %}
                                 <tr>
-                                    <td>{{ p.name }}</td>
-                                    <td class="text-danger">Out</td>
+                                    <td class="fw-medium ps-3">{{ p.name }}</td>
+                                    <td class="text-end pe-3">
+                                        <span>
+                                            Out
+                                        </span>
+                                    </td>
                                 </tr>
                                 {% empty %}
-                                <tr><td colspan="2" class="text-center text-muted">Everything stocked</td></tr>
+                                <tr>
+                                    <td colspan="2" class="text-center text-muted py-4">
+                                        Everything stocked
+                                    </td>
+                                </tr>
                                 {% endfor %}
-                            </table>
-                        </div>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
 
-            <!-- RECENT STOCK ACTIVITY -->
-            <div class="card shadow-sm mb-4">
-                <div class="card-header d-flex justify-content-between align-items-center bg-light">
-                            <b>Stock Logs</b>
-                            <a href="{% url 'stock_history' %}" class="btn btn-sm btn-outline-secondary">View All</a>
-                        </div>
-                <ul class="list-group list-group-flush">
-                    {% for log in recent_stock_logs %}
-                    <li class="list-group-item d-flex justify-content-between align-items-center hover-shadow">
-                        <div>
-                            <span class="fw-semibold">{{ log.product.name }}</span> — {{ log.action }} 
-                            <span class="badge bg-secondary ms-2">{{ log.quantity }}</span>
-                        </div>
-                        <small class="text-muted">{{ log.created_at|date:"M d, Y H:i" }}</small>
-                    </li>
-                    {% empty %}
-                    <li class="list-group-item text-center text-muted">No recent activity</li>
-                    {% endfor %}
-                </ul>
+        </div>
+
+        <!-- STOCK LOGS -->
+        <div class="card dashboard-card mb-4">
+            <div class="card-header dashboard-header">
+                <div class="d-flex align-items-center gap-2">
+                    <i class="bi bi-activity text-secondary"></i>
+                    <span class="fw-semibold">Recent Stock Activity</span>
+                </div>
+                <a href="{% url 'stock_history' %}" 
+                   class="btn btn-sm btn-light rounded-pill px-3">
+                   View All
+                </a>
+            </div>
+
+            <ul class="list-group list-group-flush">
+                {% for log in recent_stock_logs %}
+                <li class="list-group-item d-flex justify-content-between align-items-center py-3">
+                    <div>
+                        <div class="fw-medium">{{ log.product.name }}</div>
+                        <small class="text-muted">
+                            {{ log.action }}
+                            <span class="badge bg-light text-dark ms-2">
+                                {{ log.quantity }}
+                            </span>
+                        </small>
+                    </div>
+                    <small class="text-muted">
+                        {{ log.created_at|date:"M d, Y H:i" }}
+                    </small>
+                </li>
+                {% empty %}
+                <li class="list-group-item text-center text-muted py-4">
+                    No recent activity
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+
+    </div>
+    <!-- RIGHT SIDEBAR -->
+    <div class="col-lg-3 col-12">
+
+        <!-- Quick Actions -->
+         <div class="card shadow-sm border-0 mb-4 sidebar-card">
+    <div class="card-header bg-light border-0 d-flex align-items-center gap-2">
+        <i class="bi bi-lightning-charge-fill text-primary"></i>
+        <span class="fw-semibold text-uppercase small">QUICK ACTIONS</span>
+    </div>
+
+    <div class="card-body p-2">
+
+        <!-- Add Product -->
+        <a href="{% url 'add_product' %}"
+           class="operation-item d-flex align-items-center justify-content-between p-3 mb-2 rounded text-decoration-none">
+            
+            <div class="d-flex align-items-center gap-3">
+                <div class="icon-box bg-primary-subtle text-primary">
+                    <i class="bi bi-plus-lg"></i>
+                </div>
+                <div>
+                    <div class="fw-semibold">Add Inventory Item</div>
+                </div>
+            </div>
+
+            <i class="bi bi-chevron-right text-muted"></i>
+        </a>
+        
+        <!--Add Category-->
+         <a href="{% url 'stock_in_section' %}"
+           class="operation-item d-flex align-items-center justify-content-between p-3 mb-2 rounded text-decoration-none">
+            
+            <div class="d-flex align-items-center gap-3">
+                <div class="icon-box bg-primary-subtle text-primary">
+                    <i class="bi bi-box-arrow-in-down text-success"></i>
+                </div>
+                <div>
+                    <div class="fw-semibold">Stock In</div>
+                </div>
+            </div>
+
+            <i class="bi bi-chevron-right text-muted"></i>
+        </a>
+
+        <!--Add Supplier-->
+         <a href="{% url 'stock_history' %}"
+           class="operation-item d-flex align-items-center justify-content-between p-3 mb-2 rounded text-decoration-none">
+            
+            <div class="d-flex align-items-center gap-3">
+                <div class="icon-box bg-primary-subtle text-primary">
+                    <i class="bi bi-clock-history text-secondary"></i>
+                </div>
+                <div>
+                    <div class="fw-semibold">Stock History</div>
+                </div>
+            </div>
+            <i class="bi bi-chevron-right text-muted"></i>
+        </a>
+      </div>
+        </div>
+
+        <!-- Inventory Distribution -->
+        <div class="card dashboard-card">
+            <div class="card-header dashboard-header">
+                <span class="fw-semibold">Inventory Distribution</span>
+            </div>
+
+            <div class="card-body">
+
+                <div class="progress-item">
+                    <div class="d-flex justify-content-between small mb-1">
+                        <span>In Stock</span>
+                        <span>{{ in_stock_bar }}%</span>
+                    </div>
+                    <div class="progress">
+                        <div class="progress-bar bg-success"
+                             style="width: {{ in_stock_bar }}%"></div>
+                    </div>
+                </div>
+
+                <div class="progress-item mt-3">
+                    <div class="d-flex justify-content-between small mb-1">
+                        <span>Low Stock</span>
+                        <span>{{ low_stock_bar }}%</span>
+                    </div>
+                    <div class="progress">
+                        <div class="progress-bar bg-warning"
+                             style="width: {{ low_stock_bar }}%"></div>
+                    </div>
+                </div>
+
+                <div class="progress-item mt-3">
+                    <div class="d-flex justify-content-between small mb-1">
+                        <span>Out of Stock</span>
+                        <span>{{ out_stock_bar }}%</span>
+                    </div>
+                    <div class="progress">
+                        <div class="progress-bar bg-danger"
+                             style="width: {{ out_stock_bar }}%"></div>
+                    </div>
+                </div>
+
             </div>
         </div>
 
-        <!-- RIGHT: QUICK ACTIONS SIDEBAR -->
-        <div class="col-lg-3 col-12">
-            <div class="card shadow-sm sticky-top" style="top: 90px;">
-                <div class="card-header fw-bold bg-light">Quick Actions</div>
-                <div class="card-body d-flex flex-column gap-3">
-                    <a href="{% url 'add_product' %}" class="btn btn-primary w-100">Add Item</a>
-                    <a href="{% url 'stock_in_section' %}" class="btn btn-success w-100">Stock In</a>
-                    <a href="{% url 'stock_history' %}" class="btn btn-dark w-100">Stock Log</a>
-                </div>
-            </div>
-        </div>
     </div>
 </div>
+
 {% endblock %}
