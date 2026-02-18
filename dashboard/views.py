@@ -2,7 +2,7 @@ from django.shortcuts import render
 from inventory.models import Product, Category, StockLog
 from suppliers.models import Supplier
 from accounts.decorators import role_required
-from inventory.config import LOW_STOCK_THRESHOLD
+from inventory.config import get_low_stock_threshold
 from django.contrib.auth.models import User
 from django.utils import timezone
 from datetime import timedelta
@@ -57,10 +57,10 @@ def admin_dashboard(request):
     total_categories = Category.objects.count()
     total_suppliers = Supplier.objects.count()
     low_stock_products = Product.objects.filter(
-        quantity__lte=LOW_STOCK_THRESHOLD, quantity__gt=0, is_active=True)
+        quantity__lte=get_low_stock_threshold(), quantity__gt=0, is_active=True)
     low_stock = low_stock_products.count()
     out_of_stock = Product.objects.filter(quantity__lte=0).count()
-    in_stock = Product.objects.filter(quantity__gt=LOW_STOCK_THRESHOLD).count()
+    in_stock = Product.objects.filter(quantity__gt=get_low_stock_threshold()).count()
     # total sales
     total_sales = (
         OrderItem.objects
@@ -93,13 +93,13 @@ def admin_dashboard(request):
     users = User.objects.all()
     # for admin low_stock table and out of stock table
     l_stock = Product.objects.filter(
-        quantity__lte=LOW_STOCK_THRESHOLD, quantity__gt=0, is_active=True).select_related('supplier').order_by('quantity')[:3]
+        quantity__lte=get_low_stock_threshold(), quantity__gt=0, is_active=True).select_related('supplier').order_by('quantity')[:3]
     o_stock = Product.objects.filter(quantity=0).order_by('quantity')[:3]
     # Progress bar indicator to show percentage distribution of stocks
     low_stock_bar = Product.objects.filter(
-        quantity__lte=LOW_STOCK_THRESHOLD, quantity__gt=0, is_active=True).count()
+        quantity__lte=get_low_stock_threshold(), quantity__gt=0, is_active=True).count()
     in_stock_bar = Product.objects.filter(
-        quantity__gt=LOW_STOCK_THRESHOLD, is_active=True).count()
+        quantity__gt=get_low_stock_threshold(), is_active=True).count()
     out_stock_bar = Product.objects.filter(
         quantity__lte=0, is_active=True).count()
     notifications = get_user_notifications(request.user, 5)
@@ -225,13 +225,13 @@ def manager_dashboard(request):
     total_categories = Category.objects.count()
     total_suppliers = Supplier.objects.count()
     in_stock = Product.objects.filter(
-        quantity__gt=LOW_STOCK_THRESHOLD, is_active=True).count()
+        quantity__gt=get_low_stock_threshold(), is_active=True).count()
     low_stock = Product.objects.filter(
-        quantity__lte=LOW_STOCK_THRESHOLD, quantity__gt=0, is_active=True).count()
+        quantity__lte=get_low_stock_threshold(), quantity__gt=0, is_active=True).count()
     out_stock = Product.objects.filter(quantity=0, is_active=True).count()
 
     l_stock = Product.objects.filter(
-        quantity__lte=LOW_STOCK_THRESHOLD,
+        quantity__lte=get_low_stock_threshold(),
         quantity__gt=0
     ).select_related('supplier').order_by('quantity')[:5]
 
@@ -274,12 +274,12 @@ def manager_dashboard(request):
 def staff_dashboard(request):
     total_products = Product.objects.count()
     in_stock = Product.objects.filter(
-        quantity__gt=LOW_STOCK_THRESHOLD, is_active=True).count()
+        quantity__gt=get_low_stock_threshold(), is_active=True).count()
     low_stock = Product.objects.filter(
-        quantity__lte=LOW_STOCK_THRESHOLD, quantity__gt=0, is_active=True).count()
+        quantity__lte=get_low_stock_threshold(), quantity__gt=0, is_active=True).count()
     out_stock = Product.objects.filter(quantity=0, is_active=True).count()
     low_stock_products = Product.objects.filter(
-        quantity__lte=LOW_STOCK_THRESHOLD,
+        quantity__lte=get_low_stock_threshold(),
         quantity__gt=0,
         is_active=True
     ).select_related('supplier')[:5]
