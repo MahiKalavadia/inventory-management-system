@@ -8,7 +8,26 @@ from .models import Notification
 
 # ================= UTILITY FUNCTION =================
 
+def is_notification_enabled(notification_type):
+    try:
+        from settings_app.models import SystemSettings
+        settings_obj = SystemSettings.load()
+        flag_map = {
+            'product': settings_obj.enable_product_notifications,
+            'stock': settings_obj.enable_stock_notifications,
+            'order': settings_obj.enable_order_notifications,
+            'supplier': settings_obj.enable_supplier_notifications,
+            'category': settings_obj.enable_category_notifications,
+            'purchase': settings_obj.enable_purchase_notifications,
+        }
+        return flag_map.get(notification_type, True)
+    except Exception:
+        return True
+
+
 def create_notification(title, message, type, notification_type, roles, user=None):
+    if not is_notification_enabled(notification_type):
+        return
     Notification.objects.create(
         title=title,
         message=message,
