@@ -1,4 +1,5 @@
 {% extends 'base_dashboard.html' %}
+{% load number_filters %}
 {% load static %}
 {% block content %}
 <div class="dashboard-topbar fixed-top d-flex justify-content-between align-items-center px-4 py-3 bg-white border-bottom"
@@ -220,8 +221,8 @@
                <div class="card-body" style="height: 260px;">
                     <h6 class="fw-semibold mb-2">Inventory Value by Category</h6>
                     <div class="text-muted small mb-3">
-                        Total Inventory Value:
-                        <span class="fw-bold text-dark">₹ {{ total_inventory_value|floatformat:0 }}</span>
+                        Total Inventory Value
+                        <span class="fw-bold text-dark">₹ {{ total_inventory_value|floatformat:0|short_number }}</span>
                     </div>
                     <canvas id="inventoryValueChart"></canvas>
                 </div>
@@ -429,7 +430,7 @@ new Chart(categoryChart, {
         maintainAspectRatio: false,
         indexAxis: 'y',
         plugins: { legend: { display: false }},
-        animation: { duration: 600 },
+        animation: { duration: 700 },
         scales: { x: { beginAtZero: true }}
     }
 });
@@ -465,7 +466,7 @@ new Chart(trendChart, {
     options: {
         maintainAspectRatio: false,
         plugins: { legend: { display: false }},
-        animation: { duration: 700 },
+        animation: { duration: 1500 },
         scales: { y: { beginAtZero: true }}
     }
 });
