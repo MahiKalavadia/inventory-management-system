@@ -1,3 +1,13 @@
 from django.contrib import admin
+from .models import SystemSettings
 
-# Register your models here.
+
+@admin.register(SystemSettings)
+class SystemSettingsAdmin(admin.ModelAdmin):
+    list_display = ('__str__', 'updated_at')
+
+    def has_add_permission(self, request):
+        return not SystemSettings.objects.exists()
+
+    def has_delete_permission(self, request, obj=None):
+        return False
