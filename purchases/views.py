@@ -9,7 +9,7 @@ from django.db.models import Sum, Count
 from inventory.models import Product
 from suppliers.models import Supplier
 from django.contrib import messages
-from inventory.config import LOW_STOCK_THRESHOLD
+from inventory.config import get_low_stock_threshold
 from django.core.paginator import Paginator
 from django.contrib.admin.views.decorators import staff_member_required
 from django.utils.timezone import now
@@ -26,7 +26,7 @@ def is_manager_or_staff(user):
 
 @login_required
 def purchase_dashboard(request):
-    low_products = Product.objects.filter(quantity__lte=LOW_STOCK_THRESHOLD)
+    low_products = Product.objects.filter(quantity__lte=get_low_stock_threshold())
     total_requests = PurchaseRequest.objects.count()
     pending_requests = PurchaseRequest.objects.filter(status='Pending').count()
     approved_requests = PurchaseRequest.objects.filter(
@@ -79,7 +79,7 @@ def purchase_dashboard_ms(request):
 
     # 📉 Low / Out stock products
     low_stock_products = Product.objects.filter(
-        quantity__lte=LOW_STOCK_THRESHOLD,
+        quantity__lte=get_low_stock_threshold(),
         quantity__gt=0,
         is_active=True
     ).order_by('-created_at')
@@ -162,7 +162,7 @@ def create_request(request, product_id):
 @login_required
 def purchase_request(request):
     low_stock_products = Product.objects.filter(
-        quantity__lte=LOW_STOCK_THRESHOLD, quantity__gt=0).all()
+        quantity__lte=get_low_stock_threshold(), quantity__gt=0).all()
     out_of_stock_products = Product.objects.filter(quantity=0).all()
     paginator = Paginator(low_stock_products, 10)
     low_page = request.GET.get("page_low")
