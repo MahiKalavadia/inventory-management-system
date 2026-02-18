@@ -6,7 +6,7 @@ from django.core.paginator import Paginator
 from django.contrib.auth.decorators import login_required
 from .forms import ProductForm, CategoryForm, StockForm
 from django.db.models import Count
-from inventory.config import LOW_STOCK_THRESHOLD
+from inventory.config import get_low_stock_threshold
 from django.contrib import messages
 from django.db.models.functions import TruncMonth, Coalesce
 from django.http import HttpResponse
@@ -47,10 +47,10 @@ def product_dashboard(request):
         products = products.filter(supplier_id=supplier_id)
 
     if status == "in":
-        products = products.filter(quantity__gt=5)
+        products = products.filter(quantity__gt=get_low_stock_threshold())
     elif status == "low":
         products = products.filter(
-            quantity__lte=LOW_STOCK_THRESHOLD, quantity__gt=0)
+            quantity__lte=get_low_stock_threshold(), quantity__gt=0)
     elif status == "out":
         products = products.filter(quantity=0)
 
@@ -62,9 +62,9 @@ def product_dashboard(request):
     # Stats
     total_products = Product.objects.count()
     in_stock = Product.objects.filter(
-        quantity__gt=LOW_STOCK_THRESHOLD, is_active=True).count()
+        quantity__gt=get_low_stock_threshold(), is_active=True).count()
     low_stock = Product.objects.filter(
-        quantity__lte=LOW_STOCK_THRESHOLD, quantity__gt=0, is_active=True).count()
+        quantity__lte=get_low_stock_threshold(), quantity__gt=0, is_active=True).count()
     out_of_stock = Product.objects.filter(quantity=0, is_active=True).count()
     total_categories = Category.objects.count()
     total_suppliers = Supplier.objects.count()
@@ -107,6 +107,15 @@ def product_dashboard(request):
         )
     ).order_by('-inventory_value')[:8]
 
+    total_inventory_value = Product.objects.aggregate(
+        value=Sum(
+            ExpressionWrapper(
+                F('price') * F('quantity'),
+                output_field=DecimalField()
+            )
+        )
+    )['value'] or 0
+
     context = {
         'products': page_obj,
         'page_obj': page_obj,
@@ -118,7 +127,7 @@ def product_dashboard(request):
         "out_of_stock": out_of_stock,
         "total_categories": total_categories,
         "total_suppliers": total_suppliers,
-        "low_stock_limit": LOW_STOCK_THRESHOLD,
+        "low_stock_limit": get_low_stock_threshold(),
         'category_names': category_names,
         'category_counts': category_counts,
         'expensive_names': expensive_names,
@@ -127,6 +136,7 @@ def product_dashboard(request):
         'monthly_counts': monthly_counts,
         'category_value_labels': [c.name for c in category_value_data],
         'category_value_values': [float(c.inventory_value or 0) for c in category_value_data],
+        'total_inventory_value': total_inventory_value,
     }
 
     return render(request, "dashboards/product_dashboard.html", context)
@@ -152,10 +162,10 @@ def product_list(request):
         products = products.filter(supplier_id=supplier)
 
     if status == 'in':
-        products = products.filter(quantity__gt=LOW_STOCK_THRESHOLD)
+        products = products.filter(quantity__gt=get_low_stock_threshold())
     elif status == 'low':
         products = products.filter(
-            quantity__gt=0, quantity__lte=LOW_STOCK_THRESHOLD)
+            quantity__gt=0, quantity__lte=get_low_stock_threshold())
     elif status == 'out':
         products = products.filter(quantity=0)
 
@@ -165,7 +175,7 @@ def product_list(request):
 
     return render(request, 'inventory/product_list.html', {
         'page_obj': page_obj,
-        "low_stock_limit": LOW_STOCK_THRESHOLD,
+        "low_stock_limit": get_low_stock_threshold(),
         'categories': Category.objects.all(),
         'suppliers': Supplier.objects.all(),
     })
@@ -622,10 +632,10 @@ def stock_dashboard(request):
     if supplier_id:
         product_qs = product_qs.filter(supplier_id=supplier_id)
     if status == 'in':
-        product_qs = product_qs.filter(quantity__gt=LOW_STOCK_THRESHOLD)
+        product_qs = product_qs.filter(quantity__gt=get_low_stock_threshold())
     elif status == 'low':
         product_qs = product_qs.filter(
-            quantity__lte=LOW_STOCK_THRESHOLD, quantity__gt=0)
+            quantity__lte=get_low_stock_threshold(), quantity__gt=0)
     elif status == 'out':
         product_qs = product_qs.filter(quantity=0)
     if search:
@@ -635,9 +645,9 @@ def stock_dashboard(request):
     # ---------- SUMMARY COUNTS ----------
     total_products = Product.objects.filter(is_active=True).count()
     in_stock = Product.objects.filter(
-        quantity__gt=LOW_STOCK_THRESHOLD, is_active=True).count()
+        quantity__gt=get_low_stock_threshold(), is_active=True).count()
     low_stock = Product.objects.filter(
-        quantity__lte=LOW_STOCK_THRESHOLD, quantity__gt=0, is_active=True).count()
+        quantity__lte=get_low_stock_threshold(), quantity__gt=0, is_active=True).count()
     out_stock = Product.objects.filter(quantity=0, is_active=True).count()
 
     # ---------- TOTAL STOCK IN/OUT ----------
@@ -648,7 +658,7 @@ def stock_dashboard(request):
 
     # ---------- LOW STOCK PRODUCTS ----------
     low_qs = Product.objects.filter(
-        quantity__lte=LOW_STOCK_THRESHOLD, quantity__gt=0, is_active=True).select_related('category', 'supplier')
+        quantity__lte=get_low_stock_threshold(), quantity__gt=0, is_active=True).select_related('category', 'supplier')
 
     # ---------- PAGINATION ----------
     product_paginator = Paginator(product_qs.order_by('name'), 5)
@@ -777,7 +787,7 @@ def stock_history(request):
 @login_required
 def in_stock_products(request):
     products = Product.objects.filter(
-        quantity__gt=LOW_STOCK_THRESHOLD, is_active=True)
+        quantity__gt=get_low_stock_threshold(), is_active=True)
 
     MAX_STOCK = 100
 
@@ -794,7 +804,7 @@ def in_stock_products(request):
 @login_required
 def low_stock_products(request):
     products = Product.objects.filter(
-        quantity__lte=LOW_STOCK_THRESHOLD, quantity__gt=0, is_active=True)
+        quantity__lte=get_low_stock_threshold(), quantity__gt=0, is_active=True)
 
     MAX_STOCK = 10
 
@@ -805,7 +815,7 @@ def low_stock_products(request):
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
 
-    return render(request, 'inventory/low_stock.html', {'page_obj': page_obj, "low_stock_limit": LOW_STOCK_THRESHOLD})
+    return render(request, 'inventory/low_stock.html', {'page_obj': page_obj, "low_stock_limit": get_low_stock_threshold()})
 
 
 @login_required
@@ -829,7 +839,7 @@ def export_instock_csv(request):
         "Profit", "Quantity", "Category", "Supplier", "Warranty Months"
     ])
 
-    for instock in Product.objects.filter(quantity__gt=LOW_STOCK_THRESHOLD).all():
+    for instock in Product.objects.filter(quantity__gt=get_low_stock_threshold()).all():
         writer.writerow([
             instock.sku,
             instock.name,
@@ -855,7 +865,7 @@ def export_instock_excel(request):
                "Profit", "Quantity", "Category", "Supplier", "Warranty Months"
                ])
 
-    for instock in Product.objects.filter(quantity__gt=LOW_STOCK_THRESHOLD).all():
+    for instock in Product.objects.filter(quantity__gt=get_low_stock_threshold()).all():
         ws.append([
             instock.sku,
             instock.name,
@@ -893,7 +903,7 @@ def export_instock_pdf(request):
     data = [["SKU", "Name", "Brand", "Purchase Price", "Price",
              "Profit", "Qty", "Category", "Supplier", "Warranty (Months)"]]
 
-    products = Product.objects.filter(quantity__gt=LOW_STOCK_THRESHOLD).all()
+    products = Product.objects.filter(quantity__gt=get_low_stock_threshold()).all()
     for item in products:
         data.append([
             item.sku,
@@ -962,7 +972,7 @@ def export_lowstock_csv(request):
                "Profit", "Quantity", "Category", "Supplier", "Warranty Months"
     ])
 
-    for lowstock in Product.objects.filter(quantity__gt=0, quantity__lte=LOW_STOCK_THRESHOLD,
+    for lowstock in Product.objects.filter(quantity__gt=0, quantity__lte=get_low_stock_threshold(),
                                            ).all():
         writer.writerow([
             lowstock.sku,
@@ -990,7 +1000,7 @@ def export_lowstock_excel(request):
                "Profit", "Quantity", "Category", "Supplier", "Warranty Months"
     ])
 
-    for lowstock in Product.objects.filter(quantity__gt=0, quantity__lte=LOW_STOCK_THRESHOLD).all():
+    for lowstock in Product.objects.filter(quantity__gt=0, quantity__lte=get_low_stock_threshold()).all():
         ws.append([
             lowstock.sku,
             lowstock.name,
@@ -1030,7 +1040,7 @@ def export_lowstock_pdf(request):
              "Profit", "Qty", "Category", "Supplier", "Warranty (Months)"]]
 
     products = Product.objects.filter(
-        quantity__gt=0, quantity__lte=LOW_STOCK_THRESHOLD).all()
+        quantity__gt=0, quantity__lte=get_low_stock_threshold()).all()
     for item in products:
         data.append([
             item.sku,
@@ -1231,7 +1241,7 @@ def report_dashboard(request):
     total_orders = Order.objects.count()
 
     in_stock_products = Product.objects.filter(
-        quantity__gt=LOW_STOCK_THRESHOLD,
+        quantity__gt=get_low_stock_threshold(),
         is_active=True
     )
 
@@ -1242,7 +1252,7 @@ def report_dashboard(request):
     )['average_price'] or 0
 
     reorder_products = Product.objects.filter(
-        quantity__lte=LOW_STOCK_THRESHOLD,
+        quantity__lte=get_low_stock_threshold(),
         is_active=True
     )
 
@@ -1251,7 +1261,7 @@ def report_dashboard(request):
     reorder_cost = reorder_products.aggregate(
         total_reorder=Sum(
             ExpressionWrapper(
-                (LOW_STOCK_THRESHOLD - F('quantity')) * F('purchase_price'),
+                (get_low_stock_threshold() - F('quantity')) * F('purchase_price'),
                 output_field=DecimalField()
             )
         )
@@ -1425,20 +1435,20 @@ def export_stock_report_pdf(request):
 @login_required
 def reorder_report(request):
     products = Product.objects.filter(
-        quantity__lte=LOW_STOCK_THRESHOLD,
+        quantity__lte=get_low_stock_threshold(),
         is_active=True
     )
 
     return render(request, "inventory/reorder_report.html", {
         "products": products,
-        "threshold": LOW_STOCK_THRESHOLD
+        "threshold": get_low_stock_threshold()
     })
 
 
 @login_required
 def export_reorder_csv(request):
     products = Product.objects.filter(
-        quantity__lte=LOW_STOCK_THRESHOLD,
+        quantity__lte=get_low_stock_threshold(),
         is_active=True
     )
 
@@ -1471,7 +1481,7 @@ def export_reorder_report_excel(request):
     ws.title = "Reorder Report"
 
     products = Product.objects.filter(
-        quantity__lte=LOW_STOCK_THRESHOLD,
+        quantity__lte=get_low_stock_threshold(),
         is_active=True
     )
 
@@ -1514,7 +1524,7 @@ def export_reorder_report_pdf(request):
              ]]
 
     products = Product.objects.filter(
-        quantity__lte=LOW_STOCK_THRESHOLD,
+        quantity__lte=get_low_stock_threshold(),
         is_active=True
     )
     for item in products:
@@ -2070,7 +2080,7 @@ def view_all_reports(request):
     )['average_price'] or 0
 
     reorder_products = Product.objects.filter(
-        quantity__lte=LOW_STOCK_THRESHOLD,
+        quantity__lte=get_low_stock_threshold(),
         is_active=True
     )
 
@@ -2079,7 +2089,7 @@ def view_all_reports(request):
     reorder_cost = reorder_products.aggregate(
         total_reorder=Sum(
             ExpressionWrapper(
-                (LOW_STOCK_THRESHOLD - F('quantity')) * F('purchase_price'),
+                (get_low_stock_threshold() - F('quantity')) * F('purchase_price'),
                 output_field=DecimalField()
             )
         )
