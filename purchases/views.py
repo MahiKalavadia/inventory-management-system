@@ -5,8 +5,8 @@ from .models import PurchaseRequest, PurchaseOrder
 from .forms import PurchaseRequestForm, PurchaseOrderForm
 from notifications.models import Notification
 from django.contrib.auth.models import User
-from django.db.models import Sum, Count
-from inventory.models import Product
+from django.db.models import Sum, Count, ExpressionWrapper, F, DecimalField
+from inventory.models import Product, StockLog, Category
 from suppliers.models import Supplier
 from django.contrib import messages
 from inventory.config import get_low_stock_threshold
@@ -15,9 +15,12 @@ from django.contrib.admin.views.decorators import staff_member_required
 from django.utils.timezone import now
 from django.http import HttpResponse
 import csv
+import json
 from openpyxl import Workbook
 from reportlab.pdfgen import canvas
 from django.db import transaction
+from datetime import timedelta
+from django.db.models.functions import TruncMonth
 
 
 def is_manager_or_staff(user):
@@ -26,7 +29,8 @@ def is_manager_or_staff(user):
 
 @login_required
 def purchase_dashboard(request):
-    low_products = Product.objects.filter(quantity__lte=get_low_stock_threshold())
+    low_products = Product.objects.filter(
+        quantity__lte=get_low_stock_threshold())
     total_requests = PurchaseRequest.objects.count()
     pending_requests = PurchaseRequest.objects.filter(status='Pending').count()
     approved_requests = PurchaseRequest.objects.filter(
@@ -56,6 +60,52 @@ def purchase_dashboard(request):
     page_number = request.GET.get('page')
     urder = paginator.get_page(page_number)
 
+    # charts
+    # monthly purchase amount
+    monthly_purchases = StockLog.objects.filter(action='IN').annotate(
+        month=TruncMonth('created_at'),
+        purchase_total=ExpressionWrapper(
+            F('quantity') * F('product__purchase_price'),
+            output_field=DecimalField(decimal_places=2, max_digits=12)
+        )
+    ).values('month').annotate(total=Sum('purchase_total')).order_by('month')
+
+    months = []
+    monthly_totals = []
+
+    for item in monthly_purchases:
+        months.append(item['month'].strftime("%b %Y"))
+        monthly_totals.append(float(item['total'] or 0))
+
+    category_purchases = StockLog.objects.filter(action='IN').annotate(
+        purchase_total=ExpressionWrapper(
+            F('quantity') * F('product__purchase_price'),
+            output_field=DecimalField(max_digits=12, decimal_places=2)
+        )
+    ).values('product__category__name').annotate(total=Sum('purchase_total')).order_by('-total')
+
+    category_labels = []
+    category_data = []
+
+    for item in category_purchases:
+        category_labels.append(item['product__category__name'])
+        category_data.append(float(item['total'] or 0))
+
+    top_products = PurchaseOrder.objects.filter(
+        status='delivered'
+    ).values(
+        'request__product__name'
+    ).annotate(
+        total_qty=Sum('request__quantity')
+    ).order_by('-total_qty')[:5]   # Top 5 products
+
+    product_labels = []
+    product_data = []
+
+    for item in top_products:
+        product_labels.append(item['request__product__name'])
+        product_data.append(item['total_qty'] or 0)
+
     return render(request, 'dashboards/purchase_dashboard.html', {
         'low_products': low_products,
         'total_requests': total_requests,
@@ -69,6 +119,13 @@ def purchase_dashboard(request):
         'page_obj': page_obj,
         'reque': reque,
         'urder': urder,
+        # charts
+        'monthly_labels': json.dumps(months),
+        'monthly_data': json.dumps(monthly_totals),
+        'category_labels': json.dumps(category_labels),
+        'category_data': json.dumps(category_data),
+        'product_name': json.dumps(product_labels),
+        'product_purchased': json.dumps(product_data),
     })
 
 

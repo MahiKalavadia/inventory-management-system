@@ -148,7 +148,60 @@
   </div>
 
 <div>
-<br>
+    <div class="row mt-3">
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <h5 class="fw-bold mb-0">Analytics Overview of Stock</h5>
+        <span class="text-muted small">Real-time inventory insights</span>
+    </div>
+    <!-- Chart 1 -->
+    <div class="col-lg-3 col-md-6 mb-3">
+        <div class="card shadow-sm border-0 h-100">
+            <div class="card-body">
+                <h6 class="fw-semibold mb-3">Stock Status</h6>
+                <div style="position:relative; height:220px;">
+                    <canvas id="stockChart1"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Chart 2 -->
+    <div class="col-lg-3 col-md-6 mb-3">
+        <div class="card shadow-sm border-0 h-100">
+            <div class="card-body">
+                <h6 class="fw-semibold mb-3">Inventory Value</h6>
+                <div style="position:relative; height:220px;">
+                    <canvas id="stockChart2"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Chart 3 -->
+    <div class="col-lg-3 col-md-6 mb-3">
+        <div class="card shadow-sm border-0 h-100">
+            <div class="card-body">
+                <h6 class="fw-semibold mb-3">Low Stock Items</h6>
+                <div style="position:relative; height:220px;">
+                    <canvas id="stockChart3"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Chart 4 -->
+    <div class="col-lg-3 col-md-6 mb-3">
+        <div class="card shadow-sm border-0 h-100">
+            <div class="card-body">
+                <h6 class="fw-semibold mb-3">Stock Movement</h6>
+                <div style="position:relative; height:220px;">
+                    <canvas id="stockChart4"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
 
    <div class="card dashboard-card mb-4 shadow-sm border-0">
     <div class="card-body">
@@ -204,8 +257,6 @@
         </form>
     </div>
 </div>
-
-
 <div class="row g-4">
     <!-- Inventory Snapshot -->
   <div class="col-md-6">
@@ -331,5 +382,101 @@
   </div>
 
 </div>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+
+// ------------------- DATA FROM DJANGO -------------------
+
+const inStock = {{ in_stock }};
+const lowStock = {{ low_stock }};
+const outStock = {{ out_stock }};
+
+const categoryLabels = {{ category_labels|safe }};
+const categoryValues = {{ category_values|safe }};
+
+const lowProductLabels = {{ low_product_labels|safe }};
+const lowProductValues = {{ low_product_values|safe }};
+
+const monthlyLabels = {{ monthly_labels|safe }};
+const monthlySupplied = {{ monthly_supplied|safe }};
+
+// ------------------- 1️⃣ STOCK STATUS (Doughnut) -------------------
+
+new Chart(document.getElementById('stockChart1'), {
+    type: 'doughnut',
+    data: {
+        labels: ['In Stock', 'Low Stock', 'Out of Stock'],
+        datasets: [{
+            data: [inStock, lowStock, outStock]
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+            legend: { position: 'bottom' }
+        }
+    }
+});
+
+
+// ------------------- 2️⃣ INVENTORY VALUE BY CATEGORY -------------------
+
+new Chart(document.getElementById('stockChart2'), {
+    type: 'bar',
+    data: {
+        labels: categoryLabels,
+        datasets: [{
+            label: 'Stock Value',
+            data: categoryValues
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false
+    }
+});
+
+
+// ------------------- 3️⃣ LOW STOCK PRODUCTS -------------------
+
+new Chart(document.getElementById('stockChart3'), {
+    type: 'bar',
+    data: {
+        labels: lowProductLabels,
+        datasets: [{
+            label: 'Remaining Quantity',
+            data: lowProductValues
+        }]
+    },
+    options: {
+        indexAxis: 'y',   // Horizontal bar
+        responsive: true,
+        maintainAspectRatio: false
+    }
+});
+
+
+// ------------------- 4️⃣ STOCK MOVEMENT TREND -------------------
+
+new Chart(document.getElementById('stockChart4'), {
+    type: 'line',
+    data: {
+        labels: monthlyLabels,
+        datasets: [{
+            label: 'Monthly Supplied',
+            data: monthlySupplied,
+            borderWidth: 2,
+            fill: true
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false
+    }
+});
+
+</script>
 
 {% endblock content %}

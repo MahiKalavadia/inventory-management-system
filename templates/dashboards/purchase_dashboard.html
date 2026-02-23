@@ -173,7 +173,46 @@
   </div>
 
 </div>
-<br>
+<div class="dashboard-section mb-4">
+ <div class="d-flex justify-content-between align-items-center mb-3">
+        <h5 class="fw-bold mb-0">Analytics Overview of Purchases</h5>
+        <span class="text-muted small">Real-time inventory insights</span>
+    </div>
+    <div class="row g-4">
+
+       
+<div class="col-lg-4 col-md-6 mb-3">
+        <div class="card shadow-sm border-0 h-100">
+            <div class="card-body">
+                <h6 class="fw-semibold mb-3">Monthly Purchase Amount</h6>
+                <div style="position:relative; height:220px;">
+                    <canvas id="monthlyPurchaseChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-4 col-md-6 mb-3">
+        <div class="card shadow-sm border-0 h-100">
+            <div class="card-body">
+                <h6 class="fw-semibold mb-3">Purchases By Category</h6>
+                <div style="position:relative; height:220px; ">
+                    <canvas id="categoryPurchaseChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+        <div class="col-lg-4 col-md-6 mb-3">
+        <div class="card shadow-sm border-0 h-100">
+            <div class="card-body">
+                <h6 class="fw-semibold mb-3">Top Purchased Products</h6>
+                <div style="position:relative; height:220px;">
+                    <canvas id="topPurchaseproductChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+</div>
 <div class="row g-4">
 
 <!-- ================= Manage Requests ================= -->
@@ -342,7 +381,70 @@
 
   </div>
 </div>
-
 </div>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+const monthlyPurchaseChart = document.getElementById('monthlyPurchaseChart').getContext('2d');
+const categoryPurchaseChart = document.getElementById('categoryPurchaseChart').getContext('2d');
+const topPurchaseproductChart = document.getElementById('topPurchaseproductChart').getContext('2d');
 
+new Chart(monthlyPurchaseChart, {
+      type: 'line',
+      data: {
+        labels: {{ monthly_labels|safe }},
+        datasets: [{
+            label: 'Purchase Amount ($)',
+            data: {{ monthly_data|safe }},
+            backgroundColor: 'rgba(124, 58, 237, 0.2)',
+            borderColor: 'rgba(124, 58, 237, 1)',
+            borderWidth: 2,
+            tension: 0.3,
+            fill: true
+        }]
+    },        
+      options: {
+        responsive: true,
+        plugins: { legend: { display: false } }
+      }
+});
+
+new Chart(categoryPurchaseChart, {
+    type: 'doughnut',
+    data: {
+        labels: {{ category_labels|safe }},
+        datasets: [{
+            data: {{ category_data|safe }},
+            backgroundColor: ['#7c3aed', '#3b82f6', '#f59e0b', '#ef4444', '#10b981']
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins : {
+            legend : {
+        position : 'right'
+      }
+    }
+    }
+});
+
+new Chart(topPurchaseproductChart, {
+    type: 'bar',
+    data: {
+        labels: {{ product_name|safe }},
+        datasets: [{
+            label: 'Quantity Purchased',
+            data: {{ product_purchased|safe }},
+            backgroundColor: '#3b82f6'
+        }]
+    },
+    options: {
+        responsive: true,
+        plugins: { legend: { display: false } },
+        scales: {
+            y: { beginAtZero: true }
+        }
+    }
+});
+</script>
 {% endblock %}

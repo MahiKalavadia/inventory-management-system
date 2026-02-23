@@ -152,6 +152,82 @@
 
 <div>
 <br>
+<div class="dashboard-section mb-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h5 class="fw-bold mb-0">Analytics Overview of Vendors</h5>
+        <span class="text-muted small">Real-time inventory insights</span>
+    </div>
+
+    <div class="row g-4">
+
+        <!-- Stock -->
+        <div class="col-lg-4">
+             <div class="card dashboard-card shadow-sm border-0">
+                <div class="card-body">
+                   <h6 class="fw-semibold mb-3">Purchase Value per Supplier</h6>
+
+                  <div class="chart-container">
+                     <canvas id="TopSupplierByPurchase"></canvas>
+                  </div>
+
+                </div>
+              </div>
+        </div>
+        <div class="col-lg-4">
+             <div class="card dashboard-card shadow-sm border-0">
+                <div class="card-body">
+                   <h6 class="fw-semibold mb-3">Supplier Status</h6>
+
+                  <div style="position: relative; height: 242px; width: 100%;">
+                       <canvas id="statusChart"></canvas>
+                  </div>
+
+                </div>
+              </div>
+        </div>
+        <div class="col-lg-4">
+             <div class="card dashboard-card shadow-sm border-0">
+                <div class="card-body">
+                   <h6 class="fw-semibold mb-3">Category Coverage</h6>
+
+                  <div style="position: relative; height: 242px; width: 100%;">
+                       <canvas id="categoryCoverageChart"></canvas>
+                  </div>
+
+                </div>
+              </div>
+        </div>
+
+
+    </div>
+</div>
+    <div class="row g-4">
+        <div class="col-lg-6">
+             <div class="card dashboard-card shadow-sm border-0">
+                <div class="card-body">
+                   <h6 class="fw-semibold mb-3">Growth Trend</h6>
+
+                  <div style="position: relative; height: 242px; width: 100%;">
+                       <canvas id="growthChart"></canvas>
+                  </div>
+
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6">
+                <div class="card dashboard-card shadow-sm border-0">
+                   <div class="card-body">
+                      <h6 class="fw-semibold mb-3">Inventory Supplied vs Used (Monthly)</h6>
+
+                      <div style="position: relative; height: 242px; width: 100%;">
+                         <canvas id="inventoryChart"></canvas>
+                      </div>
+
+                   </div>
+              </div>
+        </div>
+</div>
+<br>
      <div class="card shadow-sm mb-4 border-0">
 
     <!-- Header -->
@@ -274,5 +350,105 @@
 
 </ul>
 </nav>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+document.addEventListener("DOMContentLoaded", function() {
 
+const TopSupplierByPurchase = document.getElementById('TopSupplierByPurchase');
+const statusChart = document.getElementById('statusChart');
+const categoryCoverageChart = document.getElementById('categoryCoverageChart');
+const growthChart = document.getElementById('growthChart');
+const inventoryChart = document.getElementById('inventoryChart');
+
+new Chart(TopSupplierByPurchase, {
+    type: 'bar',
+    data: {
+        labels: {{ supplier_names|safe }},
+        datasets: [{
+            label: "Purchase Value",
+            data: {{ top_supplier|safe}},
+            borderRadius: 6
+        }]
+    },
+    options: {
+        indexAxis: 'y',
+        plugins: { legend: { display: false }},
+        scales: { x: { beginAtZero: true }},
+    }
+});
+
+new Chart(statusChart, {
+    type: 'doughnut',
+    data: {
+        labels: ['Active', 'Inactive'],
+        datasets: [{
+            data: {{ supplier_status|safe }}
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: { legend : { position: 'right' }}
+    }
+});
+
+new Chart(categoryCoverageChart, {
+    type: 'bar',
+    data: {
+        labels: {{ names|safe }},
+        datasets: [{
+            label: "Categories Supplied",
+            data: {{ total_category|safe }},
+            borderRadius: 6
+        }]
+    },
+    options: {
+        indexAxis: 'y',
+        plugins: {
+            legend: { display: false }
+        }
+    }
+});
+new Chart(growthChart, {
+    type: 'line',
+    data: {
+        labels: {{ months|safe }},
+        datasets: [{
+            label: "New Suppliers",
+            data: {{ totals|safe }},
+            fill: false,
+            tension: 0.3
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false
+    }
+});
+new Chart(inventoryChart, {
+    type: 'bar',
+    data: {
+        labels: {{ months|safe }},
+        datasets: [
+            {
+                label: 'Supplied',
+                data: {{ supplied_totals|safe }}
+            },
+            {
+                label: 'Used',
+                data: {{ used_totals|safe }}
+            }
+        ]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+            x: { stacked: true },
+            y: { stacked: true, beginAtZero: true }
+        }
+    }
+});
+})
+</script>
 {% endblock content %}

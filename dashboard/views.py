@@ -12,6 +12,7 @@ from orders.models import OrderItem, Order
 from purchases.models import PurchaseRequest, PurchaseOrder
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.core.paginator import Paginator
+from django.db.models.functions import TruncMonth
 
 
 def landing(request):
@@ -84,13 +85,70 @@ def admin_dashboard(request):
             )
         ))['total'] or 0
     )
+    # 1️⃣ Revenue Trend (Monthly Paid Orders)
+    # -----------------------------
+    revenue_data = (
+        Order.objects
+        .filter(status="Paid")
+        .annotate(month=TruncMonth('created_at'))
+        .values('month')
+        .annotate(total=Sum('items__price'))
+        .order_by('month')
+    )
 
+    revenue_labels = []
+    revenue_values = []
+
+    for item in revenue_data:
+        month_name = item['month'].strftime('%b %Y')
+        revenue_labels.append(month_name)
+        revenue_values.append(float(item['total'] or 0))
+
+    # -----------------------------
+    # 2️⃣ Purchase Order Status
+    # -----------------------------
+    po_status_data = (
+        PurchaseOrder.objects
+        .values('status')
+        .annotate(count=Count('id'))
+    )
+
+    po_labels = [item['status'] for item in po_status_data]
+    po_values = [item['count'] for item in po_status_data]
+
+    # -----------------------------
+    # 3️⃣ Payment Status (Orders)
+    # -----------------------------
+    payment_status_data = (
+        Order.objects
+        .values('payment_status')
+        .annotate(count=Count('id'))
+    )
+
+    payment_labels = [item['payment_status'] for item in payment_status_data]
+    payment_values = [item['count'] for item in payment_status_data]
+
+    # -----------------------------
+    # 4️⃣ Inventory Supplied vs Sold
+    # -----------------------------
+
+    supplied = (
+        PurchaseRequest.objects
+        .filter(status="Approved")
+        .aggregate(total=Sum('quantity'))['total'] or 0
+    )
+
+    sold = (
+        OrderItem.objects
+        .filter(order__status="Paid")
+        .aggregate(total=Sum('quantity'))['total'] or 0
+    )
     # 📈 Gross Margin
     gross_margin = total_sales - total_cogs
     recent_stock_logs = StockLog.objects.select_related(
         'product').order_by('-created_at')[:5]
     # login status
-    recent_logins = User.objects.order_by('-last_login')[:3]
+    recent_logins = User.objects.order_by('-last_login')[:4]
     users = User.objects.all()
     # for admin low_stock table and out of stock table
     l_stock = Product.objects.filter(
@@ -118,22 +176,14 @@ def admin_dashboard(request):
     top_suppliers = Supplier.objects.annotate(
         value=Sum(F('product__purchase_price') *
                   F('product__quantity'), output_field=FloatField())
-    ).order_by('-value')
+    ).order_by('-value')[:3]
 
     top_value_products = Product.objects.annotate(
         value=ExpressionWrapper(
             F('purchase_price') * F('quantity'),
             output_field=FloatField()
         )
-    ).order_by('-value')
-
-    paginator = Paginator(top_suppliers, 3)
-    suppliers = request.GET.get('page_s')
-    supply = paginator.get_page(suppliers)
-
-    paginator = Paginator(top_value_products, 3)
-    page_number = request.GET.get('page')
-    productt = paginator.get_page(page_number)
+    ).order_by('-value')[:3]
 
     activities = []
 
@@ -204,9 +254,8 @@ def admin_dashboard(request):
         'orders': orders,
         # quick actions
         "unread_notifications_count": notifications_count,
-        'supply': supply,
-        'productt': productt,
-
+        'top_value_products': top_value_products,
+        'top_suppliers': top_suppliers,
         "pending_requests_count": PurchaseRequest.objects.filter(
             status="Pending"
         ).count(),
@@ -215,6 +264,17 @@ def admin_dashboard(request):
         "active_po_count": PurchaseOrder.objects.exclude(
             status="delivered"
         ).count(),
+        "revenue_labels": revenue_labels,
+        "revenue_values": revenue_values,
+
+        "po_labels": po_labels,
+        "po_values": po_values,
+
+        "payment_labels": payment_labels,
+        "payment_values": payment_values,
+
+        "supplied": supplied,
+        "sold": sold,
     }
 
     return render(request, "admin_dashboard.html", context)

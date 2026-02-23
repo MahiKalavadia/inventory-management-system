@@ -99,10 +99,10 @@
     <div class="stat-card">
       <div class="stat-header">
         <span class="stat-title">CONFIRMED ORDERS</span>
-        <i class="bi-check2-circle text-warning"></i>
+        <i class="bi-check2-circle text-muted"></i>
       </div>
       <h2>{{ confirmed_orders }}</h2>
-      <p class="stat-sub text-warning">
+      <p class="stat-sub text-muted">
         Orders that has been confirmed but not yet paid
       </p>
     </div>
@@ -123,10 +123,10 @@
     <div class="stat-card">
       <div class="stat-header">
         <span class="stat-title">OUTSTANDING PAYMENTS</span>
-        <i class="bi bi-hourglass-split text-danger"></i>
+        <i class="bi bi-hourglass-split text-muted"></i>
       </div>
       <h2>₹{{ pending_amount|short_number }}</h2>
-      <p class="stat-sub text-danger">
+      <p class="stat-sub text-muted">
         Payments not yet received.
       </p>
     </div>
@@ -135,10 +135,10 @@
     <div class="stat-card">
       <div class="stat-header">
         <span class="stat-title">TOTAL REVENUE</span>
-        <i class="bi bi-currency-rupee text-success"></i>
+        <i class="bi bi-currency-rupee text-muted"></i>
       </div>
       <h2>₹{{ total_sales|short_number }}</h2>
-      <p class="stat-sub text-success">
+      <p class="stat-sub text-muted">
         MTD Performance
       </p>
     </div>
@@ -159,10 +159,10 @@
     <div class="stat-card">
       <div class="stat-header">
         <span class="stat-title">REVENUE THIS MONTH</span>
-        <i class="bi bi-calendar-week text-success"></i>
+        <i class="bi bi-calendar-week text-muted"></i>
       </div>
       <h2>₹{{ monthly_sales|short_number }}</h2>
-      <p class="stat-sub text-success">
+      <p class="stat-sub text-muted">
         Performance in this month
       </p>
     </div>
@@ -183,7 +183,7 @@
     <div class="stat-card">
       <div class="stat-header">
         <span class="stat-title">BEST SELLING PRODUCTS</span>
-        <i class="bi bi-fire fs-3 text-danger"></i>
+        <i class="bi bi-fire fs-3 text-muted"></i>
       </div>
       {% if top_product %}
             <h5 class="fw-bold mb-1">{{ top_product.product__name }}</h5>
@@ -192,7 +192,7 @@
             <p class="mb-0">No sales yet</p>
         {% endif %}
       
-      <p class="stat-sub text-success">
+      <p class="stat-sub text-muted">
         Best Selling product till now
       </p>
     </div>
@@ -202,10 +202,10 @@
     <div class="stat-card">
       <div class="stat-header">
         <span class="stat-title">ALL ORDERS</span>
-        <i class="bi bi-receipt-cutoff text-primary"></i>
+        <i class="bi bi-receipt-cutoff text-muted"></i>
       </div>
       <h2>{{ total_orders }}</h2>
-      <p class="stat-sub text-primary">
+      <p class="stat-sub text-muted">
         Orders Received
       </p>
     </div>
@@ -213,7 +213,37 @@
   </div>
 
 </div>
+<div class="dashboard-section mb-4">
+ <div class="d-flex justify-content-between align-items-center mb-3">
+        <h5 class="fw-bold mb-0">Analytics Overview of Stock</h5>
+        <span class="text-muted small">Real-time inventory insights</span>
+    </div>
+    <div class="row g-4">
 
+       
+<div class="col-lg-5 col-md-6 mb-3">
+        <div class="card shadow-sm border-0 h-100">
+            <div class="card-body">
+                <h6 class="fw-semibold mb-3">Orders By Status</h6>
+                <div style="position:relative; height:220px;">
+                    <canvas id="orderChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-7 col-md-6 mb-3">
+        <div class="card shadow-sm border-0 h-100">
+            <div class="card-body">
+                <h6 class="fw-semibold mb-3">Revenue Trend</h6>
+                <div style="position:relative; height:220px;">
+                    <canvas id="revenueChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    </div>
+</div>
 <div class="row">
 <div class="col-md-6">
 <div class="card shadow-sm border-0 rounded-4 mb-4">
@@ -268,37 +298,34 @@
 
 </div>
 </div>
-
 <div class="col-md-6">
 <div class="card shadow-sm border-0 rounded-4 mb-4">
 
   <div class="card-header bg-white d-flex justify-content-between align-items-center">
-    <span class="fw-semibold">⚠ Orders Requiring Attention</span>
-    <a href="{% url 'order_attention' %}" class="btn btn-sm btn-outline-primary">View All →</a>
+    <span class="fw-semibold">Best Selling Products</span>
+    <span>Best sold till now</span>
   </div>
 
   <div class="card-body p-0">
     <table class="table table-hover align-middle mb-0">
       <thead class="table-light">
         <tr>
-          <th>Order</th>
-          <th>Issue</th>
-          <th class="text-end">Action</th>
+          <th>Product Name</th>
+          <th>Quantity Sold</th>
+          <th>Supplier</th>
         </tr>
       </thead>
 
       <tbody>
-        {% for o in attention_orders %}
+        {% for order in top_products %}
         <tr>
-          <td>#{{ o.id }}</td>
-          <td class="text-danger">Confirmed but payment pending</td>
-          <td class="text-end">
-            <a href="{% url 'order_detail' o.id %}" class="btn btn-sm btn-outline-danger">Review</a>
-          </td>
+          <td>{{ order.product__name }}</td>
+          <td class="fw-medium">{{ order.total_sold }}</td>
+          <td>{{ order.product__supplier__name}}</td>
         </tr>
         {% empty %}
         <tr>
-          <td colspan="3" class="text-center text-success py-3">No critical issues 🎉</td>
+          <td colspan="6" class="text-center text-muted py-3">No best selling products</td>
         </tr>
         {% endfor %}
       </tbody>
@@ -307,6 +334,7 @@
 
 </div>
 </div>
+
 </div>
 
 <div class="row">
@@ -348,11 +376,82 @@
 
 </div>
 </div>
-</div>
+<div class="col-md-6">
+<div class="card shadow-sm border-0 rounded-4 mb-4">
 
+  <div class="card-header bg-white d-flex justify-content-between align-items-center">
+    <span class="fw-semibold">⚠ Orders Requiring Attention</span>
+    <a href="{% url 'order_attention' %}" class="btn btn-sm btn-outline-primary">View All →</a>
+  </div>
 
-<div class="col md-6">
-    
+  <div class="card-body p-0">
+    <table class="table table-hover align-middle mb-0">
+      <thead class="table-light">
+        <tr>
+          <th>Order</th>
+          <th>Issue</th>
+          <th class="text-end">Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for o in attention_orders %}
+        <tr>
+          <td>#{{ o.id }}</td>
+          <td class="text-muted">Confirmed but payment pending</td>
+          <td class="text-end">
+            <a href="{% url 'order_detail' o.id %}" class="btn btn-sm btn-outline-danger">Review</a>
+          </td>
+        </tr>
+        {% empty %}
+        <tr>
+          <td colspan="3" class="text-center text-success py-3">No critical issues 🎉</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
 </div>
 </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+const orderChart = document.getElementById('orderChart');
+const revenueChart = document.getElementById('revenueChart');
+
+new Chart(revenueChart, {
+  type:'line',
+  data : {
+    labels : {{dates|safe}},
+    datasets : [{
+      label : 'Revenue (₹)',
+      data : {{ totals|safe }},
+      borderColor: '#0d6efd',
+      backgroundColor: 'rgba(13,110,253,0.1)',
+      tension: 0.4,
+      fill: true
+    }]
+  },
+  options : {
+       responsive: true,
+        maintainAspectRatio: false
+  }
+});
+
+new Chart(orderChart, {
+    type: 'doughnut',
+    data: {
+        labels: ['Paid', 'Failed', 'Cancelled'],
+        datasets: [{
+            data: [{{ payment_paid }}, {{ payment_fail }}, {{ payment_cancel }}],
+            backgroundColor: ['#16a34a','#f97316','#dc2626']
+        }]
+    },
+    options: {
+        maintainAspectRatio: false,
+        plugins: { legend: { position: 'right' }},
+        animation: { duration: 600 }
+    }
+});
+</script>
 {% endblock content %}

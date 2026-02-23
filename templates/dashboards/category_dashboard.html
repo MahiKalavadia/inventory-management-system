@@ -117,6 +117,59 @@
 </div>
 
 </div>
+<div class="dashboard-section mb-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h5 class="fw-bold mb-0">Analytics Overview of Categories</h5>
+        <span class="text-muted small">Real-time inventory insights</span>
+    </div>
+
+    <div class="row g-4">
+
+        <!-- Stock -->
+        <div class="col-lg-4">
+             <div class="card dashboard-card shadow-sm border-0">
+                <div class="card-body">
+                   <h6 class="fw-semibold mb-3">Stock Per Category</h6>
+
+                  <div class="chart-container">
+                     <canvas id="stockPerCategory"></canvas>
+                  </div>
+
+                </div>
+              </div>
+        </div>
+
+        <!-- Stock Value -->
+        <div class="col-lg-4">
+             <div class="card dashboard-card shadow-sm border-0">
+                <div class="card-body">
+                   <h6 class="fw-semibold mb-3">Stock Value Per Category</h6>
+
+                  <div class="chart-container">
+                     <canvas id="stockValueCategory"></canvas>
+                  </div>
+
+                </div>
+              </div>
+        </div>
+
+        <!-- Sales -->
+        <div class="col-lg-4">
+             <div class="card dashboard-card shadow-sm border-0">
+                <div class="card-body">
+                   <h6 class="fw-semibold mb-3">Sales Per Category</h6>
+
+                  <div class="chart-scroll-wrapper">
+    <div class="chart-scroll-inner">
+        <canvas id="salesPerCategory"></canvas>
+    </div>
+</div>
+
+                </div>
+              </div>
+        </div>
+    </div>
+
 
 <div class="card shadow-sm mb-4 border-0">
     
@@ -146,7 +199,7 @@
                 </tr>
             </thead>
             <tbody>
-                {% for category in categories %}
+                {% for category in categoriess %}
                 <tr>
                     <td class="ps-3 fw-semibold">{{ category.name }}</td>
                     <td>
@@ -189,24 +242,85 @@
 <nav class="mt-4">
     <ul class="pagination justify-content-center">
 
-        {% if categories.has_previous %}
+        {% if categoriess.has_previous %}
         <li class="page-item">
-            <a class="page-link" href="?page={{ categories.previous_page_number }}">Previous</a>
+            <a class="page-link" href="?page={{ categoriess.previous_page_number }}">Previous</a>
         </li>
         {% endif %}
 
         <li class="page-item active">
-            <span class="page-link">{{ categories.number }}</span>
+            <span class="page-link">{{ categoriess.number }}</span>
         </li>
 
-        {% if categories.has_next %}
+        {% if categoriess.has_next %}
         <li class="page-item">
-            <a class="page-link" href="?page={{ categories.next_page_number }}">Next</a>
+            <a class="page-link" href="?page={{ categoriess.next_page_number }}">Next</a>
         </li>
         {% endif %}
 
     </ul>
 </nav>
+<!-- ===================== CHART JS ===================== -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+document.addEventListener("DOMContentLoaded", function() {
 
+const stockPerCategory = document.getElementById('stockPerCategory');
+const stockValueCategory = document.getElementById('stockValueCategory');
+const salesPerCategory = document.getElementById('salesPerCategory');
+
+// Stock per category (Horizontal)
+new Chart(stockPerCategory, {
+    type: 'bar',
+    data: {
+        labels: {{ category_names|safe }},
+        datasets: [{
+            label: "Stock Quantity",
+            data: {{ stock_totals|safe }},
+            borderRadius: 6
+        }]
+    },
+    options: {
+        indexAxis: 'y',
+        plugins: { legend: { display: false }},
+        scales: { x: { beginAtZero: true }},
+    }
+});
+
+// Stock value per category
+new Chart(stockValueCategory, {
+    type: 'bar',
+    data: {
+        labels: {{ category_names|safe }},
+        datasets: [{
+            label: "Stock Value",
+            data: {{ stock_values|safe }},
+            borderRadius: 6
+        }]
+    },
+    options: {
+        plugins: { legend: { display: false }},
+        scales: { y: { beginAtZero: true }},
+    }
+});
+
+// Sales per category (Doughnut - better)
+new Chart(salesPerCategory, {
+    type: 'bar',
+    data: {
+        labels: {{ category_names|safe }},
+        datasets: [{
+            data: {{ sales_values|safe }}
+        }]
+    },
+    options: {
+        indexAxis: 'y',
+        plugins: { legend: { display: false }},
+        scales: { x: { beginAtZero: true }},
+    }
+});
+
+});
+</script>
 
 {% endblock content %}

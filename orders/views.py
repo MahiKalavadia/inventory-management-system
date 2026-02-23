@@ -18,6 +18,9 @@ from reportlab.lib import colors
 from reportlab.lib.styles import getSampleStyleSheet
 from openpyxl import Workbook
 import csv
+import json
+from datetime import timedelta
+from django.db.models.functions import TruncDate
 # Create your views here.
 
 
@@ -114,11 +117,40 @@ def order_dashboard(request):
         .first()
     )
 
+    top_products = (
+        OrderItem.objects
+        .filter(order__payment_status='Paid')
+        .values('product__name', 'product__supplier__name')
+        .annotate(total_sold=Sum('quantity'))
+        .order_by('-total_sold')[:5]
+    )
+
     recent_orders = Order.objects.order_by('-created_at')[:5]
     attention_orders = Order.objects.filter(
         payment_status="Pending"
     )[:5]
     pending_payments = Order.objects.filter(payment_status='Pending')[:5]
+
+    payment_paid = Order.objects.filter(payment_status='Paid').count()
+    payment_cancel = Order.objects.filter(payment_status='Pending').count()
+    payment_fail = Order.objects.filter(payment_status='Failed').count()
+
+    # revenue chart
+    today = timezone.now().date()
+    last_30_days = today - timedelta(days=1)
+
+    revenue = OrderItem.objects.filter(
+        order__created_at__date__gte=last_30_days, order__payment_status='Paid').annotate(date=TruncDate('order__created_at'), item_total=ExpressionWrapper(
+            F('price') * F('quantity'),
+            output_field=DecimalField(max_digits=12, decimal_places=2)
+        )).values('date').annotate(total=Sum('item_total')).order_by('date')
+
+    dates = []
+    totals = []
+
+    for item in revenue:
+        dates.append(item['date'].strftime("%d %b"))
+        totals.append(float(item['total']))
 
     context = {
         'total_orders': total_orders,
@@ -134,6 +166,12 @@ def order_dashboard(request):
         'recent_orders': recent_orders,
         'attention_orders': attention_orders,
         'pending_payments': pending_payments,
+        'top_products': top_products,
+        'payment_paid': payment_paid,
+        'payment_cancel': payment_cancel,
+        'payment_fail': payment_fail,
+        'dates': json.dumps(dates),
+        'totals': json.dumps(totals),
     }
 
     return render(request, "dashboards/order_dashboard.html", context)

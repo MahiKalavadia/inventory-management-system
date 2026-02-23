@@ -11,6 +11,7 @@ from django.contrib import messages
 from django.db.models.functions import TruncMonth, Coalesce
 from django.http import HttpResponse
 import csv
+import json
 from openpyxl import Workbook
 from reportlab.lib.pagesizes import landscape, A4
 from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph, Spacer
@@ -19,6 +20,7 @@ from reportlab.lib.styles import getSampleStyleSheet
 from django.utils.timezone import now
 from datetime import timedelta
 from orders.models import Order
+from purchases.models import PurchaseRequest
 
 
 @login_required
@@ -220,6 +222,25 @@ def delete_product(request, pk):
     return render(request, 'inventory/delete_product.html', {'product': product})
 
 
+@login_required
+def top_value_products(request):
+    top_value_products = Product.objects.annotate(
+        value=ExpressionWrapper(
+            F('purchase_price') * F('quantity'),
+            output_field=FloatField()
+        )
+    ).order_by('-value')
+
+    paginator = Paginator(top_value_products, 15)
+    page_number = request.GET.get('page')
+    productt = paginator.get_page(page_number)
+
+    context = {
+        'productt': productt,
+    }
+    return render(request, 'inventory/top_value_products.html', context)
+
+
 def export_product_csv(request):
     response = HttpResponse(content_type="text/csv")
     response["Content-Disposition"] = 'attachment; filename="products.csv"'
@@ -356,7 +377,7 @@ def category_dashboard(request):
 
     paginator = Paginator(categories_qs, 5)
     page_number = request.GET.get('page')
-    categories = paginator.get_page(page_number)
+    categoriess = paginator.get_page(page_number)
 
     total_category = Category.objects.count()
     categories_with_products = Category.objects.annotate(
@@ -367,44 +388,50 @@ def category_dashboard(request):
     ).filter(product_count=0).count()
 
     # Charts
-    # Products per Category
-    products_per_category = Category.objects.annotate(
-        product_count=Count('product')
-    )
-    # Stock value per category(price * quantity )
-    stock_value = Category.objects.annotate(
-        total_stock_value=Coalesce(
-            Sum(
-                ExpressionWrapper(
+    # stock per category
+    categories = list(
+        Category.objects.annotate(
+            total_stock=Coalesce(Sum('product__quantity'), 0),
+            total_stock_value=Coalesce(
+                Sum(
                     F('product__price') * F('product__quantity'),
                     output_field=DecimalField(max_digits=12, decimal_places=2)
-                )
+                ),
+                Value(0),
+                output_field=DecimalField(max_digits=12, decimal_places=2)
             ),
-            Value(0, output_field=DecimalField(
-                max_digits=12, decimal_places=2))
+            total_sales=Coalesce(
+                Sum(
+                    F('product__orderitem__price') *
+                    F('product__orderitem__quantity'),
+                    output_field=DecimalField(max_digits=12, decimal_places=2)
+                ),
+                Value(0),
+                output_field=DecimalField(max_digits=12, decimal_places=2)
+            )
+        ).values(
+            'name',
+            'total_stock',
+            'total_stock_value',
+            'total_sales'
         )
     )
 
-    # sales per category
-    sales_per_category = Category.objects.annotate(
-        total_sales=Coalesce(
-            Sum('product__orderitem__price',
-                output_field=DecimalField(max_digits=12, decimal_places=2)
-                ),
-            Value(0, output_field=DecimalField(
-                max_digits=12, decimal_places=2))
-        )
-    )
+    category_names = [c['name'] for c in categories]
+    stock_totals = [c['total_stock'] for c in categories]
+    stock_values = [float(c['total_stock_value']) for c in categories]
+    sales_values = [float(c['total_sales']) for c in categories]
 
     context = {
-        'categories': categories,
+        'categoriess': categoriess,
         'total_category': total_category,
         'categories_with_products': categories_with_products,
         'categories_without_products': categories_without_products,
         'search': search,
-        'products_per_category': products_per_category,
-        'stock_value': stock_value,
-        'sales_per_category': sales_per_category,
+        'category_names': json.dumps(category_names),
+        'stock_totals': json.dumps(stock_totals),
+        'stock_values': json.dumps(stock_values),
+        'sales_values': json.dumps(sales_values),
     }
 
     return render(request, "dashboards/category_dashboard.html", context)
@@ -673,6 +700,62 @@ def stock_dashboard(request):
     recent_logs = StockLog.objects.select_related(
         'product', 'user').order_by('-created_at')[:10]
 
+    # Charts
+    category_data = (
+        Product.objects
+        .values('category__name')
+        .annotate(
+            total_value=Sum(
+                ExpressionWrapper(
+                    F('quantity') * F('price'),
+                    output_field=DecimalField()
+                )
+            )
+        )
+        .order_by('-total_value')
+    )
+
+    category_labels = []
+    category_values = []
+
+    for item in category_data:
+        category_labels.append(item['category__name'] or "No Category")
+        category_values.append(float(item['total_value'] or 0))
+
+    # ============================
+    # 3️⃣ TOP 5 LOW STOCK PRODUCTS
+    # ============================
+
+    low_products = (
+        Product.objects
+        .filter(quantity__gt=0)
+        .order_by('quantity')[:5]
+    )
+
+    low_product_labels = [p.name for p in low_products]
+    low_product_values = [p.quantity for p in low_products]
+
+    # ============================
+    # 4️⃣ MONTHLY STOCK SUPPLIED
+    # ============================
+
+    monthly_data = (
+        PurchaseRequest.objects
+        .filter(status="Approved")
+        .annotate(month=TruncMonth('created_at'))
+        .values('month')
+        .annotate(total=Sum('quantity'))
+        .order_by('month')
+    )
+
+    monthly_labels = []
+    monthly_supplied = []
+
+    for item in monthly_data:
+        month_name = item['month'].strftime('%b %Y')
+        monthly_labels.append(month_name)
+        monthly_supplied.append(item['total'] or 0)
+
     # ---------- CONTEXT ----------
     context = {
         # cards
@@ -693,6 +776,15 @@ def stock_dashboard(request):
         # filters
         'categories': Category.objects.all(),
         'suppliers': Supplier.objects.all(),
+
+        "category_labels": category_labels,
+        "category_values": category_values,
+
+        "low_product_labels": low_product_labels,
+        "low_product_values": low_product_values,
+
+        "monthly_labels": monthly_labels,
+        "monthly_supplied": monthly_supplied,
     }
 
     return render(request, 'dashboards/stock_dashboard.html', context)
@@ -903,7 +995,8 @@ def export_instock_pdf(request):
     data = [["SKU", "Name", "Brand", "Purchase Price", "Price",
              "Profit", "Qty", "Category", "Supplier", "Warranty (Months)"]]
 
-    products = Product.objects.filter(quantity__gt=get_low_stock_threshold()).all()
+    products = Product.objects.filter(
+        quantity__gt=get_low_stock_threshold()).all()
     for item in products:
         data.append([
             item.sku,

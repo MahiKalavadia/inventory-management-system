@@ -10,8 +10,10 @@ superuser_required = user_passes_test(lambda u: u.is_superuser)
 @user_passes_test(lambda u: u.is_superuser)
 def user_dashboard(request):
     total_users = User.objects.count()
+    admin = User.objects.filter(groups__name='Admin').count()
     total_managers = User.objects.filter(groups__name='Manager').count()
     total_staff = User.objects.filter(groups__name='Staff').count()
+    active_users = User.objects.filter(is_active=True).count()
     inactive_users = User.objects.filter(is_active=False).count()
     recent_logins = User.objects.order_by('-last_login')[:3]
     users = User.objects.all()
@@ -20,9 +22,11 @@ def user_dashboard(request):
         'total_users': total_users,
         'total_managers': total_managers,
         'total_staff': total_staff,
+        'active_users': active_users,
         'inactive_users': inactive_users,
         'recent_logins': recent_logins,
         'users': users,
+        'admin': admin,
     }
     return render(request, 'dashboards/user_dashboard.html', context)
 

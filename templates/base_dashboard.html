@@ -185,6 +185,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Mobile open
     mobileToggle?.addEventListener("click", () => {
+        document.body.classList.toggle("sidebar-collapsed");
         sidebar.classList.add("show");
     });
 

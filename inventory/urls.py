@@ -7,6 +7,8 @@ urlpatterns = [
     path("products/dashboard/", views.product_dashboard, name="product_dashboard"),
     path('product/update/<int:pk>/', views.update_product, name='update_product'),
     path('product/delete/<int:pk>/', views.delete_product, name='delete_product'),
+    path("product/top_value_products/",
+         views.top_value_products, name="top_value_products"),
     path('product/export/csv', views.export_product_csv, name="export_product_csv"),
     path('product/export/excel', views.export_product_excel,
          name="export_product_excel"),

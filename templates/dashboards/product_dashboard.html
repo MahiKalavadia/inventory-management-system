@@ -161,77 +161,96 @@
 <!-- ===================== ANALYTICS OVERVIEW ===================== -->
 <div class="dashboard-section mb-4">
     <div class="d-flex justify-content-between align-items-center mb-3">
-        <h5 class="fw-bold mb-0">Analytics Overview</h5>
+        <h5 class="fw-bold mb-0">Analytics Overview of Products</h5>
         <span class="text-muted small">Real-time inventory insights</span>
     </div>
-
     <div class="row g-4">
 
         <!-- Stock -->
         <div class="col-lg-4">
-    <div class="card dashboard-card h-100 shadow-sm border-0">
-        <div class="card-body" style="height: 220px;">
-            <h6 class="fw-semibold mb-3">Stock Distribution</h6>
-            <canvas id="stockChart" height='200'></canvas>
+             <div class="card dashboard-card shadow-sm border-0">
+                <div class="card-body">
+                   <h6 class="fw-semibold mb-3">Stock Distribution</h6>
+
+                  <div class="chart-container">
+                     <canvas id="stockChart" height = '200px'></canvas>
+                  </div>
+
+                </div>
+              </div>
         </div>
-    </div>
-</div>
 
-<!-- Category -->
-<div class="col-lg-4">
-    <div class="card dashboard-card h-100 shadow-sm border-0">
-        <div class="card-body" style="height: 220px;">
-            <h6 class="fw-semibold mb-3">Products by Category</h6>
-            <canvas id="categoryChart" height='200'></canvas>
+        <!-- Stock Value -->
+        <div class="col-lg-4">
+             <div class="card dashboard-card shadow-sm border-0">
+                <div class="card-body">
+                   <h6 class="fw-semibold mb-3">Products by Category</h6>
+
+                  <div class="chart-container">
+                     <canvas id="categoryChart" height='200px'></canvas>
+                  </div>
+
+                </div>
+              </div>
         </div>
-    </div>
-</div>
 
-<!-- Expensive -->
-<div class="col-lg-4">
-    <div class="card dashboard-card h-100 shadow-sm border-0">
-        <div class="card-body" style="height: 220px;">
-            <h6 class="fw-semibold mb-3">High-Value Products</h6>
-            <canvas id="expensiveChart" height='200'></canvas>
+        <!-- Sales -->
+        <div class="col-lg-4">
+             <div class="card dashboard-card shadow-sm border-0">
+                <div class="card-body">
+                   <h6 class="fw-semibold mb-3">High-Value Products</h6>
+
+                  <div class="chart-scroll-wrapper">
+                    <div class="chart-scroll-inner">
+                      <canvas id="expensiveChart" height='200px'></canvas>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
         </div>
-    </div>
+
+    
 </div>
-
-
-    </div>
-</div>
-
+<br>
 <!-- ===================== TRENDS SECTION ===================== -->
 <div class="dashboard-section mb-4">
-    <h5 class="fw-bold mb-3">Trends & Valuation</h5>
-
+    <h5 class="fw-bold mb-3">Trends & Valuation of Products</h5>
     <div class="row g-4">
 
-        <div class="col-lg-6">
-            <div class="card dashboard-card h-100 shadow-sm border-0">
-                <div class="card-body" style="height: 260px;">
-                    <h6 class="fw-semibold mb-3">Monthly Product Additions</h6>
+       
+<div class="col-lg-6 col-md-6 mb-3">
+        <div class="card shadow-sm border-0 h-100">
+            <div class="card-body">
+                <h6 class="fw-semibold mb-3">Monthly Product Additions</h6>
+                <div style="position:relative; height:220px;">
                     <canvas id="trendChart"></canvas>
                 </div>
             </div>
         </div>
-
-        <div class="col-lg-6">
-            <div class="card dashboard-card h-100 shadow-sm border-0">
-               <div class="card-body" style="height: 260px;">
-                    <h6 class="fw-semibold mb-2">Inventory Value by Category</h6>
-                    <div class="text-muted small mb-3">
+    </div>
+    <div class="col-lg-6 col-md-6 mb-3">
+        <div class="card shadow-sm border-0 h-100">
+            <div class="card-body">
+                <div>
+                     <h6 class="fw-semibold mb-3">Inventory Value by Category</h6>
+                     <div class="text-muted small mb-3">
                         Total Inventory Value
                         <span class="fw-bold text-dark">₹ {{ total_inventory_value|floatformat:0|short_number }}</span>
                     </div>
-                    <canvas id="inventoryValueChart"></canvas>
+                </div>
+                <div style="position:relative; height:220px;">
+                    <canvas id="inventoryValueChart" height='250px'></canvas>
                 </div>
             </div>
         </div>
+    </div>
 
     </div>
+
+   
 </div>
-<br>
+
 <!-- ===================== FILTER BAR ===================== -->
 <div class="card dashboard-card mb-4 shadow-sm border-0">
     <div class="card-body">

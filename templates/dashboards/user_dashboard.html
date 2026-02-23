@@ -128,6 +128,37 @@ thead th {
 
 <div>
 <br>
+<div class="dashboard-section mb-4">
+ <div class="d-flex justify-content-between align-items-center mb-3">
+        <h5 class="fw-bold mb-0">Analytics Overview of User Activity</h5>
+        <span class="text-muted small">Real-time inventory insights</span>
+    </div>
+    <div class="row g-4">
+
+       
+<div class="col-lg-6 col-md-6 mb-3">
+        <div class="card shadow-sm border-0 h-100">
+            <div class="card-body">
+                <h6 class="fw-semibold mb-3">Users Status</h6>
+                <div style="position:relative; height:220px;">
+                    <canvas id="statusChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-6 col-md-6 mb-3">
+        <div class="card shadow-sm border-0 h-100">
+            <div class="card-body">
+                <h6 class="fw-semibold mb-3">User Role Status</h6>
+                <div style="position:relative; height:220px;">
+                    <canvas id="rolebasedChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+  </div>
+
     <!-- Recent Logins -->
 <div class="row">
 
@@ -268,6 +299,41 @@ thead th {
 </div>
 
 </div>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+const statusChart = document.getElementById('statusChart').getContext('2d');
+const rolebasedChart = document.getElementById('rolebasedChart').getContext('2d');
 
+new Chart(statusChart, {
+  type: 'bar',
+  data: {
+    labels: ['Active', 'Inactive'],
+    datasets: [{
+      data: [{{active_users}}, {{inactive_users}}],
+      label : 'User Status',
+      backgroundColor: ['#269f50ff','#da5959ff']
+    }]
+  },
+  options: {
+        maintainAspectRatio: false,
+
+    }
+}),
+
+new Chart(rolebasedChart, {
+  type: 'doughnut',
+  data: {
+    labels: ['Admin', 'Manager', 'Staff'],
+    datasets: [{
+      data: [{{admin}}, {{total_managers}}, {{total_staff}}],
+    }]
+  },
+  options: {
+        maintainAspectRatio: false,
+        plugins : { legend : { position: 'right' } },
+        animation: { duration: 600 }
+    }
+})
+</script>
 
 {% endblock %}
