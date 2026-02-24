@@ -305,6 +305,16 @@ def manager_dashboard(request):
     notifications = get_user_notifications(request.user, 5)
     notifications_count = len(notifications)
 
+    # monthly summary
+    today = timezone.now()
+    start_month = today.replace(day=1)
+
+    monthly_stockin = PurchaseOrder.objects.filter(
+        status='delivered', request__created_at__gte=start_month).aggregate(total=Sum('request__quantity'))["total"] or 0
+
+    monthly_stockout = OrderItem.objects.filter(
+        order__payment_status="Paid", order__created_at__gte=start_month).aggregate(total=Sum('quantity'))["total"] or 0
+
     # Inventory health %
     total_products = total_products if total_products else 1
 
@@ -326,6 +336,8 @@ def manager_dashboard(request):
         'out_stock_bar': percent(out_stock),
         'notifications': notifications,
         'notifications_count': notifications_count,
+        "monthly_stockin": monthly_stockin,
+        "monthly_stockout": monthly_stockout,
 
     }
     return render(request, "manager_dashboard.html", context)

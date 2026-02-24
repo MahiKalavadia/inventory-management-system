@@ -869,7 +869,7 @@ def stock_history(request):
     logs = StockLog.objects.select_related(
         'product', 'user').order_by('-created_at')
 
-    paginator = Paginator(logs, 10)
+    paginator = Paginator(logs, 15)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
 

@@ -1,0 +1,802 @@
+sku,name,brand,purchase_price,price,quantity,category,supplier,description,warranty_months
+MO-DE-0001,Dell Monitor Model 462,Dell,34676,44312,65,Monitor,PowerTech Distributors,Dell Monitor with premium features,12
+SM-GA-0002,Garmin Smartwatch Model 401,Garmin,32472,43548,30,Smartwatch,SoundPro Solutions,Garmin Smartwatch with premium features,24
+HE-JB-0003,JBL Headphones Model 495,JBL,6362,8461,13,Headphones,SmartGear Traders,JBL Headphones with premium features,24
+LA-DE-0004,Dell Laptop Model 259,Dell,51700,80165,18,Laptop,MobileMart Pvt Ltd,Dell Laptop with premium features,36
+TA-AP-0005,Apple Tablet Model 702,Apple,22080,34920,26,Tablet,Elite Tech Supplies,Apple Tablet with premium features,36
+MO-LO-0006,Logitech Mouse Model 258,Logitech,1030,1565,6,Mouse,GameZone Distributors,Logitech Mouse with premium features,6
+SM-SA-0007,Samsung Smartphone Model 810,Samsung,46495,63551,24,Smartphone,PowerTech Distributors,Samsung Smartphone with premium features,6
+HE-AU-0008,Audio-Technica Headphones Model 633,Audio-Technica,8969,13503,84,Headphones,TechWorld Pvt Ltd,Audio-Technica Headphones with premium features,6
+KE-CO-0009,Corsair Keyboard Model 632,Corsair,2683,3910,19,Keyboard,Visiopython managnary Electronics,Corsair Keyboard with premium features,24
+RO-NE-0010,Netgear Router Model 551,Netgear,8364,10628,83,Router,TechWorld Pvt Ltd,Netgear Router with premium features,6
+HE-BO-0011,Bose Headphones Model 731,Bose,18368,29798,31,Headphones,Peripheral Pros,Bose Headphones with premium features,24
+SM-XI-0012,Xiaomi Smartphone Model 849,Xiaomi,74029,94800,86,Smartphone,MobileMart Pvt Ltd,Xiaomi Smartphone with premium features,12
+RO-CI-0013,Cisco Router Model 278,Cisco,3880,5759,17,Router,MobileMart Pvt Ltd,Cisco Router with premium features,36
+TV-SO-0014,Sony TV Model 197,Sony,84181,128605,43,TV,SmartGear Traders,Sony TV with premium features,36
+LA-MS-0015,MSI Laptop Model 602,MSI,60355,86104,60,Laptop,AudioMax Distributors,MSI Laptop with premium features,36
+RO-CI-0016,Cisco Router Model 260,Cisco,5755,8413,30,Router,GameZone Distributors,Cisco Router with premium features,12
+LA-MS-0017,MSI Laptop Model 767,MSI,56333,88965,91,Laptop,GameZone Distributors,MSI Laptop with premium features,24
+CA-SO-0018,Sony Camera Model 358,Sony,74885,117122,29,Camera,ConnectPro Supplies,Sony Camera with premium features,24
+CA-CA-0019,Canon Camera Model 738,Canon,70863,98894,53,Camera,Visionary Electronics,Canon Camera with premium features,24
+HE-PH-0020,Philips Headphones Model 445,Philips,6228,8605,71,Headphones,ElectroMart Solutions,Philips Headphones with premium features,24
+SM-RE-0021,Realme Smartphone Model 743,Realme,33163,52328,16,Smartphone,DigiHub Electronics,Realme Smartphone with premium features,12
+KE-RA-0022,Razer Keyboard Model 822,Razer,4335,6297,91,Keyboard,VisionTech Supplies,Razer Keyboard with premium features,12
+KE-CO-0023,Corsair Keyboard Model 387,Corsair,3681,4694,12,Keyboard,SmartGear Traders,Corsair Keyboard with premium features,24
+CA-AM-0024,AmazonBasics Cable Model 878,AmazonBasics,875,1377,11,Cable,AudioMax Distributors,AmazonBasics Cable with premium features,12
+SM-BO-0025,Boat Smartwatch Model 924,Boat,5616,9025,28,Smartwatch,ConnectPro Supplies,Boat Smartwatch with premium features,12
+CA-OL-0026,Olympus Camera Model 201,Olympus,69576,104395,92,Camera,Visionary Electronics,Olympus Camera with premium features,24
+TV-TC-0027,TCL TV Model 425,TCL,112424,151302,51,TV,GadgetHub India,TCL TV with premium features,6
+SM-ON-0028,OnePlus Smartwatch Model 382,OnePlus,3329,5444,4,Smartwatch,PowerTech Distributors,OnePlus Smartwatch with premium features,12
+PO-RE-0029,Realme Power Bank Model 125,Realme,1974,2841,17,Power Bank,ConnectPro Supplies,Realme Power Bank with premium features,12
+MO-RA-0030,Razer Mouse Model 825,Razer,692,1090,24,Mouse,SmartLife Traders,Razer Mouse with premium features,36
+GA-MI-0031,Microsoft Gaming Console Model 411,Microsoft,34819,44109,28,Gaming Console,ReadMore Supplies,Microsoft Gaming Console with premium features,12
+TV-XI-0032,Xiaomi TV Model 745,Xiaomi,27439,40803,40,TV,AudioMax Distributors,Xiaomi TV with premium features,12
+GA-SO-0033,Sony Gaming Console Model 353,Sony,26716,35339,8,Gaming Console,VisionTech Supplies,Sony Gaming Console with premium features,12
+LA-AS-0034,Asus Laptop Model 996,Asus,53593,69786,37,Laptop,CameraKing Distributors,Asus Laptop with premium features,12
+TV-SA-0035,Samsung TV Model 384,Samsung,19166,28055,50,TV,SmartGear Traders,Samsung TV with premium features,24
+GA-SO-0036,Sony Gaming Console Model 866,Sony,27254,36749,49,Gaming Console,SmartLife Traders,Sony Gaming Console with premium features,12
+ME-TR-0037,Transcend Memory Card Model 537,Transcend,1271,1661,37,Memory Card,SmartGear Traders,Transcend Memory Card with premium features,12
+PR-EP-0038,Epson Printer Model 698,Epson,21152,27111,21,Printer,VisionTech Supplies,Epson Printer with premium features,12
+WE-RA-0039,Razer Webcam Model 748,Razer,4725,6195,97,Webcam,Visionary Electronics,Razer Webcam with premium features,12
+ME-SO-0040,Sony Memory Card Model 423,Sony,2954,3992,17,Memory Card,DigiHub Electronics,Sony Memory Card with premium features,36
+ME-SO-0041,Sony Memory Card Model 655,Sony,3227,4638,47,Memory Card,ConnectPro Supplies,Sony Memory Card with premium features,36
+CA-BO-0042,Boat Cable Model 787,Boat,643,1038,97,Cable,Visionary Electronics,Boat Cable with premium features,6
+PR-HP-0043,HP Printer Model 960,HP,10339,13418,34,Printer,ReadMore Supplies,HP Printer with premium features,12
+MO-HP-0044,HP Mouse Model 940,HP,1907,2575,1,Mouse,ReadMore Supplies,HP Mouse with premium features,36
+MO-AS-0045,Asus Monitor Model 844,Asus,41057,65232,46,Monitor,VisionTech Supplies,Asus Monitor with premium features,12
+HE-SK-0046,Skullcandy Headphones Model 331,Skullcandy,2836,4710,36,Headphones,GadgetHub India,Skullcandy Headphones with premium features,6
+CA-AM-0047,AmazonBasics Cable Model 770,AmazonBasics,1119,1488,33,Cable,PrintWorks Pvt Ltd,AmazonBasics Cable with premium features,12
+WE-RA-0048,Razer Webcam Model 711,Razer,3278,4554,51,Webcam,GadgetHub India,Razer Webcam with premium features,24
+CA-AN-0049,Anker Cable Model 863,Anker,560,762,89,Cable,ElectroMart Solutions,Anker Cable with premium features,12
+GA-SO-0050,Sony Gaming Console Model 745,Sony,32863,41958,96,Gaming Console,TechNova Pvt Ltd,Sony Gaming Console with premium features,6
+PR-BR-0051,Brother Printer Model 852,Brother,27973,42632,83,Printer,TechNova Pvt Ltd,Brother Printer with premium features,36
+CA-GO-0052,GoPro Camera Model 171,GoPro,61033,98268,30,Camera,MobileMart Pvt Ltd,GoPro Camera with premium features,12
+GA-MI-0053,Microsoft Gaming Console Model 469,Microsoft,23277,37587,64,Gaming Console,Peripheral Pros,Microsoft Gaming Console with premium features,6
+PO-RE-0054,Realme Power Bank Model 687,Realme,871,1341,21,Power Bank,PrintWorks Pvt Ltd,Realme Power Bank with premium features,24
+GA-SO-0055,Sony Gaming Console Model 352,Sony,38653,54790,31,Gaming Console,Elite Tech Supplies,Sony Gaming Console with premium features,12
+SM-RE-0056,Realme Smartphone Model 700,Realme,29809,39552,50,Smartphone,DigiHub Electronics,Realme Smartphone with premium features,6
+LA-MI-0057,Microsoft Laptop Model 414,Microsoft,133234,197846,4,Laptop,SmartLife Traders,Microsoft Laptop with premium features,36
+ME-SA-0058,SanDisk Memory Card Model 361,SanDisk,1307,1753,38,Memory Card,ElectroMart Solutions,SanDisk Memory Card with premium features,36
+SM-RE-0059,Realme Smartphone Model 168,Realme,69695,113551,89,Smartphone,TechNova Pvt Ltd,Realme Smartphone with premium features,6
+HE-SK-0060,Skullcandy Headphones Model 910,Skullcandy,14813,19943,93,Headphones,Visionary Electronics,Skullcandy Headphones with premium features,36
+HE-PH-0061,Philips Headphones Model 293,Philips,14142,21726,2,Headphones,GadgetHub India,Philips Headphones with premium features,36
+CH-AP-0062,Apple Charger Model 200,Apple,732,1148,14,Charger,SmartGear Traders,Apple Charger with premium features,12
+MO-DE-0063,Dell Mouse Model 631,Dell,768,1217,61,Mouse,Visionary Electronics,Dell Mouse with premium features,24
+CA-AM-0064,AmazonBasics Cable Model 772,AmazonBasics,987,1339,39,Cable,Peripheral Pros,AmazonBasics Cable with premium features,12
+ME-TR-0065,Transcend Memory Card Model 638,Transcend,5235,7255,85,Memory Card,GadgetHub India,Transcend Memory Card with premium features,36
+WE-LO-0066,Logitech Webcam Model 194,Logitech,6756,9711,53,Webcam,TechNova Pvt Ltd,Logitech Webcam with premium features,12
+LA-LE-0067,Lenovo Laptop Model 571,Lenovo,120214,168013,32,Laptop,Elite Tech Supplies,Lenovo Laptop with premium features,24
+LA-RA-0068,Razer Laptop Model 600,Razer,55748,90736,84,Laptop,SmartLife Traders,Razer Laptop with premium features,6
+RO-AS-0069,Asus Router Model 267,Asus,9231,12970,31,Router,GadgetHub India,Asus Router with premium features,24
+TA-AM-0070,Amazon Tablet Model 101,Amazon,40526,67227,19,Tablet,TechNova Pvt Ltd,Amazon Tablet with premium features,6
+MO-RA-0071,Razer Mouse Model 614,Razer,5057,7306,77,Mouse,Peripheral Pros,Razer Mouse with premium features,24
+LA-AS-0072,Asus Laptop Model 109,Asus,41722,53496,33,Laptop,Visionary Electronics,Asus Laptop with premium features,6
+WE-HP-0073,HP Webcam Model 250,HP,2346,2941,82,Webcam,Visionary Electronics,HP Webcam with premium features,24
+ME-SO-0074,Sony Memory Card Model 921,Sony,4683,6552,84,Memory Card,PowerTech Distributors,Sony Memory Card with premium features,6
+MO-SA-0075,Samsung Monitor Model 283,Samsung,30267,38887,39,Monitor,TechNova Pvt Ltd,Samsung Monitor with premium features,6
+HE-AU-0076,Audio-Technica Headphones Model 364,Audio-Technica,16123,26775,70,Headphones,CameraKing Distributors,Audio-Technica Headphones with premium features,12
+WE-MI-0077,Microsoft Webcam Model 226,Microsoft,6675,9042,99,Webcam,GameZone Distributors,Microsoft Webcam with premium features,24
+CA-AN-0078,Anker Cable Model 932,Anker,886,1406,60,Cable,MobileMart Pvt Ltd,Anker Cable with premium features,12
+MO-CO-0079,Corsair Mouse Model 824,Corsair,4549,6613,99,Mouse,SmartGear Traders,Corsair Mouse with premium features,6
+SM-XI-0080,Xiaomi Smartphone Model 438,Xiaomi,53235,81414,50,Smartphone,TechNova Pvt Ltd,Xiaomi Smartphone with premium features,24
+TV-ON-0081,OnePlus TV Model 261,OnePlus,51430,81785,52,TV,Peripheral Pros,OnePlus TV with premium features,24
+LA-HP-0082,HP Laptop Model 937,HP,107645,141535,96,Laptop,PowerTech Distributors,HP Laptop with premium features,12
+SP-MA-0083,Marshall Speaker Model 337,Marshall,23041,32852,70,Speaker,AudioMax Distributors,Marshall Speaker with premium features,36
+CA-BO-0084,Boat Cable Model 500,Boat,205,275,53,Cable,Peripheral Pros,Boat Cable with premium features,24
+MO-BE-0085,BenQ Monitor Model 348,BenQ,13036,16857,44,Monitor,TechWorld Pvt Ltd,BenQ Monitor with premium features,36
+MO-DE-0086,Dell Mouse Model 289,Dell,4233,6751,26,Mouse,SmartLife Traders,Dell Mouse with premium features,6
+PO-MI-0087,Mi Power Bank Model 915,Mi,2196,3028,9,Power Bank,PrintWorks Pvt Ltd,Mi Power Bank with premium features,36
+TV-LG-0088,LG TV Model 746,LG,73685,112050,67,TV,Elite Tech Supplies,LG TV with premium features,6
+LA-DE-0089,Dell Laptop Model 135,Dell,51436,82224,55,Laptop,Peripheral Pros,Dell Laptop with premium features,12
+LA-MS-0090,MSI Laptop Model 707,MSI,95841,121233,73,Laptop,PrintWorks Pvt Ltd,MSI Laptop with premium features,12
+EA-AN-0091,Anker Earbuds Model 214,Anker,6116,9287,39,Earbuds,TechWorld Pvt Ltd,Anker Earbuds with premium features,6
+GA-NI-0092,Nintendo Gaming Console Model 492,Nintendo,35155,44551,2,Gaming Console,AudioMax Distributors,Nintendo Gaming Console with premium features,36
+RO-AS-0093,Asus Router Model 825,Asus,5916,8284,92,Router,Peripheral Pros,Asus Router with premium features,24
+SM-AP-0094,Apple Smartwatch Model 487,Apple,10037,15642,45,Smartwatch,TechNova Pvt Ltd,Apple Smartwatch with premium features,12
+LA-RA-0095,Razer Laptop Model 189,Razer,34211,49026,98,Laptop,SoundPro Solutions,Razer Laptop with premium features,24
+CA-FU-0096,Fujifilm Camera Model 364,Fujifilm,85234,110028,24,Camera,MobileMart Pvt Ltd,Fujifilm Camera with premium features,24
+LA-LE-0097,Lenovo Laptop Model 247,Lenovo,62641,85243,9,Laptop,SoundPro Solutions,Lenovo Laptop with premium features,24
+KE-KE-0098,Keychron Keyboard Model 346,Keychron,8604,14306,31,Keyboard,Elite Tech Supplies,Keychron Keyboard with premium features,12
+MO-ST-0099,SteelSeries Mouse Model 818,SteelSeries,4244,5637,54,Mouse,TechWorld Pvt Ltd,SteelSeries Mouse with premium features,24
+MO-BE-0100,BenQ Monitor Model 188,BenQ,46951,66235,99,Monitor,VisionTech Supplies,BenQ Monitor with premium features,24
+SM-XI-0101,Xiaomi Smartphone Model 218,Xiaomi,31117,40062,11,Smartphone,DigiHub Electronics,Xiaomi Smartphone with premium features,24
+TA-RE-0102,Realme Tablet Model 595,Realme,49764,76816,78,Tablet,MobileMart Pvt Ltd,Realme Tablet with premium features,12
+SM-BO-0103,Boat Smartwatch Model 123,Boat,16039,24469,100,Smartwatch,TechWorld Pvt Ltd,Boat Smartwatch with premium features,36
+TV-ON-0104,OnePlus TV Model 980,OnePlus,44689,62436,20,TV,GadgetHub India,OnePlus TV with premium features,36
+WE-LO-0105,Logitech Webcam Model 180,Logitech,8632,12091,21,Webcam,CameraKing Distributors,Logitech Webcam with premium features,24
+PR-EP-0106,Epson Printer Model 397,Epson,32760,46093,83,Printer,SoundPro Solutions,Epson Printer with premium features,36
+ME-SO-0107,Sony Memory Card Model 197,Sony,4303,5667,36,Memory Card,CameraKing Distributors,Sony Memory Card with premium features,6
+WE-LO-0108,Logitech Webcam Model 603,Logitech,9231,13890,31,Webcam,TechWorld Pvt Ltd,Logitech Webcam with premium features,6
+PO-SA-0109,Samsung Power Bank Model 954,Samsung,403,543,83,Power Bank,GadgetHub India,Samsung Power Bank with premium features,24
+GA-SO-0110,Sony Gaming Console Model 374,Sony,23118,38149,34,Gaming Console,CameraKing Distributors,Sony Gaming Console with premium features,6
+WE-HP-0111,HP Webcam Model 519,HP,7086,9859,37,Webcam,TechNova Pvt Ltd,HP Webcam with premium features,36
+SM-AM-0112,Amazfit Smartwatch Model 532,Amazfit,5021,6320,29,Smartwatch,VisionTech Supplies,Amazfit Smartwatch with premium features,24
+CA-BE-0113,Belkin Cable Model 382,Belkin,1175,1476,6,Cable,SmartGear Traders,Belkin Cable with premium features,12
+CH-SA-0114,Samsung Charger Model 540,Samsung,1446,2246,67,Charger,PrintWorks Pvt Ltd,Samsung Charger with premium features,36
+EA-AN-0115,Anker Earbuds Model 591,Anker,2301,3063,8,Earbuds,SmartGear Traders,Anker Earbuds with premium features,24
+MO-AC-0116,Acer Monitor Model 248,Acer,37185,54778,16,Monitor,Peripheral Pros,Acer Monitor with premium features,36
+RO-AS-0117,Asus Router Model 804,Asus,7972,11653,18,Router,Visionary Electronics,Asus Router with premium features,6
+TA-AP-0118,Apple Tablet Model 802,Apple,58902,74700,11,Tablet,VisionTech Supplies,Apple Tablet with premium features,36
+PR-EP-0119,Epson Printer Model 285,Epson,30953,42134,45,Printer,SmartGear Traders,Epson Printer with premium features,36
+LA-MS-0120,MSI Laptop Model 468,MSI,53947,77606,69,Laptop,AudioMax Distributors,MSI Laptop with premium features,36
+KE-DU-0121,Ducky Keyboard Model 952,Ducky,6842,10988,98,Keyboard,Visionary Electronics,Ducky Keyboard with premium features,12
+CA-ON-0122,OnePlus Cable Model 221,OnePlus,363,596,76,Cable,GadgetHub India,OnePlus Cable with premium features,36
+ME-SA-0123,Samsung Memory Card Model 622,Samsung,5614,7275,93,Memory Card,MobileMart Pvt Ltd,Samsung Memory Card with premium features,6
+SM-AM-0124,Amazfit Smartwatch Model 572,Amazfit,4225,5518,96,Smartwatch,SmartLife Traders,Amazfit Smartwatch with premium features,6
+ME-SO-0125,Sony Memory Card Model 943,Sony,3893,5041,61,Memory Card,ElectroMart Solutions,Sony Memory Card with premium features,24
+LA-MI-0126,Microsoft Laptop Model 658,Microsoft,141518,182628,97,Laptop,TechWorld Pvt Ltd,Microsoft Laptop with premium features,24
+CA-BO-0127,Boat Cable Model 141,Boat,265,390,70,Cable,SoundPro Solutions,Boat Cable with premium features,24
+SM-GA-0128,Garmin Smartwatch Model 713,Garmin,24644,31599,73,Smartwatch,Visionary Electronics,Garmin Smartwatch with premium features,24
+SP-BO-0129,Bose Speaker Model 394,Bose,22769,30421,63,Speaker,VisionTech Supplies,Bose Speaker with premium features,6
+PR-BR-0130,Brother Printer Model 422,Brother,19303,30583,15,Printer,TechNova Pvt Ltd,Brother Printer with premium features,24
+LA-MS-0131,MSI Laptop Model 890,MSI,95043,143451,37,Laptop,SoundPro Solutions,MSI Laptop with premium features,24
+WE-MI-0132,Microsoft Webcam Model 523,Microsoft,9699,14456,55,Webcam,SmartLife Traders,Microsoft Webcam with premium features,6
+KE-DE-0133,Dell Keyboard Model 769,Dell,1209,1533,9,Keyboard,SmartGear Traders,Dell Keyboard with premium features,6
+SP-HA-0134,Harman Kardon Speaker Model 805,Harman Kardon,18017,24023,100,Speaker,SmartGear Traders,Harman Kardon Speaker with premium features,6
+MO-DE-0135,Dell Mouse Model 410,Dell,4688,6100,96,Mouse,SmartLife Traders,Dell Mouse with premium features,24
+WE-CR-0136,Creative Webcam Model 681,Creative,9099,13248,3,Webcam,PowerTech Distributors,Creative Webcam with premium features,6
+CH-SA-0137,Samsung Charger Model 584,Samsung,1478,2045,89,Charger,SoundPro Solutions,Samsung Charger with premium features,12
+WE-HP-0138,HP Webcam Model 755,HP,2500,3386,62,Webcam,GameZone Distributors,HP Webcam with premium features,12
+CA-BO-0139,Boat Cable Model 259,Boat,590,924,54,Cable,GadgetHub India,Boat Cable with premium features,6
+HE-JB-0140,JBL Headphones Model 512,JBL,13776,19349,96,Headphones,Peripheral Pros,JBL Headphones with premium features,24
+ME-SA-0141,SanDisk Memory Card Model 819,SanDisk,3035,4176,86,Memory Card,VisionTech Supplies,SanDisk Memory Card with premium features,12
+RO-AS-0142,Asus Router Model 524,Asus,8220,12429,29,Router,SmartLife Traders,Asus Router with premium features,6
+TA-MI-0143,Microsoft Tablet Model 126,Microsoft,19906,29182,61,Tablet,GameZone Distributors,Microsoft Tablet with premium features,36
+GA-SO-0144,Sony Gaming Console Model 905,Sony,36067,47282,27,Gaming Console,Peripheral Pros,Sony Gaming Console with premium features,6
+CH-RE-0145,Realme Charger Model 246,Realme,1564,2346,17,Charger,GadgetHub India,Realme Charger with premium features,6
+WE-HP-0146,HP Webcam Model 120,HP,8325,11727,77,Webcam,AudioMax Distributors,HP Webcam with premium features,12
+SM-OP-0147,Oppo Smartphone Model 299,Oppo,39324,59168,64,Smartphone,TechWorld Pvt Ltd,Oppo Smartphone with premium features,6
+EA-AP-0148,Apple Earbuds Model 706,Apple,7656,10311,5,Earbuds,PowerTech Distributors,Apple Earbuds with premium features,12
+CH-SA-0149,Samsung Charger Model 325,Samsung,479,699,5,Charger,DigiHub Electronics,Samsung Charger with premium features,6
+SM-AP-0150,Apple Smartphone Model 128,Apple,35469,52992,95,Smartphone,AudioMax Distributors,Apple Smartphone with premium features,36
+GA-MI-0151,Microsoft Gaming Console Model 744,Microsoft,17220,28236,87,Gaming Console,AudioMax Distributors,Microsoft Gaming Console with premium features,12
+WE-RA-0152,Razer Webcam Model 278,Razer,5580,7953,16,Webcam,ConnectPro Supplies,Razer Webcam with premium features,24
+MO-SA-0153,Samsung Monitor Model 441,Samsung,57041,72578,7,Monitor,Visionary Electronics,Samsung Monitor with premium features,36
+CH-BE-0154,Belkin Charger Model 907,Belkin,1678,2104,12,Charger,DigiHub Electronics,Belkin Charger with premium features,36
+SM-NO-0155,Nokia Smartphone Model 891,Nokia,68837,93696,40,Smartphone,SoundPro Solutions,Nokia Smartphone with premium features,12
+MO-RA-0156,Razer Mouse Model 171,Razer,5636,7787,99,Mouse,Visionary Electronics,Razer Mouse with premium features,24
+RO-CI-0157,Cisco Router Model 861,Cisco,6072,9662,90,Router,GadgetHub India,Cisco Router with premium features,24
+PO-MI-0158,Mi Power Bank Model 426,Mi,861,1272,28,Power Bank,Peripheral Pros,Mi Power Bank with premium features,24
+KE-ST-0159,SteelSeries Keyboard Model 746,SteelSeries,10414,13073,60,Keyboard,TechNova Pvt Ltd,SteelSeries Keyboard with premium features,24
+TV-TC-0160,TCL TV Model 582,TCL,71563,104275,6,TV,AudioMax Distributors,TCL TV with premium features,12
+MO-HP-0161,HP Mouse Model 379,HP,6205,7833,89,Mouse,SoundPro Solutions,HP Mouse with premium features,6
+CH-AN-0162,Anker Charger Model 645,Anker,1440,1884,67,Charger,SmartLife Traders,Anker Charger with premium features,6
+LA-LG-0163,LG Laptop Model 387,LG,81112,117305,59,Laptop,AudioMax Distributors,LG Laptop with premium features,36
+EA-AN-0164,Anker Earbuds Model 138,Anker,15129,23449,91,Earbuds,MobileMart Pvt Ltd,Anker Earbuds with premium features,6
+TA-MI-0165,Microsoft Tablet Model 296,Microsoft,9200,12584,85,Tablet,SmartLife Traders,Microsoft Tablet with premium features,36
+CA-BO-0166,Boat Cable Model 267,Boat,255,419,65,Cable,DigiHub Electronics,Boat Cable with premium features,24
+HE-BE-0167,Beats Headphones Model 872,Beats,16651,22675,49,Headphones,TechWorld Pvt Ltd,Beats Headphones with premium features,24
+ME-KI-0168,Kingston Memory Card Model 957,Kingston,847,1253,29,Memory Card,AudioMax Distributors,Kingston Memory Card with premium features,36
+SM-ON-0169,OnePlus Smartwatch Model 113,OnePlus,30587,47345,79,Smartwatch,DigiHub Electronics,OnePlus Smartwatch with premium features,6
+TA-AM-0170,Amazon Tablet Model 913,Amazon,44936,69823,8,Tablet,TechWorld Pvt Ltd,Amazon Tablet with premium features,24
+LA-MI-0171,Microsoft Laptop Model 595,Microsoft,112064,149535,59,Laptop,SoundPro Solutions,Microsoft Laptop with premium features,12
+SM-BO-0172,Boat Smartwatch Model 686,Boat,16792,24142,99,Smartwatch,GameZone Distributors,Boat Smartwatch with premium features,24
+PR-BR-0173,Brother Printer Model 227,Brother,33740,46996,13,Printer,GadgetHub India,Brother Printer with premium features,6
+PO-ON-0174,OnePlus Power Bank Model 836,OnePlus,2513,4050,12,Power Bank,Elite Tech Supplies,OnePlus Power Bank with premium features,24
+SM-AP-0175,Apple Smartwatch Model 548,Apple,14615,21987,51,Smartwatch,MobileMart Pvt Ltd,Apple Smartwatch with premium features,36
+CA-OL-0176,Olympus Camera Model 886,Olympus,33570,54883,94,Camera,ElectroMart Solutions,Olympus Camera with premium features,12
+SM-BO-0177,Boat Smartwatch Model 984,Boat,30716,42260,5,Smartwatch,Visionary Electronics,Boat Smartwatch with premium features,24
+KE-HP-0178,HP Keyboard Model 893,HP,8214,13421,46,Keyboard,Peripheral Pros,HP Keyboard with premium features,24
+PR-BR-0179,Brother Printer Model 733,Brother,24421,36709,60,Printer,TechWorld Pvt Ltd,Brother Printer with premium features,12
+TA-AP-0180,Apple Tablet Model 919,Apple,26226,40802,72,Tablet,ConnectPro Supplies,Apple Tablet with premium features,24
+PR-XE-0181,Xerox Printer Model 530,Xerox,10480,17165,89,Printer,ElectroMart Solutions,Xerox Printer with premium features,36
+PO-AN-0182,Anker Power Bank Model 283,Anker,1583,2587,21,Power Bank,SmartGear Traders,Anker Power Bank with premium features,6
+SM-SA-0183,Samsung Smartwatch Model 194,Samsung,7957,12359,59,Smartwatch,SoundPro Solutions,Samsung Smartwatch with premium features,12
+TA-XI-0184,Xiaomi Tablet Model 162,Xiaomi,43809,70152,25,Tablet,SmartLife Traders,Xiaomi Tablet with premium features,24
+CH-BO-0185,Boat Charger Model 732,Boat,1836,2348,78,Charger,SmartLife Traders,Boat Charger with premium features,12
+HE-SO-0186,Sony Headphones Model 614,Sony,15751,22234,84,Headphones,ConnectPro Supplies,Sony Headphones with premium features,6
+SM-MO-0187,Motorola Smartphone Model 841,Motorola,30650,47725,66,Smartphone,CameraKing Distributors,Motorola Smartphone with premium features,36
+HE-SE-0188,Sennheiser Headphones Model 545,Sennheiser,11415,14544,34,Headphones,SmartGear Traders,Sennheiser Headphones with premium features,12
+LA-AP-0189,Apple Laptop Model 516,Apple,23577,31407,16,Laptop,VisionTech Supplies,Apple Laptop with premium features,6
+GA-MI-0190,Microsoft Gaming Console Model 814,Microsoft,34316,48493,11,Gaming Console,Elite Tech Supplies,Microsoft Gaming Console with premium features,36
+CH-AN-0191,Anker Charger Model 470,Anker,2015,2548,90,Charger,TechWorld Pvt Ltd,Anker Charger with premium features,36
+MO-DE-0192,Dell Monitor Model 338,Dell,11798,17924,43,Monitor,VisionTech Supplies,Dell Monitor with premium features,36
+TV-PA-0193,Panasonic TV Model 661,Panasonic,25274,37065,90,TV,ConnectPro Supplies,Panasonic TV with premium features,36
+PO-SA-0194,Samsung Power Bank Model 748,Samsung,2429,3587,94,Power Bank,ElectroMart Solutions,Samsung Power Bank with premium features,36
+SM-GO-0195,Google Smartphone Model 813,Google,65277,105784,25,Smartphone,VisionTech Supplies,Google Smartphone with premium features,24
+MO-LO-0196,Logitech Mouse Model 591,Logitech,2517,3191,61,Mouse,SmartLife Traders,Logitech Mouse with premium features,24
+CA-ON-0197,OnePlus Cable Model 284,OnePlus,933,1200,17,Cable,TechWorld Pvt Ltd,OnePlus Cable with premium features,36
+EA-NO-0198,Noise Earbuds Model 499,Noise,14062,22970,63,Earbuds,MobileMart Pvt Ltd,Noise Earbuds with premium features,12
+LA-HP-0199,HP Laptop Model 508,HP,46625,75473,49,Laptop,ElectroMart Solutions,HP Laptop with premium features,36
+HE-SE-0200,Sennheiser Headphones Model 760,Sennheiser,11030,16114,96,Headphones,CameraKing Distributors,Sennheiser Headphones with premium features,36
+MO-SA-0201,Samsung Monitor Model 932,Samsung,10070,14622,1,Monitor,PowerTech Distributors,Samsung Monitor with premium features,24
+TA-RE-0202,Realme Tablet Model 202,Realme,17849,25576,18,Tablet,DigiHub Electronics,Realme Tablet with premium features,24
+ME-KI-0203,Kingston Memory Card Model 588,Kingston,544,703,31,Memory Card,ElectroMart Solutions,Kingston Memory Card with premium features,6
+GA-NI-0204,Nintendo Gaming Console Model 556,Nintendo,28778,36707,19,Gaming Console,GameZone Distributors,Nintendo Gaming Console with premium features,12
+WE-HP-0205,HP Webcam Model 760,HP,11276,14196,65,Webcam,DigiHub Electronics,HP Webcam with premium features,36
+EA-SA-0206,Samsung Earbuds Model 528,Samsung,14240,18749,96,Earbuds,DigiHub Electronics,Samsung Earbuds with premium features,24
+SM-RE-0207,Realme Smartphone Model 136,Realme,79911,121258,83,Smartphone,CameraKing Distributors,Realme Smartphone with premium features,12
+MO-CO-0208,Corsair Mouse Model 315,Corsair,322,521,86,Mouse,GadgetHub India,Corsair Mouse with premium features,12
+HE-SE-0209,Sennheiser Headphones Model 277,Sennheiser,20537,29141,7,Headphones,Peripheral Pros,Sennheiser Headphones with premium features,12
+CH-AN-0210,Anker Charger Model 135,Anker,2066,2722,77,Charger,GadgetHub India,Anker Charger with premium features,36
+LA-DE-0211,Dell Laptop Model 437,Dell,100419,140299,5,Laptop,TechWorld Pvt Ltd,Dell Laptop with premium features,12
+KE-RA-0212,Razer Keyboard Model 897,Razer,4192,6474,4,Keyboard,ElectroMart Solutions,Razer Keyboard with premium features,6
+MO-HP-0213,HP Monitor Model 650,HP,13483,18971,1,Monitor,PrintWorks Pvt Ltd,HP Monitor with premium features,36
+WE-RA-0214,Razer Webcam Model 820,Razer,2222,3012,12,Webcam,ElectroMart Solutions,Razer Webcam with premium features,6
+KE-ST-0215,SteelSeries Keyboard Model 858,SteelSeries,7996,10661,79,Keyboard,ReadMore Supplies,SteelSeries Keyboard with premium features,6
+SM-FI-0216,Fitbit Smartwatch Model 770,Fitbit,30135,38856,17,Smartwatch,CameraKing Distributors,Fitbit Smartwatch with premium features,36
+SP-SO-0217,Sony Speaker Model 743,Sony,25203,37053,83,Speaker,MobileMart Pvt Ltd,Sony Speaker with premium features,6
+MO-ST-0218,SteelSeries Mouse Model 491,SteelSeries,5589,7393,53,Mouse,TechWorld Pvt Ltd,SteelSeries Mouse with premium features,24
+HE-AU-0219,Audio-Technica Headphones Model 776,Audio-Technica,6481,8755,34,Headphones,Elite Tech Supplies,Audio-Technica Headphones with premium features,6
+PO-ON-0220,OnePlus Power Bank Model 920,OnePlus,1766,2494,4,Power Bank,MobileMart Pvt Ltd,OnePlus Power Bank with premium features,6
+EA-AP-0221,Apple Earbuds Model 353,Apple,5250,7010,39,Earbuds,SoundPro Solutions,Apple Earbuds with premium features,12
+SM-BO-0222,Boat Smartwatch Model 269,Boat,21508,33829,97,Smartwatch,GameZone Distributors,Boat Smartwatch with premium features,24
+SM-GA-0223,Garmin Smartwatch Model 671,Garmin,7679,10117,96,Smartwatch,SmartLife Traders,Garmin Smartwatch with premium features,24
+RO-AS-0224,Asus Router Model 343,Asus,7615,10203,97,Router,PowerTech Distributors,Asus Router with premium features,36
+EA-BO-0225,Boat Earbuds Model 782,Boat,17383,23956,62,Earbuds,ReadMore Supplies,Boat Earbuds with premium features,6
+SP-HA-0226,Harman Kardon Speaker Model 229,Harman Kardon,3337,4448,83,Speaker,ConnectPro Supplies,Harman Kardon Speaker with premium features,12
+MO-HP-0227,HP Mouse Model 435,HP,1334,1758,57,Mouse,ConnectPro Supplies,HP Mouse with premium features,24
+EA-JA-0228,Jabra Earbuds Model 316,Jabra,13410,17483,42,Earbuds,ConnectPro Supplies,Jabra Earbuds with premium features,36
+CH-AN-0229,Anker Charger Model 424,Anker,737,1141,68,Charger,SmartLife Traders,Anker Charger with premium features,12
+SP-UL-0230,Ultimate Ears Speaker Model 178,Ultimate Ears,24242,34871,94,Speaker,ReadMore Supplies,Ultimate Ears Speaker with premium features,6
+LA-RA-0231,Razer Laptop Model 918,Razer,74058,94769,73,Laptop,MobileMart Pvt Ltd,Razer Laptop with premium features,24
+SM-GA-0232,Garmin Smartwatch Model 981,Garmin,30181,38501,77,Smartwatch,Visionary Electronics,Garmin Smartwatch with premium features,12
+SM-RE-0233,Realme Smartphone Model 758,Realme,75819,107790,3,Smartphone,SmartGear Traders,Realme Smartphone with premium features,6
+CA-FU-0234,Fujifilm Camera Model 516,Fujifilm,54122,89783,81,Camera,PrintWorks Pvt Ltd,Fujifilm Camera with premium features,24
+KE-KE-0235,Keychron Keyboard Model 197,Keychron,1013,1293,4,Keyboard,AudioMax Distributors,Keychron Keyboard with premium features,24
+TV-PA-0236,Panasonic TV Model 979,Panasonic,125935,192172,93,TV,SmartGear Traders,Panasonic TV with premium features,6
+CA-UG-0237,Ugreen Cable Model 560,Ugreen,122,199,94,Cable,Elite Tech Supplies,Ugreen Cable with premium features,36
+RO-NE-0238,Netgear Router Model 983,Netgear,8184,13485,58,Router,PowerTech Distributors,Netgear Router with premium features,24
+SM-BO-0239,Boat Smartwatch Model 212,Boat,2652,4314,68,Smartwatch,SmartLife Traders,Boat Smartwatch with premium features,12
+SM-AM-0240,Amazfit Smartwatch Model 460,Amazfit,27862,42288,97,Smartwatch,Visionary Electronics,Amazfit Smartwatch with premium features,12
+CA-GO-0241,GoPro Camera Model 199,GoPro,111934,146970,0,Camera,ConnectPro Supplies,GoPro Camera with premium features,12
+HE-PH-0242,Philips Headphones Model 834,Philips,7918,12022,45,Headphones,TechNova Pvt Ltd,Philips Headphones with premium features,36
+CA-GO-0243,GoPro Camera Model 534,GoPro,93070,135087,98,Camera,SmartGear Traders,GoPro Camera with premium features,6
+RO-CI-0244,Cisco Router Model 416,Cisco,10742,14508,94,Router,SmartGear Traders,Cisco Router with premium features,12
+SM-MO-0245,Motorola Smartphone Model 532,Motorola,62433,97631,24,Smartphone,AudioMax Distributors,Motorola Smartphone with premium features,24
+PO-ON-0246,OnePlus Power Bank Model 420,OnePlus,1650,2554,33,Power Bank,TechWorld Pvt Ltd,OnePlus Power Bank with premium features,12
+ME-SO-0247,Sony Memory Card Model 204,Sony,2923,3959,70,Memory Card,ConnectPro Supplies,Sony Memory Card with premium features,6
+SP-MA-0248,Marshall Speaker Model 921,Marshall,5194,8583,32,Speaker,PrintWorks Pvt Ltd,Marshall Speaker with premium features,6
+MO-AC-0249,Acer Monitor Model 433,Acer,61993,78471,90,Monitor,VisionTech Supplies,Acer Monitor with premium features,36
+PR-EP-0250,Epson Printer Model 340,Epson,18515,28617,66,Printer,PowerTech Distributors,Epson Printer with premium features,12
+CA-AM-0251,AmazonBasics Cable Model 584,AmazonBasics,586,871,59,Cable,Peripheral Pros,AmazonBasics Cable with premium features,6
+ME-TR-0252,Transcend Memory Card Model 177,Transcend,2038,2610,26,Memory Card,TechWorld Pvt Ltd,Transcend Memory Card with premium features,24
+TA-AP-0253,Apple Tablet Model 926,Apple,43231,59284,97,Tablet,Visionary Electronics,Apple Tablet with premium features,12
+SM-AP-0254,Apple Smartwatch Model 838,Apple,16068,21380,8,Smartwatch,DigiHub Electronics,Apple Smartwatch with premium features,6
+RO-AS-0255,Asus Router Model 623,Asus,4302,5850,42,Router,GameZone Distributors,Asus Router with premium features,12
+HE-BE-0256,Beats Headphones Model 359,Beats,6967,10947,91,Headphones,Visionary Electronics,Beats Headphones with premium features,36
+PO-AN-0257,Anker Power Bank Model 682,Anker,708,1046,37,Power Bank,SmartLife Traders,Anker Power Bank with premium features,36
+EA-JA-0258,Jabra Earbuds Model 597,Jabra,2635,3938,30,Earbuds,TechNova Pvt Ltd,Jabra Earbuds with premium features,12
+ME-KI-0259,Kingston Memory Card Model 128,Kingston,4707,6395,75,Memory Card,ReadMore Supplies,Kingston Memory Card with premium features,36
+HE-SE-0260,Sennheiser Headphones Model 577,Sennheiser,15405,21360,27,Headphones,MobileMart Pvt Ltd,Sennheiser Headphones with premium features,24
+CH-AN-0261,Anker Charger Model 323,Anker,229,347,62,Charger,MobileMart Pvt Ltd,Anker Charger with premium features,6
+WE-LO-0262,Logitech Webcam Model 512,Logitech,4620,6911,12,Webcam,AudioMax Distributors,Logitech Webcam with premium features,24
+RO-CI-0263,Cisco Router Model 414,Cisco,3913,5098,95,Router,SoundPro Solutions,Cisco Router with premium features,12
+LA-DE-0264,Dell Laptop Model 239,Dell,122555,173850,76,Laptop,DigiHub Electronics,Dell Laptop with premium features,6
+GA-NI-0265,Nintendo Gaming Console Model 192,Nintendo,22499,32999,12,Gaming Console,VisionTech Supplies,Nintendo Gaming Console with premium features,36
+RO-D--0266,D-Link Router Model 329,D-Link,768,1079,79,Router,Visionary Electronics,D-Link Router with premium features,6
+RO-CI-0267,Cisco Router Model 162,Cisco,6729,10560,62,Router,TechWorld Pvt Ltd,Cisco Router with premium features,24
+TV-TC-0268,TCL TV Model 350,TCL,113994,180445,86,TV,ReadMore Supplies,TCL TV with premium features,24
+PR-CA-0269,Canon Printer Model 786,Canon,34630,48450,71,Printer,DigiHub Electronics,Canon Printer with premium features,6
+TV-PA-0270,Panasonic TV Model 687,Panasonic,49743,62782,44,TV,ElectroMart Solutions,Panasonic TV with premium features,12
+MO-DE-0271,Dell Mouse Model 280,Dell,5235,6821,88,Mouse,PowerTech Distributors,Dell Mouse with premium features,12
+TA-MI-0272,Microsoft Tablet Model 833,Microsoft,20032,29980,43,Tablet,PrintWorks Pvt Ltd,Microsoft Tablet with premium features,24
+TA-RE-0273,Realme Tablet Model 285,Realme,24219,33035,22,Tablet,PrintWorks Pvt Ltd,Realme Tablet with premium features,36
+HE-AU-0274,Audio-Technica Headphones Model 548,Audio-Technica,14942,23870,45,Headphones,Visionary Electronics,Audio-Technica Headphones with premium features,24
+WE-CR-0275,Creative Webcam Model 524,Creative,1227,1823,68,Webcam,SoundPro Solutions,Creative Webcam with premium features,36
+EA-AN-0276,Anker Earbuds Model 848,Anker,4249,6479,21,Earbuds,VisionTech Supplies,Anker Earbuds with premium features,12
+PO-AM-0277,Ambrane Power Bank Model 546,Ambrane,1098,1742,9,Power Bank,Visionary Electronics,Ambrane Power Bank with premium features,36
+SP-JB-0278,JBL Speaker Model 371,JBL,13013,21497,4,Speaker,GameZone Distributors,JBL Speaker with premium features,24
+ME-SA-0279,Samsung Memory Card Model 942,Samsung,2719,4289,61,Memory Card,TechWorld Pvt Ltd,Samsung Memory Card with premium features,6
+SP-MA-0280,Marshall Speaker Model 107,Marshall,15361,21480,21,Speaker,AudioMax Distributors,Marshall Speaker with premium features,6
+SM-VI-0281,Vivo Smartphone Model 395,Vivo,83436,134581,62,Smartphone,TechNova Pvt Ltd,Vivo Smartphone with premium features,24
+SM-AP-0282,Apple Smartwatch Model 690,Apple,11819,16575,92,Smartwatch,GameZone Distributors,Apple Smartwatch with premium features,24
+SM-RE-0283,Realme Smartphone Model 655,Realme,33258,52364,64,Smartphone,PrintWorks Pvt Ltd,Realme Smartphone with premium features,24
+MO-BE-0284,BenQ Monitor Model 933,BenQ,51493,72046,19,Monitor,SmartLife Traders,BenQ Monitor with premium features,24
+CA-ON-0285,OnePlus Cable Model 673,OnePlus,327,420,81,Cable,SoundPro Solutions,OnePlus Cable with premium features,24
+TA-MI-0286,Microsoft Tablet Model 783,Microsoft,47623,62308,97,Tablet,TechWorld Pvt Ltd,Microsoft Tablet with premium features,24
+PO-SY-0287,Syska Power Bank Model 161,Syska,476,666,99,Power Bank,Peripheral Pros,Syska Power Bank with premium features,36
+PO-SY-0288,Syska Power Bank Model 996,Syska,3330,4217,29,Power Bank,ConnectPro Supplies,Syska Power Bank with premium features,36
+CA-GO-0289,GoPro Camera Model 869,GoPro,103492,147823,80,Camera,SmartGear Traders,GoPro Camera with premium features,36
+MO-LO-0290,Logitech Mouse Model 150,Logitech,1922,2729,92,Mouse,ConnectPro Supplies,Logitech Mouse with premium features,12
+PR-XE-0291,Xerox Printer Model 303,Xerox,29431,45717,77,Printer,TechNova Pvt Ltd,Xerox Printer with premium features,6
+TA-SA-0292,Samsung Tablet Model 522,Samsung,20535,26029,21,Tablet,Elite Tech Supplies,Samsung Tablet with premium features,6
+SM-RE-0293,Realme Smartphone Model 275,Realme,94568,129078,26,Smartphone,SoundPro Solutions,Realme Smartphone with premium features,24
+HE-SO-0294,Sony Headphones Model 845,Sony,9980,13792,70,Headphones,ConnectPro Supplies,Sony Headphones with premium features,24
+CA-SO-0295,Sony Camera Model 252,Sony,42898,64680,100,Camera,ReadMore Supplies,Sony Camera with premium features,36
+CA-CA-0296,Canon Camera Model 405,Canon,63944,90878,90,Camera,GadgetHub India,Canon Camera with premium features,12
+KE-RA-0297,Razer Keyboard Model 106,Razer,4480,6551,95,Keyboard,ElectroMart Solutions,Razer Keyboard with premium features,12
+RO-LI-0298,Linksys Router Model 830,Linksys,8022,11814,94,Router,TechNova Pvt Ltd,Linksys Router with premium features,36
+LA-DE-0299,Dell Laptop Model 111,Dell,123845,158334,19,Laptop,PrintWorks Pvt Ltd,Dell Laptop with premium features,24
+ME-SA-0300,SanDisk Memory Card Model 601,SanDisk,2743,3656,31,Memory Card,AudioMax Distributors,SanDisk Memory Card with premium features,36
+ME-SA-0301,Samsung Memory Card Model 837,Samsung,1618,2542,85,Memory Card,CameraKing Distributors,Samsung Memory Card with premium features,36
+ME-KI-0302,Kingston Memory Card Model 569,Kingston,3522,5357,8,Memory Card,Visionary Electronics,Kingston Memory Card with premium features,36
+SM-NO-0303,Noise Smartwatch Model 617,Noise,28137,38277,57,Smartwatch,AudioMax Distributors,Noise Smartwatch with premium features,6
+HE-JB-0304,JBL Headphones Model 613,JBL,11563,14533,38,Headphones,AudioMax Distributors,JBL Headphones with premium features,6
+EA-NO-0305,Noise Earbuds Model 969,Noise,5455,8383,98,Earbuds,SmartLife Traders,Noise Earbuds with premium features,6
+RO-AS-0306,Asus Router Model 257,Asus,9943,14096,85,Router,ConnectPro Supplies,Asus Router with premium features,12
+CA-PA-0307,Panasonic Camera Model 585,Panasonic,91875,123661,35,Camera,PrintWorks Pvt Ltd,Panasonic Camera with premium features,6
+CA-AN-0308,Anker Cable Model 988,Anker,432,669,11,Cable,ElectroMart Solutions,Anker Cable with premium features,12
+GA-NI-0309,Nintendo Gaming Console Model 889,Nintendo,25233,33478,92,Gaming Console,MobileMart Pvt Ltd,Nintendo Gaming Console with premium features,36
+PR-CA-0310,Canon Printer Model 642,Canon,20254,27719,27,Printer,AudioMax Distributors,Canon Printer with premium features,24
+PO-RE-0311,Realme Power Bank Model 463,Realme,729,1045,23,Power Bank,SmartGear Traders,Realme Power Bank with premium features,24
+KE-DU-0312,Ducky Keyboard Model 332,Ducky,4035,5146,76,Keyboard,VisionTech Supplies,Ducky Keyboard with premium features,6
+HE-PH-0313,Philips Headphones Model 288,Philips,15754,20298,3,Headphones,DigiHub Electronics,Philips Headphones with premium features,6
+SM-MO-0314,Motorola Smartphone Model 862,Motorola,26733,34503,30,Smartphone,PowerTech Distributors,Motorola Smartphone with premium features,24
+SM-SA-0315,Samsung Smartphone Model 994,Samsung,12859,18460,65,Smartphone,ConnectPro Supplies,Samsung Smartphone with premium features,36
+SM-ON-0316,OnePlus Smartwatch Model 483,OnePlus,7895,10869,100,Smartwatch,MobileMart Pvt Ltd,OnePlus Smartwatch with premium features,12
+PO-AN-0317,Anker Power Bank Model 311,Anker,394,544,92,Power Bank,ReadMore Supplies,Anker Power Bank with premium features,24
+TV-XI-0318,Xiaomi TV Model 573,Xiaomi,75480,105731,77,TV,ElectroMart Solutions,Xiaomi TV with premium features,6
+TA-RE-0319,Realme Tablet Model 879,Realme,56296,74134,29,Tablet,Peripheral Pros,Realme Tablet with premium features,24
+GA-NI-0320,Nintendo Gaming Console Model 749,Nintendo,18087,27156,8,Gaming Console,ElectroMart Solutions,Nintendo Gaming Console with premium features,24
+WE-RA-0321,Razer Webcam Model 215,Razer,5563,7976,17,Webcam,ElectroMart Solutions,Razer Webcam with premium features,12
+CA-NI-0322,Nikon Camera Model 700,Nikon,43763,67161,89,Camera,Peripheral Pros,Nikon Camera with premium features,36
+CA-UG-0323,Ugreen Cable Model 290,Ugreen,618,1005,86,Cable,Elite Tech Supplies,Ugreen Cable with premium features,24
+SM-AP-0324,Apple Smartphone Model 536,Apple,51144,81079,65,Smartphone,MobileMart Pvt Ltd,Apple Smartphone with premium features,24
+TV-TC-0325,TCL TV Model 493,TCL,43870,64998,100,TV,PrintWorks Pvt Ltd,TCL TV with premium features,24
+EA-SO-0326,Sony Earbuds Model 614,Sony,15952,20739,35,Earbuds,PrintWorks Pvt Ltd,Sony Earbuds with premium features,12
+CH-RE-0327,Realme Charger Model 376,Realme,1699,2230,64,Charger,ElectroMart Solutions,Realme Charger with premium features,12
+MO-RA-0328,Razer Mouse Model 435,Razer,1686,2137,62,Mouse,TechWorld Pvt Ltd,Razer Mouse with premium features,24
+WE-MI-0329,Microsoft Webcam Model 885,Microsoft,1594,2319,56,Webcam,VisionTech Supplies,Microsoft Webcam with premium features,36
+SM-OP-0330,Oppo Smartphone Model 348,Oppo,12488,16130,27,Smartphone,MobileMart Pvt Ltd,Oppo Smartphone with premium features,12
+HE-SK-0331,Skullcandy Headphones Model 135,Skullcandy,12083,19224,85,Headphones,DigiHub Electronics,Skullcandy Headphones with premium features,6
+TA-SA-0332,Samsung Tablet Model 873,Samsung,40118,56353,57,Tablet,Elite Tech Supplies,Samsung Tablet with premium features,36
+RO-AS-0333,Asus Router Model 690,Asus,5986,8941,59,Router,PowerTech Distributors,Asus Router with premium features,24
+TV-SO-0334,Sony TV Model 943,Sony,77898,101157,39,TV,GadgetHub India,Sony TV with premium features,36
+TV-TC-0335,TCL TV Model 255,TCL,75096,103728,58,TV,AudioMax Distributors,TCL TV with premium features,6
+SP-UL-0336,Ultimate Ears Speaker Model 840,Ultimate Ears,30532,39597,80,Speaker,ElectroMart Solutions,Ultimate Ears Speaker with premium features,24
+KE-DU-0337,Ducky Keyboard Model 163,Ducky,5569,7614,23,Keyboard,SoundPro Solutions,Ducky Keyboard with premium features,24
+TV-PA-0338,Panasonic TV Model 782,Panasonic,23134,36556,80,TV,Peripheral Pros,Panasonic TV with premium features,36
+KE-RA-0339,Razer Keyboard Model 271,Razer,11090,14054,72,Keyboard,PrintWorks Pvt Ltd,Razer Keyboard with premium features,12
+LA-RA-0340,Razer Laptop Model 267,Razer,57364,73261,62,Laptop,CameraKing Distributors,Razer Laptop with premium features,6
+KE-RA-0341,Razer Keyboard Model 887,Razer,10119,14325,28,Keyboard,Visionary Electronics,Razer Keyboard with premium features,36
+MO-LG-0342,LG Monitor Model 234,LG,24938,40559,35,Monitor,SmartLife Traders,LG Monitor with premium features,12
+CA-AN-0343,Anker Cable Model 351,Anker,520,729,38,Cable,ConnectPro Supplies,Anker Cable with premium features,36
+TA-RE-0344,Realme Tablet Model 265,Realme,20471,26830,51,Tablet,Visionary Electronics,Realme Tablet with premium features,36
+CH-SA-0345,Samsung Charger Model 826,Samsung,834,1143,100,Charger,DigiHub Electronics,Samsung Charger with premium features,24
+TV-XI-0346,Xiaomi TV Model 358,Xiaomi,87117,124763,47,TV,AudioMax Distributors,Xiaomi TV with premium features,36
+MO-AS-0347,Asus Monitor Model 424,Asus,28581,44378,49,Monitor,GameZone Distributors,Asus Monitor with premium features,6
+TV-PA-0348,Panasonic TV Model 383,Panasonic,23389,34816,4,TV,Visionary Electronics,Panasonic TV with premium features,24
+RO-NE-0349,Netgear Router Model 110,Netgear,8552,12856,61,Router,PrintWorks Pvt Ltd,Netgear Router with premium features,24
+PR-XE-0350,Xerox Printer Model 484,Xerox,30890,42614,77,Printer,DigiHub Electronics,Xerox Printer with premium features,12
+EA-AN-0351,Anker Earbuds Model 859,Anker,14985,24906,62,Earbuds,Visionary Electronics,Anker Earbuds with premium features,36
+SM-VI-0352,Vivo Smartphone Model 897,Vivo,91577,147364,78,Smartphone,SmartLife Traders,Vivo Smartphone with premium features,6
+SP-BO-0353,Boat Speaker Model 548,Boat,22270,35844,69,Speaker,VisionTech Supplies,Boat Speaker with premium features,6
+KE-CO-0354,Corsair Keyboard Model 819,Corsair,2840,3947,90,Keyboard,AudioMax Distributors,Corsair Keyboard with premium features,12
+LA-HP-0355,HP Laptop Model 570,HP,85673,124417,12,Laptop,Visionary Electronics,HP Laptop with premium features,36
+TV-TC-0356,TCL TV Model 781,TCL,86872,118420,33,TV,PrintWorks Pvt Ltd,TCL TV with premium features,12
+WE-RA-0357,Razer Webcam Model 716,Razer,3255,4698,49,Webcam,DigiHub Electronics,Razer Webcam with premium features,6
+HE-SE-0358,Sennheiser Headphones Model 762,Sennheiser,7126,10674,93,Headphones,ReadMore Supplies,Sennheiser Headphones with premium features,36
+MO-RA-0359,Razer Mouse Model 703,Razer,2152,2956,15,Mouse,CameraKing Distributors,Razer Mouse with premium features,6
+WE-HP-0360,HP Webcam Model 983,HP,8135,10700,72,Webcam,MobileMart Pvt Ltd,HP Webcam with premium features,24
+SM-GO-0361,Google Smartphone Model 820,Google,26703,33572,82,Smartphone,PrintWorks Pvt Ltd,Google Smartphone with premium features,24
+CA-SO-0362,Sony Camera Model 187,Sony,53849,71612,32,Camera,VisionTech Supplies,Sony Camera with premium features,6
+WE-RA-0363,Razer Webcam Model 721,Razer,9307,11829,24,Webcam,TechWorld Pvt Ltd,Razer Webcam with premium features,36
+KE-LO-0364,Logitech Keyboard Model 181,Logitech,5083,8352,7,Keyboard,TechWorld Pvt Ltd,Logitech Keyboard with premium features,12
+KE-RA-0365,Razer Keyboard Model 566,Razer,4929,6686,78,Keyboard,SmartLife Traders,Razer Keyboard with premium features,24
+TV-LG-0366,LG TV Model 414,LG,22726,30078,21,TV,AudioMax Distributors,LG TV with premium features,12
+CA-BE-0367,Belkin Cable Model 583,Belkin,502,716,7,Cable,PrintWorks Pvt Ltd,Belkin Cable with premium features,36
+ME-SO-0368,Sony Memory Card Model 251,Sony,5865,7378,64,Memory Card,Peripheral Pros,Sony Memory Card with premium features,24
+CA-FU-0369,Fujifilm Camera Model 972,Fujifilm,31051,45567,26,Camera,TechNova Pvt Ltd,Fujifilm Camera with premium features,24
+CA-OL-0370,Olympus Camera Model 900,Olympus,42571,61766,75,Camera,DigiHub Electronics,Olympus Camera with premium features,6
+CA-NI-0371,Nikon Camera Model 497,Nikon,55728,73151,68,Camera,DigiHub Electronics,Nikon Camera with premium features,36
+PR-CA-0372,Canon Printer Model 785,Canon,8924,11259,56,Printer,Elite Tech Supplies,Canon Printer with premium features,6
+EA-ON-0373,OnePlus Earbuds Model 534,OnePlus,7747,12216,40,Earbuds,Peripheral Pros,OnePlus Earbuds with premium features,6
+MO-MI-0374,Microsoft Mouse Model 417,Microsoft,4691,7537,46,Mouse,VisionTech Supplies,Microsoft Mouse with premium features,6
+GA-SO-0375,Sony Gaming Console Model 569,Sony,37170,47312,30,Gaming Console,TechNova Pvt Ltd,Sony Gaming Console with premium features,24
+MO-HP-0376,HP Monitor Model 269,HP,26597,43552,58,Monitor,Peripheral Pros,HP Monitor with premium features,12
+SM-XI-0377,Xiaomi Smartphone Model 116,Xiaomi,59946,78851,56,Smartphone,GadgetHub India,Xiaomi Smartphone with premium features,36
+LA-MI-0378,Microsoft Laptop Model 809,Microsoft,55712,76081,74,Laptop,SmartGear Traders,Microsoft Laptop with premium features,12
+PO-SA-0379,Samsung Power Bank Model 981,Samsung,3278,4546,80,Power Bank,SmartGear Traders,Samsung Power Bank with premium features,36
+CA-SO-0380,Sony Camera Model 997,Sony,97185,132088,90,Camera,SoundPro Solutions,Sony Camera with premium features,12
+GA-MI-0381,Microsoft Gaming Console Model 851,Microsoft,21302,33987,2,Gaming Console,PowerTech Distributors,Microsoft Gaming Console with premium features,6
+LA-RA-0382,Razer Laptop Model 408,Razer,74034,94932,42,Laptop,DigiHub Electronics,Razer Laptop with premium features,12
+KE-DE-0383,Dell Keyboard Model 876,Dell,3501,5557,76,Keyboard,ElectroMart Solutions,Dell Keyboard with premium features,12
+PO-AN-0384,Anker Power Bank Model 207,Anker,3420,4397,25,Power Bank,CameraKing Distributors,Anker Power Bank with premium features,36
+MO-ST-0385,SteelSeries Mouse Model 696,SteelSeries,3999,5337,5,Mouse,CameraKing Distributors,SteelSeries Mouse with premium features,36
+LA-HP-0386,HP Laptop Model 947,HP,26161,33257,67,Laptop,GadgetHub India,HP Laptop with premium features,36
+EA-AN-0387,Anker Earbuds Model 108,Anker,11017,15330,3,Earbuds,GadgetHub India,Anker Earbuds with premium features,12
+WE-CR-0388,Creative Webcam Model 721,Creative,5218,7396,71,Webcam,CameraKing Distributors,Creative Webcam with premium features,36
+EA-AP-0389,Apple Earbuds Model 282,Apple,1937,3130,57,Earbuds,MobileMart Pvt Ltd,Apple Earbuds with premium features,6
+ME-KI-0390,Kingston Memory Card Model 346,Kingston,4859,6448,81,Memory Card,AudioMax Distributors,Kingston Memory Card with premium features,12
+PR-HP-0391,HP Printer Model 212,HP,31725,42417,16,Printer,SmartGear Traders,HP Printer with premium features,24
+LA-DE-0392,Dell Laptop Model 821,Dell,56744,94459,61,Laptop,CameraKing Distributors,Dell Laptop with premium features,6
+WE-MI-0393,Microsoft Webcam Model 846,Microsoft,7465,10748,83,Webcam,Visionary Electronics,Microsoft Webcam with premium features,6
+LA-AP-0394,Apple Laptop Model 413,Apple,122667,171548,15,Laptop,Visionary Electronics,Apple Laptop with premium features,24
+TA-XI-0395,Xiaomi Tablet Model 144,Xiaomi,46685,65049,53,Tablet,ConnectPro Supplies,Xiaomi Tablet with premium features,12
+LA-LE-0396,Lenovo Laptop Model 732,Lenovo,26385,36904,43,Laptop,PrintWorks Pvt Ltd,Lenovo Laptop with premium features,24
+CA-UG-0397,Ugreen Cable Model 407,Ugreen,917,1467,53,Cable,ElectroMart Solutions,Ugreen Cable with premium features,24
+LA-LE-0398,Lenovo Laptop Model 874,Lenovo,50227,72781,87,Laptop,SmartGear Traders,Lenovo Laptop with premium features,24
+SM-AM-0399,Amazfit Smartwatch Model 889,Amazfit,7862,11837,61,Smartwatch,TechWorld Pvt Ltd,Amazfit Smartwatch with premium features,6
+CA-BO-0400,Boat Cable Model 200,Boat,150,241,84,Cable,PrintWorks Pvt Ltd,Boat Cable with premium features,24
+GA-NI-0401,Nintendo Gaming Console Model 707,Nintendo,27621,44517,33,Gaming Console,MobileMart Pvt Ltd,Nintendo Gaming Console with premium features,36
+CA-AN-0402,Anker Cable Model 574,Anker,409,631,87,Cable,PowerTech Distributors,Anker Cable with premium features,12
+SM-GO-0403,Google Smartphone Model 883,Google,67393,87688,54,Smartphone,Peripheral Pros,Google Smartphone with premium features,12
+SP-SO-0404,Sony Speaker Model 553,Sony,10163,14259,0,Speaker,SoundPro Solutions,Sony Speaker with premium features,36
+MO-DE-0405,Dell Mouse Model 892,Dell,1825,2690,3,Mouse,VisionTech Supplies,Dell Mouse with premium features,6
+TV-SA-0406,Samsung TV Model 126,Samsung,22245,30059,87,TV,Peripheral Pros,Samsung TV with premium features,12
+TA-AM-0407,Amazon Tablet Model 288,Amazon,55795,70517,47,Tablet,DigiHub Electronics,Amazon Tablet with premium features,6
+ME-KI-0408,Kingston Memory Card Model 332,Kingston,394,557,43,Memory Card,MobileMart Pvt Ltd,Kingston Memory Card with premium features,36
+MO-LO-0409,Logitech Mouse Model 390,Logitech,1766,2369,98,Mouse,ElectroMart Solutions,Logitech Mouse with premium features,36
+ME-SO-0410,Sony Memory Card Model 638,Sony,4594,7186,21,Memory Card,PowerTech Distributors,Sony Memory Card with premium features,12
+KE-DU-0411,Ducky Keyboard Model 600,Ducky,9979,12738,63,Keyboard,VisionTech Supplies,Ducky Keyboard with premium features,36
+SM-ON-0412,OnePlus Smartwatch Model 404,OnePlus,17842,26509,65,Smartwatch,GameZone Distributors,OnePlus Smartwatch with premium features,6
+CA-BO-0413,Boat Cable Model 431,Boat,601,781,68,Cable,SoundPro Solutions,Boat Cable with premium features,36
+CA-SO-0414,Sony Camera Model 424,Sony,28436,39490,66,Camera,SmartLife Traders,Sony Camera with premium features,12
+HE-BE-0415,Beats Headphones Model 944,Beats,14095,23234,49,Headphones,PowerTech Distributors,Beats Headphones with premium features,12
+GA-NI-0416,Nintendo Gaming Console Model 699,Nintendo,22830,36881,32,Gaming Console,SmartGear Traders,Nintendo Gaming Console with premium features,24
+KE-RA-0417,Razer Keyboard Model 349,Razer,8247,13538,64,Keyboard,GadgetHub India,Razer Keyboard with premium features,12
+GA-NI-0418,Nintendo Gaming Console Model 244,Nintendo,42604,53366,32,Gaming Console,SmartLife Traders,Nintendo Gaming Console with premium features,6
+SM-GA-0419,Garmin Smartwatch Model 696,Garmin,18109,22846,45,Smartwatch,ElectroMart Solutions,Garmin Smartwatch with premium features,12
+CH-SA-0420,Samsung Charger Model 383,Samsung,1545,1943,48,Charger,VisionTech Supplies,Samsung Charger with premium features,24
+GA-MI-0421,Microsoft Gaming Console Model 493,Microsoft,26031,39766,87,Gaming Console,ReadMore Supplies,Microsoft Gaming Console with premium features,36
+RO-TP-0422,TP-Link Router Model 950,TP-Link,1813,2954,7,Router,Peripheral Pros,TP-Link Router with premium features,12
+SM-FI-0423,Fitbit Smartwatch Model 624,Fitbit,20831,27697,94,Smartwatch,AudioMax Distributors,Fitbit Smartwatch with premium features,12
+TA-SA-0424,Samsung Tablet Model 620,Samsung,44869,63493,5,Tablet,GameZone Distributors,Samsung Tablet with premium features,24
+GA-MI-0425,Microsoft Gaming Console Model 691,Microsoft,33042,41719,0,Gaming Console,TechWorld Pvt Ltd,Microsoft Gaming Console with premium features,12
+CA-BO-0426,Boat Cable Model 226,Boat,574,872,67,Cable,Peripheral Pros,Boat Cable with premium features,36
+PR-BR-0427,Brother Printer Model 698,Brother,10762,16996,89,Printer,MobileMart Pvt Ltd,Brother Printer with premium features,6
+CA-SO-0428,Sony Camera Model 352,Sony,70129,89759,74,Camera,GadgetHub India,Sony Camera with premium features,6
+ME-SO-0429,Sony Memory Card Model 345,Sony,2046,2857,47,Memory Card,Elite Tech Supplies,Sony Memory Card with premium features,12
+LA-AC-0430,Acer Laptop Model 224,Acer,37154,51049,74,Laptop,MobileMart Pvt Ltd,Acer Laptop with premium features,24
+PR-EP-0431,Epson Printer Model 645,Epson,7135,10941,77,Printer,TechNova Pvt Ltd,Epson Printer with premium features,6
+LA-HP-0432,HP Laptop Model 535,HP,122161,185439,50,Laptop,SoundPro Solutions,HP Laptop with premium features,12
+TV-ON-0433,OnePlus TV Model 942,OnePlus,132643,182635,25,TV,Elite Tech Supplies,OnePlus TV with premium features,36
+CH-ON-0434,OnePlus Charger Model 926,OnePlus,1109,1664,20,Charger,SmartGear Traders,OnePlus Charger with premium features,12
+PO-AM-0435,Ambrane Power Bank Model 150,Ambrane,2993,4107,33,Power Bank,GadgetHub India,Ambrane Power Bank with premium features,36
+MO-MI-0436,Microsoft Mouse Model 651,Microsoft,2041,3309,84,Mouse,Peripheral Pros,Microsoft Mouse with premium features,36
+KE-ST-0437,SteelSeries Keyboard Model 822,SteelSeries,8123,11615,15,Keyboard,TechNova Pvt Ltd,SteelSeries Keyboard with premium features,36
+WE-MI-0438,Microsoft Webcam Model 368,Microsoft,6225,9492,7,Webcam,DigiHub Electronics,Microsoft Webcam with premium features,24
+KE-DE-0439,Dell Keyboard Model 571,Dell,4137,6700,18,Keyboard,DigiHub Electronics,Dell Keyboard with premium features,24
+RO-NE-0440,Netgear Router Model 787,Netgear,6536,9366,98,Router,TechNova Pvt Ltd,Netgear Router with premium features,12
+TA-AM-0441,Amazon Tablet Model 838,Amazon,21003,33063,85,Tablet,TechNova Pvt Ltd,Amazon Tablet with premium features,12
+LA-DE-0442,Dell Laptop Model 139,Dell,150924,194159,50,Laptop,ConnectPro Supplies,Dell Laptop with premium features,36
+MO-DE-0443,Dell Monitor Model 724,Dell,45290,60187,12,Monitor,PrintWorks Pvt Ltd,Dell Monitor with premium features,12
+SM-OP-0444,Oppo Smartphone Model 115,Oppo,68316,106854,97,Smartphone,TechNova Pvt Ltd,Oppo Smartphone with premium features,12
+HE-SK-0445,Skullcandy Headphones Model 419,Skullcandy,19872,24899,47,Headphones,AudioMax Distributors,Skullcandy Headphones with premium features,36
+WE-HP-0446,HP Webcam Model 197,HP,9491,14082,26,Webcam,PowerTech Distributors,HP Webcam with premium features,12
+MO-RA-0447,Razer Mouse Model 956,Razer,2516,4133,39,Mouse,Visionary Electronics,Razer Mouse with premium features,36
+CA-GO-0448,GoPro Camera Model 579,GoPro,29061,36564,55,Camera,Visionary Electronics,GoPro Camera with premium features,6
+TV-ON-0449,OnePlus TV Model 241,OnePlus,45944,58056,43,TV,Elite Tech Supplies,OnePlus TV with premium features,36
+CA-UG-0450,Ugreen Cable Model 974,Ugreen,1037,1387,48,Cable,MobileMart Pvt Ltd,Ugreen Cable with premium features,36
+CA-BO-0451,Boat Cable Model 548,Boat,482,628,44,Cable,GameZone Distributors,Boat Cable with premium features,6
+PR-BR-0452,Brother Printer Model 110,Brother,5443,6909,18,Printer,SmartGear Traders,Brother Printer with premium features,6
+RO-LI-0453,Linksys Router Model 946,Linksys,6595,8686,9,Router,GameZone Distributors,Linksys Router with premium features,6
+HE-BO-0454,Bose Headphones Model 733,Bose,14643,20069,35,Headphones,PowerTech Distributors,Bose Headphones with premium features,36
+CA-SO-0455,Sony Camera Model 104,Sony,93043,132878,39,Camera,SoundPro Solutions,Sony Camera with premium features,36
+MO-BE-0456,BenQ Monitor Model 384,BenQ,11598,18168,66,Monitor,TechWorld Pvt Ltd,BenQ Monitor with premium features,36
+CA-GO-0457,GoPro Camera Model 774,GoPro,79796,101489,33,Camera,PowerTech Distributors,GoPro Camera with premium features,6
+ME-SO-0458,Sony Memory Card Model 370,Sony,2674,3719,97,Memory Card,Peripheral Pros,Sony Memory Card with premium features,6
+PO-AM-0459,Ambrane Power Bank Model 269,Ambrane,1829,2933,68,Power Bank,GameZone Distributors,Ambrane Power Bank with premium features,12
+TV-PA-0460,Panasonic TV Model 820,Panasonic,24161,33828,29,TV,SmartLife Traders,Panasonic TV with premium features,24
+RO-NE-0461,Netgear Router Model 454,Netgear,5294,8615,87,Router,AudioMax Distributors,Netgear Router with premium features,24
+SM-FI-0462,Fitbit Smartwatch Model 243,Fitbit,21745,35191,34,Smartwatch,Visionary Electronics,Fitbit Smartwatch with premium features,6
+CA-OL-0463,Olympus Camera Model 987,Olympus,29316,46467,33,Camera,CameraKing Distributors,Olympus Camera with premium features,24
+SM-AP-0464,Apple Smartwatch Model 568,Apple,29998,38074,82,Smartwatch,MobileMart Pvt Ltd,Apple Smartwatch with premium features,6
+TA-MI-0465,Microsoft Tablet Model 995,Microsoft,41776,52772,41,Tablet,TechWorld Pvt Ltd,Microsoft Tablet with premium features,24
+MO-HP-0466,HP Mouse Model 516,HP,2156,3165,100,Mouse,ElectroMart Solutions,HP Mouse with premium features,36
+LA-MI-0467,Microsoft Laptop Model 808,Microsoft,22526,30894,12,Laptop,CameraKing Distributors,Microsoft Laptop with premium features,6
+SP-BO-0468,Boat Speaker Model 759,Boat,11166,18557,65,Speaker,PrintWorks Pvt Ltd,Boat Speaker with premium features,6
+SM-RE-0469,Realme Smartphone Model 472,Realme,35943,57589,99,Smartphone,CameraKing Distributors,Realme Smartphone with premium features,36
+WE-CR-0470,Creative Webcam Model 908,Creative,5653,7582,18,Webcam,Elite Tech Supplies,Creative Webcam with premium features,12
+CH-BE-0471,Belkin Charger Model 279,Belkin,966,1344,92,Charger,PrintWorks Pvt Ltd,Belkin Charger with premium features,36
+WE-CR-0472,Creative Webcam Model 622,Creative,1533,1928,28,Webcam,DigiHub Electronics,Creative Webcam with premium features,24
+GA-SO-0473,Sony Gaming Console Model 540,Sony,33302,54701,76,Gaming Console,GadgetHub India,Sony Gaming Console with premium features,36
+KE-ST-0474,SteelSeries Keyboard Model 183,SteelSeries,5080,6679,77,Keyboard,ElectroMart Solutions,SteelSeries Keyboard with premium features,24
+SM-VI-0475,Vivo Smartphone Model 481,Vivo,59542,93198,94,Smartphone,MobileMart Pvt Ltd,Vivo Smartphone with premium features,36
+CA-SO-0476,Sony Camera Model 302,Sony,64515,86883,46,Camera,Peripheral Pros,Sony Camera with premium features,36
+SP-BO-0477,Bose Speaker Model 484,Bose,1280,1970,97,Speaker,PowerTech Distributors,Bose Speaker with premium features,6
+PR-CA-0478,Canon Printer Model 288,Canon,30425,42089,21,Printer,VisionTech Supplies,Canon Printer with premium features,36
+PR-EP-0479,Epson Printer Model 857,Epson,19560,28382,60,Printer,TechWorld Pvt Ltd,Epson Printer with premium features,6
+ME-KI-0480,Kingston Memory Card Model 380,Kingston,2605,3343,19,Memory Card,SmartGear Traders,Kingston Memory Card with premium features,36
+KE-HP-0481,HP Keyboard Model 678,HP,3175,4793,34,Keyboard,SmartLife Traders,HP Keyboard with premium features,36
+PR-BR-0482,Brother Printer Model 432,Brother,36657,47757,12,Printer,Elite Tech Supplies,Brother Printer with premium features,24
+RO-NE-0483,Netgear Router Model 930,Netgear,1719,2766,54,Router,TechWorld Pvt Ltd,Netgear Router with premium features,12
+PR-HP-0484,HP Printer Model 743,HP,33118,47890,31,Printer,PowerTech Distributors,HP Printer with premium features,36
+HE-BO-0485,Bose Headphones Model 782,Bose,7335,10935,36,Headphones,AudioMax Distributors,Bose Headphones with premium features,6
+SM-RE-0486,Realme Smartphone Model 714,Realme,14606,18723,69,Smartphone,DigiHub Electronics,Realme Smartphone with premium features,6
+TA-AM-0487,Amazon Tablet Model 801,Amazon,58060,77162,20,Tablet,TechNova Pvt Ltd,Amazon Tablet with premium features,36
+KE-LO-0488,Logitech Keyboard Model 401,Logitech,2663,3630,60,Keyboard,DigiHub Electronics,Logitech Keyboard with premium features,6
+PO-AM-0489,Ambrane Power Bank Model 505,Ambrane,995,1557,23,Power Bank,GameZone Distributors,Ambrane Power Bank with premium features,6
+GA-SO-0490,Sony Gaming Console Model 897,Sony,19923,27860,71,Gaming Console,SmartLife Traders,Sony Gaming Console with premium features,12
+CH-BO-0491,Boat Charger Model 648,Boat,1536,2035,27,Charger,PrintWorks Pvt Ltd,Boat Charger with premium features,6
+GA-MI-0492,Microsoft Gaming Console Model 483,Microsoft,37948,51987,68,Gaming Console,MobileMart Pvt Ltd,Microsoft Gaming Console with premium features,24
+CA-BO-0493,Boat Cable Model 217,Boat,380,606,86,Cable,TechWorld Pvt Ltd,Boat Cable with premium features,24
+EA-ON-0494,OnePlus Earbuds Model 510,OnePlus,18693,24139,1,Earbuds,TechNova Pvt Ltd,OnePlus Earbuds with premium features,24
+SP-BO-0495,Bose Speaker Model 237,Bose,15033,23767,51,Speaker,DigiHub Electronics,Bose Speaker with premium features,36
+SP-UL-0496,Ultimate Ears Speaker Model 677,Ultimate Ears,14206,18255,37,Speaker,Elite Tech Supplies,Ultimate Ears Speaker with premium features,24
+MO-DE-0497,Dell Mouse Model 392,Dell,2248,3227,65,Mouse,CameraKing Distributors,Dell Mouse with premium features,24
+CA-BO-0498,Boat Cable Model 832,Boat,1132,1437,24,Cable,VisionTech Supplies,Boat Cable with premium features,24
+TA-SA-0499,Samsung Tablet Model 162,Samsung,28012,37912,51,Tablet,SmartLife Traders,Samsung Tablet with premium features,24
+MO-CO-0500,Corsair Mouse Model 268,Corsair,2331,3634,26,Mouse,ConnectPro Supplies,Corsair Mouse with premium features,12
+SM-OP-0501,Oppo Smartphone Model 292,Oppo,54139,88476,26,Smartphone,TechNova Pvt Ltd,Oppo Smartphone with premium features,36
+TA-RE-0502,Realme Tablet Model 326,Realme,50764,74167,70,Tablet,ReadMore Supplies,Realme Tablet with premium features,12
+RO-AS-0503,Asus Router Model 358,Asus,2643,3765,64,Router,ElectroMart Solutions,Asus Router with premium features,6
+KE-KE-0504,Keychron Keyboard Model 777,Keychron,4576,6141,92,Keyboard,PrintWorks Pvt Ltd,Keychron Keyboard with premium features,12
+RO-AS-0505,Asus Router Model 672,Asus,2077,2757,43,Router,CameraKing Distributors,Asus Router with premium features,24
+PO-SA-0506,Samsung Power Bank Model 563,Samsung,1347,1798,55,Power Bank,AudioMax Distributors,Samsung Power Bank with premium features,6
+PO-RE-0507,Realme Power Bank Model 438,Realme,3605,4961,74,Power Bank,CameraKing Distributors,Realme Power Bank with premium features,36
+EA-AN-0508,Anker Earbuds Model 619,Anker,3581,5788,90,Earbuds,CameraKing Distributors,Anker Earbuds with premium features,12
+GA-SO-0509,Sony Gaming Console Model 159,Sony,32891,51693,37,Gaming Console,PowerTech Distributors,Sony Gaming Console with premium features,24
+KE-DU-0510,Ducky Keyboard Model 238,Ducky,3806,5032,30,Keyboard,SmartGear Traders,Ducky Keyboard with premium features,12
+SM-SA-0511,Samsung Smartphone Model 115,Samsung,40005,61886,71,Smartphone,AudioMax Distributors,Samsung Smartphone with premium features,24
+GA-SO-0512,Sony Gaming Console Model 199,Sony,18768,28691,70,Gaming Console,Elite Tech Supplies,Sony Gaming Console with premium features,24
+CA-GO-0513,GoPro Camera Model 735,GoPro,100438,125681,69,Camera,TechWorld Pvt Ltd,GoPro Camera with premium features,12
+PO-AM-0514,Ambrane Power Bank Model 868,Ambrane,3339,4428,37,Power Bank,SmartGear Traders,Ambrane Power Bank with premium features,12
+MO-DE-0515,Dell Mouse Model 162,Dell,4256,6638,81,Mouse,TechNova Pvt Ltd,Dell Mouse with premium features,6
+LA-DE-0516,Dell Laptop Model 871,Dell,116476,175001,24,Laptop,Elite Tech Supplies,Dell Laptop with premium features,24
+HE-JB-0517,JBL Headphones Model 275,JBL,13925,19614,84,Headphones,DigiHub Electronics,JBL Headphones with premium features,12
+KE-CO-0518,Corsair Keyboard Model 680,Corsair,7829,10632,18,Keyboard,AudioMax Distributors,Corsair Keyboard with premium features,6
+PR-BR-0519,Brother Printer Model 596,Brother,23257,36038,6,Printer,Peripheral Pros,Brother Printer with premium features,12
+KE-HP-0520,HP Keyboard Model 805,HP,9532,14475,74,Keyboard,Elite Tech Supplies,HP Keyboard with premium features,12
+TA-MI-0521,Microsoft Tablet Model 645,Microsoft,17689,28382,82,Tablet,ConnectPro Supplies,Microsoft Tablet with premium features,6
+GA-SO-0522,Sony Gaming Console Model 955,Sony,31050,46811,62,Gaming Console,GameZone Distributors,Sony Gaming Console with premium features,24
+TA-LE-0523,Lenovo Tablet Model 674,Lenovo,33412,53800,82,Tablet,CameraKing Distributors,Lenovo Tablet with premium features,6
+CH-BO-0524,Boat Charger Model 606,Boat,516,813,36,Charger,MobileMart Pvt Ltd,Boat Charger with premium features,6
+MO-BE-0525,BenQ Monitor Model 116,BenQ,28939,37174,30,Monitor,SoundPro Solutions,BenQ Monitor with premium features,12
+EA-SA-0526,Samsung Earbuds Model 396,Samsung,7522,11245,93,Earbuds,Elite Tech Supplies,Samsung Earbuds with premium features,36
+SM-BO-0527,Boat Smartwatch Model 746,Boat,21551,30839,32,Smartwatch,ConnectPro Supplies,Boat Smartwatch with premium features,12
+RO-LI-0528,Linksys Router Model 315,Linksys,4906,8103,58,Router,TechNova Pvt Ltd,Linksys Router with premium features,36
+CA-SO-0529,Sony Camera Model 431,Sony,48069,75875,83,Camera,VisionTech Supplies,Sony Camera with premium features,12
+SM-NO-0530,Noise Smartwatch Model 745,Noise,8630,11776,30,Smartwatch,ConnectPro Supplies,Noise Smartwatch with premium features,24
+EA-AP-0531,Apple Earbuds Model 560,Apple,1014,1606,8,Earbuds,SmartLife Traders,Apple Earbuds with premium features,6
+CH-BO-0532,Boat Charger Model 841,Boat,1021,1286,88,Charger,VisionTech Supplies,Boat Charger with premium features,24
+PR-BR-0533,Brother Printer Model 887,Brother,17847,26144,35,Printer,SmartGear Traders,Brother Printer with premium features,6
+CA-CA-0534,Canon Camera Model 871,Canon,53302,67696,29,Camera,GadgetHub India,Canon Camera with premium features,6
+PO-ON-0535,OnePlus Power Bank Model 382,OnePlus,1832,2680,41,Power Bank,Visionary Electronics,OnePlus Power Bank with premium features,24
+PO-SY-0536,Syska Power Bank Model 464,Syska,2648,3374,43,Power Bank,ReadMore Supplies,Syska Power Bank with premium features,12
+LA-AC-0537,Acer Laptop Model 691,Acer,54550,86393,3,Laptop,SmartGear Traders,Acer Laptop with premium features,6
+GA-SO-0538,Sony Gaming Console Model 179,Sony,40877,54666,39,Gaming Console,ConnectPro Supplies,Sony Gaming Console with premium features,24
+CA-BE-0539,Belkin Cable Model 290,Belkin,648,915,82,Cable,ElectroMart Solutions,Belkin Cable with premium features,36
+PO-ON-0540,OnePlus Power Bank Model 110,OnePlus,2244,2844,11,Power Bank,GameZone Distributors,OnePlus Power Bank with premium features,24
+LA-RA-0541,Razer Laptop Model 908,Razer,113862,170508,36,Laptop,TechWorld Pvt Ltd,Razer Laptop with premium features,12
+MO-LO-0542,Logitech Mouse Model 388,Logitech,2344,3637,72,Mouse,TechWorld Pvt Ltd,Logitech Mouse with premium features,24
+SM-SA-0543,Samsung Smartphone Model 359,Samsung,30495,48209,6,Smartphone,PrintWorks Pvt Ltd,Samsung Smartphone with premium features,6
+KE-DU-0544,Ducky Keyboard Model 326,Ducky,5954,9743,84,Keyboard,ElectroMart Solutions,Ducky Keyboard with premium features,6
+SM-NO-0545,Noise Smartwatch Model 550,Noise,29435,43902,73,Smartwatch,CameraKing Distributors,Noise Smartwatch with premium features,36
+HE-BE-0546,Beats Headphones Model 934,Beats,7177,9630,89,Headphones,PowerTech Distributors,Beats Headphones with premium features,24
+SM-FI-0547,Fitbit Smartwatch Model 603,Fitbit,21207,31509,26,Smartwatch,Elite Tech Supplies,Fitbit Smartwatch with premium features,24
+SP-UL-0548,Ultimate Ears Speaker Model 696,Ultimate Ears,10576,14301,11,Speaker,SmartGear Traders,Ultimate Ears Speaker with premium features,24
+PR-HP-0549,HP Printer Model 534,HP,34509,44649,25,Printer,ReadMore Supplies,HP Printer with premium features,12
+TA-SA-0550,Samsung Tablet Model 708,Samsung,50532,70010,49,Tablet,PowerTech Distributors,Samsung Tablet with premium features,36
+EA-ON-0551,OnePlus Earbuds Model 502,OnePlus,11985,17006,64,Earbuds,AudioMax Distributors,OnePlus Earbuds with premium features,24
+MO-DE-0552,Dell Mouse Model 159,Dell,3254,4686,70,Mouse,PrintWorks Pvt Ltd,Dell Mouse with premium features,6
+GA-MI-0553,Microsoft Gaming Console Model 789,Microsoft,16000,26403,81,Gaming Console,SmartLife Traders,Microsoft Gaming Console with premium features,24
+SP-SO-0554,Sony Speaker Model 352,Sony,27709,36526,7,Speaker,AudioMax Distributors,Sony Speaker with premium features,24
+PO-SA-0555,Samsung Power Bank Model 813,Samsung,3630,4577,49,Power Bank,PowerTech Distributors,Samsung Power Bank with premium features,24
+WE-RA-0556,Razer Webcam Model 644,Razer,5977,9090,83,Webcam,CameraKing Distributors,Razer Webcam with premium features,12
+SP-UL-0557,Ultimate Ears Speaker Model 980,Ultimate Ears,26803,34915,5,Speaker,Visionary Electronics,Ultimate Ears Speaker with premium features,24
+EA-SO-0558,Sony Earbuds Model 560,Sony,13628,22075,75,Earbuds,VisionTech Supplies,Sony Earbuds with premium features,36
+MO-DE-0559,Dell Monitor Model 902,Dell,36483,55401,91,Monitor,SoundPro Solutions,Dell Monitor with premium features,36
+SM-AP-0560,Apple Smartphone Model 243,Apple,68868,107835,90,Smartphone,Elite Tech Supplies,Apple Smartphone with premium features,12
+PO-RE-0561,Realme Power Bank Model 147,Realme,2309,2904,29,Power Bank,Peripheral Pros,Realme Power Bank with premium features,36
+GA-SO-0562,Sony Gaming Console Model 717,Sony,24465,39439,55,Gaming Console,ElectroMart Solutions,Sony Gaming Console with premium features,12
+MO-LO-0563,Logitech Mouse Model 323,Logitech,3611,5657,30,Mouse,GameZone Distributors,Logitech Mouse with premium features,6
+RO-AS-0564,Asus Router Model 782,Asus,8518,11051,46,Router,PrintWorks Pvt Ltd,Asus Router with premium features,36
+SM-FI-0565,Fitbit Smartwatch Model 848,Fitbit,1820,2833,0,Smartwatch,Elite Tech Supplies,Fitbit Smartwatch with premium features,24
+WE-LO-0566,Logitech Webcam Model 613,Logitech,4523,7018,23,Webcam,Elite Tech Supplies,Logitech Webcam with premium features,6
+PR-XE-0567,Xerox Printer Model 971,Xerox,13082,21414,64,Printer,GameZone Distributors,Xerox Printer with premium features,24
+SP-JB-0568,JBL Speaker Model 649,JBL,9006,12896,87,Speaker,GadgetHub India,JBL Speaker with premium features,24
+CA-NI-0569,Nikon Camera Model 905,Nikon,67483,88921,87,Camera,Peripheral Pros,Nikon Camera with premium features,12
+PR-HP-0570,HP Printer Model 675,HP,30484,47038,5,Printer,VisionTech Supplies,HP Printer with premium features,6
+CA-SO-0571,Sony Camera Model 198,Sony,84557,136061,59,Camera,GameZone Distributors,Sony Camera with premium features,12
+TV-SA-0572,Samsung TV Model 902,Samsung,23793,36784,70,TV,AudioMax Distributors,Samsung TV with premium features,36
+ME-TR-0573,Transcend Memory Card Model 884,Transcend,2421,3799,96,Memory Card,ConnectPro Supplies,Transcend Memory Card with premium features,6
+SP-HA-0574,Harman Kardon Speaker Model 867,Harman Kardon,24256,34832,79,Speaker,ConnectPro Supplies,Harman Kardon Speaker with premium features,36
+KE-RA-0575,Razer Keyboard Model 297,Razer,9572,12888,9,Keyboard,ReadMore Supplies,Razer Keyboard with premium features,36
+SM-ON-0576,OnePlus Smartwatch Model 874,OnePlus,10490,15226,36,Smartwatch,GadgetHub India,OnePlus Smartwatch with premium features,6
+HE-PH-0577,Philips Headphones Model 519,Philips,13401,20181,77,Headphones,AudioMax Distributors,Philips Headphones with premium features,36
+CA-BE-0578,Belkin Cable Model 613,Belkin,831,1271,14,Cable,Elite Tech Supplies,Belkin Cable with premium features,12
+SP-HA-0579,Harman Kardon Speaker Model 756,Harman Kardon,13554,17620,40,Speaker,CameraKing Distributors,Harman Kardon Speaker with premium features,12
+LA-DE-0580,Dell Laptop Model 680,Dell,56907,84317,26,Laptop,SoundPro Solutions,Dell Laptop with premium features,24
+MO-HP-0581,HP Monitor Model 711,HP,12559,20789,7,Monitor,ReadMore Supplies,HP Monitor with premium features,12
+ME-KI-0582,Kingston Memory Card Model 152,Kingston,1756,2204,30,Memory Card,ConnectPro Supplies,Kingston Memory Card with premium features,36
+SM-RE-0583,Realme Smartphone Model 140,Realme,93696,125179,36,Smartphone,Visionary Electronics,Realme Smartphone with premium features,6
+CA-ON-0584,OnePlus Cable Model 296,OnePlus,298,415,90,Cable,GameZone Distributors,OnePlus Cable with premium features,24
+CA-UG-0585,Ugreen Cable Model 645,Ugreen,528,787,66,Cable,CameraKing Distributors,Ugreen Cable with premium features,36
+HE-SO-0586,Sony Headphones Model 264,Sony,7421,9701,95,Headphones,TechWorld Pvt Ltd,Sony Headphones with premium features,36
+WE-LO-0587,Logitech Webcam Model 564,Logitech,5375,8689,6,Webcam,PowerTech Distributors,Logitech Webcam with premium features,12
+TV-TC-0588,TCL TV Model 454,TCL,27423,43669,98,TV,ReadMore Supplies,TCL TV with premium features,36
+LA-HP-0589,HP Laptop Model 509,HP,134278,181432,19,Laptop,SmartLife Traders,HP Laptop with premium features,36
+CA-AM-0590,AmazonBasics Cable Model 705,AmazonBasics,574,891,92,Cable,CameraKing Distributors,AmazonBasics Cable with premium features,12
+KE-KE-0591,Keychron Keyboard Model 688,Keychron,2968,3788,97,Keyboard,Elite Tech Supplies,Keychron Keyboard with premium features,6
+HE-SK-0592,Skullcandy Headphones Model 980,Skullcandy,18752,29337,34,Headphones,GadgetHub India,Skullcandy Headphones with premium features,24
+EA-JA-0593,Jabra Earbuds Model 970,Jabra,16841,23925,25,Earbuds,ElectroMart Solutions,Jabra Earbuds with premium features,24
+KE-HP-0594,HP Keyboard Model 237,HP,3397,4867,4,Keyboard,PowerTech Distributors,HP Keyboard with premium features,36
+ME-KI-0595,Kingston Memory Card Model 494,Kingston,2136,2706,39,Memory Card,PowerTech Distributors,Kingston Memory Card with premium features,36
+CH-BO-0596,Boat Charger Model 272,Boat,1470,1926,62,Charger,ConnectPro Supplies,Boat Charger with premium features,24
+SP-HA-0597,Harman Kardon Speaker Model 306,Harman Kardon,20649,26777,10,Speaker,ConnectPro Supplies,Harman Kardon Speaker with premium features,6
+TV-SO-0598,Sony TV Model 750,Sony,13924,22705,88,TV,ConnectPro Supplies,Sony TV with premium features,24
+CA-AN-0599,Anker Cable Model 491,Anker,979,1378,72,Cable,PrintWorks Pvt Ltd,Anker Cable with premium features,6
+KE-ST-0600,SteelSeries Keyboard Model 897,SteelSeries,9506,13389,31,Keyboard,GadgetHub India,SteelSeries Keyboard with premium features,6
+CH-BO-0601,Boat Charger Model 699,Boat,1428,1792,10,Charger,GadgetHub India,Boat Charger with premium features,36
+MO-AC-0602,Acer Monitor Model 719,Acer,39475,59185,76,Monitor,TechNova Pvt Ltd,Acer Monitor with premium features,24
+TV-XI-0603,Xiaomi TV Model 990,Xiaomi,117866,189834,12,TV,ConnectPro Supplies,Xiaomi TV with premium features,6
+MO-SA-0604,Samsung Monitor Model 521,Samsung,17964,26820,3,Monitor,PowerTech Distributors,Samsung Monitor with premium features,24
+RO-LI-0605,Linksys Router Model 533,Linksys,7200,11031,46,Router,TechNova Pvt Ltd,Linksys Router with premium features,36
+MO-MI-0606,Microsoft Mouse Model 262,Microsoft,2685,4170,46,Mouse,Visionary Electronics,Microsoft Mouse with premium features,6
+ME-SA-0607,Samsung Memory Card Model 489,Samsung,4244,5511,61,Memory Card,AudioMax Distributors,Samsung Memory Card with premium features,6
+SM-GO-0608,Google Smartphone Model 862,Google,23050,35240,97,Smartphone,CameraKing Distributors,Google Smartphone with premium features,6
+SM-BO-0609,Boat Smartwatch Model 166,Boat,15566,21391,47,Smartwatch,PowerTech Distributors,Boat Smartwatch with premium features,36
+RO-CI-0610,Cisco Router Model 254,Cisco,3550,5276,78,Router,CameraKing Distributors,Cisco Router with premium features,36
+MO-LO-0611,Logitech Mouse Model 906,Logitech,3210,4015,98,Mouse,SoundPro Solutions,Logitech Mouse with premium features,6
+EA-BO-0612,Boat Earbuds Model 218,Boat,3999,5815,57,Earbuds,TechNova Pvt Ltd,Boat Earbuds with premium features,24
+CA-AN-0613,Anker Cable Model 768,Anker,135,200,86,Cable,Elite Tech Supplies,Anker Cable with premium features,12
+KE-RA-0614,Razer Keyboard Model 185,Razer,5820,8551,46,Keyboard,VisionTech Supplies,Razer Keyboard with premium features,24
+CA-AM-0615,AmazonBasics Cable Model 891,AmazonBasics,98,150,42,Cable,Peripheral Pros,AmazonBasics Cable with premium features,12
+LA-MI-0616,Microsoft Laptop Model 559,Microsoft,25178,36561,23,Laptop,SmartLife Traders,Microsoft Laptop with premium features,36
+GA-MI-0617,Microsoft Gaming Console Model 889,Microsoft,39837,51874,66,Gaming Console,ElectroMart Solutions,Microsoft Gaming Console with premium features,36
+MO-DE-0618,Dell Monitor Model 369,Dell,42161,62497,17,Monitor,SoundPro Solutions,Dell Monitor with premium features,6
+TA-RE-0619,Realme Tablet Model 258,Realme,35516,52805,78,Tablet,MobileMart Pvt Ltd,Realme Tablet with premium features,36
+SP-HA-0620,Harman Kardon Speaker Model 438,Harman Kardon,8855,13696,65,Speaker,TechNova Pvt Ltd,Harman Kardon Speaker with premium features,6
+TA-RE-0621,Realme Tablet Model 897,Realme,26666,38481,2,Tablet,Peripheral Pros,Realme Tablet with premium features,36
+TA-XI-0622,Xiaomi Tablet Model 958,Xiaomi,48724,77923,65,Tablet,PrintWorks Pvt Ltd,Xiaomi Tablet with premium features,6
+PO-AM-0623,Ambrane Power Bank Model 664,Ambrane,2505,3940,19,Power Bank,Visionary Electronics,Ambrane Power Bank with premium features,24
+SP-HA-0624,Harman Kardon Speaker Model 710,Harman Kardon,8112,13457,55,Speaker,PrintWorks Pvt Ltd,Harman Kardon Speaker with premium features,12
+HE-SO-0625,Sony Headphones Model 426,Sony,11146,14374,66,Headphones,DigiHub Electronics,Sony Headphones with premium features,24
+CA-UG-0626,Ugreen Cable Model 487,Ugreen,401,627,58,Cable,Visionary Electronics,Ugreen Cable with premium features,6
+HE-BO-0627,Bose Headphones Model 393,Bose,11843,15833,49,Headphones,DigiHub Electronics,Bose Headphones with premium features,24
+RO-CI-0628,Cisco Router Model 899,Cisco,6212,8712,20,Router,PrintWorks Pvt Ltd,Cisco Router with premium features,24
+HE-PH-0629,Philips Headphones Model 392,Philips,1837,2360,92,Headphones,GameZone Distributors,Philips Headphones with premium features,12
+SM-MO-0630,Motorola Smartphone Model 852,Motorola,15744,24036,67,Smartphone,ElectroMart Solutions,Motorola Smartphone with premium features,24
+SM-SA-0631,Samsung Smartwatch Model 638,Samsung,6064,9562,60,Smartwatch,Elite Tech Supplies,Samsung Smartwatch with premium features,24
+TV-ON-0632,OnePlus TV Model 335,OnePlus,92266,124868,96,TV,SmartLife Traders,OnePlus TV with premium features,6
+TA-LE-0633,Lenovo Tablet Model 923,Lenovo,25677,37316,84,Tablet,PrintWorks Pvt Ltd,Lenovo Tablet with premium features,24
+CA-NI-0634,Nikon Camera Model 982,Nikon,57929,82242,81,Camera,MobileMart Pvt Ltd,Nikon Camera with premium features,36
+SM-AP-0635,Apple Smartwatch Model 189,Apple,9862,13431,13,Smartwatch,VisionTech Supplies,Apple Smartwatch with premium features,6
+TV-LG-0636,LG TV Model 436,LG,17395,24269,77,TV,GadgetHub India,LG TV with premium features,36
+ME-TR-0637,Transcend Memory Card Model 273,Transcend,4403,5648,17,Memory Card,MobileMart Pvt Ltd,Transcend Memory Card with premium features,36
+SP-UL-0638,Ultimate Ears Speaker Model 984,Ultimate Ears,23759,33908,58,Speaker,TechWorld Pvt Ltd,Ultimate Ears Speaker with premium features,6
+CA-AN-0639,Anker Cable Model 119,Anker,339,545,77,Cable,SmartLife Traders,Anker Cable with premium features,6
+CH-AP-0640,Apple Charger Model 993,Apple,372,478,57,Charger,AudioMax Distributors,Apple Charger with premium features,36
+CH-BO-0641,Boat Charger Model 173,Boat,962,1301,51,Charger,PrintWorks Pvt Ltd,Boat Charger with premium features,24
+PR-XE-0642,Xerox Printer Model 451,Xerox,25753,37921,73,Printer,ConnectPro Supplies,Xerox Printer with premium features,24
+TA-LE-0643,Lenovo Tablet Model 812,Lenovo,39889,56651,57,Tablet,Visionary Electronics,Lenovo Tablet with premium features,36
+GA-NI-0644,Nintendo Gaming Console Model 468,Nintendo,37352,52492,10,Gaming Console,Visionary Electronics,Nintendo Gaming Console with premium features,12
+TA-AM-0645,Amazon Tablet Model 988,Amazon,45652,62959,75,Tablet,VisionTech Supplies,Amazon Tablet with premium features,12
+KE-RA-0646,Razer Keyboard Model 734,Razer,3235,5228,6,Keyboard,AudioMax Distributors,Razer Keyboard with premium features,36
+SM-AM-0647,Amazfit Smartwatch Model 189,Amazfit,10912,14746,74,Smartwatch,ElectroMart Solutions,Amazfit Smartwatch with premium features,12
+EA-SO-0648,Sony Earbuds Model 449,Sony,9040,12896,75,Earbuds,GameZone Distributors,Sony Earbuds with premium features,36
+PO-ON-0649,OnePlus Power Bank Model 226,OnePlus,1728,2249,2,Power Bank,PrintWorks Pvt Ltd,OnePlus Power Bank with premium features,36
+SP-JB-0650,JBL Speaker Model 214,JBL,20462,32845,57,Speaker,SmartLife Traders,JBL Speaker with premium features,24
+SM-BO-0651,Boat Smartwatch Model 831,Boat,16249,26685,92,Smartwatch,SmartGear Traders,Boat Smartwatch with premium features,6
+SP-UL-0652,Ultimate Ears Speaker Model 968,Ultimate Ears,6626,8671,12,Speaker,ConnectPro Supplies,Ultimate Ears Speaker with premium features,12
+PR-EP-0653,Epson Printer Model 517,Epson,32642,41965,100,Printer,PowerTech Distributors,Epson Printer with premium features,36
+TV-SA-0654,Samsung TV Model 610,Samsung,18500,30701,69,TV,Visionary Electronics,Samsung TV with premium features,24
+MO-DE-0655,Dell Mouse Model 335,Dell,1523,2273,83,Mouse,VisionTech Supplies,Dell Mouse with premium features,36
+TA-AP-0656,Apple Tablet Model 731,Apple,53047,79578,16,Tablet,ConnectPro Supplies,Apple Tablet with premium features,6
+CH-BE-0657,Belkin Charger Model 397,Belkin,1882,2523,82,Charger,ReadMore Supplies,Belkin Charger with premium features,12
+PO-AN-0658,Anker Power Bank Model 673,Anker,1421,1804,0,Power Bank,GameZone Distributors,Anker Power Bank with premium features,36
+GA-NI-0659,Nintendo Gaming Console Model 681,Nintendo,21205,28439,90,Gaming Console,TechNova Pvt Ltd,Nintendo Gaming Console with premium features,6
+SP-MA-0660,Marshall Speaker Model 546,Marshall,26634,34569,25,Speaker,GameZone Distributors,Marshall Speaker with premium features,24
+CH-BO-0661,Boat Charger Model 283,Boat,771,967,77,Charger,PowerTech Distributors,Boat Charger with premium features,24
+SM-NO-0662,Nokia Smartphone Model 254,Nokia,50091,64936,55,Smartphone,ElectroMart Solutions,Nokia Smartphone with premium features,36
+SP-UL-0663,Ultimate Ears Speaker Model 657,Ultimate Ears,14425,18592,53,Speaker,PrintWorks Pvt Ltd,Ultimate Ears Speaker with premium features,12
+WE-HP-0664,HP Webcam Model 215,HP,2392,3224,61,Webcam,TechNova Pvt Ltd,HP Webcam with premium features,24
+LA-DE-0665,Dell Laptop Model 445,Dell,94137,125924,52,Laptop,PowerTech Distributors,Dell Laptop with premium features,24
+HE-JB-0666,JBL Headphones Model 499,JBL,8856,13788,96,Headphones,Elite Tech Supplies,JBL Headphones with premium features,12
+SM-AM-0667,Amazfit Smartwatch Model 226,Amazfit,5754,8193,10,Smartwatch,VisionTech Supplies,Amazfit Smartwatch with premium features,12
+KE-ST-0668,SteelSeries Keyboard Model 380,SteelSeries,5123,8088,63,Keyboard,PrintWorks Pvt Ltd,SteelSeries Keyboard with premium features,6
+PR-CA-0669,Canon Printer Model 936,Canon,18727,25806,23,Printer,TechWorld Pvt Ltd,Canon Printer with premium features,6
+SP-JB-0670,JBL Speaker Model 887,JBL,26807,36585,27,Speaker,PowerTech Distributors,JBL Speaker with premium features,12
+RO-TP-0671,TP-Link Router Model 134,TP-Link,8289,12263,2,Router,AudioMax Distributors,TP-Link Router with premium features,12
+WE-LO-0672,Logitech Webcam Model 598,Logitech,4724,7089,61,Webcam,GameZone Distributors,Logitech Webcam with premium features,24
+MO-ST-0673,SteelSeries Mouse Model 419,SteelSeries,2023,2660,63,Mouse,SoundPro Solutions,SteelSeries Mouse with premium features,36
+TV-SO-0674,Sony TV Model 937,Sony,41774,65591,49,TV,VisionTech Supplies,Sony TV with premium features,24
+SP-BO-0675,Bose Speaker Model 588,Bose,29619,37261,60,Speaker,SmartLife Traders,Bose Speaker with premium features,24
+LA-LG-0676,LG Laptop Model 463,LG,143742,189262,69,Laptop,ElectroMart Solutions,LG Laptop with premium features,12
+LA-DE-0677,Dell Laptop Model 957,Dell,98418,134210,6,Laptop,CameraKing Distributors,Dell Laptop with premium features,36
+HE-SK-0678,Skullcandy Headphones Model 799,Skullcandy,10872,15450,95,Headphones,SmartGear Traders,Skullcandy Headphones with premium features,24
+LA-AC-0679,Acer Laptop Model 361,Acer,102981,155558,42,Laptop,DigiHub Electronics,Acer Laptop with premium features,12
+MO-MI-0680,Microsoft Mouse Model 905,Microsoft,4989,7283,77,Mouse,GameZone Distributors,Microsoft Mouse with premium features,36
+MO-DE-0681,Dell Monitor Model 782,Dell,23507,35248,64,Monitor,ElectroMart Solutions,Dell Monitor with premium features,12
+CA-UG-0682,Ugreen Cable Model 548,Ugreen,870,1262,11,Cable,PowerTech Distributors,Ugreen Cable with premium features,6
+PO-SA-0683,Samsung Power Bank Model 128,Samsung,1767,2816,33,Power Bank,GameZone Distributors,Samsung Power Bank with premium features,24
+CA-ON-0684,OnePlus Cable Model 440,OnePlus,558,796,50,Cable,MobileMart Pvt Ltd,OnePlus Cable with premium features,36
+PO-SA-0685,Samsung Power Bank Model 359,Samsung,2422,3307,22,Power Bank,TechNova Pvt Ltd,Samsung Power Bank with premium features,36
+CA-AN-0686,Anker Cable Model 931,Anker,527,728,5,Cable,ElectroMart Solutions,Anker Cable with premium features,6
+PR-EP-0687,Epson Printer Model 114,Epson,28302,46097,28,Printer,SoundPro Solutions,Epson Printer with premium features,24
+ME-TR-0688,Transcend Memory Card Model 705,Transcend,4544,6304,14,Memory Card,ConnectPro Supplies,Transcend Memory Card with premium features,6
+SM-NO-0689,Nokia Smartphone Model 385,Nokia,92498,122919,42,Smartphone,TechWorld Pvt Ltd,Nokia Smartphone with premium features,36
+PO-AM-0690,Ambrane Power Bank Model 799,Ambrane,1443,2165,52,Power Bank,MobileMart Pvt Ltd,Ambrane Power Bank with premium features,36
+EA-NO-0691,Noise Earbuds Model 855,Noise,5207,8485,0,Earbuds,VisionTech Supplies,Noise Earbuds with premium features,6
+RO-NE-0692,Netgear Router Model 689,Netgear,6652,8809,70,Router,TechNova Pvt Ltd,Netgear Router with premium features,6
+MO-VI-0693,ViewSonic Monitor Model 567,ViewSonic,34140,52421,29,Monitor,ReadMore Supplies,ViewSonic Monitor with premium features,24
+RO-AS-0694,Asus Router Model 784,Asus,6624,9943,17,Router,ConnectPro Supplies,Asus Router with premium features,36
+TV-XI-0695,Xiaomi TV Model 564,Xiaomi,24308,40254,64,TV,MobileMart Pvt Ltd,Xiaomi TV with premium features,36
+HE-AU-0696,Audio-Technica Headphones Model 309,Audio-Technica,7344,9954,8,Headphones,TechWorld Pvt Ltd,Audio-Technica Headphones with premium features,24
+SP-JB-0697,JBL Speaker Model 313,JBL,12039,16293,86,Speaker,DigiHub Electronics,JBL Speaker with premium features,6
+WE-CR-0698,Creative Webcam Model 498,Creative,8469,10746,62,Webcam,SmartGear Traders,Creative Webcam with premium features,24
+PR-BR-0699,Brother Printer Model 153,Brother,19738,32559,45,Printer,ConnectPro Supplies,Brother Printer with premium features,6
+HE-SK-0700,Skullcandy Headphones Model 432,Skullcandy,21377,28550,28,Headphones,TechWorld Pvt Ltd,Skullcandy Headphones with premium features,36
+MO-MI-0701,Microsoft Mouse Model 454,Microsoft,3573,4605,91,Mouse,GadgetHub India,Microsoft Mouse with premium features,12
+TV-TC-0702,TCL TV Model 195,TCL,23974,39894,12,TV,TechWorld Pvt Ltd,TCL TV with premium features,12
+TA-LE-0703,Lenovo Tablet Model 515,Lenovo,26407,40022,9,Tablet,PrintWorks Pvt Ltd,Lenovo Tablet with premium features,24
+CA-PA-0704,Panasonic Camera Model 376,Panasonic,68501,111108,49,Camera,ElectroMart Solutions,Panasonic Camera with premium features,24
+GA-NI-0705,Nintendo Gaming Console Model 252,Nintendo,26819,40404,69,Gaming Console,ConnectPro Supplies,Nintendo Gaming Console with premium features,36
+TV-TC-0706,TCL TV Model 294,TCL,31728,42939,59,TV,Visionary Electronics,TCL TV with premium features,24
+CA-AM-0707,AmazonBasics Cable Model 791,AmazonBasics,712,891,69,Cable,MobileMart Pvt Ltd,AmazonBasics Cable with premium features,36
+SP-HA-0708,Harman Kardon Speaker Model 837,Harman Kardon,7009,11264,58,Speaker,SmartGear Traders,Harman Kardon Speaker with premium features,6
+PR-XE-0709,Xerox Printer Model 429,Xerox,14957,23838,24,Printer,AudioMax Distributors,Xerox Printer with premium features,12
+ME-SO-0710,Sony Memory Card Model 207,Sony,1275,1888,27,Memory Card,GadgetHub India,Sony Memory Card with premium features,24
+TA-RE-0711,Realme Tablet Model 377,Realme,39040,56157,5,Tablet,VisionTech Supplies,Realme Tablet with premium features,36
+CA-PA-0712,Panasonic Camera Model 842,Panasonic,27830,44293,56,Camera,SoundPro Solutions,Panasonic Camera with premium features,24
+LA-RA-0713,Razer Laptop Model 312,Razer,54242,89714,30,Laptop,Elite Tech Supplies,Razer Laptop with premium features,12
+PR-CA-0714,Canon Printer Model 706,Canon,12963,17518,40,Printer,Elite Tech Supplies,Canon Printer with premium features,24
+MO-HP-0715,HP Mouse Model 231,HP,2184,3378,49,Mouse,SoundPro Solutions,HP Mouse with premium features,12
+TV-ON-0716,OnePlus TV Model 732,OnePlus,129898,172330,68,TV,TechWorld Pvt Ltd,OnePlus TV with premium features,6
+MO-LG-0717,LG Monitor Model 203,LG,39539,54355,88,Monitor,VisionTech Supplies,LG Monitor with premium features,36
+PR-BR-0718,Brother Printer Model 270,Brother,33055,46106,24,Printer,Elite Tech Supplies,Brother Printer with premium features,12
+MO-ST-0719,SteelSeries Mouse Model 842,SteelSeries,1983,2592,5,Mouse,MobileMart Pvt Ltd,SteelSeries Mouse with premium features,24
+KE-CO-0720,Corsair Keyboard Model 918,Corsair,7553,10672,18,Keyboard,GameZone Distributors,Corsair Keyboard with premium features,12
+TA-AP-0721,Apple Tablet Model 483,Apple,19633,27720,69,Tablet,MobileMart Pvt Ltd,Apple Tablet with premium features,24
+TA-RE-0722,Realme Tablet Model 320,Realme,58012,73662,98,Tablet,Elite Tech Supplies,Realme Tablet with premium features,12
+RO-TP-0723,TP-Link Router Model 355,TP-Link,5373,8273,3,Router,PrintWorks Pvt Ltd,TP-Link Router with premium features,12
+RO-D--0724,D-Link Router Model 614,D-Link,750,1074,7,Router,SoundPro Solutions,D-Link Router with premium features,36
+EA-JA-0725,Jabra Earbuds Model 907,Jabra,660,1015,77,Earbuds,ElectroMart Solutions,Jabra Earbuds with premium features,36
+RO-CI-0726,Cisco Router Model 296,Cisco,1250,1597,62,Router,ReadMore Supplies,Cisco Router with premium features,36
+SM-FI-0727,Fitbit Smartwatch Model 321,Fitbit,20814,27911,60,Smartwatch,ConnectPro Supplies,Fitbit Smartwatch with premium features,6
+CA-FU-0728,Fujifilm Camera Model 856,Fujifilm,66161,103910,23,Camera,SmartGear Traders,Fujifilm Camera with premium features,36
+SM-AP-0729,Apple Smartwatch Model 609,Apple,17445,22230,2,Smartwatch,ConnectPro Supplies,Apple Smartwatch with premium features,36
+KE-HP-0730,HP Keyboard Model 167,HP,8557,13864,24,Keyboard,Peripheral Pros,HP Keyboard with premium features,12
+CA-SO-0731,Sony Camera Model 971,Sony,32191,51318,100,Camera,SoundPro Solutions,Sony Camera with premium features,12
+TA-XI-0732,Xiaomi Tablet Model 387,Xiaomi,40245,65068,43,Tablet,AudioMax Distributors,Xiaomi Tablet with premium features,12
+SM-OP-0733,Oppo Smartphone Model 885,Oppo,69386,110624,36,Smartphone,SmartLife Traders,Oppo Smartphone with premium features,12
+LA-HP-0734,HP Laptop Model 540,HP,51114,77370,35,Laptop,AudioMax Distributors,HP Laptop with premium features,12
+CA-UG-0735,Ugreen Cable Model 653,Ugreen,237,312,29,Cable,MobileMart Pvt Ltd,Ugreen Cable with premium features,24
+GA-SO-0736,Sony Gaming Console Model 344,Sony,27942,36208,63,Gaming Console,Visionary Electronics,Sony Gaming Console with premium features,12
+HE-SK-0737,Skullcandy Headphones Model 612,Skullcandy,5047,6729,43,Headphones,GadgetHub India,Skullcandy Headphones with premium features,6
+CA-BE-0738,Belkin Cable Model 740,Belkin,238,328,33,Cable,PowerTech Distributors,Belkin Cable with premium features,36
+HE-SO-0739,Sony Headphones Model 221,Sony,7889,11785,51,Headphones,GadgetHub India,Sony Headphones with premium features,12
+LA-AP-0740,Apple Laptop Model 913,Apple,84285,123080,67,Laptop,PowerTech Distributors,Apple Laptop with premium features,36
+PO-ON-0741,OnePlus Power Bank Model 833,OnePlus,428,581,95,Power Bank,SmartLife Traders,OnePlus Power Bank with premium features,24
+HE-AU-0742,Audio-Technica Headphones Model 182,Audio-Technica,20161,29678,54,Headphones,CameraKing Distributors,Audio-Technica Headphones with premium features,36
+PR-CA-0743,Canon Printer Model 916,Canon,22471,32555,92,Printer,Peripheral Pros,Canon Printer with premium features,24
+CA-PA-0744,Panasonic Camera Model 245,Panasonic,19124,31537,73,Camera,CameraKing Distributors,Panasonic Camera with premium features,24
+RO-CI-0745,Cisco Router Model 715,Cisco,7530,10859,63,Router,Visionary Electronics,Cisco Router with premium features,36
+ME-TR-0746,Transcend Memory Card Model 164,Transcend,944,1210,73,Memory Card,ConnectPro Supplies,Transcend Memory Card with premium features,24
+ME-KI-0747,Kingston Memory Card Model 922,Kingston,1174,1615,37,Memory Card,DigiHub Electronics,Kingston Memory Card with premium features,6
+TA-SA-0748,Samsung Tablet Model 538,Samsung,53211,70534,45,Tablet,SmartLife Traders,Samsung Tablet with premium features,6
+PO-SA-0749,Samsung Power Bank Model 870,Samsung,1588,2107,9,Power Bank,ReadMore Supplies,Samsung Power Bank with premium features,12
+TA-MI-0750,Microsoft Tablet Model 699,Microsoft,27156,37453,98,Tablet,SmartGear Traders,Microsoft Tablet with premium features,24
+CH-RE-0751,Realme Charger Model 290,Realme,1254,1794,91,Charger,GameZone Distributors,Realme Charger with premium features,36
+TV-PA-0752,Panasonic TV Model 795,Panasonic,71947,91396,39,TV,GadgetHub India,Panasonic TV with premium features,6
+CA-BO-0753,Boat Cable Model 972,Boat,177,273,36,Cable,GameZone Distributors,Boat Cable with premium features,24
+CA-AN-0754,Anker Cable Model 215,Anker,647,1047,72,Cable,ReadMore Supplies,Anker Cable with premium features,36
+TA-AM-0755,Amazon Tablet Model 589,Amazon,19920,26122,60,Tablet,PrintWorks Pvt Ltd,Amazon Tablet with premium features,6
+WE-MI-0756,Microsoft Webcam Model 402,Microsoft,4031,6145,44,Webcam,TechWorld Pvt Ltd,Microsoft Webcam with premium features,24
+MO-AC-0757,Acer Monitor Model 780,Acer,6602,9321,26,Monitor,ElectroMart Solutions,Acer Monitor with premium features,6
+CA-UG-0758,Ugreen Cable Model 704,Ugreen,345,544,5,Cable,SmartLife Traders,Ugreen Cable with premium features,12
+CA-AM-0759,AmazonBasics Cable Model 867,AmazonBasics,270,435,21,Cable,Visionary Electronics,AmazonBasics Cable with premium features,6
+SM-AP-0760,Apple Smartwatch Model 712,Apple,35813,44860,34,Smartwatch,Peripheral Pros,Apple Smartwatch with premium features,12
+SP-UL-0761,Ultimate Ears Speaker Model 239,Ultimate Ears,4351,6149,64,Speaker,TechNova Pvt Ltd,Ultimate Ears Speaker with premium features,36
+TA-MI-0762,Microsoft Tablet Model 284,Microsoft,35120,53006,100,Tablet,SoundPro Solutions,Microsoft Tablet with premium features,12
+GA-SO-0763,Sony Gaming Console Model 384,Sony,29553,42324,41,Gaming Console,ConnectPro Supplies,Sony Gaming Console with premium features,24
+CH-BO-0764,Boat Charger Model 249,Boat,1008,1647,6,Charger,Peripheral Pros,Boat Charger with premium features,6
+WE-RA-0765,Razer Webcam Model 805,Razer,3802,6186,61,Webcam,SoundPro Solutions,Razer Webcam with premium features,6
+KE-ST-0766,SteelSeries Keyboard Model 122,SteelSeries,655,1024,5,Keyboard,VisionTech Supplies,SteelSeries Keyboard with premium features,24
+WE-MI-0767,Microsoft Webcam Model 918,Microsoft,8190,13258,41,Webcam,Peripheral Pros,Microsoft Webcam with premium features,24
+RO-CI-0768,Cisco Router Model 824,Cisco,4832,6574,27,Router,Visionary Electronics,Cisco Router with premium features,24
+EA-NO-0769,Noise Earbuds Model 270,Noise,8982,11323,24,Earbuds,SoundPro Solutions,Noise Earbuds with premium features,36
+SM-OP-0770,Oppo Smartphone Model 120,Oppo,12745,20146,2,Smartphone,SmartLife Traders,Oppo Smartphone with premium features,24
+CH-AN-0771,Anker Charger Model 368,Anker,799,1011,91,Charger,GameZone Distributors,Anker Charger with premium features,12
+HE-BE-0772,Beats Headphones Model 966,Beats,16661,26259,22,Headphones,Peripheral Pros,Beats Headphones with premium features,6
+CH-RE-0773,Realme Charger Model 550,Realme,904,1135,47,Charger,Peripheral Pros,Realme Charger with premium features,12
+HE-BO-0774,Bose Headphones Model 850,Bose,1530,2297,43,Headphones,ElectroMart Solutions,Bose Headphones with premium features,36
+WE-HP-0775,HP Webcam Model 465,HP,9154,14841,22,Webcam,VisionTech Supplies,HP Webcam with premium features,12
+TV-SO-0776,Sony TV Model 983,Sony,79865,104371,25,TV,MobileMart Pvt Ltd,Sony TV with premium features,36
+KE-ST-0777,SteelSeries Keyboard Model 127,SteelSeries,7509,9743,59,Keyboard,ConnectPro Supplies,SteelSeries Keyboard with premium features,36
+TV-SO-0778,Sony TV Model 804,Sony,144649,181649,57,TV,VisionTech Supplies,Sony TV with premium features,6
+SM-GA-0779,Garmin Smartwatch Model 711,Garmin,6856,10955,2,Smartwatch,ElectroMart Solutions,Garmin Smartwatch with premium features,6
+CH-ON-0780,OnePlus Charger Model 165,OnePlus,311,480,2,Charger,TechNova Pvt Ltd,OnePlus Charger with premium features,24
+ME-SA-0781,SanDisk Memory Card Model 102,SanDisk,3583,5197,52,Memory Card,SoundPro Solutions,SanDisk Memory Card with premium features,6
+PR-BR-0782,Brother Printer Model 830,Brother,30594,45602,28,Printer,GameZone Distributors,Brother Printer with premium features,6
+CH-BE-0783,Belkin Charger Model 989,Belkin,281,365,38,Charger,GameZone Distributors,Belkin Charger with premium features,12
+LA-LE-0784,Lenovo Laptop Model 124,Lenovo,55249,71726,16,Laptop,GameZone Distributors,Lenovo Laptop with premium features,12
+RO-AS-0785,Asus Router Model 215,Asus,3331,4551,57,Router,ConnectPro Supplies,Asus Router with premium features,36
+PR-CA-0786,Canon Printer Model 414,Canon,21548,30761,23,Printer,Elite Tech Supplies,Canon Printer with premium features,36
+KE-KE-0787,Keychron Keyboard Model 383,Keychron,8753,12620,36,Keyboard,CameraKing Distributors,Keychron Keyboard with premium features,36
+MO-ST-0788,SteelSeries Mouse Model 458,SteelSeries,4212,6125,56,Mouse,ElectroMart Solutions,SteelSeries Mouse with premium features,36
+KE-HP-0789,HP Keyboard Model 350,HP,3280,5326,35,Keyboard,PowerTech Distributors,HP Keyboard with premium features,36
+MO-CO-0790,Corsair Mouse Model 933,Corsair,3605,5029,45,Mouse,TechWorld Pvt Ltd,Corsair Mouse with premium features,24
+PO-AN-0791,Anker Power Bank Model 986,Anker,1714,2264,68,Power Bank,Elite Tech Supplies,Anker Power Bank with premium features,24
+TA-SA-0792,Samsung Tablet Model 441,Samsung,19197,25776,87,Tablet,ConnectPro Supplies,Samsung Tablet with premium features,12
+CA-FU-0793,Fujifilm Camera Model 232,Fujifilm,89374,144027,7,Camera,SmartGear Traders,Fujifilm Camera with premium features,24
+GA-MI-0794,Microsoft Gaming Console Model 271,Microsoft,27192,44354,5,Gaming Console,Elite Tech Supplies,Microsoft Gaming Console with premium features,6
+HE-JB-0795,JBL Headphones Model 586,JBL,22231,27806,7,Headphones,Visionary Electronics,JBL Headphones with premium features,6
+WE-MI-0796,Microsoft Webcam Model 321,Microsoft,3988,6037,6,Webcam,SmartLife Traders,Microsoft Webcam with premium features,24
+SM-ON-0797,OnePlus Smartwatch Model 481,OnePlus,16255,20692,4,Smartwatch,TechWorld Pvt Ltd,OnePlus Smartwatch with premium features,12
+CA-AM-0798,AmazonBasics Cable Model 183,AmazonBasics,717,1076,70,Cable,MobileMart Pvt Ltd,AmazonBasics Cable with premium features,36
+SM-VI-0799,Vivo Smartphone Model 431,Vivo,51164,79141,73,Smartphone,Elite Tech Supplies,Vivo Smartphone with premium features,36
+RO-TP-0800,TP-Link Router Model 838,TP-Link,9149,13345,46,Router,CameraKing Distributors,TP-Link Router with premium features,24
+

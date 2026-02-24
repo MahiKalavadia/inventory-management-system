@@ -175,40 +175,13 @@
 </div>
 
 
+<div class="row g-4">
+    <div class="col-lg-9 col-12">
 
-    <!-- QUICK ACTIONS AS SMALL CARDS -->
-    <div class="row g-3 mb-4">
-        <div class="col-md-3 col-6">
-            <a href="{% url 'product_list' %}" class="card text-center text-decoration-none shadow-sm py-3 hover-shadow">
-                <i class="bi bi-search fs-3 text-primary"></i>
-                <p class="mb-0 mt-2 fw-semibold text-dark">View Inventory</p>
-            </a>
-        </div>
-        <div class="col-md-3 col-6">
-            <a href="{% url 'stock_in_section' %}" class="card text-center text-decoration-none shadow-sm py-3 hover-shadow">
-                <i class="bi bi-plus-circle fs-3 text-success"></i>
-                <p class="mb-0 mt-2 fw-semibold text-dark">Stock In</p>
-            </a>
-        </div>
-        <div class="col-md-3 col-6">
-            <a href="{% url 'stock_out' %}" class="card text-center text-decoration-none shadow-sm py-3 hover-shadow">
-                <i class="bi bi-dash-circle fs-3 text-danger"></i>
-                <p class="mb-0 mt-2 fw-semibold text-dark">Stock Out</p>
-            </a>
-        </div>
-        <div class="col-md-3 col-6">
-            <a href="{% url 'stock_history' %}" class="card text-center text-decoration-none shadow-sm py-3 hover-shadow">
-                <i class="bi bi-clock-history fs-3 text-dark"></i>
-                <p class="mb-0 mt-2 fw-semibold text-dark">Stock Log</p>
-            </a>
-        </div>
-    </div>
+        <div class="row g-4 mb-4">
 
-    <!-- MAIN CARDS -->
-    <div class="row g-3">
-
-        <!-- CRITICAL STOCK ITEMS -->
-        <div class="col-lg-6 col-12">
+            <!-- Critical Stock -->
+           <div class="col-lg-6 col-12">
             <div class="card shadow-sm border-0">
                 <div class="card-header d-flex justify-content-between align-items-center bg-white border-bottom">
                     <h6 class="mb-0 fw-bold">Critical Stock Items</h6>
@@ -241,31 +214,119 @@
             </div>
         </div>
 
-        <!-- RECENT TRANSACTIONS -->
-        <div class="col-lg-6 col-12">
+            <!-- Stockout -->
+            <div class="col-lg-6 col-12">
             <div class="card shadow-sm border-0">
                 <div class="card-header d-flex justify-content-between align-items-center bg-white border-bottom">
                     <h6 class="mb-0 fw-bold">Recent Inventory Transactions</h6>
                     <a href="{% url 'stock_history' %}" class="btn btn-sm btn-outline-primary">View All →</a>
                 </div>
                 <div class="card-body p-0">
-                    <ul class="list-group list-group-flush">
-                        {% for log in recent_stock_logs %}
-                        <li class="list-group-item d-flex justify-content-between align-items-center hover-shadow">
-                            <div>
-                                <span class="fw-semibold">{{ log.product.name }}</span> — {{ log.action }} 
-                                <span class="badge bg-secondary ms-2">{{ log.quantity }}</span>
-                            </div>
-                            <small class="text-muted">{{ log.created_at|date:"M d, Y H:i" }}</small>
-                        </li>
-                        {% empty %}
-                        <li class="list-group-item text-center text-muted">No recent transactions.</li>
-                        {% endfor %}
-                    </ul>
+                    <table class="table table-hover mb-0">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Product</th>
+                                <th>Date</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for log in recent_stock_logs %}
+                            <tr>
+                                <td>
+                                    <div>
+                                      <span class="fw-semibold">{{ log.product.name }}</span> — {{ log.action }} 
+                                      <span class="badge bg-secondary ms-2">{{ log.quantity }}</span>
+                                    </div>
+                                </td>
+                                <td>{{ log.created_at|date:"M d, Y H:i" }}</td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="3" class="text-center text-muted">No recent transactions</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
                 </div>
+            </div>           
             </div>
         </div>
+        </div>
+    <!-- RIGHT SIDEBAR -->
+    <div class="col-lg-3 col-12">
+
+        <!-- Quick Actions -->
+         <div class="card shadow-sm border-0 mb-4 sidebar-card">
+    <div class="card-header bg-light border-0 d-flex align-items-center gap-2">
+        <i class="bi bi-lightning-charge-fill text-primary"></i>
+        <span class="fw-semibold text-uppercase small">QUICK ACTIONS</span>
+    </div>
+
+    <div class="card-body p-2" style="height: 255px;">
+
+        <!-- Add Product -->
+        <a href="{% url 'add_product' %}"
+           class="operation-item d-flex align-items-center justify-content-between p-2 mb-1 rounded text-decoration-none">
+            
+            <div class="d-flex align-items-center gap-2">
+                <div class="icon-box bg-primary-subtle text-primary">
+                    <i class="bi bi-search text-primary"></i>
+                </div>
+                <div>
+                    <div class="fw-semibold">View Inventory</div>
+                </div>
+            </div>
+
+            <i class="bi bi-chevron-right text-muted"></i>
+        </a>
+
+         <a href="{% url 'stock_in_section' %}"
+           class="operation-item d-flex align-items-center justify-content-between p-2 mb-1 rounded text-decoration-none">
+            
+            <div class="d-flex align-items-center gap-2">
+                <div class="icon-box bg-primary-subtle text-primary">
+                    <i class="bi bi-box-arrow-in-down text-success"></i>
+                </div>
+                <div>
+                    <div class="fw-semibold">Stock In</div>
+                </div>
+            </div>
+
+            <i class="bi bi-chevron-right text-muted"></i>
+        </a>
+
+        <a href="{% url 'stock_out' %}"
+           class="operation-item d-flex align-items-center justify-content-between p-2 mb-1 rounded text-decoration-none">
+            
+            <div class="d-flex align-items-center gap-2">
+                <div class="icon-box bg-primary-subtle text-primary">
+                    <i class="bi bi-box-arrow-up-right"></i>
+                </div>
+                <div>
+                    <div class="fw-semibold">Stock Out</div>
+                </div>
+            </div>
+            <i class="bi bi-chevron-right text-muted"></i>
+        </a>
+
+         <a href="{% url 'stock_history' %}"
+           class="operation-item d-flex align-items-center justify-content-between p-2 mb-1 rounded text-decoration-none">
+            
+            <div class="d-flex align-items-center gap-2">
+                <div class="icon-box bg-primary-subtle text-primary">
+                    <i class="bi bi-clock-history text-secondary"></i>
+                </div>
+                <div>
+                    <div class="fw-semibold">Stock History</div>
+                </div>
+            </div>
+            <i class="bi bi-chevron-right text-muted"></i>
+        </a>
+      </div>
+        </div>
+       
 
     </div>
+</div>
 
 {% endblock %}

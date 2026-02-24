@@ -1,0 +1,1201 @@
+id,product_sku,supplier,description,quantity,status,created_at
+1,MO-MI-0680,GameZone Distributors,Urgent: Microsoft Mouse Model 905 running out,129,Approved,2025-05-01 09:31:00
+2,CA-NI-0371,DigiHub Electronics,Customer pre-orders for Nikon Camera Model 497,164,Approved,2025-10-31 00:15:43
+3,EA-AN-0091,TechWorld Pvt Ltd,Seasonal demand increase for Anker Earbuds Model 214,168,Pending,2024-06-28 00:47:38
+4,TV-ON-0632,SmartLife Traders,Urgent: OnePlus TV Model 335 running out,17,Pending,2024-12-05 14:02:39
+5,CA-OL-0370,DigiHub Electronics,Bulk order request for Olympus Camera Model 900,25,Pending,2025-07-16 21:39:24
+6,KE-KE-0787,CameraKing Distributors,Seasonal demand increase for Keychron Keyboard Model 383,35,Approved,2025-05-29 20:03:38
+7,SM-RE-0059,TechNova Pvt Ltd,Seasonal demand increase for Realme Smartphone Model 168,170,Approved,2025-08-18 04:19:51
+8,CA-AN-0639,SmartLife Traders,Customer pre-orders for Anker Cable Model 119,183,Approved,2024-04-05 16:12:27
+9,MO-DE-0135,SmartLife Traders,Low stock alert - need restock for Dell Mouse Model 410,84,Pending,2025-04-14 19:49:56
+10,SM-XI-0080,TechNova Pvt Ltd,Low stock alert - need restock for Xiaomi Smartphone Model 438,40,Pending,2024-06-20 18:19:38
+11,CA-BE-0539,ElectroMart Solutions,Low stock alert - need restock for Belkin Cable Model 290,95,Approved,2025-11-07 07:50:34
+12,MO-DE-0192,VisionTech Supplies,Customer pre-orders for Dell Monitor Model 338,63,Rejected,2024-01-09 16:01:03
+13,GA-SO-0033,VisionTech Supplies,Urgent: Sony Gaming Console Model 353 running out,101,Approved,2024-08-08 04:34:02
+14,TA-MI-0272,PrintWorks Pvt Ltd,Low stock alert - need restock for Microsoft Tablet Model 833,153,Approved,2025-01-23 20:43:48
+15,SM-GA-0002,SoundPro Solutions,Low stock alert - need restock for Garmin Smartwatch Model 401,43,Approved,2025-08-07 01:18:00
+16,LA-MS-0120,AudioMax Distributors,Seasonal demand increase for MSI Laptop Model 468,198,Approved,2025-03-01 02:21:39
+17,TV-XI-0032,AudioMax Distributors,Urgent: Xiaomi TV Model 745 running out,116,Approved,2024-03-21 19:01:11
+18,CA-AN-0754,ReadMore Supplies,Customer pre-orders for Anker Cable Model 215,35,Approved,2024-08-13 12:28:53
+19,PR-HP-0570,VisionTech Supplies,Customer pre-orders for HP Printer Model 675,161,Rejected,2024-10-10 05:13:44
+20,WE-LO-0566,Elite Tech Supplies,Customer pre-orders for Logitech Webcam Model 613,61,Approved,2025-01-19 02:29:11
+21,TA-AP-0180,ConnectPro Supplies,Seasonal demand increase for Apple Tablet Model 919,188,Approved,2024-04-05 01:58:34
+22,TA-SA-0792,ConnectPro Supplies,Seasonal demand increase for Samsung Tablet Model 441,174,Approved,2024-08-16 19:10:44
+23,SM-SA-0543,PrintWorks Pvt Ltd,Bulk order request for Samsung Smartphone Model 359,192,Approved,2024-08-02 14:46:40
+24,TA-MI-0465,TechWorld Pvt Ltd,Seasonal demand increase for Microsoft Tablet Model 995,106,Pending,2024-08-28 19:18:42
+25,LA-AP-0740,PowerTech Distributors,Low stock alert - need restock for Apple Laptop Model 913,131,Pending,2024-06-25 08:33:05
+26,SM-ON-0169,DigiHub Electronics,Seasonal demand increase for OnePlus Smartwatch Model 113,71,Approved,2024-12-08 05:39:42
+27,PO-SA-0379,SmartGear Traders,Urgent: Samsung Power Bank Model 981 running out,104,Approved,2024-11-12 13:23:28
+28,GA-NI-0092,AudioMax Distributors,Seasonal demand increase for Nintendo Gaming Console Model 492,137,Approved,2024-01-20 14:41:07
+29,SM-AP-0282,GameZone Distributors,Customer pre-orders for Apple Smartwatch Model 690,189,Approved,2025-10-03 00:57:20
+30,ME-KI-0582,ConnectPro Supplies,Urgent: Kingston Memory Card Model 152 running out,95,Approved,2025-01-17 06:51:33
+31,CA-UG-0450,MobileMart Pvt Ltd,Customer pre-orders for Ugreen Cable Model 974,107,Pending,2024-01-23 17:47:52
+32,SM-BO-0103,TechWorld Pvt Ltd,Customer pre-orders for Boat Smartwatch Model 123,91,Approved,2025-03-12 23:28:48
+33,CH-AN-0162,SmartLife Traders,Bulk order request for Anker Charger Model 645,199,Approved,2024-04-17 00:21:09
+34,HE-SO-0586,TechWorld Pvt Ltd,Customer pre-orders for Sony Headphones Model 264,103,Pending,2025-12-13 23:15:38
+35,GA-SO-0763,ConnectPro Supplies,Seasonal demand increase for Sony Gaming Console Model 384,126,Pending,2025-06-12 06:24:49
+36,MO-HP-0161,SoundPro Solutions,Low stock alert - need restock for HP Mouse Model 379,93,Approved,2025-01-09 09:48:05
+37,RO-TP-0671,AudioMax Distributors,Customer pre-orders for TP-Link Router Model 134,151,Approved,2026-01-14 02:14:26
+38,PO-SY-0288,ConnectPro Supplies,Urgent: Syska Power Bank Model 996 running out,149,Pending,2024-10-19 06:47:24
+39,GA-SO-0509,PowerTech Distributors,Low stock alert - need restock for Sony Gaming Console Model 159,101,Approved,2024-03-26 00:35:22
+40,SM-RE-0059,TechNova Pvt Ltd,Urgent: Realme Smartphone Model 168 running out,101,Approved,2025-12-27 06:46:42
+41,TA-MI-0521,ConnectPro Supplies,Bulk order request for Microsoft Tablet Model 645,104,Pending,2025-05-05 04:28:51
+42,HE-SO-0186,ConnectPro Supplies,Customer pre-orders for Sony Headphones Model 614,194,Pending,2025-03-30 01:02:02
+43,GA-NI-0092,AudioMax Distributors,Urgent: Nintendo Gaming Console Model 492 running out,48,Rejected,2024-08-16 11:36:35
+44,CA-BO-0413,SoundPro Solutions,Urgent: Boat Cable Model 431 running out,24,Approved,2025-02-18 13:54:57
+45,RO-CI-0768,Visionary Electronics,Urgent: Cisco Router Model 824 running out,117,Approved,2024-02-27 00:36:32
+46,WE-LO-0066,TechNova Pvt Ltd,Urgent: Logitech Webcam Model 194 running out,94,Pending,2024-04-13 01:13:00
+47,CA-UG-0450,MobileMart Pvt Ltd,Bulk order request for Ugreen Cable Model 974,85,Approved,2025-03-21 12:51:51
+48,CH-AN-0771,GameZone Distributors,Bulk order request for Anker Charger Model 368,106,Pending,2024-08-09 03:33:42
+49,TV-TC-0356,PrintWorks Pvt Ltd,Seasonal demand increase for TCL TV Model 781,24,Pending,2024-12-10 20:39:22
+50,GA-SO-0509,PowerTech Distributors,Bulk order request for Sony Gaming Console Model 159,142,Approved,2024-05-13 23:32:47
+51,CA-CA-0296,GadgetHub India,Customer pre-orders for Canon Camera Model 405,186,Approved,2025-01-24 17:31:27
+52,GA-MI-0151,AudioMax Distributors,Seasonal demand increase for Microsoft Gaming Console Model 744,158,Rejected,2025-02-06 11:46:10
+53,RO-CI-0016,GameZone Distributors,Bulk order request for Cisco Router Model 260,17,Approved,2024-12-29 09:38:18
+54,ME-SO-0368,Peripheral Pros,Urgent: Sony Memory Card Model 251 running out,18,Approved,2025-12-12 05:56:51
+55,CA-SO-0414,SmartLife Traders,Urgent: Sony Camera Model 424 running out,101,Pending,2024-02-26 18:53:14
+56,TA-AM-0170,TechWorld Pvt Ltd,Urgent: Amazon Tablet Model 913 running out,28,Pending,2025-02-17 17:21:36
+57,TA-MI-0762,SoundPro Solutions,Seasonal demand increase for Microsoft Tablet Model 284,77,Rejected,2024-02-08 22:26:41
+58,CA-AN-0686,ElectroMart Solutions,Seasonal demand increase for Anker Cable Model 931,86,Approved,2025-11-09 01:49:59
+59,CA-SO-0428,GadgetHub India,Urgent: Sony Camera Model 352 running out,115,Rejected,2024-03-13 06:08:20
+60,PO-AM-0489,GameZone Distributors,Customer pre-orders for Ambrane Power Bank Model 505,76,Approved,2025-06-16 04:37:51
+61,TA-SA-0748,SmartLife Traders,Low stock alert - need restock for Samsung Tablet Model 538,188,Approved,2025-04-16 20:53:51
+62,CA-GO-0052,MobileMart Pvt Ltd,Bulk order request for GoPro Camera Model 171,84,Pending,2025-11-11 11:44:05
+63,ME-SO-0429,Elite Tech Supplies,Urgent: Sony Memory Card Model 345 running out,157,Approved,2024-05-07 15:42:53
+64,PO-RE-0507,CameraKing Distributors,Bulk order request for Realme Power Bank Model 438,77,Approved,2024-01-08 19:19:56
+65,PR-CA-0786,Elite Tech Supplies,Bulk order request for Canon Printer Model 414,16,Approved,2025-11-30 19:29:59
+66,ME-SA-0300,AudioMax Distributors,Low stock alert - need restock for SanDisk Memory Card Model 601,25,Pending,2024-10-27 19:52:59
+67,TV-TC-0706,Visionary Electronics,Urgent: TCL TV Model 294 running out,191,Approved,2025-02-09 20:08:49
+68,PO-RE-0561,Peripheral Pros,Seasonal demand increase for Realme Power Bank Model 147,56,Approved,2024-06-18 12:08:47
+69,HE-JB-0795,Visionary Electronics,Bulk order request for JBL Headphones Model 586,169,Approved,2025-09-19 03:04:44
+70,CA-ON-0285,SoundPro Solutions,Urgent: OnePlus Cable Model 673 running out,67,Approved,2026-01-13 20:27:05
+71,MO-ST-0788,ElectroMart Solutions,Low stock alert - need restock for SteelSeries Mouse Model 458,31,Pending,2024-09-07 19:56:34
+72,MO-RA-0030,SmartLife Traders,Customer pre-orders for Razer Mouse Model 825,131,Approved,2026-01-17 04:07:40
+73,PO-AM-0489,GameZone Distributors,Urgent: Ambrane Power Bank Model 505 running out,30,Approved,2024-07-12 22:48:19
+74,WE-RA-0214,ElectroMart Solutions,Low stock alert - need restock for Razer Webcam Model 820,178,Pending,2024-07-29 16:05:43
+75,GA-SO-0522,GameZone Distributors,Seasonal demand increase for Sony Gaming Console Model 955,161,Pending,2025-01-28 12:09:12
+76,HE-SE-0358,ReadMore Supplies,Seasonal demand increase for Sennheiser Headphones Model 762,36,Rejected,2025-06-13 06:38:45
+77,SM-BO-0239,SmartLife Traders,Customer pre-orders for Boat Smartwatch Model 212,110,Pending,2024-07-25 14:02:55
+78,GA-MI-0053,Peripheral Pros,Bulk order request for Microsoft Gaming Console Model 469,132,Rejected,2025-05-30 10:03:20
+79,GA-SO-0538,ConnectPro Supplies,Bulk order request for Sony Gaming Console Model 179,72,Approved,2025-04-05 04:55:15
+80,TV-ON-0433,Elite Tech Supplies,Customer pre-orders for OnePlus TV Model 942,95,Pending,2026-01-29 19:39:51
+81,TA-MI-0286,TechWorld Pvt Ltd,Low stock alert - need restock for Microsoft Tablet Model 783,152,Approved,2024-06-23 10:40:37
+82,RO-TP-0800,CameraKing Distributors,Urgent: TP-Link Router Model 838 running out,137,Approved,2025-04-21 22:50:42
+83,CA-AM-0759,Visionary Electronics,Low stock alert - need restock for AmazonBasics Cable Model 867,36,Rejected,2025-06-24 00:57:46
+84,RO-CI-0157,GadgetHub India,Low stock alert - need restock for Cisco Router Model 861,150,Rejected,2024-09-06 02:20:55
+85,WE-LO-0566,Elite Tech Supplies,Low stock alert - need restock for Logitech Webcam Model 613,107,Approved,2025-10-24 13:32:55
+86,TA-XI-0622,PrintWorks Pvt Ltd,Customer pre-orders for Xiaomi Tablet Model 958,132,Pending,2025-09-03 02:19:12
+87,CH-AN-0162,SmartLife Traders,Seasonal demand increase for Anker Charger Model 645,172,Rejected,2024-10-31 13:34:07
+88,HE-SO-0186,ConnectPro Supplies,Customer pre-orders for Sony Headphones Model 614,29,Approved,2024-02-10 21:39:11
+89,MO-LO-0006,GameZone Distributors,Seasonal demand increase for Logitech Mouse Model 258,39,Approved,2024-11-16 08:27:49
+90,SM-NO-0662,ElectroMart Solutions,Bulk order request for Nokia Smartphone Model 254,89,Approved,2025-07-09 04:34:00
+91,CH-ON-0780,TechNova Pvt Ltd,Bulk order request for OnePlus Charger Model 165,119,Approved,2024-05-18 22:14:34
+92,SM-AP-0324,MobileMart Pvt Ltd,Urgent: Apple Smartphone Model 536 running out,161,Approved,2024-03-19 06:33:15
+93,KE-HP-0178,Peripheral Pros,Bulk order request for HP Keyboard Model 893,60,Approved,2025-02-24 20:08:01
+94,KE-DE-0133,SmartGear Traders,Urgent: Dell Keyboard Model 769 running out,162,Approved,2025-10-24 20:31:02
+95,MO-DE-0559,SoundPro Solutions,Urgent: Dell Monitor Model 902 running out,55,Pending,2025-04-14 02:34:23
+96,KE-ST-0437,TechNova Pvt Ltd,Urgent: SteelSeries Keyboard Model 822 running out,156,Rejected,2026-01-29 01:53:21
+97,TA-SA-0550,PowerTech Distributors,Urgent: Samsung Tablet Model 708 running out,134,Rejected,2026-01-05 21:31:34
+98,GA-SO-0490,SmartLife Traders,Urgent: Sony Gaming Console Model 897 running out,112,Pending,2024-11-16 06:05:34
+99,KE-RA-0339,PrintWorks Pvt Ltd,Customer pre-orders for Razer Keyboard Model 271,16,Approved,2024-07-07 01:32:09
+100,PO-AM-0690,MobileMart Pvt Ltd,Urgent: Ambrane Power Bank Model 799 running out,80,Approved,2026-01-17 14:54:06
+101,TV-ON-0081,Peripheral Pros,Bulk order request for OnePlus TV Model 261,111,Pending,2024-08-09 17:40:00
+102,PO-SA-0506,AudioMax Distributors,Customer pre-orders for Samsung Power Bank Model 563,129,Approved,2025-09-15 13:05:06
+103,ME-SA-0279,TechWorld Pvt Ltd,Customer pre-orders for Samsung Memory Card Model 942,19,Approved,2025-12-03 03:37:13
+104,MO-DE-0681,ElectroMart Solutions,Urgent: Dell Monitor Model 782 running out,94,Pending,2024-12-16 15:57:30
+105,WE-MI-0767,Peripheral Pros,Urgent: Microsoft Webcam Model 918 running out,133,Pending,2024-07-25 19:50:08
+106,WE-HP-0146,AudioMax Distributors,Customer pre-orders for HP Webcam Model 120,156,Approved,2024-12-05 09:18:33
+107,MO-CO-0079,SmartGear Traders,Urgent: Corsair Mouse Model 824 running out,40,Approved,2024-12-01 20:00:39
+108,CA-SO-0731,SoundPro Solutions,Customer pre-orders for Sony Camera Model 971,142,Approved,2025-10-03 00:47:09
+109,TV-PA-0752,GadgetHub India,Bulk order request for Panasonic TV Model 795,70,Rejected,2025-04-17 17:44:35
+110,GA-SO-0512,Elite Tech Supplies,Bulk order request for Sony Gaming Console Model 199,154,Approved,2024-03-02 20:06:20
+111,WE-MI-0438,DigiHub Electronics,Customer pre-orders for Microsoft Webcam Model 368,151,Approved,2025-08-09 18:59:08
+112,MO-CO-0208,GadgetHub India,Seasonal demand increase for Corsair Mouse Model 315,100,Pending,2024-07-05 12:19:52
+113,TV-TC-0706,Visionary Electronics,Seasonal demand increase for TCL TV Model 294,129,Rejected,2024-12-10 06:31:28
+114,KE-KE-0235,AudioMax Distributors,Bulk order request for Keychron Keyboard Model 197,183,Rejected,2025-10-23 16:13:40
+115,ME-KI-0582,ConnectPro Supplies,Bulk order request for Kingston Memory Card Model 152,138,Approved,2025-09-05 13:18:22
+116,CA-BO-0451,GameZone Distributors,Low stock alert - need restock for Boat Cable Model 548,138,Pending,2025-05-05 02:36:21
+117,MO-SA-0075,TechNova Pvt Ltd,Bulk order request for Samsung Monitor Model 283,104,Approved,2025-05-05 23:45:46
+118,ME-KI-0595,PowerTech Distributors,Customer pre-orders for Kingston Memory Card Model 494,36,Pending,2025-05-22 02:29:32
+119,CA-SO-0455,SoundPro Solutions,Bulk order request for Sony Camera Model 104,12,Approved,2024-12-09 06:27:20
+120,MO-ST-0099,TechWorld Pvt Ltd,Bulk order request for SteelSeries Mouse Model 818,183,Approved,2025-07-25 23:43:08
+121,LA-RA-0541,TechWorld Pvt Ltd,Customer pre-orders for Razer Laptop Model 908,181,Approved,2026-01-01 19:48:33
+122,GA-MI-0794,Elite Tech Supplies,Low stock alert - need restock for Microsoft Gaming Console Model 271,56,Approved,2024-09-29 00:12:14
+123,ME-SO-0074,PowerTech Distributors,Customer pre-orders for Sony Memory Card Model 921,113,Pending,2025-05-24 09:07:34
+124,MO-RA-0030,SmartLife Traders,Seasonal demand increase for Razer Mouse Model 825,179,Pending,2025-06-18 01:52:20
+125,SM-OP-0147,TechWorld Pvt Ltd,Customer pre-orders for Oppo Smartphone Model 299,89,Approved,2024-01-02 11:48:06
+126,PR-EP-0431,TechNova Pvt Ltd,Bulk order request for Epson Printer Model 645,108,Rejected,2025-12-24 17:28:36
+127,PR-CA-0786,Elite Tech Supplies,Bulk order request for Canon Printer Model 414,184,Pending,2025-07-01 18:10:43
+128,MO-VI-0693,ReadMore Supplies,Low stock alert - need restock for ViewSonic Monitor Model 567,123,Pending,2025-03-20 19:50:53
+129,KE-ST-0159,TechNova Pvt Ltd,Customer pre-orders for SteelSeries Keyboard Model 746,150,Approved,2024-01-23 20:14:02
+130,ME-KI-0390,AudioMax Distributors,Bulk order request for Kingston Memory Card Model 346,82,Approved,2026-02-08 19:00:11
+131,SM-BO-0222,GameZone Distributors,Urgent: Boat Smartwatch Model 269 running out,110,Pending,2025-09-08 00:33:56
+132,WE-RA-0765,SoundPro Solutions,Bulk order request for Razer Webcam Model 805,114,Pending,2025-10-05 21:55:16
+133,CA-NI-0322,Peripheral Pros,Seasonal demand increase for Nikon Camera Model 700,65,Approved,2024-01-02 07:14:49
+134,SM-MO-0630,ElectroMart Solutions,Seasonal demand increase for Motorola Smartphone Model 852,75,Pending,2025-04-14 16:14:13
+135,RO-AS-0503,ElectroMart Solutions,Urgent: Asus Router Model 358 running out,59,Pending,2025-05-09 14:08:52
+136,CA-OL-0026,Visionary Electronics,Customer pre-orders for Olympus Camera Model 201,139,Approved,2026-01-10 07:17:59
+137,SM-RE-0583,Visionary Electronics,Low stock alert - need restock for Realme Smartphone Model 140,191,Approved,2025-10-13 08:27:59
+138,RO-TP-0671,AudioMax Distributors,Urgent: TP-Link Router Model 134 running out,132,Approved,2024-11-07 16:11:11
+139,CA-BO-0498,VisionTech Supplies,Customer pre-orders for Boat Cable Model 832,103,Approved,2024-12-31 10:12:40
+140,CA-OL-0370,DigiHub Electronics,Low stock alert - need restock for Olympus Camera Model 900,186,Approved,2025-08-11 08:53:52
+141,RO-AS-0224,PowerTech Distributors,Bulk order request for Asus Router Model 343,34,Pending,2024-06-13 01:03:33
+142,HE-BE-0772,Peripheral Pros,Low stock alert - need restock for Beats Headphones Model 966,176,Pending,2025-03-02 10:30:24
+143,TA-SA-0332,Elite Tech Supplies,Seasonal demand increase for Samsung Tablet Model 873,98,Approved,2025-12-24 23:41:54
+144,SM-GO-0361,PrintWorks Pvt Ltd,Seasonal demand increase for Google Smartphone Model 820,152,Rejected,2025-07-15 22:57:19
+145,CA-PA-0307,PrintWorks Pvt Ltd,Seasonal demand increase for Panasonic Camera Model 585,42,Pending,2025-12-06 04:51:17
+146,SM-NO-0689,TechWorld Pvt Ltd,Bulk order request for Nokia Smartphone Model 385,86,Pending,2025-07-15 20:32:40
+147,KE-ST-0777,ConnectPro Supplies,Bulk order request for SteelSeries Keyboard Model 127,112,Approved,2025-03-15 20:40:05
+148,LA-MI-0378,SmartGear Traders,Low stock alert - need restock for Microsoft Laptop Model 809,160,Pending,2024-01-18 20:39:19
+149,MO-RA-0030,SmartLife Traders,Customer pre-orders for Razer Mouse Model 825,141,Approved,2025-07-03 00:33:04
+150,WE-HP-0205,DigiHub Electronics,Bulk order request for HP Webcam Model 760,55,Rejected,2024-09-19 03:42:21
+151,CA-NI-0569,Peripheral Pros,Low stock alert - need restock for Nikon Camera Model 905,193,Pending,2025-07-20 22:12:36
+152,CH-SA-0114,PrintWorks Pvt Ltd,Low stock alert - need restock for Samsung Charger Model 540,107,Approved,2024-11-10 05:53:09
+153,LA-RA-0095,SoundPro Solutions,Bulk order request for Razer Laptop Model 189,109,Approved,2024-01-05 20:20:07
+154,PO-SY-0536,ReadMore Supplies,Urgent: Syska Power Bank Model 464 running out,182,Pending,2024-08-19 16:51:54
+155,EA-JA-0258,TechNova Pvt Ltd,Seasonal demand increase for Jabra Earbuds Model 597,28,Approved,2025-05-13 05:12:48
+156,PR-HP-0484,PowerTech Distributors,Seasonal demand increase for HP Printer Model 743,108,Approved,2025-11-08 20:35:29
+157,CA-AN-0639,SmartLife Traders,Customer pre-orders for Anker Cable Model 119,28,Approved,2024-01-25 09:43:26
+158,SP-BO-0129,VisionTech Supplies,Bulk order request for Bose Speaker Model 394,97,Pending,2024-01-15 03:19:57
+159,CH-SA-0114,PrintWorks Pvt Ltd,Bulk order request for Samsung Charger Model 540,170,Pending,2025-08-26 02:26:34
+160,HE-AU-0696,TechWorld Pvt Ltd,Bulk order request for Audio-Technica Headphones Model 309,107,Pending,2025-06-05 04:30:31
+161,CA-BO-0166,DigiHub Electronics,Low stock alert - need restock for Boat Cable Model 267,33,Pending,2024-06-08 12:03:18
+162,SM-AM-0399,TechWorld Pvt Ltd,Seasonal demand increase for Amazfit Smartwatch Model 889,135,Rejected,2024-06-03 03:18:55
+163,SM-AP-0760,Peripheral Pros,Customer pre-orders for Apple Smartwatch Model 712,14,Pending,2026-01-12 11:34:22
+164,ME-TR-0688,ConnectPro Supplies,Low stock alert - need restock for Transcend Memory Card Model 705,119,Approved,2025-03-06 16:57:19
+165,EA-AN-0508,CameraKing Distributors,Bulk order request for Anker Earbuds Model 619,109,Approved,2025-11-24 00:15:39
+166,HE-SE-0209,Peripheral Pros,Customer pre-orders for Sennheiser Headphones Model 277,71,Rejected,2025-07-15 00:43:06
+167,MO-RA-0071,Peripheral Pros,Urgent: Razer Mouse Model 614 running out,147,Approved,2025-08-13 22:31:10
+168,TV-XI-0695,MobileMart Pvt Ltd,Customer pre-orders for Xiaomi TV Model 564,58,Approved,2025-10-12 11:39:52
+169,WE-HP-0146,AudioMax Distributors,Customer pre-orders for HP Webcam Model 120,43,Pending,2024-08-22 09:26:09
+170,CH-RE-0327,ElectroMart Solutions,Customer pre-orders for Realme Charger Model 376,134,Pending,2024-11-26 10:27:38
+171,SM-GA-0223,SmartLife Traders,Customer pre-orders for Garmin Smartwatch Model 671,37,Rejected,2024-01-15 22:53:42
+172,SM-NO-0689,TechWorld Pvt Ltd,Customer pre-orders for Nokia Smartphone Model 385,117,Approved,2026-01-29 19:54:04
+173,CA-GO-0513,TechWorld Pvt Ltd,Urgent: GoPro Camera Model 735 running out,186,Rejected,2025-07-28 11:33:44
+174,MO-HP-0161,SoundPro Solutions,Customer pre-orders for HP Mouse Model 379,155,Approved,2025-12-15 12:37:08
+175,RO-NE-0692,TechNova Pvt Ltd,Bulk order request for Netgear Router Model 689,140,Pending,2024-04-11 03:49:50
+176,HE-BO-0774,ElectroMart Solutions,Low stock alert - need restock for Bose Headphones Model 850,61,Approved,2025-04-11 11:19:40
+177,ME-SO-0074,PowerTech Distributors,Urgent: Sony Memory Card Model 921 running out,136,Approved,2024-03-28 19:11:09
+178,SM-AP-0175,MobileMart Pvt Ltd,Low stock alert - need restock for Apple Smartwatch Model 548,147,Approved,2024-01-13 09:16:04
+179,CA-AN-0402,PowerTech Distributors,Seasonal demand increase for Anker Cable Model 574,159,Pending,2025-06-19 17:07:32
+180,SP-BO-0495,DigiHub Electronics,Customer pre-orders for Bose Speaker Model 237,63,Approved,2025-07-29 16:34:53
+181,MO-DE-0063,Visionary Electronics,Low stock alert - need restock for Dell Mouse Model 631,83,Rejected,2025-07-24 18:24:28
+182,ME-KI-0480,SmartGear Traders,Seasonal demand increase for Kingston Memory Card Model 380,132,Pending,2024-06-01 00:28:15
+183,CA-ON-0285,SoundPro Solutions,Customer pre-orders for OnePlus Cable Model 673,45,Approved,2025-10-13 13:05:42
+184,EA-NO-0198,MobileMart Pvt Ltd,Low stock alert - need restock for Noise Earbuds Model 499,195,Approved,2024-12-20 21:14:30
+185,SM-AP-0560,Elite Tech Supplies,Customer pre-orders for Apple Smartphone Model 243,99,Pending,2025-08-03 20:32:40
+186,KE-DE-0439,DigiHub Electronics,Bulk order request for Dell Keyboard Model 571,198,Pending,2025-10-11 06:05:33
+187,EA-JA-0258,TechNova Pvt Ltd,Seasonal demand increase for Jabra Earbuds Model 597,120,Rejected,2025-01-13 00:52:41
+188,HE-AU-0696,TechWorld Pvt Ltd,Seasonal demand increase for Audio-Technica Headphones Model 309,43,Pending,2026-01-23 05:19:06
+189,RO-LI-0453,GameZone Distributors,Customer pre-orders for Linksys Router Model 946,80,Rejected,2024-06-22 08:41:45
+190,CA-OL-0463,CameraKing Distributors,Low stock alert - need restock for Olympus Camera Model 987,23,Rejected,2024-08-14 04:53:32
+191,HE-BE-0546,PowerTech Distributors,Low stock alert - need restock for Beats Headphones Model 934,40,Approved,2024-10-05 20:00:53
+192,LA-DE-0211,TechWorld Pvt Ltd,Bulk order request for Dell Laptop Model 437,60,Approved,2024-02-08 17:54:08
+193,SP-SO-0554,AudioMax Distributors,Customer pre-orders for Sony Speaker Model 352,75,Pending,2024-08-21 14:19:53
+194,RO-CI-0263,SoundPro Solutions,Seasonal demand increase for Cisco Router Model 414,174,Pending,2025-03-19 15:11:26
+195,PO-SA-0109,GadgetHub India,Urgent: Samsung Power Bank Model 954 running out,116,Pending,2024-08-05 08:40:10
+196,CA-OL-0026,Visionary Electronics,Urgent: Olympus Camera Model 201 running out,168,Pending,2025-09-21 02:12:43
+197,TA-RE-0619,MobileMart Pvt Ltd,Customer pre-orders for Realme Tablet Model 258,116,Approved,2025-11-24 16:38:34
+198,SM-ON-0797,TechWorld Pvt Ltd,Seasonal demand increase for OnePlus Smartwatch Model 481,12,Pending,2024-10-01 07:01:39
+199,MO-LO-0542,TechWorld Pvt Ltd,Bulk order request for Logitech Mouse Model 388,20,Pending,2024-01-12 06:26:31
+200,TV-XI-0032,AudioMax Distributors,Bulk order request for Xiaomi TV Model 745,94,Approved,2025-02-02 05:15:33
+201,SP-JB-0568,GadgetHub India,Bulk order request for JBL Speaker Model 649,158,Pending,2025-10-25 15:51:28
+202,EA-AP-0531,SmartLife Traders,Low stock alert - need restock for Apple Earbuds Model 560,163,Pending,2025-10-13 11:13:44
+203,TV-TC-0702,TechWorld Pvt Ltd,Seasonal demand increase for TCL TV Model 195,81,Approved,2025-05-03 22:18:36
+204,TV-SO-0334,GadgetHub India,Low stock alert - need restock for Sony TV Model 943,78,Approved,2025-02-06 09:25:26
+205,TV-SA-0654,Visionary Electronics,Urgent: Samsung TV Model 610 running out,174,Approved,2024-08-29 17:03:54
+206,CA-AN-0599,PrintWorks Pvt Ltd,Bulk order request for Anker Cable Model 491,147,Pending,2025-03-22 12:17:50
+207,EA-JA-0258,TechNova Pvt Ltd,Bulk order request for Jabra Earbuds Model 597,156,Approved,2025-03-10 09:56:12
+208,TA-XI-0184,SmartLife Traders,Low stock alert - need restock for Xiaomi Tablet Model 162,135,Approved,2024-10-07 16:24:56
+209,HE-SK-0445,AudioMax Distributors,Customer pre-orders for Skullcandy Headphones Model 419,133,Pending,2024-10-17 16:03:14
+210,ME-KI-0595,PowerTech Distributors,Customer pre-orders for Kingston Memory Card Model 494,143,Approved,2025-01-15 11:30:45
+211,MO-ST-0788,ElectroMart Solutions,Customer pre-orders for SteelSeries Mouse Model 458,88,Pending,2024-04-07 01:38:25
+212,SM-SA-0631,Elite Tech Supplies,Customer pre-orders for Samsung Smartwatch Model 638,196,Pending,2025-09-06 15:24:32
+213,MO-CO-0500,ConnectPro Supplies,Customer pre-orders for Corsair Mouse Model 268,49,Approved,2024-08-04 07:24:39
+214,PO-SY-0287,Peripheral Pros,Seasonal demand increase for Syska Power Bank Model 161,95,Approved,2025-10-30 18:15:45
+215,SM-FI-0462,Visionary Electronics,Bulk order request for Fitbit Smartwatch Model 243,102,Rejected,2025-11-03 03:38:24
+216,SM-AP-0094,TechNova Pvt Ltd,Bulk order request for Apple Smartwatch Model 487,60,Pending,2024-01-11 11:00:43
+217,GA-NI-0401,MobileMart Pvt Ltd,Bulk order request for Nintendo Gaming Console Model 707,63,Approved,2025-09-01 09:27:51
+218,TA-MI-0762,SoundPro Solutions,Bulk order request for Microsoft Tablet Model 284,104,Approved,2025-01-25 11:16:50
+219,ME-SA-0058,ElectroMart Solutions,Bulk order request for SanDisk Memory Card Model 361,138,Rejected,2024-11-10 14:23:36
+220,MO-RA-0071,Peripheral Pros,Seasonal demand increase for Razer Mouse Model 614,53,Approved,2024-01-27 09:57:40
+221,MO-SA-0075,TechNova Pvt Ltd,Low stock alert - need restock for Samsung Monitor Model 283,135,Pending,2025-03-13 09:09:16
+222,PO-AM-0623,Visionary Electronics,Seasonal demand increase for Ambrane Power Bank Model 664,82,Approved,2024-03-20 07:15:13
+223,MO-ST-0673,SoundPro Solutions,Low stock alert - need restock for SteelSeries Mouse Model 419,127,Approved,2025-01-29 05:41:31
+224,LA-LE-0067,Elite Tech Supplies,Customer pre-orders for Lenovo Laptop Model 571,189,Pending,2024-01-19 12:57:45
+225,CA-SO-0362,VisionTech Supplies,Urgent: Sony Camera Model 187 running out,177,Pending,2025-06-04 01:18:18
+226,RO-CI-0013,MobileMart Pvt Ltd,Low stock alert - need restock for Cisco Router Model 278,175,Approved,2025-11-15 10:59:10
+227,LA-LE-0398,SmartGear Traders,Low stock alert - need restock for Lenovo Laptop Model 874,149,Approved,2024-04-21 18:27:58
+228,CA-GO-0513,TechWorld Pvt Ltd,Customer pre-orders for GoPro Camera Model 735,42,Pending,2024-04-03 06:46:42
+229,TV-PA-0236,SmartGear Traders,Bulk order request for Panasonic TV Model 979,55,Approved,2025-05-01 05:16:59
+230,CA-PA-0712,SoundPro Solutions,Seasonal demand increase for Panasonic Camera Model 842,78,Pending,2024-12-06 09:19:57
+231,GA-NI-0705,ConnectPro Supplies,Low stock alert - need restock for Nintendo Gaming Console Model 252,90,Pending,2025-03-19 07:14:28
+232,CA-PA-0704,ElectroMart Solutions,Customer pre-orders for Panasonic Camera Model 376,91,Rejected,2024-02-16 04:32:47
+233,PO-ON-0535,Visionary Electronics,Low stock alert - need restock for OnePlus Power Bank Model 382,30,Approved,2024-05-06 21:01:28
+234,PR-EP-0431,TechNova Pvt Ltd,Low stock alert - need restock for Epson Printer Model 645,40,Approved,2024-08-25 20:35:53
+235,PO-SA-0379,SmartGear Traders,Low stock alert - need restock for Samsung Power Bank Model 981,55,Approved,2025-05-29 18:55:02
+236,HE-JB-0666,Elite Tech Supplies,Seasonal demand increase for JBL Headphones Model 499,16,Approved,2024-04-14 14:07:04
+237,CH-BE-0471,PrintWorks Pvt Ltd,Bulk order request for Belkin Charger Model 279,33,Approved,2024-11-23 02:29:06
+238,MO-DE-0001,PowerTech Distributors,Customer pre-orders for Dell Monitor Model 462,12,Approved,2025-10-03 12:31:43
+239,PO-AN-0257,SmartLife Traders,Urgent: Anker Power Bank Model 682 running out,47,Approved,2025-08-23 23:23:42
+240,CA-FU-0793,SmartGear Traders,Seasonal demand increase for Fujifilm Camera Model 232,71,Approved,2025-11-16 05:20:21
+241,RO-CI-0726,ReadMore Supplies,Customer pre-orders for Cisco Router Model 296,37,Approved,2024-04-23 23:26:25
+242,SM-OP-0330,MobileMart Pvt Ltd,Customer pre-orders for Oppo Smartphone Model 348,120,Pending,2024-03-21 19:01:48
+243,HE-JB-0517,DigiHub Electronics,Seasonal demand increase for JBL Headphones Model 275,157,Approved,2024-01-01 17:33:07
+244,TV-LG-0366,AudioMax Distributors,Low stock alert - need restock for LG TV Model 414,124,Approved,2024-06-17 12:28:42
+245,HE-SK-0678,SmartGear Traders,Urgent: Skullcandy Headphones Model 799 running out,178,Approved,2024-09-22 23:14:52
+246,PR-CA-0310,AudioMax Distributors,Seasonal demand increase for Canon Printer Model 642,116,Approved,2024-03-07 14:09:32
+247,CH-AN-0771,GameZone Distributors,Customer pre-orders for Anker Charger Model 368,197,Approved,2025-01-29 12:02:38
+248,SM-RE-0233,SmartGear Traders,Urgent: Realme Smartphone Model 758 running out,62,Pending,2024-06-11 01:38:20
+249,KE-LO-0488,DigiHub Electronics,Seasonal demand increase for Logitech Keyboard Model 401,184,Approved,2024-04-20 23:28:55
+250,TV-XI-0695,MobileMart Pvt Ltd,Low stock alert - need restock for Xiaomi TV Model 564,114,Pending,2025-03-12 10:42:15
+251,WE-LO-0587,PowerTech Distributors,Urgent: Logitech Webcam Model 564 running out,26,Rejected,2025-04-21 17:39:32
+252,CA-AN-0639,SmartLife Traders,Bulk order request for Anker Cable Model 119,168,Rejected,2025-03-10 12:06:55
+253,SM-SA-0543,PrintWorks Pvt Ltd,Seasonal demand increase for Samsung Smartphone Model 359,197,Pending,2025-06-12 19:42:46
+254,HE-SE-0188,SmartGear Traders,Customer pre-orders for Sennheiser Headphones Model 545,173,Pending,2024-03-26 06:29:46
+255,CA-GO-0513,TechWorld Pvt Ltd,Low stock alert - need restock for GoPro Camera Model 735,73,Pending,2024-06-17 01:12:22
+256,LA-MS-0015,AudioMax Distributors,Urgent: MSI Laptop Model 602 running out,91,Approved,2025-09-10 20:38:51
+257,CA-BO-0166,DigiHub Electronics,Bulk order request for Boat Cable Model 267,29,Approved,2024-07-27 15:34:14
+258,RO-CI-0013,MobileMart Pvt Ltd,Bulk order request for Cisco Router Model 278,17,Pending,2024-07-23 21:44:30
+259,WE-HP-0664,TechNova Pvt Ltd,Low stock alert - need restock for HP Webcam Model 215,22,Pending,2024-10-09 18:00:27
+260,SP-HA-0226,ConnectPro Supplies,Bulk order request for Harman Kardon Speaker Model 229,159,Approved,2024-11-25 12:44:23
+261,TA-MI-0750,SmartGear Traders,Seasonal demand increase for Microsoft Tablet Model 699,164,Pending,2024-11-02 20:30:17
+262,SM-AP-0635,VisionTech Supplies,Bulk order request for Apple Smartwatch Model 189,77,Approved,2024-10-05 16:11:45
+263,LA-HP-0734,AudioMax Distributors,Customer pre-orders for HP Laptop Model 540,196,Pending,2024-07-29 22:25:56
+264,ME-SO-0107,CameraKing Distributors,Low stock alert - need restock for Sony Memory Card Model 197,95,Pending,2025-06-18 07:09:11
+265,EA-NO-0769,SoundPro Solutions,Customer pre-orders for Noise Earbuds Model 270,86,Pending,2024-11-29 17:32:51
+266,ME-SO-0040,DigiHub Electronics,Customer pre-orders for Sony Memory Card Model 423,10,Approved,2024-01-04 14:55:00
+267,RO-AS-0117,Visionary Electronics,Seasonal demand increase for Asus Router Model 804,25,Pending,2024-07-08 22:21:56
+268,LA-HP-0082,PowerTech Distributors,Seasonal demand increase for HP Laptop Model 937,185,Approved,2025-01-21 11:28:19
+269,HE-SK-0060,Visionary Electronics,Urgent: Skullcandy Headphones Model 910 running out,192,Pending,2024-11-26 12:05:41
+270,HE-AU-0219,Elite Tech Supplies,Low stock alert - need restock for Audio-Technica Headphones Model 776,167,Pending,2024-06-26 09:19:37
+271,CA-SO-0362,VisionTech Supplies,Bulk order request for Sony Camera Model 187,80,Approved,2025-03-18 02:08:11
+272,CH-RE-0327,ElectroMart Solutions,Bulk order request for Realme Charger Model 376,12,Rejected,2026-01-01 20:07:07
+273,MO-DE-0618,SoundPro Solutions,Customer pre-orders for Dell Monitor Model 369,22,Approved,2024-12-31 07:45:36
+274,GA-NI-0659,TechNova Pvt Ltd,Customer pre-orders for Nintendo Gaming Console Model 681,150,Rejected,2025-09-17 14:16:32
+275,SM-FI-0727,ConnectPro Supplies,Bulk order request for Fitbit Smartwatch Model 321,169,Pending,2024-10-28 11:34:39
+276,PR-BR-0533,SmartGear Traders,Customer pre-orders for Brother Printer Model 887,122,Approved,2025-12-16 21:40:22
+277,SP-HA-0574,ConnectPro Supplies,Urgent: Harman Kardon Speaker Model 867 running out,91,Pending,2024-04-30 06:00:35
+278,CA-FU-0793,SmartGear Traders,Seasonal demand increase for Fujifilm Camera Model 232,129,Pending,2026-01-25 11:12:59
+279,MO-RA-0447,Visionary Electronics,Low stock alert - need restock for Razer Mouse Model 956,134,Rejected,2024-01-05 00:21:26
+280,PR-CA-0714,Elite Tech Supplies,Bulk order request for Canon Printer Model 706,146,Pending,2024-03-31 00:20:33
+281,MO-DE-0271,PowerTech Distributors,Customer pre-orders for Dell Mouse Model 280,187,Approved,2025-01-24 17:36:21
+282,MO-DE-0086,SmartLife Traders,Low stock alert - need restock for Dell Mouse Model 289,35,Rejected,2024-06-07 15:04:39
+283,PR-CA-0372,Elite Tech Supplies,Low stock alert - need restock for Canon Printer Model 785,200,Pending,2026-01-05 14:31:36
+284,TV-SA-0406,Peripheral Pros,Customer pre-orders for Samsung TV Model 126,123,Pending,2024-01-20 10:14:54
+285,RO-AS-0564,PrintWorks Pvt Ltd,Bulk order request for Asus Router Model 782,11,Approved,2024-01-04 17:29:38
+286,CA-ON-0197,TechWorld Pvt Ltd,Bulk order request for OnePlus Cable Model 284,44,Approved,2024-04-28 11:21:40
+287,WE-MI-0393,Visionary Electronics,Bulk order request for Microsoft Webcam Model 846,128,Pending,2024-05-31 16:54:10
+288,SM-FI-0216,CameraKing Distributors,Customer pre-orders for Fitbit Smartwatch Model 770,139,Approved,2024-06-23 07:08:22
+289,CA-SO-0018,ConnectPro Supplies,Urgent: Sony Camera Model 358 running out,81,Pending,2025-12-19 17:18:26
+290,RO-AS-0505,CameraKing Distributors,Bulk order request for Asus Router Model 672,111,Pending,2025-04-14 04:06:13
+291,TA-SA-0792,ConnectPro Supplies,Bulk order request for Samsung Tablet Model 441,157,Approved,2024-11-04 23:55:04
+292,CA-AM-0251,Peripheral Pros,Low stock alert - need restock for AmazonBasics Cable Model 584,41,Approved,2025-06-01 10:46:25
+293,LA-MI-0126,TechWorld Pvt Ltd,Customer pre-orders for Microsoft Laptop Model 658,50,Pending,2025-06-16 09:30:24
+294,SM-VI-0281,TechNova Pvt Ltd,Bulk order request for Vivo Smartphone Model 395,77,Approved,2025-09-01 22:42:03
+295,SM-MO-0245,AudioMax Distributors,Seasonal demand increase for Motorola Smartphone Model 532,58,Approved,2025-11-20 14:26:41
+296,MO-AC-0249,VisionTech Supplies,Bulk order request for Acer Monitor Model 433,66,Approved,2025-09-12 15:40:54
+297,CA-FU-0728,SmartGear Traders,Seasonal demand increase for Fujifilm Camera Model 856,14,Approved,2024-07-28 07:55:16
+298,HE-AU-0076,CameraKing Distributors,Seasonal demand increase for Audio-Technica Headphones Model 364,109,Pending,2024-07-30 14:45:10
+299,TA-AP-0253,Visionary Electronics,Seasonal demand increase for Apple Tablet Model 926,63,Rejected,2026-01-28 12:30:37
+300,MO-LG-0717,VisionTech Supplies,Customer pre-orders for LG Monitor Model 203,84,Approved,2024-01-01 15:53:55
+301,RO-TP-0422,Peripheral Pros,Low stock alert - need restock for TP-Link Router Model 950,198,Pending,2024-06-22 04:06:13
+302,SM-AP-0464,MobileMart Pvt Ltd,Low stock alert - need restock for Apple Smartwatch Model 568,115,Pending,2024-01-16 20:34:00
+303,GA-SO-0144,Peripheral Pros,Bulk order request for Sony Gaming Console Model 905,85,Approved,2025-04-08 12:21:47
+304,HE-PH-0313,DigiHub Electronics,Seasonal demand increase for Philips Headphones Model 288,45,Pending,2025-09-06 07:41:52
+305,PR-BR-0452,SmartGear Traders,Bulk order request for Brother Printer Model 110,56,Rejected,2024-11-13 18:29:42
+306,RO-CI-0726,ReadMore Supplies,Seasonal demand increase for Cisco Router Model 296,123,Approved,2025-02-07 07:43:02
+307,HE-SK-0592,GadgetHub India,Bulk order request for Skullcandy Headphones Model 980,86,Pending,2025-06-03 19:34:20
+308,TV-PA-0193,ConnectPro Supplies,Low stock alert - need restock for Panasonic TV Model 661,75,Approved,2025-03-22 04:03:51
+309,RO-CI-0016,GameZone Distributors,Urgent: Cisco Router Model 260 running out,151,Approved,2024-08-16 15:33:59
+310,GA-SO-0562,ElectroMart Solutions,Low stock alert - need restock for Sony Gaming Console Model 717,24,Approved,2024-03-11 13:21:31
+311,SM-RE-0207,CameraKing Distributors,Bulk order request for Realme Smartphone Model 136,75,Pending,2025-11-21 07:50:57
+312,WE-MI-0393,Visionary Electronics,Customer pre-orders for Microsoft Webcam Model 846,116,Approved,2024-05-19 11:38:07
+313,GA-NI-0705,ConnectPro Supplies,Low stock alert - need restock for Nintendo Gaming Console Model 252,165,Pending,2024-10-03 17:41:20
+314,SM-MO-0630,ElectroMart Solutions,Seasonal demand increase for Motorola Smartphone Model 852,99,Rejected,2024-05-01 04:36:52
+315,PO-ON-0174,Elite Tech Supplies,Customer pre-orders for OnePlus Power Bank Model 836,92,Approved,2024-02-23 02:17:41
+316,GA-MI-0053,Peripheral Pros,Bulk order request for Microsoft Gaming Console Model 469,160,Pending,2024-06-22 12:36:03
+317,SM-XI-0101,DigiHub Electronics,Bulk order request for Xiaomi Smartphone Model 218,32,Pending,2024-01-04 03:34:03
+318,SM-VI-0352,SmartLife Traders,Bulk order request for Vivo Smartphone Model 897,119,Pending,2024-04-12 12:08:44
+319,ME-KI-0408,MobileMart Pvt Ltd,Low stock alert - need restock for Kingston Memory Card Model 332,181,Approved,2024-08-20 00:56:23
+320,WE-RA-0321,ElectroMart Solutions,Low stock alert - need restock for Razer Webcam Model 215,120,Pending,2025-03-08 10:18:56
+321,MO-CO-0079,SmartGear Traders,Low stock alert - need restock for Corsair Mouse Model 824,179,Rejected,2025-09-15 20:02:32
+322,CA-SO-0018,ConnectPro Supplies,Low stock alert - need restock for Sony Camera Model 358,48,Pending,2025-04-24 07:42:48
+323,KE-DU-0510,SmartGear Traders,Bulk order request for Ducky Keyboard Model 238,148,Pending,2026-02-04 03:10:59
+324,LA-HP-0082,PowerTech Distributors,Urgent: HP Laptop Model 937 running out,157,Approved,2024-09-11 07:01:16
+325,RO-AS-0142,SmartLife Traders,Customer pre-orders for Asus Router Model 524,26,Pending,2024-03-14 01:40:29
+326,MO-BE-0085,TechWorld Pvt Ltd,Seasonal demand increase for BenQ Monitor Model 348,137,Approved,2024-09-08 20:45:08
+327,MO-DE-0405,VisionTech Supplies,Seasonal demand increase for Dell Mouse Model 892,121,Approved,2025-03-24 01:17:36
+328,SM-GO-0195,VisionTech Supplies,Customer pre-orders for Google Smartphone Model 813,11,Rejected,2024-03-15 14:00:40
+329,ME-KI-0302,Visionary Electronics,Low stock alert - need restock for Kingston Memory Card Model 569,132,Pending,2025-07-12 14:36:10
+330,CA-AN-0049,ElectroMart Solutions,Bulk order request for Anker Cable Model 863,93,Pending,2024-10-08 20:09:17
+331,WE-CR-0698,SmartGear Traders,Bulk order request for Creative Webcam Model 498,89,Pending,2025-10-08 16:48:15
+332,ME-SO-0040,DigiHub Electronics,Seasonal demand increase for Sony Memory Card Model 423,60,Pending,2025-08-05 09:04:01
+333,PO-RE-0311,SmartGear Traders,Urgent: Realme Power Bank Model 463 running out,170,Pending,2024-09-11 02:00:28
+334,PR-EP-0106,SoundPro Solutions,Urgent: Epson Printer Model 397 running out,104,Pending,2025-03-05 23:17:14
+335,SM-MO-0187,CameraKing Distributors,Seasonal demand increase for Motorola Smartphone Model 841,20,Pending,2025-01-01 16:07:54
+336,SP-UL-0761,TechNova Pvt Ltd,Customer pre-orders for Ultimate Ears Speaker Model 239,27,Approved,2025-08-27 01:45:39
+337,RO-TP-0800,CameraKing Distributors,Urgent: TP-Link Router Model 838 running out,48,Pending,2024-08-05 19:48:45
+338,CA-AN-0599,PrintWorks Pvt Ltd,Urgent: Anker Cable Model 491 running out,155,Rejected,2025-04-11 21:04:30
+339,SM-AP-0282,GameZone Distributors,Seasonal demand increase for Apple Smartwatch Model 690,130,Approved,2026-01-14 22:39:20
+340,SM-MO-0314,PowerTech Distributors,Bulk order request for Motorola Smartphone Model 862,116,Pending,2024-04-21 15:19:17
+341,GA-MI-0553,SmartLife Traders,Bulk order request for Microsoft Gaming Console Model 789,128,Pending,2024-07-04 05:12:14
+342,CA-BE-0113,SmartGear Traders,Bulk order request for Belkin Cable Model 382,72,Rejected,2024-05-31 14:56:15
+343,SM-RE-0469,CameraKing Distributors,Low stock alert - need restock for Realme Smartphone Model 472,15,Approved,2025-09-02 00:05:51
+344,LA-DE-0516,Elite Tech Supplies,Customer pre-orders for Dell Laptop Model 871,172,Pending,2025-06-15 22:26:09
+345,LA-LE-0398,SmartGear Traders,Low stock alert - need restock for Lenovo Laptop Model 874,121,Approved,2025-08-28 10:47:27
+346,EA-JA-0258,TechNova Pvt Ltd,Low stock alert - need restock for Jabra Earbuds Model 597,20,Approved,2025-11-25 13:24:47
+347,PR-CA-0269,DigiHub Electronics,Seasonal demand increase for Canon Printer Model 786,147,Pending,2024-10-29 04:01:54
+348,CA-AN-0402,PowerTech Distributors,Seasonal demand increase for Anker Cable Model 574,112,Pending,2024-01-21 05:30:36
+349,ME-TR-0746,ConnectPro Supplies,Seasonal demand increase for Transcend Memory Card Model 164,75,Approved,2024-07-08 03:37:54
+350,WE-LO-0108,TechWorld Pvt Ltd,Low stock alert - need restock for Logitech Webcam Model 603,91,Pending,2025-10-12 00:05:42
+351,PR-EP-0431,TechNova Pvt Ltd,Seasonal demand increase for Epson Printer Model 645,114,Approved,2025-09-20 23:50:03
+352,CA-SO-0380,SoundPro Solutions,Low stock alert - need restock for Sony Camera Model 997,176,Pending,2025-12-08 10:42:31
+353,CA-AN-0343,ConnectPro Supplies,Customer pre-orders for Anker Cable Model 351,131,Approved,2025-08-29 12:12:25
+354,LA-HP-0589,SmartLife Traders,Seasonal demand increase for HP Laptop Model 509,102,Rejected,2024-05-19 23:26:49
+355,TV-SO-0014,SmartGear Traders,Seasonal demand increase for Sony TV Model 197,41,Approved,2024-06-16 21:58:34
+356,LA-MI-0171,SoundPro Solutions,Customer pre-orders for Microsoft Laptop Model 595,106,Approved,2025-02-23 19:37:29
+357,SP-UL-0761,TechNova Pvt Ltd,Bulk order request for Ultimate Ears Speaker Model 239,11,Approved,2026-01-24 02:40:07
+358,SP-SO-0554,AudioMax Distributors,Customer pre-orders for Sony Speaker Model 352,156,Approved,2025-07-06 23:04:46
+359,TV-XI-0346,AudioMax Distributors,Low stock alert - need restock for Xiaomi TV Model 358,162,Rejected,2025-04-25 17:36:02
+360,MO-BE-0525,SoundPro Solutions,Seasonal demand increase for BenQ Monitor Model 116,130,Approved,2024-02-03 15:58:12
+361,EA-AN-0091,TechWorld Pvt Ltd,Seasonal demand increase for Anker Earbuds Model 214,43,Approved,2024-11-05 15:10:20
+362,TA-MI-0286,TechWorld Pvt Ltd,Customer pre-orders for Microsoft Tablet Model 783,98,Approved,2025-11-18 13:29:15
+363,RO-CI-0745,Visionary Electronics,Low stock alert - need restock for Cisco Router Model 715,116,Approved,2025-02-22 22:56:21
+364,SP-BO-0468,PrintWorks Pvt Ltd,Low stock alert - need restock for Boat Speaker Model 759,147,Approved,2025-08-12 12:29:02
+365,PR-EP-0653,PowerTech Distributors,Seasonal demand increase for Epson Printer Model 517,37,Approved,2025-01-29 15:01:29
+366,SM-GO-0195,VisionTech Supplies,Bulk order request for Google Smartphone Model 813,177,Pending,2024-07-20 02:43:33
+367,LA-RA-0713,Elite Tech Supplies,Customer pre-orders for Razer Laptop Model 312,110,Pending,2025-09-12 00:00:40
+368,CH-ON-0434,SmartGear Traders,Bulk order request for OnePlus Charger Model 926,83,Pending,2024-01-22 01:40:19
+369,GA-SO-0473,GadgetHub India,Low stock alert - need restock for Sony Gaming Console Model 540,59,Approved,2025-04-28 15:11:01
+370,SP-SO-0404,SoundPro Solutions,Bulk order request for Sony Speaker Model 553,177,Approved,2025-02-19 08:39:22
+371,TV-TC-0027,GadgetHub India,Bulk order request for TCL TV Model 425,23,Approved,2024-08-08 17:55:39
+372,EA-SA-0526,Elite Tech Supplies,Low stock alert - need restock for Samsung Earbuds Model 396,24,Pending,2024-08-18 01:29:28
+373,TV-TC-0335,AudioMax Distributors,Urgent: TCL TV Model 255 running out,35,Pending,2025-01-04 00:54:26
+374,CA-AN-0049,ElectroMart Solutions,Bulk order request for Anker Cable Model 863,101,Pending,2025-06-30 10:44:57
+375,SM-RE-0293,SoundPro Solutions,Bulk order request for Realme Smartphone Model 275,106,Pending,2025-09-30 20:07:00
+376,CA-NI-0634,MobileMart Pvt Ltd,Urgent: Nikon Camera Model 982 running out,103,Pending,2024-09-10 08:44:25
+377,PR-EP-0106,SoundPro Solutions,Customer pre-orders for Epson Printer Model 397,178,Approved,2025-05-20 17:32:45
+378,GA-SO-0490,SmartLife Traders,Seasonal demand increase for Sony Gaming Console Model 897,73,Pending,2026-01-09 08:41:57
+379,WE-CR-0472,DigiHub Electronics,Low stock alert - need restock for Creative Webcam Model 622,114,Pending,2025-03-30 17:27:50
+380,ME-SO-0458,Peripheral Pros,Low stock alert - need restock for Sony Memory Card Model 370,19,Pending,2024-04-21 13:24:16
+381,TV-TC-0325,PrintWorks Pvt Ltd,Low stock alert - need restock for TCL TV Model 493,137,Pending,2024-04-03 11:16:27
+382,SM-ON-0028,PowerTech Distributors,Low stock alert - need restock for OnePlus Smartwatch Model 382,122,Pending,2025-05-24 05:26:33
+383,RO-AS-0694,ConnectPro Supplies,Low stock alert - need restock for Asus Router Model 784,154,Pending,2025-12-27 18:25:58
+384,MO-VI-0693,ReadMore Supplies,Low stock alert - need restock for ViewSonic Monitor Model 567,12,Pending,2024-09-26 10:23:00
+385,CA-SO-0731,SoundPro Solutions,Bulk order request for Sony Camera Model 971,179,Pending,2025-12-12 20:02:39
+386,PO-AM-0489,GameZone Distributors,Urgent: Ambrane Power Bank Model 505 running out,79,Approved,2024-05-03 05:25:37
+387,LA-HP-0199,ElectroMart Solutions,Seasonal demand increase for HP Laptop Model 508,20,Pending,2025-01-29 19:57:50
+388,SM-XI-0101,DigiHub Electronics,Low stock alert - need restock for Xiaomi Smartphone Model 218,197,Approved,2024-02-26 01:28:45
+389,GA-SO-0736,Visionary Electronics,Low stock alert - need restock for Sony Gaming Console Model 344,19,Approved,2024-05-05 18:42:22
+390,SM-RE-0056,DigiHub Electronics,Low stock alert - need restock for Realme Smartphone Model 700,200,Pending,2024-02-13 23:26:38
+391,LA-MS-0015,AudioMax Distributors,Customer pre-orders for MSI Laptop Model 602,121,Pending,2024-06-13 14:23:33
+392,EA-NO-0691,VisionTech Supplies,Urgent: Noise Earbuds Model 855 running out,33,Pending,2024-07-09 23:03:44
+393,MO-HP-0581,ReadMore Supplies,Urgent: HP Monitor Model 711 running out,55,Approved,2024-02-01 23:40:08
+394,TV-XI-0346,AudioMax Distributors,Customer pre-orders for Xiaomi TV Model 358,111,Approved,2026-02-22 18:44:50
+395,SP-MA-0083,AudioMax Distributors,Seasonal demand increase for Marshall Speaker Model 337,156,Pending,2025-11-10 05:51:58
+396,ME-KI-0203,ElectroMart Solutions,Low stock alert - need restock for Kingston Memory Card Model 588,36,Pending,2024-03-07 16:46:46
+397,CA-AM-0615,Peripheral Pros,Urgent: AmazonBasics Cable Model 891 running out,39,Approved,2024-04-22 07:14:39
+398,GA-SO-0490,SmartLife Traders,Customer pre-orders for Sony Gaming Console Model 897,172,Approved,2025-02-12 03:36:46
+399,LA-AS-0034,CameraKing Distributors,Urgent: Asus Laptop Model 996 running out,25,Approved,2024-04-17 22:42:46
+400,EA-JA-0593,ElectroMart Solutions,Urgent: Jabra Earbuds Model 970 running out,95,Pending,2024-05-15 11:44:05
+401,WE-RA-0321,ElectroMart Solutions,Customer pre-orders for Razer Webcam Model 215,68,Approved,2026-02-14 21:16:21
+402,TV-SO-0334,GadgetHub India,Low stock alert - need restock for Sony TV Model 943,123,Approved,2025-06-06 23:20:52
+403,PO-ON-0246,TechWorld Pvt Ltd,Low stock alert - need restock for OnePlus Power Bank Model 420,17,Pending,2024-03-30 16:06:15
+404,PR-BR-0130,TechNova Pvt Ltd,Urgent: Brother Printer Model 422 running out,55,Rejected,2024-02-20 03:43:00
+405,SM-FI-0565,Elite Tech Supplies,Bulk order request for Fitbit Smartwatch Model 848,65,Approved,2025-03-03 17:54:05
+406,WE-CR-0698,SmartGear Traders,Customer pre-orders for Creative Webcam Model 498,56,Pending,2025-07-02 06:15:15
+407,EA-NO-0691,VisionTech Supplies,Urgent: Noise Earbuds Model 855 running out,81,Approved,2024-05-14 15:30:21
+408,PO-AN-0182,SmartGear Traders,Customer pre-orders for Anker Power Bank Model 283,55,Approved,2025-10-31 04:04:28
+409,SP-UL-0548,SmartGear Traders,Bulk order request for Ultimate Ears Speaker Model 696,191,Pending,2025-09-30 18:03:19
+410,TA-SA-0792,ConnectPro Supplies,Urgent: Samsung Tablet Model 441 running out,186,Pending,2024-12-25 05:43:28
+411,CA-CA-0534,GadgetHub India,Customer pre-orders for Canon Camera Model 871,120,Approved,2025-04-05 19:29:55
+412,ME-KI-0302,Visionary Electronics,Customer pre-orders for Kingston Memory Card Model 569,26,Approved,2025-05-02 09:27:07
+413,PR-HP-0570,VisionTech Supplies,Urgent: HP Printer Model 675 running out,101,Approved,2024-02-09 02:13:47
+414,CA-PA-0704,ElectroMart Solutions,Seasonal demand increase for Panasonic Camera Model 376,64,Pending,2026-01-05 09:05:16
+415,SM-AP-0760,Peripheral Pros,Customer pre-orders for Apple Smartwatch Model 712,177,Pending,2024-03-13 01:18:55
+416,GA-SO-0144,Peripheral Pros,Customer pre-orders for Sony Gaming Console Model 905,150,Rejected,2025-01-03 09:50:49
+417,PR-BR-0482,Elite Tech Supplies,Low stock alert - need restock for Brother Printer Model 432,81,Approved,2024-05-29 18:43:24
+418,SM-VI-0475,MobileMart Pvt Ltd,Low stock alert - need restock for Vivo Smartphone Model 481,192,Approved,2026-01-10 20:06:24
+419,KE-DU-0121,Visionary Electronics,Bulk order request for Ducky Keyboard Model 952,165,Rejected,2025-03-16 20:13:35
+420,KE-HP-0594,PowerTech Distributors,Seasonal demand increase for HP Keyboard Model 237,121,Approved,2025-09-03 06:19:36
+421,GA-NI-0416,SmartGear Traders,Bulk order request for Nintendo Gaming Console Model 699,122,Pending,2024-04-10 03:30:26
+422,ME-KI-0259,ReadMore Supplies,Bulk order request for Kingston Memory Card Model 128,67,Pending,2024-09-20 18:06:57
+423,CA-AM-0251,Peripheral Pros,Customer pre-orders for AmazonBasics Cable Model 584,36,Pending,2025-07-16 21:49:32
+424,LA-RA-0095,SoundPro Solutions,Customer pre-orders for Razer Laptop Model 189,30,Pending,2024-09-04 09:42:16
+425,WE-HP-0360,MobileMart Pvt Ltd,Urgent: HP Webcam Model 983 running out,66,Pending,2025-09-18 08:28:45
+426,TA-AP-0253,Visionary Electronics,Bulk order request for Apple Tablet Model 926,108,Pending,2024-05-30 21:12:42
+427,SM-AP-0175,MobileMart Pvt Ltd,Customer pre-orders for Apple Smartwatch Model 548,200,Approved,2024-11-18 09:07:03
+428,CA-AM-0759,Visionary Electronics,Low stock alert - need restock for AmazonBasics Cable Model 867,184,Approved,2026-02-18 11:56:40
+429,GA-SO-0110,CameraKing Distributors,Seasonal demand increase for Sony Gaming Console Model 374,171,Approved,2025-06-12 22:34:06
+430,CA-ON-0197,TechWorld Pvt Ltd,Bulk order request for OnePlus Cable Model 284,74,Pending,2025-04-20 03:26:07
+431,SM-FI-0423,AudioMax Distributors,Customer pre-orders for Fitbit Smartwatch Model 624,33,Pending,2025-06-03 07:44:59
+432,CA-BO-0042,Visionary Electronics,Urgent: Boat Cable Model 787 running out,172,Approved,2025-01-03 02:02:42
+433,KE-KE-0787,CameraKing Distributors,Customer pre-orders for Keychron Keyboard Model 383,147,Approved,2024-03-08 19:17:58
+434,LA-DE-0665,PowerTech Distributors,Low stock alert - need restock for Dell Laptop Model 445,51,Pending,2024-03-27 17:25:48
+435,HE-PH-0242,TechNova Pvt Ltd,Bulk order request for Philips Headphones Model 834,180,Approved,2026-01-12 04:35:03
+436,WE-LO-0105,CameraKing Distributors,Bulk order request for Logitech Webcam Model 180,114,Approved,2025-05-28 03:46:04
+437,KE-CO-0023,SmartGear Traders,Seasonal demand increase for Corsair Keyboard Model 387,153,Pending,2025-10-31 06:57:12
+438,MO-MI-0701,GadgetHub India,Seasonal demand increase for Microsoft Mouse Model 454,59,Pending,2026-01-22 08:37:21
+439,CH-AP-0062,SmartGear Traders,Customer pre-orders for Apple Charger Model 200,180,Pending,2025-01-08 23:57:34
+440,LA-LE-0067,Elite Tech Supplies,Seasonal demand increase for Lenovo Laptop Model 571,31,Approved,2025-05-12 09:56:08
+441,TV-TC-0706,Visionary Electronics,Urgent: TCL TV Model 294 running out,140,Pending,2024-10-19 14:47:53
+442,MO-ST-0099,TechWorld Pvt Ltd,Bulk order request for SteelSeries Mouse Model 818,116,Approved,2025-04-09 10:30:45
+443,KE-DE-0439,DigiHub Electronics,Urgent: Dell Keyboard Model 571 running out,189,Pending,2025-10-28 12:22:23
+444,SM-RE-0233,SmartGear Traders,Seasonal demand increase for Realme Smartphone Model 758,124,Approved,2024-05-09 03:07:01
+445,CH-SA-0345,DigiHub Electronics,Bulk order request for Samsung Charger Model 826,136,Approved,2024-10-05 07:21:48
+446,LA-AS-0072,Visionary Electronics,Urgent: Asus Laptop Model 109 running out,13,Approved,2025-06-16 20:40:09
+447,MO-LO-0409,ElectroMart Solutions,Low stock alert - need restock for Logitech Mouse Model 390,183,Approved,2025-06-30 03:26:46
+448,PO-AM-0690,MobileMart Pvt Ltd,Low stock alert - need restock for Ambrane Power Bank Model 799,189,Approved,2025-01-05 11:28:35
+449,WE-LO-0587,PowerTech Distributors,Urgent: Logitech Webcam Model 564 running out,143,Approved,2024-01-07 18:04:28
+450,WE-CR-0698,SmartGear Traders,Bulk order request for Creative Webcam Model 498,179,Pending,2025-02-02 19:33:13
+451,CA-AM-0707,MobileMart Pvt Ltd,Low stock alert - need restock for AmazonBasics Cable Model 791,122,Rejected,2025-03-05 06:59:06
+452,MO-LO-0006,GameZone Distributors,Urgent: Logitech Mouse Model 258 running out,23,Pending,2025-07-30 15:50:00
+453,MO-LO-0542,TechWorld Pvt Ltd,Seasonal demand increase for Logitech Mouse Model 388,46,Approved,2024-06-27 03:55:05
+454,SP-HA-0624,PrintWorks Pvt Ltd,Low stock alert - need restock for Harman Kardon Speaker Model 710,195,Approved,2025-03-13 23:16:27
+455,WE-MI-0438,DigiHub Electronics,Customer pre-orders for Microsoft Webcam Model 368,25,Approved,2025-02-23 11:56:49
+456,WE-HP-0138,GameZone Distributors,Urgent: HP Webcam Model 755 running out,194,Approved,2024-10-06 09:34:48
+457,SP-BO-0675,SmartLife Traders,Urgent: Bose Speaker Model 588 running out,195,Pending,2024-12-27 07:06:54
+458,HE-SK-0445,AudioMax Distributors,Seasonal demand increase for Skullcandy Headphones Model 419,146,Pending,2024-11-25 04:04:18
+459,MO-AC-0757,ElectroMart Solutions,Customer pre-orders for Acer Monitor Model 780,96,Approved,2025-09-07 23:38:09
+460,TA-AM-0170,TechWorld Pvt Ltd,Customer pre-orders for Amazon Tablet Model 913,171,Pending,2025-10-11 09:10:05
+461,SP-HA-0624,PrintWorks Pvt Ltd,Customer pre-orders for Harman Kardon Speaker Model 710,177,Rejected,2025-11-13 12:05:54
+462,PO-AN-0791,Elite Tech Supplies,Urgent: Anker Power Bank Model 986 running out,49,Pending,2025-08-27 09:45:20
+463,LA-MS-0131,SoundPro Solutions,Customer pre-orders for MSI Laptop Model 890,135,Approved,2025-10-28 05:32:03
+464,SM-RE-0486,DigiHub Electronics,Seasonal demand increase for Realme Smartphone Model 714,87,Approved,2025-12-12 16:20:36
+465,HE-AU-0274,Visionary Electronics,Urgent: Audio-Technica Headphones Model 548 running out,62,Approved,2025-09-18 06:17:32
+466,CA-OL-0026,Visionary Electronics,Seasonal demand increase for Olympus Camera Model 201,183,Pending,2024-04-12 01:20:59
+467,SM-FI-0462,Visionary Electronics,Urgent: Fitbit Smartwatch Model 243 running out,163,Approved,2024-07-23 20:00:17
+468,SM-NO-0662,ElectroMart Solutions,Low stock alert - need restock for Nokia Smartphone Model 254,195,Approved,2024-09-21 02:03:08
+469,CA-AM-0024,AudioMax Distributors,Customer pre-orders for AmazonBasics Cable Model 878,180,Approved,2025-02-06 22:00:59
+470,CH-BE-0657,ReadMore Supplies,Urgent: Belkin Charger Model 397 running out,57,Approved,2025-08-10 22:28:10
+471,SP-UL-0663,PrintWorks Pvt Ltd,Seasonal demand increase for Ultimate Ears Speaker Model 657,96,Approved,2025-05-01 03:18:53
+472,MO-MI-0606,Visionary Electronics,Customer pre-orders for Microsoft Mouse Model 262,177,Pending,2024-09-14 15:10:49
+473,MO-LO-0006,GameZone Distributors,Seasonal demand increase for Logitech Mouse Model 258,126,Pending,2025-06-02 16:07:25
+474,WE-HP-0775,VisionTech Supplies,Seasonal demand increase for HP Webcam Model 465,152,Pending,2024-05-10 19:52:37
+475,MO-HP-0227,ConnectPro Supplies,Low stock alert - need restock for HP Mouse Model 435,133,Pending,2024-12-09 00:46:24
+476,RO-CI-0610,CameraKing Distributors,Customer pre-orders for Cisco Router Model 254,108,Pending,2025-09-05 11:31:28
+477,RO-AS-0333,PowerTech Distributors,Low stock alert - need restock for Asus Router Model 690,81,Approved,2024-08-10 10:21:14
+478,GA-MI-0031,ReadMore Supplies,Customer pre-orders for Microsoft Gaming Console Model 411,66,Rejected,2025-03-18 02:32:27
+479,TV-TC-0588,ReadMore Supplies,Low stock alert - need restock for TCL TV Model 454,15,Pending,2024-08-04 05:29:25
+480,LA-LG-0676,ElectroMart Solutions,Seasonal demand increase for LG Laptop Model 463,45,Pending,2024-05-13 10:18:52
+481,CA-PA-0307,PrintWorks Pvt Ltd,Urgent: Panasonic Camera Model 585 running out,50,Approved,2026-02-18 20:03:00
+482,LA-RA-0541,TechWorld Pvt Ltd,Seasonal demand increase for Razer Laptop Model 908,100,Approved,2024-01-11 14:00:07
+483,HE-AU-0742,CameraKing Distributors,Bulk order request for Audio-Technica Headphones Model 182,119,Pending,2025-07-05 07:28:12
+484,CA-GO-0457,PowerTech Distributors,Low stock alert - need restock for GoPro Camera Model 774,97,Approved,2025-06-23 21:55:55
+485,EA-AN-0276,VisionTech Supplies,Urgent: Anker Earbuds Model 848 running out,140,Approved,2024-03-16 04:15:47
+486,MO-MI-0436,Peripheral Pros,Bulk order request for Microsoft Mouse Model 651,91,Pending,2024-10-18 05:06:58
+487,TA-LE-0633,PrintWorks Pvt Ltd,Low stock alert - need restock for Lenovo Tablet Model 923,189,Pending,2024-03-01 09:22:57
+488,HE-SO-0739,GadgetHub India,Low stock alert - need restock for Sony Headphones Model 221,52,Pending,2025-12-29 13:55:50
+489,MO-ST-0218,TechWorld Pvt Ltd,Seasonal demand increase for SteelSeries Mouse Model 491,145,Pending,2025-05-21 04:25:45
+490,EA-AP-0389,MobileMart Pvt Ltd,Seasonal demand increase for Apple Earbuds Model 282,58,Rejected,2024-11-20 06:59:08
+491,TA-LE-0523,CameraKing Distributors,Low stock alert - need restock for Lenovo Tablet Model 674,128,Approved,2025-05-15 18:17:44
+492,SP-UL-0557,Visionary Electronics,Customer pre-orders for Ultimate Ears Speaker Model 980,22,Approved,2025-06-10 23:41:46
+493,LA-MI-0057,SmartLife Traders,Low stock alert - need restock for Microsoft Laptop Model 414,55,Approved,2025-03-12 00:39:13
+494,GA-MI-0381,PowerTech Distributors,Bulk order request for Microsoft Gaming Console Model 851,43,Pending,2024-09-13 00:33:54
+495,GA-NI-0416,SmartGear Traders,Customer pre-orders for Nintendo Gaming Console Model 699,55,Pending,2025-04-25 11:00:39
+496,SM-RE-0283,PrintWorks Pvt Ltd,Low stock alert - need restock for Realme Smartphone Model 655,109,Approved,2024-01-18 04:11:29
+497,TV-LG-0366,AudioMax Distributors,Bulk order request for LG TV Model 414,121,Pending,2025-10-28 22:39:28
+498,WE-CR-0472,DigiHub Electronics,Bulk order request for Creative Webcam Model 622,200,Pending,2025-08-06 21:17:40
+499,EA-AP-0221,SoundPro Solutions,Bulk order request for Apple Earbuds Model 353,129,Approved,2025-09-12 03:07:07
+500,PR-CA-0310,AudioMax Distributors,Low stock alert - need restock for Canon Printer Model 642,38,Pending,2024-08-03 20:59:10
+501,KE-RA-0365,SmartLife Traders,Seasonal demand increase for Razer Keyboard Model 566,80,Pending,2026-01-04 09:11:47
+502,KE-CO-0009,Visionary Electronics,Customer pre-orders for Corsair Keyboard Model 632,41,Approved,2024-05-01 04:52:15
+503,GA-SO-0375,TechNova Pvt Ltd,Bulk order request for Sony Gaming Console Model 569,175,Pending,2024-12-31 01:02:13
+504,SP-UL-0336,ElectroMart Solutions,Bulk order request for Ultimate Ears Speaker Model 840,159,Pending,2025-02-27 15:25:47
+505,CH-AN-0162,SmartLife Traders,Customer pre-orders for Anker Charger Model 645,109,Approved,2024-01-07 16:54:06
+506,SM-RE-0021,DigiHub Electronics,Urgent: Realme Smartphone Model 743 running out,107,Pending,2025-12-03 20:53:30
+507,WE-RA-0357,DigiHub Electronics,Customer pre-orders for Razer Webcam Model 716,143,Pending,2026-02-03 08:48:32
+508,WE-MI-0756,TechWorld Pvt Ltd,Urgent: Microsoft Webcam Model 402 running out,195,Pending,2024-02-08 14:39:26
+509,GA-SO-0110,CameraKing Distributors,Seasonal demand increase for Sony Gaming Console Model 374,155,Approved,2025-05-07 00:44:09
+510,EA-AN-0276,VisionTech Supplies,Bulk order request for Anker Earbuds Model 848,97,Approved,2024-10-15 11:06:21
+511,GA-NI-0659,TechNova Pvt Ltd,Customer pre-orders for Nintendo Gaming Console Model 681,30,Pending,2024-12-31 16:01:38
+512,MO-LO-0542,TechWorld Pvt Ltd,Low stock alert - need restock for Logitech Mouse Model 388,119,Pending,2025-05-19 21:52:36
+513,SP-JB-0278,GameZone Distributors,Bulk order request for JBL Speaker Model 371,86,Pending,2026-01-06 19:30:37
+514,CH-AN-0162,SmartLife Traders,Customer pre-orders for Anker Charger Model 645,149,Approved,2025-05-06 01:11:57
+515,ME-TR-0037,SmartGear Traders,Customer pre-orders for Transcend Memory Card Model 537,167,Approved,2024-04-07 06:01:18
+516,PR-HP-0484,PowerTech Distributors,Low stock alert - need restock for HP Printer Model 743,186,Pending,2025-08-28 14:30:30
+517,TV-PA-0338,Peripheral Pros,Bulk order request for Panasonic TV Model 782,74,Pending,2025-02-09 07:27:02
+518,RO-AS-0093,Peripheral Pros,Seasonal demand increase for Asus Router Model 825,170,Approved,2025-07-21 18:46:39
+519,CH-BE-0783,GameZone Distributors,Seasonal demand increase for Belkin Charger Model 989,64,Approved,2024-08-29 19:08:03
+520,WE-RA-0556,CameraKing Distributors,Urgent: Razer Webcam Model 644 running out,183,Approved,2024-08-14 15:35:49
+521,EA-BO-0225,ReadMore Supplies,Seasonal demand increase for Boat Earbuds Model 782,67,Approved,2024-06-20 02:25:50
+522,TA-SA-0332,Elite Tech Supplies,Customer pre-orders for Samsung Tablet Model 873,103,Pending,2025-01-21 14:00:27
+523,KE-KE-0787,CameraKing Distributors,Seasonal demand increase for Keychron Keyboard Model 383,145,Rejected,2025-01-06 17:54:44
+524,KE-DU-0544,ElectroMart Solutions,Low stock alert - need restock for Ducky Keyboard Model 326,18,Approved,2024-08-23 20:18:55
+525,CA-SO-0428,GadgetHub India,Urgent: Sony Camera Model 352 running out,63,Rejected,2024-11-20 21:42:39
+526,SP-BO-0675,SmartLife Traders,Urgent: Bose Speaker Model 588 running out,45,Approved,2024-05-09 19:45:35
+527,TV-XI-0695,MobileMart Pvt Ltd,Seasonal demand increase for Xiaomi TV Model 564,156,Pending,2025-06-06 04:38:52
+528,KE-CO-0518,AudioMax Distributors,Seasonal demand increase for Corsair Keyboard Model 680,62,Pending,2024-07-28 18:50:06
+529,CA-UG-0323,Elite Tech Supplies,Low stock alert - need restock for Ugreen Cable Model 290,92,Pending,2025-06-06 13:29:24
+530,WE-HP-0360,MobileMart Pvt Ltd,Bulk order request for HP Webcam Model 983,96,Pending,2024-06-17 03:45:31
+531,SM-MO-0314,PowerTech Distributors,Low stock alert - need restock for Motorola Smartphone Model 862,54,Approved,2024-11-12 05:17:42
+532,SM-SA-0315,ConnectPro Supplies,Urgent: Samsung Smartphone Model 994 running out,177,Approved,2024-07-04 13:27:54
+533,ME-KI-0203,ElectroMart Solutions,Urgent: Kingston Memory Card Model 588 running out,21,Approved,2025-10-19 07:42:30
+534,KE-CO-0023,SmartGear Traders,Bulk order request for Corsair Keyboard Model 387,177,Pending,2025-02-03 00:38:39
+535,CA-SO-0380,SoundPro Solutions,Seasonal demand increase for Sony Camera Model 997,154,Pending,2025-03-21 02:11:17
+536,CA-BO-0166,DigiHub Electronics,Urgent: Boat Cable Model 267 running out,149,Approved,2024-10-29 02:25:03
+537,KE-RA-0341,Visionary Electronics,Low stock alert - need restock for Razer Keyboard Model 887,120,Pending,2026-02-17 21:42:34
+538,MO-DE-0655,VisionTech Supplies,Customer pre-orders for Dell Mouse Model 335,120,Approved,2024-03-06 03:21:45
+539,CH-BO-0596,ConnectPro Supplies,Seasonal demand increase for Boat Charger Model 272,98,Approved,2024-01-11 03:53:35
+540,RO-CI-0745,Visionary Electronics,Bulk order request for Cisco Router Model 715,151,Approved,2024-11-25 16:57:19
+541,KE-ST-0777,ConnectPro Supplies,Urgent: SteelSeries Keyboard Model 127 running out,67,Pending,2025-05-26 01:27:11
+542,RO-AS-0093,Peripheral Pros,Customer pre-orders for Asus Router Model 825,163,Pending,2026-02-08 08:39:30
+543,WE-HP-0111,TechNova Pvt Ltd,Seasonal demand increase for HP Webcam Model 519,18,Pending,2025-02-24 12:46:01
+544,TA-AP-0005,Elite Tech Supplies,Low stock alert - need restock for Apple Tablet Model 702,177,Rejected,2025-04-20 14:57:13
+545,PO-AM-0690,MobileMart Pvt Ltd,Bulk order request for Ambrane Power Bank Model 799,171,Approved,2025-06-30 17:14:04
+546,GA-SO-0033,VisionTech Supplies,Customer pre-orders for Sony Gaming Console Model 353,155,Approved,2024-07-14 07:06:57
+547,SM-FI-0423,AudioMax Distributors,Customer pre-orders for Fitbit Smartwatch Model 624,90,Rejected,2025-11-03 06:55:13
+548,GA-NI-0659,TechNova Pvt Ltd,Low stock alert - need restock for Nintendo Gaming Console Model 681,29,Approved,2025-08-19 10:03:04
+549,SM-FI-0547,Elite Tech Supplies,Customer pre-orders for Fitbit Smartwatch Model 603,61,Approved,2024-08-21 19:03:40
+550,TV-TC-0325,PrintWorks Pvt Ltd,Bulk order request for TCL TV Model 493,22,Rejected,2024-02-06 10:47:15
+551,EA-JA-0725,ElectroMart Solutions,Low stock alert - need restock for Jabra Earbuds Model 907,77,Approved,2024-09-20 11:10:16
+552,ME-KI-0582,ConnectPro Supplies,Low stock alert - need restock for Kingston Memory Card Model 152,18,Pending,2024-12-22 13:53:51
+553,SM-BO-0172,GameZone Distributors,Bulk order request for Boat Smartwatch Model 686,131,Approved,2024-11-02 06:52:54
+554,SM-BO-0025,ConnectPro Supplies,Customer pre-orders for Boat Smartwatch Model 924,91,Pending,2024-03-27 02:49:31
+555,SP-UL-0761,TechNova Pvt Ltd,Seasonal demand increase for Ultimate Ears Speaker Model 239,155,Approved,2024-02-15 23:24:41
+556,CH-BE-0154,DigiHub Electronics,Urgent: Belkin Charger Model 907 running out,152,Pending,2025-07-31 02:03:26
+557,CA-AN-0049,ElectroMart Solutions,Urgent: Anker Cable Model 863 running out,45,Approved,2025-12-14 00:23:24
+558,WE-RA-0048,GadgetHub India,Urgent: Razer Webcam Model 711 running out,144,Approved,2025-01-03 22:37:37
+559,HE-SE-0188,SmartGear Traders,Urgent: Sennheiser Headphones Model 545 running out,83,Approved,2025-09-05 04:08:14
+560,RO-NE-0440,TechNova Pvt Ltd,Customer pre-orders for Netgear Router Model 787,191,Pending,2025-03-01 14:18:34
+561,HE-SK-0700,TechWorld Pvt Ltd,Seasonal demand increase for Skullcandy Headphones Model 432,118,Pending,2024-07-12 22:01:26
+562,SP-UL-0761,TechNova Pvt Ltd,Customer pre-orders for Ultimate Ears Speaker Model 239,183,Approved,2024-08-13 08:37:35
+563,CA-NI-0371,DigiHub Electronics,Urgent: Nikon Camera Model 497 running out,184,Pending,2025-10-14 06:20:43
+564,PR-BR-0533,SmartGear Traders,Customer pre-orders for Brother Printer Model 887,114,Approved,2024-12-01 03:27:12
+565,PR-BR-0782,GameZone Distributors,Customer pre-orders for Brother Printer Model 830,200,Approved,2024-03-03 21:44:34
+566,WE-RA-0363,TechWorld Pvt Ltd,Customer pre-orders for Razer Webcam Model 721,180,Pending,2025-03-21 10:56:57
+567,GA-SO-0036,SmartLife Traders,Seasonal demand increase for Sony Gaming Console Model 866,127,Approved,2026-02-13 10:20:08
+568,CH-BE-0657,ReadMore Supplies,Low stock alert - need restock for Belkin Charger Model 397,177,Approved,2025-02-05 23:27:00
+569,KE-HP-0520,Elite Tech Supplies,Customer pre-orders for HP Keyboard Model 805,47,Pending,2024-05-29 06:37:52
+570,SM-XI-0012,MobileMart Pvt Ltd,Bulk order request for Xiaomi Smartphone Model 849,15,Approved,2024-07-10 11:02:37
+571,PR-HP-0549,ReadMore Supplies,Customer pre-orders for HP Printer Model 534,132,Rejected,2026-02-05 19:04:42
+572,CA-PA-0704,ElectroMart Solutions,Seasonal demand increase for Panasonic Camera Model 376,72,Pending,2025-09-02 06:46:10
+573,CH-BO-0532,VisionTech Supplies,Urgent: Boat Charger Model 841 running out,73,Approved,2024-12-05 04:09:13
+574,SM-AP-0635,VisionTech Supplies,Low stock alert - need restock for Apple Smartwatch Model 189,68,Approved,2025-06-05 17:14:38
+575,SM-RE-0207,CameraKing Distributors,Seasonal demand increase for Realme Smartphone Model 136,54,Approved,2025-09-27 22:13:43
+576,GA-MI-0053,Peripheral Pros,Customer pre-orders for Microsoft Gaming Console Model 469,195,Approved,2024-03-10 16:11:29
+577,PR-EP-0687,SoundPro Solutions,Seasonal demand increase for Epson Printer Model 114,47,Approved,2025-07-01 19:16:16
+578,PO-MI-0087,PrintWorks Pvt Ltd,Customer pre-orders for Mi Power Bank Model 915,162,Approved,2024-07-19 21:45:12
+579,MO-SA-0153,Visionary Electronics,Bulk order request for Samsung Monitor Model 441,41,Approved,2024-12-31 04:04:02
+580,WE-RA-0321,ElectroMart Solutions,Low stock alert - need restock for Razer Webcam Model 215,15,Pending,2024-05-15 14:05:22
+581,CA-PA-0307,PrintWorks Pvt Ltd,Seasonal demand increase for Panasonic Camera Model 585,88,Approved,2024-11-09 11:39:09
+582,MO-DE-0655,VisionTech Supplies,Customer pre-orders for Dell Mouse Model 335,10,Approved,2024-05-22 17:53:33
+583,GA-SO-0473,GadgetHub India,Customer pre-orders for Sony Gaming Console Model 540,166,Pending,2025-05-30 03:58:07
+584,PR-BR-0452,SmartGear Traders,Urgent: Brother Printer Model 110 running out,165,Approved,2025-04-06 00:58:27
+585,TA-RE-0273,PrintWorks Pvt Ltd,Low stock alert - need restock for Realme Tablet Model 285,152,Pending,2025-07-02 04:16:42
+586,MO-DE-0681,ElectroMart Solutions,Seasonal demand increase for Dell Monitor Model 782,190,Pending,2024-05-20 02:29:26
+587,HE-JB-0140,Peripheral Pros,Customer pre-orders for JBL Headphones Model 512,150,Rejected,2025-12-05 00:43:48
+588,CH-BE-0783,GameZone Distributors,Bulk order request for Belkin Charger Model 989,140,Rejected,2024-07-27 06:43:37
+589,HE-SK-0331,DigiHub Electronics,Bulk order request for Skullcandy Headphones Model 135,167,Pending,2025-02-24 17:15:20
+590,CA-AN-0402,PowerTech Distributors,Low stock alert - need restock for Anker Cable Model 574,65,Approved,2024-12-18 17:13:20
+591,WE-HP-0138,GameZone Distributors,Low stock alert - need restock for HP Webcam Model 755,48,Pending,2025-01-30 22:38:30
+592,CA-BO-0166,DigiHub Electronics,Low stock alert - need restock for Boat Cable Model 267,105,Approved,2024-03-31 11:05:49
+593,WE-LO-0262,AudioMax Distributors,Customer pre-orders for Logitech Webcam Model 512,114,Approved,2024-04-27 23:08:52
+594,TV-PA-0270,ElectroMart Solutions,Seasonal demand increase for Panasonic TV Model 687,75,Rejected,2024-03-10 20:26:45
+595,TV-PA-0752,GadgetHub India,Customer pre-orders for Panasonic TV Model 795,117,Approved,2025-06-01 03:27:03
+596,RO-AS-0505,CameraKing Distributors,Customer pre-orders for Asus Router Model 672,166,Pending,2025-07-19 11:55:12
+597,GA-SO-0036,SmartLife Traders,Customer pre-orders for Sony Gaming Console Model 866,53,Approved,2024-09-14 21:13:56
+598,RO-LI-0453,GameZone Distributors,Bulk order request for Linksys Router Model 946,28,Approved,2024-08-09 01:59:31
+599,ME-KI-0747,DigiHub Electronics,Customer pre-orders for Kingston Memory Card Model 922,96,Pending,2025-05-31 11:05:40
+600,TV-SA-0572,AudioMax Distributors,Seasonal demand increase for Samsung TV Model 902,26,Approved,2024-12-19 03:17:20
+601,SM-GO-0608,CameraKing Distributors,Seasonal demand increase for Google Smartphone Model 862,174,Pending,2024-03-23 22:52:51
+602,LA-MI-0467,CameraKing Distributors,Seasonal demand increase for Microsoft Laptop Model 808,196,Approved,2025-06-08 10:24:06
+603,CA-UG-0585,CameraKing Distributors,Urgent: Ugreen Cable Model 645 running out,66,Approved,2025-05-08 22:34:06
+604,TV-TC-0325,PrintWorks Pvt Ltd,Customer pre-orders for TCL TV Model 493,112,Approved,2025-07-15 22:51:35
+605,LA-AP-0189,VisionTech Supplies,Bulk order request for Apple Laptop Model 516,82,Pending,2025-05-17 10:28:45
+606,GA-SO-0050,TechNova Pvt Ltd,Low stock alert - need restock for Sony Gaming Console Model 745,83,Pending,2024-07-02 12:12:19
+607,GA-SO-0375,TechNova Pvt Ltd,Low stock alert - need restock for Sony Gaming Console Model 569,112,Pending,2025-04-25 21:31:58
+608,ME-KI-0302,Visionary Electronics,Low stock alert - need restock for Kingston Memory Card Model 569,180,Approved,2024-04-15 17:19:43
+609,SP-HA-0624,PrintWorks Pvt Ltd,Seasonal demand increase for Harman Kardon Speaker Model 710,55,Approved,2024-04-06 20:42:06
+610,MO-SA-0075,TechNova Pvt Ltd,Customer pre-orders for Samsung Monitor Model 283,23,Pending,2026-01-14 15:15:55
+611,HE-BO-0774,ElectroMart Solutions,Urgent: Bose Headphones Model 850 running out,100,Pending,2026-01-30 07:20:32
+612,SP-UL-0548,SmartGear Traders,Bulk order request for Ultimate Ears Speaker Model 696,78,Approved,2024-02-25 12:08:54
+613,GA-SO-0509,PowerTech Distributors,Low stock alert - need restock for Sony Gaming Console Model 159,200,Pending,2024-09-16 03:22:50
+614,CA-BO-0127,SoundPro Solutions,Bulk order request for Boat Cable Model 141,135,Approved,2024-12-19 10:43:34
+615,SM-AM-0647,ElectroMart Solutions,Customer pre-orders for Amazfit Smartwatch Model 189,18,Pending,2025-12-26 19:20:03
+616,PO-ON-0540,GameZone Distributors,Urgent: OnePlus Power Bank Model 110 running out,96,Approved,2024-04-19 07:19:23
+617,TA-XI-0732,AudioMax Distributors,Low stock alert - need restock for Xiaomi Tablet Model 387,146,Rejected,2025-01-23 22:16:15
+618,PR-BR-0699,ConnectPro Supplies,Low stock alert - need restock for Brother Printer Model 153,69,Pending,2025-04-11 21:06:33
+619,CA-AM-0590,CameraKing Distributors,Seasonal demand increase for AmazonBasics Cable Model 705,76,Pending,2025-07-28 22:05:44
+620,SM-AM-0112,VisionTech Supplies,Low stock alert - need restock for Amazfit Smartwatch Model 532,96,Approved,2025-08-23 21:09:30
+621,LA-AC-0679,DigiHub Electronics,Low stock alert - need restock for Acer Laptop Model 361,200,Approved,2024-11-06 22:04:21
+622,PR-BR-0452,SmartGear Traders,Bulk order request for Brother Printer Model 110,47,Approved,2025-07-13 14:49:25
+623,SM-SA-0511,AudioMax Distributors,Low stock alert - need restock for Samsung Smartphone Model 115,200,Pending,2025-08-26 11:35:33
+624,HE-SK-0445,AudioMax Distributors,Urgent: Skullcandy Headphones Model 419 running out,174,Pending,2024-06-21 14:47:39
+625,HE-BO-0627,DigiHub Electronics,Urgent: Bose Headphones Model 393 running out,156,Approved,2025-09-21 08:18:39
+626,EA-BO-0225,ReadMore Supplies,Low stock alert - need restock for Boat Earbuds Model 782,14,Approved,2025-08-01 11:13:33
+627,MO-BE-0456,TechWorld Pvt Ltd,Bulk order request for BenQ Monitor Model 384,189,Approved,2024-03-14 20:26:43
+628,LA-LE-0067,Elite Tech Supplies,Seasonal demand increase for Lenovo Laptop Model 571,88,Approved,2025-03-04 17:48:25
+629,MO-AS-0347,GameZone Distributors,Low stock alert - need restock for Asus Monitor Model 424,18,Rejected,2025-05-29 17:52:36
+630,MO-SA-0075,TechNova Pvt Ltd,Customer pre-orders for Samsung Monitor Model 283,149,Rejected,2026-02-21 21:28:12
+631,LA-DE-0665,PowerTech Distributors,Low stock alert - need restock for Dell Laptop Model 445,29,Pending,2025-05-05 00:15:36
+632,TA-AP-0005,Elite Tech Supplies,Bulk order request for Apple Tablet Model 702,166,Pending,2025-10-13 03:51:50
+633,KE-ST-0600,GadgetHub India,Customer pre-orders for SteelSeries Keyboard Model 897,77,Approved,2026-01-15 10:53:32
+634,MO-LO-0611,SoundPro Solutions,Seasonal demand increase for Logitech Mouse Model 906,86,Approved,2025-11-10 15:51:29
+635,CA-AM-0047,PrintWorks Pvt Ltd,Bulk order request for AmazonBasics Cable Model 770,136,Pending,2024-11-30 19:15:06
+636,CA-ON-0122,GadgetHub India,Seasonal demand increase for OnePlus Cable Model 221,43,Pending,2025-10-02 12:28:45
+637,PR-XE-0709,AudioMax Distributors,Seasonal demand increase for Xerox Printer Model 429,16,Rejected,2025-07-31 23:06:00
+638,MO-ST-0385,CameraKing Distributors,Bulk order request for SteelSeries Mouse Model 696,19,Rejected,2025-05-12 00:52:08
+639,SM-GA-0419,ElectroMart Solutions,Seasonal demand increase for Garmin Smartwatch Model 696,72,Approved,2025-07-03 19:16:44
+640,CA-CA-0296,GadgetHub India,Low stock alert - need restock for Canon Camera Model 405,145,Rejected,2024-02-10 03:49:32
+641,PR-CA-0310,AudioMax Distributors,Customer pre-orders for Canon Printer Model 642,165,Pending,2024-09-01 23:47:43
+642,HE-JB-0795,Visionary Electronics,Urgent: JBL Headphones Model 586 running out,35,Pending,2025-02-01 16:27:00
+643,TA-XI-0732,AudioMax Distributors,Customer pre-orders for Xiaomi Tablet Model 387,57,Approved,2026-02-09 05:16:01
+644,SP-UL-0663,PrintWorks Pvt Ltd,Seasonal demand increase for Ultimate Ears Speaker Model 657,84,Approved,2024-10-07 00:37:12
+645,CA-FU-0793,SmartGear Traders,Urgent: Fujifilm Camera Model 232 running out,40,Approved,2025-07-10 04:56:45
+646,EA-SA-0206,DigiHub Electronics,Urgent: Samsung Earbuds Model 528 running out,134,Pending,2024-02-08 02:51:14
+647,MO-DE-0063,Visionary Electronics,Seasonal demand increase for Dell Mouse Model 631,51,Approved,2025-06-23 16:35:59
+648,PR-XE-0567,GameZone Distributors,Urgent: Xerox Printer Model 971 running out,146,Pending,2024-06-23 20:12:40
+649,KE-CO-0009,Visionary Electronics,Low stock alert - need restock for Corsair Keyboard Model 632,112,Approved,2024-01-27 02:12:12
+650,GA-SO-0763,ConnectPro Supplies,Low stock alert - need restock for Sony Gaming Console Model 384,101,Approved,2024-04-17 19:04:35
+651,SP-BO-0477,PowerTech Distributors,Bulk order request for Bose Speaker Model 484,11,Approved,2025-01-28 17:58:36
+652,TA-SA-0424,GameZone Distributors,Bulk order request for Samsung Tablet Model 620,128,Pending,2025-09-24 01:06:52
+653,HE-SK-0046,GadgetHub India,Urgent: Skullcandy Headphones Model 331 running out,77,Approved,2025-02-02 16:57:35
+654,KE-ST-0437,TechNova Pvt Ltd,Seasonal demand increase for SteelSeries Keyboard Model 822,133,Pending,2025-12-19 01:12:18
+655,WE-MI-0756,TechWorld Pvt Ltd,Bulk order request for Microsoft Webcam Model 402,156,Approved,2025-03-01 01:11:25
+656,LA-MI-0057,SmartLife Traders,Customer pre-orders for Microsoft Laptop Model 414,40,Approved,2024-09-24 14:19:05
+657,CA-NI-0322,Peripheral Pros,Urgent: Nikon Camera Model 700 running out,200,Pending,2025-01-31 05:17:04
+658,TA-RE-0344,Visionary Electronics,Seasonal demand increase for Realme Tablet Model 265,164,Approved,2024-02-27 23:37:33
+659,SM-GO-0403,Peripheral Pros,Seasonal demand increase for Google Smartphone Model 883,143,Pending,2025-11-16 09:59:12
+660,PO-SA-0749,ReadMore Supplies,Bulk order request for Samsung Power Bank Model 870,55,Approved,2024-01-09 07:28:58
+661,MO-CO-0500,ConnectPro Supplies,Seasonal demand increase for Corsair Mouse Model 268,115,Rejected,2024-03-01 06:42:30
+662,KE-ST-0766,VisionTech Supplies,Bulk order request for SteelSeries Keyboard Model 122,34,Approved,2024-01-13 08:56:30
+663,SM-NO-0530,ConnectPro Supplies,Low stock alert - need restock for Noise Smartwatch Model 745,163,Rejected,2025-04-22 00:40:39
+664,MO-MI-0701,GadgetHub India,Urgent: Microsoft Mouse Model 454 running out,57,Pending,2026-02-24 15:10:35
+665,CH-BO-0661,PowerTech Distributors,Urgent: Boat Charger Model 283 running out,159,Approved,2024-03-16 03:15:50
+666,RO-TP-0800,CameraKing Distributors,Seasonal demand increase for TP-Link Router Model 838,149,Pending,2025-07-31 04:41:18
+667,CA-SO-0414,SmartLife Traders,Low stock alert - need restock for Sony Camera Model 424,16,Pending,2025-06-05 09:20:36
+668,WE-RA-0039,Visionary Electronics,Seasonal demand increase for Razer Webcam Model 748,167,Approved,2024-08-02 13:34:21
+669,SM-FI-0565,Elite Tech Supplies,Seasonal demand increase for Fitbit Smartwatch Model 848,109,Pending,2025-05-11 19:33:34
+670,MO-CO-0500,ConnectPro Supplies,Seasonal demand increase for Corsair Mouse Model 268,145,Pending,2024-07-17 01:04:50
+671,SP-SO-0404,SoundPro Solutions,Low stock alert - need restock for Sony Speaker Model 553,145,Approved,2026-02-06 15:57:58
+672,CA-BO-0753,GameZone Distributors,Seasonal demand increase for Boat Cable Model 972,16,Pending,2024-01-14 01:46:40
+673,SM-AP-0464,MobileMart Pvt Ltd,Bulk order request for Apple Smartwatch Model 568,30,Approved,2024-03-09 00:28:30
+674,SM-SA-0315,ConnectPro Supplies,Seasonal demand increase for Samsung Smartphone Model 994,64,Approved,2024-03-01 08:26:49
+675,MO-DE-0192,VisionTech Supplies,Customer pre-orders for Dell Monitor Model 338,45,Approved,2024-04-19 22:40:14
+676,TA-RE-0319,Peripheral Pros,Customer pre-orders for Realme Tablet Model 879,190,Approved,2025-07-29 00:53:06
+677,KE-ST-0474,ElectroMart Solutions,Customer pre-orders for SteelSeries Keyboard Model 183,192,Rejected,2025-07-12 19:35:50
+678,SM-FI-0462,Visionary Electronics,Low stock alert - need restock for Fitbit Smartwatch Model 243,125,Pending,2025-12-06 14:16:58
+679,CA-BO-0166,DigiHub Electronics,Low stock alert - need restock for Boat Cable Model 267,72,Pending,2024-12-06 06:54:17
+680,WE-HP-0205,DigiHub Electronics,Seasonal demand increase for HP Webcam Model 760,108,Approved,2024-03-29 07:39:00
+681,RO-NE-0692,TechNova Pvt Ltd,Seasonal demand increase for Netgear Router Model 689,132,Approved,2024-01-28 12:56:34
+682,TV-SO-0014,SmartGear Traders,Bulk order request for Sony TV Model 197,16,Approved,2025-09-03 18:39:05
+683,CH-BO-0641,PrintWorks Pvt Ltd,Urgent: Boat Charger Model 173 running out,22,Pending,2024-03-13 15:46:30
+684,GA-SO-0036,SmartLife Traders,Urgent: Sony Gaming Console Model 866 running out,118,Pending,2024-01-27 10:39:56
+685,MO-MI-0436,Peripheral Pros,Urgent: Microsoft Mouse Model 651 running out,133,Pending,2026-01-06 09:02:36
+686,EA-ON-0494,TechNova Pvt Ltd,Urgent: OnePlus Earbuds Model 510 running out,191,Approved,2025-11-25 01:25:34
+687,WE-HP-0360,MobileMart Pvt Ltd,Customer pre-orders for HP Webcam Model 983,189,Rejected,2025-10-26 13:24:59
+688,LA-MI-0171,SoundPro Solutions,Bulk order request for Microsoft Laptop Model 595,10,Approved,2024-10-23 04:29:56
+689,CA-SO-0455,SoundPro Solutions,Low stock alert - need restock for Sony Camera Model 104,77,Approved,2025-04-11 15:02:38
+690,ME-KI-0390,AudioMax Distributors,Low stock alert - need restock for Kingston Memory Card Model 346,122,Pending,2024-08-22 18:32:15
+691,GA-SO-0375,TechNova Pvt Ltd,Seasonal demand increase for Sony Gaming Console Model 569,51,Approved,2025-11-22 22:55:40
+692,TV-XI-0032,AudioMax Distributors,Customer pre-orders for Xiaomi TV Model 745,20,Pending,2024-03-12 21:43:56
+693,CA-ON-0122,GadgetHub India,Bulk order request for OnePlus Cable Model 221,109,Approved,2024-07-15 00:28:23
+694,WE-CR-0470,Elite Tech Supplies,Customer pre-orders for Creative Webcam Model 908,111,Approved,2025-03-15 19:07:22
+695,CA-SO-0476,Peripheral Pros,Urgent: Sony Camera Model 302 running out,160,Approved,2025-03-07 06:27:50
+696,GA-NI-0705,ConnectPro Supplies,Low stock alert - need restock for Nintendo Gaming Console Model 252,68,Approved,2024-06-06 18:39:07
+697,EA-NO-0691,VisionTech Supplies,Urgent: Noise Earbuds Model 855 running out,167,Approved,2025-09-17 00:56:02
+698,TV-XI-0603,ConnectPro Supplies,Bulk order request for Xiaomi TV Model 990,171,Approved,2025-05-27 16:42:35
+699,MO-HP-0715,SoundPro Solutions,Customer pre-orders for HP Mouse Model 231,178,Rejected,2024-11-23 19:40:09
+700,SP-HA-0597,ConnectPro Supplies,Low stock alert - need restock for Harman Kardon Speaker Model 306,120,Approved,2024-11-23 17:58:06
+701,PR-BR-0427,MobileMart Pvt Ltd,Low stock alert - need restock for Brother Printer Model 698,20,Approved,2025-08-13 13:33:46
+702,RO-NE-0483,TechWorld Pvt Ltd,Urgent: Netgear Router Model 930 running out,165,Pending,2024-07-01 02:52:21
+703,WE-HP-0446,PowerTech Distributors,Seasonal demand increase for HP Webcam Model 197,132,Approved,2024-08-28 20:57:28
+704,KE-DE-0439,DigiHub Electronics,Seasonal demand increase for Dell Keyboard Model 571,70,Pending,2025-11-18 03:08:11
+705,SP-JB-0278,GameZone Distributors,Low stock alert - need restock for JBL Speaker Model 371,101,Pending,2025-11-11 20:29:40
+706,RO-NE-0010,TechWorld Pvt Ltd,Urgent: Netgear Router Model 551 running out,69,Pending,2025-05-16 10:45:10
+707,TV-SO-0674,VisionTech Supplies,Urgent: Sony TV Model 937 running out,158,Pending,2026-01-31 05:50:07
+708,TA-MI-0521,ConnectPro Supplies,Low stock alert - need restock for Microsoft Tablet Model 645,114,Approved,2024-03-03 19:53:14
+709,TV-SO-0776,MobileMart Pvt Ltd,Low stock alert - need restock for Sony TV Model 983,23,Approved,2025-11-16 00:04:14
+710,GA-SO-0736,Visionary Electronics,Bulk order request for Sony Gaming Console Model 344,65,Approved,2025-08-21 14:03:09
+711,CA-BO-0753,GameZone Distributors,Low stock alert - need restock for Boat Cable Model 972,24,Pending,2024-08-06 08:02:36
+712,KE-HP-0520,Elite Tech Supplies,Customer pre-orders for HP Keyboard Model 805,194,Pending,2024-04-30 23:24:19
+713,CA-ON-0197,TechWorld Pvt Ltd,Customer pre-orders for OnePlus Cable Model 284,181,Pending,2024-11-06 13:42:20
+714,KE-ST-0766,VisionTech Supplies,Bulk order request for SteelSeries Keyboard Model 122,181,Approved,2025-06-15 00:20:32
+715,KE-RA-0297,ElectroMart Solutions,Urgent: Razer Keyboard Model 106 running out,72,Approved,2026-01-02 13:19:41
+716,WE-LO-0587,PowerTech Distributors,Seasonal demand increase for Logitech Webcam Model 564,164,Pending,2024-12-22 20:13:39
+717,ME-SO-0040,DigiHub Electronics,Bulk order request for Sony Memory Card Model 423,69,Pending,2025-02-20 14:41:38
+718,RO-LI-0453,GameZone Distributors,Low stock alert - need restock for Linksys Router Model 946,188,Rejected,2025-08-14 08:22:33
+719,MO-HP-0227,ConnectPro Supplies,Urgent: HP Mouse Model 435 running out,157,Pending,2025-10-12 16:50:31
+720,KE-HP-0178,Peripheral Pros,Seasonal demand increase for HP Keyboard Model 893,56,Approved,2025-04-18 06:12:40
+721,HE-AU-0696,TechWorld Pvt Ltd,Seasonal demand increase for Audio-Technica Headphones Model 309,175,Rejected,2025-06-10 05:46:59
+722,MO-ST-0719,MobileMart Pvt Ltd,Customer pre-orders for SteelSeries Mouse Model 842,36,Approved,2024-01-25 07:46:34
+723,RO-CI-0768,Visionary Electronics,Customer pre-orders for Cisco Router Model 824,16,Approved,2024-08-03 04:09:12
+724,RO-TP-0800,CameraKing Distributors,Customer pre-orders for TP-Link Router Model 838,57,Approved,2025-01-01 08:09:26
+725,GA-SO-0036,SmartLife Traders,Seasonal demand increase for Sony Gaming Console Model 866,169,Approved,2024-10-08 21:16:26
+726,RO-CI-0263,SoundPro Solutions,Seasonal demand increase for Cisco Router Model 414,182,Approved,2025-01-24 09:43:58
+727,MO-ST-0719,MobileMart Pvt Ltd,Customer pre-orders for SteelSeries Mouse Model 842,82,Pending,2025-05-29 17:47:05
+728,PO-RE-0507,CameraKing Distributors,Low stock alert - need restock for Realme Power Bank Model 438,44,Rejected,2025-07-02 02:44:56
+729,SM-XI-0101,DigiHub Electronics,Urgent: Xiaomi Smartphone Model 218 running out,27,Pending,2024-08-15 12:38:31
+730,SM-RE-0583,Visionary Electronics,Seasonal demand increase for Realme Smartphone Model 140,42,Approved,2024-09-25 06:08:04
+731,SM-AP-0254,DigiHub Electronics,Bulk order request for Apple Smartwatch Model 838,71,Approved,2024-03-07 22:38:43
+732,CA-SO-0428,GadgetHub India,Low stock alert - need restock for Sony Camera Model 352,90,Approved,2025-10-02 07:47:26
+733,TV-SA-0406,Peripheral Pros,Low stock alert - need restock for Samsung TV Model 126,131,Approved,2024-08-19 05:22:47
+734,LA-MI-0126,TechWorld Pvt Ltd,Urgent: Microsoft Laptop Model 658 running out,39,Approved,2026-01-29 23:55:39
+735,PR-BR-0051,TechNova Pvt Ltd,Low stock alert - need restock for Brother Printer Model 852,47,Rejected,2024-01-11 07:59:10
+736,CA-CA-0534,GadgetHub India,Seasonal demand increase for Canon Camera Model 871,36,Approved,2024-09-26 22:58:01
+737,GA-SO-0033,VisionTech Supplies,Bulk order request for Sony Gaming Console Model 353,175,Pending,2024-06-29 15:01:51
+738,CA-OL-0176,ElectroMart Solutions,Low stock alert - need restock for Olympus Camera Model 886,41,Pending,2024-07-06 08:41:37
+739,MO-MI-0374,VisionTech Supplies,Low stock alert - need restock for Microsoft Mouse Model 417,31,Approved,2024-04-14 03:42:08
+740,CA-AM-0047,PrintWorks Pvt Ltd,Seasonal demand increase for AmazonBasics Cable Model 770,26,Rejected,2025-07-04 17:37:21
+741,CA-FU-0234,PrintWorks Pvt Ltd,Low stock alert - need restock for Fujifilm Camera Model 516,165,Pending,2024-12-14 06:18:27
+742,CA-AN-0049,ElectroMart Solutions,Urgent: Anker Cable Model 863 running out,73,Approved,2024-12-02 00:54:37
+743,PR-BR-0482,Elite Tech Supplies,Low stock alert - need restock for Brother Printer Model 432,52,Approved,2025-10-25 07:23:42
+744,HE-BO-0485,AudioMax Distributors,Seasonal demand increase for Bose Headphones Model 782,71,Approved,2025-08-16 15:13:30
+745,KE-RA-0339,PrintWorks Pvt Ltd,Urgent: Razer Keyboard Model 271 running out,68,Approved,2024-09-22 10:43:25
+746,HE-JB-0140,Peripheral Pros,Low stock alert - need restock for JBL Headphones Model 512,55,Rejected,2025-01-26 10:14:56
+747,PR-EP-0431,TechNova Pvt Ltd,Customer pre-orders for Epson Printer Model 645,154,Approved,2024-02-16 08:11:26
+748,TV-ON-0081,Peripheral Pros,Low stock alert - need restock for OnePlus TV Model 261,124,Pending,2025-02-27 15:08:33
+749,HE-BE-0167,TechWorld Pvt Ltd,Low stock alert - need restock for Beats Headphones Model 872,96,Approved,2024-03-14 15:08:59
+750,SM-GA-0232,Visionary Electronics,Bulk order request for Garmin Smartwatch Model 981,153,Approved,2024-01-15 22:05:25
+751,WE-LO-0105,CameraKing Distributors,Seasonal demand increase for Logitech Webcam Model 180,49,Approved,2026-02-17 19:08:32
+752,CH-BO-0601,GadgetHub India,Urgent: Boat Charger Model 699 running out,48,Rejected,2024-12-03 17:08:52
+753,WE-LO-0108,TechWorld Pvt Ltd,Seasonal demand increase for Logitech Webcam Model 603,54,Pending,2024-05-23 03:43:43
+754,CH-BE-0471,PrintWorks Pvt Ltd,Seasonal demand increase for Belkin Charger Model 279,199,Approved,2025-09-19 06:11:05
+755,PO-SA-0683,GameZone Distributors,Urgent: Samsung Power Bank Model 128 running out,69,Pending,2025-11-06 04:51:07
+756,HE-SO-0586,TechWorld Pvt Ltd,Urgent: Sony Headphones Model 264 running out,20,Rejected,2025-08-10 11:29:56
+757,CA-BE-0113,SmartGear Traders,Low stock alert - need restock for Belkin Cable Model 382,70,Approved,2026-02-14 09:49:49
+758,EA-AP-0389,MobileMart Pvt Ltd,Customer pre-orders for Apple Earbuds Model 282,182,Approved,2024-07-11 15:11:34
+759,GA-MI-0190,Elite Tech Supplies,Low stock alert - need restock for Microsoft Gaming Console Model 814,64,Rejected,2025-12-10 23:46:56
+760,HE-JB-0304,AudioMax Distributors,Low stock alert - need restock for JBL Headphones Model 613,58,Approved,2026-01-01 10:09:56
+761,WE-RA-0556,CameraKing Distributors,Bulk order request for Razer Webcam Model 644,80,Approved,2025-03-01 04:17:12
+762,CH-AN-0210,GadgetHub India,Bulk order request for Anker Charger Model 135,90,Pending,2024-03-20 10:50:11
+763,SP-HA-0574,ConnectPro Supplies,Customer pre-orders for Harman Kardon Speaker Model 867,169,Approved,2024-07-26 08:42:13
+764,SP-BO-0468,PrintWorks Pvt Ltd,Bulk order request for Boat Speaker Model 759,18,Approved,2025-12-14 11:09:47
+765,TA-RE-0344,Visionary Electronics,Customer pre-orders for Realme Tablet Model 265,51,Approved,2025-01-14 00:43:00
+766,SP-MA-0280,AudioMax Distributors,Bulk order request for Marshall Speaker Model 107,183,Rejected,2025-12-23 07:07:17
+767,GA-NI-0659,TechNova Pvt Ltd,Customer pre-orders for Nintendo Gaming Console Model 681,19,Pending,2025-11-02 06:59:56
+768,HE-SK-0700,TechWorld Pvt Ltd,Bulk order request for Skullcandy Headphones Model 432,115,Approved,2025-06-20 19:42:02
+769,CA-UG-0682,PowerTech Distributors,Seasonal demand increase for Ugreen Cable Model 548,88,Approved,2024-08-24 23:28:34
+770,CA-UG-0682,PowerTech Distributors,Urgent: Ugreen Cable Model 548 running out,158,Approved,2025-12-16 17:14:55
+771,LA-MS-0131,SoundPro Solutions,Low stock alert - need restock for MSI Laptop Model 890,88,Approved,2024-03-09 13:48:30
+772,TV-LG-0088,Elite Tech Supplies,Seasonal demand increase for LG TV Model 746,136,Approved,2024-04-29 07:29:34
+773,MO-HP-0715,SoundPro Solutions,Bulk order request for HP Mouse Model 231,28,Pending,2024-12-21 16:06:11
+774,SM-GA-0232,Visionary Electronics,Low stock alert - need restock for Garmin Smartwatch Model 981,51,Pending,2024-02-06 17:14:56
+775,CA-PA-0704,ElectroMart Solutions,Low stock alert - need restock for Panasonic Camera Model 376,15,Pending,2025-02-25 07:07:38
+776,CH-RE-0145,GadgetHub India,Urgent: Realme Charger Model 246 running out,184,Pending,2024-03-19 06:33:20
+777,MO-CO-0500,ConnectPro Supplies,Customer pre-orders for Corsair Mouse Model 268,168,Pending,2025-12-17 20:02:14
+778,MO-DE-0681,ElectroMart Solutions,Customer pre-orders for Dell Monitor Model 782,69,Approved,2024-04-06 01:10:16
+779,TV-ON-0433,Elite Tech Supplies,Bulk order request for OnePlus TV Model 942,53,Rejected,2025-03-10 23:09:47
+780,SM-AP-0254,DigiHub Electronics,Low stock alert - need restock for Apple Smartwatch Model 838,144,Pending,2025-09-02 08:29:11
+781,PO-AN-0791,Elite Tech Supplies,Bulk order request for Anker Power Bank Model 986,75,Pending,2024-08-27 11:04:33
+782,MO-LO-0542,TechWorld Pvt Ltd,Urgent: Logitech Mouse Model 388 running out,173,Pending,2026-01-02 10:28:03
+783,KE-CO-0354,AudioMax Distributors,Low stock alert - need restock for Corsair Keyboard Model 819,139,Approved,2024-03-15 15:16:38
+784,WE-CR-0698,SmartGear Traders,Bulk order request for Creative Webcam Model 498,54,Approved,2024-01-17 00:13:35
+785,SM-BO-0222,GameZone Distributors,Urgent: Boat Smartwatch Model 269 running out,73,Pending,2025-03-25 10:58:20
+786,TA-AM-0170,TechWorld Pvt Ltd,Urgent: Amazon Tablet Model 913 running out,160,Pending,2024-01-30 12:02:39
+787,GA-SO-0055,Elite Tech Supplies,Bulk order request for Sony Gaming Console Model 352,18,Pending,2025-09-12 01:34:36
+788,SP-JB-0650,SmartLife Traders,Customer pre-orders for JBL Speaker Model 214,85,Approved,2025-08-01 18:12:46
+789,WE-LO-0262,AudioMax Distributors,Urgent: Logitech Webcam Model 512 running out,193,Rejected,2024-02-19 12:05:59
+790,RO-AS-0503,ElectroMart Solutions,Urgent: Asus Router Model 358 running out,113,Rejected,2024-06-14 09:38:00
+791,ME-SA-0301,CameraKing Distributors,Low stock alert - need restock for Samsung Memory Card Model 837,99,Approved,2025-03-04 15:28:07
+792,EA-NO-0305,SmartLife Traders,Low stock alert - need restock for Noise Earbuds Model 969,50,Pending,2025-01-22 11:43:24
+793,EA-ON-0551,AudioMax Distributors,Low stock alert - need restock for OnePlus Earbuds Model 502,80,Approved,2024-10-26 08:44:36
+794,PR-EP-0106,SoundPro Solutions,Customer pre-orders for Epson Printer Model 397,165,Approved,2024-04-04 09:22:46
+795,CH-AN-0162,SmartLife Traders,Urgent: Anker Charger Model 645 running out,162,Pending,2024-08-26 09:00:33
+796,RO-LI-0453,GameZone Distributors,Urgent: Linksys Router Model 946 running out,170,Approved,2025-08-01 21:17:55
+797,SM-RE-0283,PrintWorks Pvt Ltd,Urgent: Realme Smartphone Model 655 running out,196,Approved,2025-03-15 22:48:07
+798,TA-MI-0165,SmartLife Traders,Customer pre-orders for Microsoft Tablet Model 296,192,Approved,2024-10-09 09:06:58
+799,HE-SO-0586,TechWorld Pvt Ltd,Low stock alert - need restock for Sony Headphones Model 264,71,Pending,2026-01-27 17:10:15
+800,SM-AP-0282,GameZone Distributors,Seasonal demand increase for Apple Smartwatch Model 690,78,Pending,2025-11-04 05:11:45
+801,CA-BO-0084,Peripheral Pros,Bulk order request for Boat Cable Model 500,108,Approved,2025-05-30 20:42:06
+802,CA-GO-0052,MobileMart Pvt Ltd,Low stock alert - need restock for GoPro Camera Model 171,172,Approved,2024-12-23 21:58:31
+803,MO-DE-0271,PowerTech Distributors,Low stock alert - need restock for Dell Mouse Model 280,181,Pending,2024-02-22 22:42:16
+804,MO-AC-0249,VisionTech Supplies,Low stock alert - need restock for Acer Monitor Model 433,131,Pending,2025-11-10 13:08:58
+805,HE-BO-0774,ElectroMart Solutions,Urgent: Bose Headphones Model 850 running out,37,Pending,2025-09-30 03:19:17
+806,HE-SE-0188,SmartGear Traders,Bulk order request for Sennheiser Headphones Model 545,98,Pending,2024-12-16 09:19:31
+807,ME-SO-0410,PowerTech Distributors,Low stock alert - need restock for Sony Memory Card Model 638,160,Pending,2025-08-11 02:24:16
+808,MO-ST-0218,TechWorld Pvt Ltd,Seasonal demand increase for SteelSeries Mouse Model 491,28,Approved,2025-04-01 04:44:38
+809,KE-RA-0417,GadgetHub India,Seasonal demand increase for Razer Keyboard Model 349,122,Pending,2026-01-09 04:42:06
+810,RO-AS-0505,CameraKing Distributors,Bulk order request for Asus Router Model 672,177,Pending,2024-07-12 12:31:38
+811,KE-ST-0668,PrintWorks Pvt Ltd,Seasonal demand increase for SteelSeries Keyboard Model 380,96,Pending,2026-01-03 15:39:24
+812,WE-HP-0205,DigiHub Electronics,Urgent: HP Webcam Model 760 running out,48,Pending,2025-04-04 21:49:28
+813,SM-ON-0576,GadgetHub India,Urgent: OnePlus Smartwatch Model 874 running out,182,Approved,2025-05-23 13:34:27
+814,WE-HP-0775,VisionTech Supplies,Urgent: HP Webcam Model 465 running out,19,Pending,2025-08-05 02:29:13
+815,MO-AC-0757,ElectroMart Solutions,Low stock alert - need restock for Acer Monitor Model 780,187,Pending,2024-07-06 00:45:18
+816,CA-BE-0738,PowerTech Distributors,Low stock alert - need restock for Belkin Cable Model 740,157,Approved,2025-01-07 18:10:01
+817,SM-VI-0475,MobileMart Pvt Ltd,Bulk order request for Vivo Smartphone Model 481,168,Rejected,2025-08-04 19:06:40
+818,HE-SK-0678,SmartGear Traders,Urgent: Skullcandy Headphones Model 799 running out,112,Approved,2025-04-21 19:22:36
+819,TA-SA-0499,SmartLife Traders,Seasonal demand increase for Samsung Tablet Model 162,146,Approved,2024-10-22 16:31:36
+820,PO-AN-0791,Elite Tech Supplies,Seasonal demand increase for Anker Power Bank Model 986,152,Approved,2025-12-06 03:52:55
+821,MO-HP-0376,Peripheral Pros,Customer pre-orders for HP Monitor Model 269,73,Pending,2025-05-18 14:46:47
+822,ME-SO-0040,DigiHub Electronics,Customer pre-orders for Sony Memory Card Model 423,155,Pending,2025-09-01 23:33:05
+823,HE-BE-0415,PowerTech Distributors,Urgent: Beats Headphones Model 944 running out,160,Pending,2025-05-26 17:09:59
+824,CA-FU-0234,PrintWorks Pvt Ltd,Low stock alert - need restock for Fujifilm Camera Model 516,198,Pending,2024-06-03 20:04:14
+825,TA-RE-0319,Peripheral Pros,Customer pre-orders for Realme Tablet Model 879,20,Pending,2025-04-30 17:01:21
+826,CA-AN-0308,ElectroMart Solutions,Bulk order request for Anker Cable Model 988,194,Approved,2025-05-02 11:24:17
+827,CH-AN-0191,TechWorld Pvt Ltd,Customer pre-orders for Anker Charger Model 470,69,Pending,2025-11-02 19:01:30
+828,CA-BO-0413,SoundPro Solutions,Seasonal demand increase for Boat Cable Model 431,168,Rejected,2024-08-14 22:50:18
+829,RO-AS-0505,CameraKing Distributors,Customer pre-orders for Asus Router Model 672,147,Approved,2026-01-27 12:41:33
+830,EA-AP-0531,SmartLife Traders,Seasonal demand increase for Apple Earbuds Model 560,100,Pending,2026-02-04 10:27:05
+831,PR-CA-0310,AudioMax Distributors,Bulk order request for Canon Printer Model 642,12,Approved,2024-07-16 09:41:34
+832,CH-BO-0524,MobileMart Pvt Ltd,Urgent: Boat Charger Model 606 running out,179,Pending,2025-08-12 22:44:23
+833,CA-UG-0626,Visionary Electronics,Bulk order request for Ugreen Cable Model 487,39,Pending,2025-01-25 06:09:26
+834,PR-BR-0179,TechWorld Pvt Ltd,Low stock alert - need restock for Brother Printer Model 733,180,Pending,2024-11-24 12:03:59
+835,PO-SY-0288,ConnectPro Supplies,Seasonal demand increase for Syska Power Bank Model 996,29,Pending,2025-08-05 07:33:03
+836,WE-RA-0765,SoundPro Solutions,Urgent: Razer Webcam Model 805 running out,93,Pending,2025-04-16 12:39:48
+837,GA-NI-0659,TechNova Pvt Ltd,Seasonal demand increase for Nintendo Gaming Console Model 681,95,Approved,2024-11-12 23:56:00
+838,RO-AS-0505,CameraKing Distributors,Customer pre-orders for Asus Router Model 672,152,Pending,2024-12-29 10:58:24
+839,GA-NI-0401,MobileMart Pvt Ltd,Bulk order request for Nintendo Gaming Console Model 707,110,Approved,2025-05-23 05:50:47
+840,SM-RE-0021,DigiHub Electronics,Urgent: Realme Smartphone Model 743 running out,34,Rejected,2025-07-16 23:44:44
+841,MO-DE-0559,SoundPro Solutions,Low stock alert - need restock for Dell Monitor Model 902,39,Pending,2024-06-18 17:46:14
+842,LA-RA-0713,Elite Tech Supplies,Urgent: Razer Laptop Model 312 running out,52,Pending,2025-09-20 06:58:41
+843,KE-RA-0417,GadgetHub India,Low stock alert - need restock for Razer Keyboard Model 349,150,Rejected,2024-03-20 00:19:15
+844,LA-DE-0299,PrintWorks Pvt Ltd,Customer pre-orders for Dell Laptop Model 111,58,Pending,2024-12-27 12:48:42
+845,HE-PH-0629,GameZone Distributors,Seasonal demand increase for Philips Headphones Model 392,129,Rejected,2025-09-13 00:32:37
+846,EA-NO-0691,VisionTech Supplies,Bulk order request for Noise Earbuds Model 855,53,Pending,2025-03-04 12:37:22
+847,CH-RE-0327,ElectroMart Solutions,Bulk order request for Realme Charger Model 376,76,Pending,2025-11-29 04:44:08
+848,CA-AM-0798,MobileMart Pvt Ltd,Bulk order request for AmazonBasics Cable Model 183,43,Pending,2025-01-07 15:54:37
+849,TA-AP-0656,ConnectPro Supplies,Bulk order request for Apple Tablet Model 731,89,Pending,2025-08-19 08:38:51
+850,HE-BE-0415,PowerTech Distributors,Urgent: Beats Headphones Model 944 running out,192,Approved,2026-01-06 02:01:31
+851,MO-MI-0606,Visionary Electronics,Seasonal demand increase for Microsoft Mouse Model 262,119,Approved,2025-02-25 19:29:33
+852,TV-PA-0460,SmartLife Traders,Urgent: Panasonic TV Model 820 running out,101,Pending,2024-05-27 18:36:49
+853,RO-AS-0069,GadgetHub India,Low stock alert - need restock for Asus Router Model 267,184,Approved,2026-01-23 23:18:50
+854,GA-NI-0418,SmartLife Traders,Bulk order request for Nintendo Gaming Console Model 244,38,Approved,2024-01-19 21:08:38
+855,SP-UL-0496,Elite Tech Supplies,Customer pre-orders for Ultimate Ears Speaker Model 677,27,Rejected,2024-02-24 04:52:48
+856,PO-ON-0174,Elite Tech Supplies,Bulk order request for OnePlus Power Bank Model 836,150,Approved,2024-11-13 05:55:41
+857,LA-HP-0199,ElectroMart Solutions,Urgent: HP Laptop Model 508 running out,196,Pending,2026-02-04 14:55:25
+858,CA-SO-0362,VisionTech Supplies,Seasonal demand increase for Sony Camera Model 187,85,Approved,2024-06-25 03:57:16
+859,ME-KI-0302,Visionary Electronics,Customer pre-orders for Kingston Memory Card Model 569,149,Approved,2025-02-11 18:54:09
+860,GA-MI-0553,SmartLife Traders,Urgent: Microsoft Gaming Console Model 789 running out,177,Approved,2024-08-02 02:46:47
+861,KE-RA-0575,ReadMore Supplies,Bulk order request for Razer Keyboard Model 297,39,Pending,2025-06-23 02:25:24
+862,CA-BO-0753,GameZone Distributors,Low stock alert - need restock for Boat Cable Model 972,181,Approved,2025-12-23 22:21:45
+863,SM-BO-0172,GameZone Distributors,Low stock alert - need restock for Boat Smartwatch Model 686,19,Approved,2025-01-13 01:26:07
+864,ME-SA-0279,TechWorld Pvt Ltd,Seasonal demand increase for Samsung Memory Card Model 942,106,Pending,2025-01-20 10:44:17
+865,MO-AC-0757,ElectroMart Solutions,Seasonal demand increase for Acer Monitor Model 780,37,Rejected,2024-02-13 00:39:00
+866,SM-MO-0187,CameraKing Distributors,Seasonal demand increase for Motorola Smartphone Model 841,73,Approved,2025-07-06 01:05:51
+867,ME-SA-0123,MobileMart Pvt Ltd,Low stock alert - need restock for Samsung Memory Card Model 622,106,Pending,2026-02-15 19:19:20
+868,SM-SA-0183,SoundPro Solutions,Urgent: Samsung Smartwatch Model 194 running out,48,Approved,2025-04-03 15:48:13
+869,HE-JB-0795,Visionary Electronics,Urgent: JBL Headphones Model 586 running out,86,Pending,2025-03-01 09:41:51
+870,SM-BO-0025,ConnectPro Supplies,Low stock alert - need restock for Boat Smartwatch Model 924,65,Approved,2025-05-12 03:41:05
+871,PO-SA-0685,TechNova Pvt Ltd,Low stock alert - need restock for Samsung Power Bank Model 359,53,Pending,2024-10-16 01:52:47
+872,MO-SA-0075,TechNova Pvt Ltd,Seasonal demand increase for Samsung Monitor Model 283,183,Rejected,2026-01-24 10:10:52
+873,TA-MI-0750,SmartGear Traders,Bulk order request for Microsoft Tablet Model 699,183,Pending,2025-01-05 17:50:44
+874,RO-TP-0800,CameraKing Distributors,Low stock alert - need restock for TP-Link Router Model 838,130,Approved,2024-05-01 22:00:26
+875,TV-XI-0695,MobileMart Pvt Ltd,Urgent: Xiaomi TV Model 564 running out,193,Approved,2026-02-20 08:30:56
+876,GA-NI-0416,SmartGear Traders,Urgent: Nintendo Gaming Console Model 699 running out,177,Pending,2025-06-15 13:14:30
+877,KE-HP-0789,PowerTech Distributors,Urgent: HP Keyboard Model 350 running out,148,Approved,2025-11-25 14:36:10
+878,KE-DU-0121,Visionary Electronics,Urgent: Ducky Keyboard Model 952 running out,78,Approved,2025-10-26 23:20:09
+879,LA-AC-0430,MobileMart Pvt Ltd,Urgent: Acer Laptop Model 224 running out,105,Approved,2024-08-06 02:52:26
+880,ME-KI-0595,PowerTech Distributors,Low stock alert - need restock for Kingston Memory Card Model 494,149,Approved,2025-02-13 19:01:12
+881,LA-DE-0299,PrintWorks Pvt Ltd,Bulk order request for Dell Laptop Model 111,171,Approved,2025-11-03 19:36:20
+882,KE-HP-0594,PowerTech Distributors,Customer pre-orders for HP Keyboard Model 237,145,Rejected,2025-07-28 17:21:19
+883,TA-AP-0253,Visionary Electronics,Seasonal demand increase for Apple Tablet Model 926,129,Approved,2025-05-09 00:13:38
+884,SM-AP-0729,ConnectPro Supplies,Seasonal demand increase for Apple Smartwatch Model 609,70,Approved,2026-02-05 09:42:14
+885,HE-BE-0772,Peripheral Pros,Bulk order request for Beats Headphones Model 966,145,Rejected,2025-02-07 14:51:41
+886,SM-OP-0330,MobileMart Pvt Ltd,Urgent: Oppo Smartphone Model 348 running out,107,Pending,2025-01-18 07:01:23
+887,SM-OP-0444,TechNova Pvt Ltd,Seasonal demand increase for Oppo Smartphone Model 115,108,Pending,2024-05-21 16:37:08
+888,CA-BE-0113,SmartGear Traders,Bulk order request for Belkin Cable Model 382,51,Pending,2025-10-29 21:57:31
+889,HE-BE-0772,Peripheral Pros,Low stock alert - need restock for Beats Headphones Model 966,178,Pending,2025-09-03 02:54:28
+890,KE-CO-0009,Visionary Electronics,Low stock alert - need restock for Corsair Keyboard Model 632,96,Approved,2026-01-25 08:46:34
+891,WE-LO-0105,CameraKing Distributors,Seasonal demand increase for Logitech Webcam Model 180,97,Approved,2025-05-08 14:33:06
+892,SM-SA-0543,PrintWorks Pvt Ltd,Seasonal demand increase for Samsung Smartphone Model 359,95,Approved,2025-08-17 16:25:21
+893,EA-NO-0691,VisionTech Supplies,Low stock alert - need restock for Noise Earbuds Model 855,20,Rejected,2024-07-30 05:21:33
+894,TV-SA-0654,Visionary Electronics,Bulk order request for Samsung TV Model 610,36,Approved,2025-12-26 03:54:58
+895,GA-MI-0617,ElectroMart Solutions,Low stock alert - need restock for Microsoft Gaming Console Model 889,15,Rejected,2025-10-07 00:18:45
+896,RO-NE-0483,TechWorld Pvt Ltd,Urgent: Netgear Router Model 930 running out,193,Rejected,2024-10-20 08:50:42
+897,MO-BE-0456,TechWorld Pvt Ltd,Low stock alert - need restock for BenQ Monitor Model 384,126,Rejected,2024-05-18 13:25:38
+898,LA-MS-0131,SoundPro Solutions,Urgent: MSI Laptop Model 890 running out,17,Approved,2024-03-26 07:01:59
+899,WE-HP-0138,GameZone Distributors,Bulk order request for HP Webcam Model 755,117,Pending,2025-08-22 01:13:18
+900,WE-LO-0587,PowerTech Distributors,Bulk order request for Logitech Webcam Model 564,146,Pending,2024-04-03 05:36:21
+901,SM-RE-0293,SoundPro Solutions,Customer pre-orders for Realme Smartphone Model 275,174,Approved,2024-02-29 21:42:05
+902,CA-SO-0731,SoundPro Solutions,Seasonal demand increase for Sony Camera Model 971,106,Rejected,2024-01-24 22:59:02
+903,TV-SA-0406,Peripheral Pros,Low stock alert - need restock for Samsung TV Model 126,77,Approved,2024-09-06 08:38:45
+904,KE-DU-0337,SoundPro Solutions,Customer pre-orders for Ducky Keyboard Model 163,164,Pending,2025-08-30 07:38:39
+905,SM-NO-0303,AudioMax Distributors,Urgent: Noise Smartwatch Model 617 running out,63,Pending,2025-06-12 01:05:28
+906,PR-EP-0038,VisionTech Supplies,Seasonal demand increase for Epson Printer Model 698,133,Pending,2024-12-08 03:21:57
+907,PR-CA-0786,Elite Tech Supplies,Low stock alert - need restock for Canon Printer Model 414,156,Approved,2025-07-29 03:59:58
+908,PR-BR-0533,SmartGear Traders,Customer pre-orders for Brother Printer Model 887,114,Pending,2024-11-04 17:28:24
+909,HE-SK-0445,AudioMax Distributors,Urgent: Skullcandy Headphones Model 419 running out,96,Approved,2025-07-21 03:16:20
+910,PR-XE-0642,ConnectPro Supplies,Seasonal demand increase for Xerox Printer Model 451,121,Pending,2024-10-24 07:48:22
+911,RO-CI-0263,SoundPro Solutions,Bulk order request for Cisco Router Model 414,85,Pending,2024-09-26 02:50:38
+912,GA-SO-0562,ElectroMart Solutions,Urgent: Sony Gaming Console Model 717 running out,159,Approved,2024-04-30 06:33:24
+913,CA-GO-0289,SmartGear Traders,Customer pre-orders for GoPro Camera Model 869,171,Pending,2025-12-29 16:10:13
+914,EA-AP-0148,PowerTech Distributors,Low stock alert - need restock for Apple Earbuds Model 706,184,Pending,2025-02-08 08:34:24
+915,CA-AN-0639,SmartLife Traders,Seasonal demand increase for Anker Cable Model 119,29,Pending,2024-11-03 00:31:53
+916,KE-CO-0023,SmartGear Traders,Low stock alert - need restock for Corsair Keyboard Model 387,73,Pending,2024-10-29 13:55:43
+917,RO-CI-0157,GadgetHub India,Bulk order request for Cisco Router Model 861,53,Pending,2025-02-20 03:25:46
+918,CH-RE-0751,GameZone Distributors,Urgent: Realme Charger Model 290 running out,19,Pending,2025-03-01 06:45:01
+919,SM-NO-0303,AudioMax Distributors,Bulk order request for Noise Smartwatch Model 617,192,Pending,2024-06-09 23:04:40
+920,GA-NI-0092,AudioMax Distributors,Urgent: Nintendo Gaming Console Model 492 running out,83,Approved,2025-02-21 12:15:51
+921,KE-KE-0591,Elite Tech Supplies,Low stock alert - need restock for Keychron Keyboard Model 688,185,Approved,2024-08-09 10:16:20
+922,KE-RA-0022,VisionTech Supplies,Customer pre-orders for Razer Keyboard Model 822,187,Pending,2025-06-24 01:35:49
+923,KE-ST-0215,ReadMore Supplies,Customer pre-orders for SteelSeries Keyboard Model 858,136,Approved,2024-10-19 05:41:02
+924,TV-PA-0752,GadgetHub India,Low stock alert - need restock for Panasonic TV Model 795,141,Approved,2024-12-30 18:58:01
+925,RO-AS-0503,ElectroMart Solutions,Bulk order request for Asus Router Model 358,194,Pending,2025-02-22 16:26:41
+926,ME-SA-0058,ElectroMart Solutions,Urgent: SanDisk Memory Card Model 361 running out,192,Approved,2024-11-02 16:46:39
+927,TA-MI-0286,TechWorld Pvt Ltd,Seasonal demand increase for Microsoft Tablet Model 783,125,Approved,2025-02-26 08:57:14
+928,SM-AP-0254,DigiHub Electronics,Seasonal demand increase for Apple Smartwatch Model 838,186,Pending,2025-02-09 11:17:51
+929,SM-OP-0501,TechNova Pvt Ltd,Low stock alert - need restock for Oppo Smartphone Model 292,173,Approved,2026-02-21 20:41:45
+930,SM-GO-0403,Peripheral Pros,Customer pre-orders for Google Smartphone Model 883,53,Rejected,2024-01-25 08:51:22
+931,TA-RE-0319,Peripheral Pros,Bulk order request for Realme Tablet Model 879,83,Approved,2024-09-12 14:55:48
+932,TV-PA-0338,Peripheral Pros,Bulk order request for Panasonic TV Model 782,75,Approved,2024-05-30 09:52:20
+933,WE-LO-0108,TechWorld Pvt Ltd,Low stock alert - need restock for Logitech Webcam Model 603,111,Approved,2025-05-21 16:02:51
+934,RO-AS-0069,GadgetHub India,Bulk order request for Asus Router Model 267,79,Pending,2025-05-29 20:57:12
+935,LA-DE-0392,CameraKing Distributors,Urgent: Dell Laptop Model 821 running out,91,Rejected,2024-05-12 11:15:16
+936,LA-AC-0430,MobileMart Pvt Ltd,Urgent: Acer Laptop Model 224 running out,128,Approved,2024-11-15 15:06:46
+937,SM-MO-0245,AudioMax Distributors,Urgent: Motorola Smartphone Model 532 running out,54,Rejected,2025-04-01 01:52:29
+938,ME-SO-0041,ConnectPro Supplies,Urgent: Sony Memory Card Model 655 running out,43,Approved,2025-06-06 17:00:19
+939,HE-PH-0061,GadgetHub India,Customer pre-orders for Philips Headphones Model 293,178,Rejected,2024-02-02 02:44:36
+940,SM-GO-0608,CameraKing Distributors,Bulk order request for Google Smartphone Model 862,108,Approved,2024-11-29 05:32:45
+941,MO-DE-0192,VisionTech Supplies,Bulk order request for Dell Monitor Model 338,162,Approved,2025-04-10 15:46:20
+942,KE-HP-0594,PowerTech Distributors,Customer pre-orders for HP Keyboard Model 237,166,Approved,2024-05-17 12:04:08
+943,LA-DE-0677,CameraKing Distributors,Seasonal demand increase for Dell Laptop Model 957,134,Pending,2025-04-04 08:27:42
+944,MO-LG-0717,VisionTech Supplies,Bulk order request for LG Monitor Model 203,192,Approved,2024-08-12 14:34:37
+945,HE-SK-0331,DigiHub Electronics,Customer pre-orders for Skullcandy Headphones Model 135,118,Pending,2025-07-21 05:10:54
+946,GA-NI-0265,VisionTech Supplies,Seasonal demand increase for Nintendo Gaming Console Model 192,120,Pending,2024-10-24 19:50:07
+947,TV-SO-0598,ConnectPro Supplies,Customer pre-orders for Sony TV Model 750,106,Pending,2024-06-26 08:23:43
+948,SM-GA-0128,Visionary Electronics,Bulk order request for Garmin Smartwatch Model 713,143,Approved,2024-11-15 06:23:33
+949,SP-SO-0217,MobileMart Pvt Ltd,Customer pre-orders for Sony Speaker Model 743,94,Pending,2025-12-28 14:46:30
+950,LA-MI-0616,SmartLife Traders,Bulk order request for Microsoft Laptop Model 559,168,Pending,2024-05-22 20:01:16
+951,SP-HA-0624,PrintWorks Pvt Ltd,Bulk order request for Harman Kardon Speaker Model 710,18,Approved,2025-12-03 05:41:20
+952,SP-JB-0670,PowerTech Distributors,Customer pre-orders for JBL Speaker Model 887,88,Approved,2024-05-30 18:35:11
+953,RO-AS-0093,Peripheral Pros,Seasonal demand increase for Asus Router Model 825,135,Approved,2024-01-22 21:55:05
+954,CA-OL-0370,DigiHub Electronics,Urgent: Olympus Camera Model 900 running out,120,Approved,2025-10-22 07:33:03
+955,SM-ON-0028,PowerTech Distributors,Seasonal demand increase for OnePlus Smartwatch Model 382,171,Pending,2025-02-08 13:02:00
+956,MO-MI-0606,Visionary Electronics,Urgent: Microsoft Mouse Model 262 running out,47,Pending,2025-07-02 19:03:50
+957,GA-MI-0553,SmartLife Traders,Customer pre-orders for Microsoft Gaming Console Model 789,181,Approved,2025-11-23 07:30:46
+958,SM-AM-0399,TechWorld Pvt Ltd,Seasonal demand increase for Amazfit Smartwatch Model 889,12,Rejected,2025-03-16 21:46:00
+959,MO-DE-0655,VisionTech Supplies,Bulk order request for Dell Mouse Model 335,10,Approved,2025-08-15 04:07:32
+960,TA-AM-0170,TechWorld Pvt Ltd,Urgent: Amazon Tablet Model 913 running out,176,Pending,2024-04-12 23:08:59
+961,WE-LO-0672,GameZone Distributors,Low stock alert - need restock for Logitech Webcam Model 598,193,Approved,2025-02-06 05:36:05
+962,HE-SK-0737,GadgetHub India,Bulk order request for Skullcandy Headphones Model 612,85,Approved,2025-08-08 03:44:14
+963,WE-RA-0321,ElectroMart Solutions,Low stock alert - need restock for Razer Webcam Model 215,21,Approved,2025-08-07 13:43:52
+964,LA-RA-0382,DigiHub Electronics,Low stock alert - need restock for Razer Laptop Model 408,120,Pending,2026-02-24 07:35:45
+965,SM-GO-0403,Peripheral Pros,Bulk order request for Google Smartphone Model 883,127,Pending,2024-01-18 23:47:15
+966,TA-LE-0643,Visionary Electronics,Low stock alert - need restock for Lenovo Tablet Model 812,90,Pending,2024-07-28 23:28:01
+967,SP-UL-0663,PrintWorks Pvt Ltd,Low stock alert - need restock for Ultimate Ears Speaker Model 657,170,Pending,2025-03-15 19:56:49
+968,CA-GO-0457,PowerTech Distributors,Seasonal demand increase for GoPro Camera Model 774,167,Pending,2025-01-08 17:37:21
+969,RO-AS-0306,ConnectPro Supplies,Customer pre-orders for Asus Router Model 257,120,Approved,2025-09-20 03:38:12
+970,LA-MS-0090,PrintWorks Pvt Ltd,Urgent: MSI Laptop Model 707 running out,146,Approved,2025-12-06 11:35:22
+971,CA-AM-0707,MobileMart Pvt Ltd,Bulk order request for AmazonBasics Cable Model 791,165,Rejected,2024-10-21 04:47:59
+972,TV-ON-0632,SmartLife Traders,Seasonal demand increase for OnePlus TV Model 335,57,Approved,2024-04-29 23:24:49
+973,CA-BE-0578,Elite Tech Supplies,Bulk order request for Belkin Cable Model 613,82,Pending,2024-10-12 00:31:43
+974,CA-CA-0534,GadgetHub India,Low stock alert - need restock for Canon Camera Model 871,98,Pending,2025-10-06 17:25:01
+975,KE-DU-0337,SoundPro Solutions,Seasonal demand increase for Ducky Keyboard Model 163,64,Pending,2024-07-17 23:33:04
+976,SP-HA-0579,CameraKing Distributors,Customer pre-orders for Harman Kardon Speaker Model 756,161,Approved,2025-03-12 15:59:22
+977,WE-LO-0262,AudioMax Distributors,Customer pre-orders for Logitech Webcam Model 512,91,Approved,2025-12-07 22:01:52
+978,WE-HP-0664,TechNova Pvt Ltd,Seasonal demand increase for HP Webcam Model 215,45,Pending,2024-01-21 04:37:54
+979,EA-AN-0508,CameraKing Distributors,Urgent: Anker Earbuds Model 619 running out,44,Approved,2024-02-17 16:36:37
+980,HE-SK-0737,GadgetHub India,Urgent: Skullcandy Headphones Model 612 running out,187,Pending,2025-10-20 07:19:54
+981,CA-NI-0634,MobileMart Pvt Ltd,Customer pre-orders for Nikon Camera Model 982,116,Approved,2024-08-12 04:54:15
+982,GA-SO-0055,Elite Tech Supplies,Bulk order request for Sony Gaming Console Model 352,145,Pending,2024-09-30 06:23:49
+983,ME-SO-0040,DigiHub Electronics,Urgent: Sony Memory Card Model 423 running out,75,Pending,2025-12-17 04:19:39
+984,PR-CA-0786,Elite Tech Supplies,Urgent: Canon Printer Model 414 running out,49,Pending,2025-07-29 01:26:45
+985,CH-BO-0641,PrintWorks Pvt Ltd,Urgent: Boat Charger Model 173 running out,77,Approved,2025-11-08 23:47:37
+986,RO-AS-0142,SmartLife Traders,Customer pre-orders for Asus Router Model 524,98,Approved,2024-02-17 17:48:08
+987,TA-MI-0165,SmartLife Traders,Customer pre-orders for Microsoft Tablet Model 296,142,Approved,2025-07-17 05:18:50
+988,HE-BE-0167,TechWorld Pvt Ltd,Customer pre-orders for Beats Headphones Model 872,19,Approved,2025-04-14 19:06:38
+989,EA-BO-0612,TechNova Pvt Ltd,Low stock alert - need restock for Boat Earbuds Model 218,122,Pending,2025-09-14 08:17:22
+990,EA-NO-0198,MobileMart Pvt Ltd,Seasonal demand increase for Noise Earbuds Model 499,43,Approved,2025-02-04 21:33:07
+991,SM-BO-0103,TechWorld Pvt Ltd,Bulk order request for Boat Smartwatch Model 123,74,Approved,2024-01-04 23:36:54
+992,LA-RA-0382,DigiHub Electronics,Urgent: Razer Laptop Model 408 running out,195,Approved,2025-10-23 22:52:40
+993,HE-SE-0200,CameraKing Distributors,Low stock alert - need restock for Sennheiser Headphones Model 760,64,Approved,2024-06-13 19:04:26
+994,SP-BO-0477,PowerTech Distributors,Customer pre-orders for Bose Speaker Model 484,142,Approved,2024-11-17 14:18:01
+995,PO-AN-0791,Elite Tech Supplies,Urgent: Anker Power Bank Model 986 running out,61,Approved,2025-01-15 02:59:26
+996,PR-EP-0250,PowerTech Distributors,Bulk order request for Epson Printer Model 340,37,Rejected,2025-03-17 05:18:30
+997,TV-TC-0268,ReadMore Supplies,Low stock alert - need restock for TCL TV Model 350,180,Approved,2025-01-28 12:31:58
+998,GA-SO-0473,GadgetHub India,Urgent: Sony Gaming Console Model 540 running out,102,Approved,2024-07-04 20:28:55
+999,TV-XI-0603,ConnectPro Supplies,Low stock alert - need restock for Xiaomi TV Model 990,95,Approved,2024-04-06 09:50:57
+1000,RO-AS-0564,PrintWorks Pvt Ltd,Low stock alert - need restock for Asus Router Model 782,158,Pending,2025-02-28 15:06:04
+1001,HE-JB-0140,Peripheral Pros,Bulk order request for JBL Headphones Model 512,124,Approved,2024-06-07 09:35:11
+1002,SP-JB-0650,SmartLife Traders,Urgent: JBL Speaker Model 214 running out,84,Approved,2024-10-27 01:32:17
+1003,TV-TC-0588,ReadMore Supplies,Customer pre-orders for TCL TV Model 454,87,Approved,2024-03-09 23:45:42
+1004,HE-BE-0546,PowerTech Distributors,Seasonal demand increase for Beats Headphones Model 934,142,Rejected,2025-09-25 21:07:37
+1005,SP-BO-0675,SmartLife Traders,Customer pre-orders for Bose Speaker Model 588,25,Approved,2024-09-19 21:32:11
+1006,SM-RE-0486,DigiHub Electronics,Urgent: Realme Smartphone Model 714 running out,157,Pending,2024-08-31 09:21:07
+1007,CA-AN-0343,ConnectPro Supplies,Seasonal demand increase for Anker Cable Model 351,170,Pending,2025-04-24 17:48:16
+1008,RO-LI-0528,TechNova Pvt Ltd,Urgent: Linksys Router Model 315 running out,197,Rejected,2025-04-09 11:51:01
+1009,KE-CO-0518,AudioMax Distributors,Low stock alert - need restock for Corsair Keyboard Model 680,153,Pending,2024-02-02 18:41:34
+1010,GA-SO-0055,Elite Tech Supplies,Customer pre-orders for Sony Gaming Console Model 352,137,Pending,2024-08-02 08:29:43
+1011,GA-SO-0055,Elite Tech Supplies,Low stock alert - need restock for Sony Gaming Console Model 352,119,Pending,2025-07-18 21:18:22
+1012,ME-KI-0480,SmartGear Traders,Seasonal demand increase for Kingston Memory Card Model 380,44,Pending,2025-08-20 17:46:57
+1013,SM-RE-0021,DigiHub Electronics,Low stock alert - need restock for Realme Smartphone Model 743,107,Approved,2025-06-14 09:57:33
+1014,GA-NI-0659,TechNova Pvt Ltd,Bulk order request for Nintendo Gaming Console Model 681,113,Approved,2025-05-05 10:48:26
+1015,KE-RA-0614,VisionTech Supplies,Low stock alert - need restock for Razer Keyboard Model 185,169,Approved,2025-09-22 22:23:00
+1016,TV-SA-0035,SmartGear Traders,Customer pre-orders for Samsung TV Model 384,130,Approved,2024-12-22 01:34:19
+1017,LA-DE-0580,SoundPro Solutions,Seasonal demand increase for Dell Laptop Model 680,121,Rejected,2024-11-17 08:54:07
+1018,SM-AP-0560,Elite Tech Supplies,Seasonal demand increase for Apple Smartphone Model 243,144,Pending,2025-01-03 06:41:00
+1019,CH-ON-0434,SmartGear Traders,Customer pre-orders for OnePlus Charger Model 926,45,Rejected,2025-08-10 10:33:08
+1020,SM-AM-0124,SmartLife Traders,Urgent: Amazfit Smartwatch Model 572 running out,114,Pending,2025-12-19 07:18:39
+1021,GA-MI-0794,Elite Tech Supplies,Low stock alert - need restock for Microsoft Gaming Console Model 271,162,Rejected,2025-11-02 20:10:39
+1022,SP-UL-0638,TechWorld Pvt Ltd,Seasonal demand increase for Ultimate Ears Speaker Model 984,154,Approved,2025-06-11 17:43:49
+1023,HE-AU-0696,TechWorld Pvt Ltd,Low stock alert - need restock for Audio-Technica Headphones Model 309,112,Approved,2025-10-02 06:57:40
+1024,ME-SA-0058,ElectroMart Solutions,Bulk order request for SanDisk Memory Card Model 361,14,Pending,2025-11-29 22:31:39
+1025,PO-RE-0029,ConnectPro Supplies,Bulk order request for Realme Power Bank Model 125,23,Approved,2024-04-29 15:21:41
+1026,TV-SO-0778,VisionTech Supplies,Low stock alert - need restock for Sony TV Model 804,107,Approved,2025-10-21 04:10:29
+1027,MO-AC-0602,TechNova Pvt Ltd,Seasonal demand increase for Acer Monitor Model 719,114,Pending,2025-12-28 01:07:30
+1028,CA-PA-0744,CameraKing Distributors,Low stock alert - need restock for Panasonic Camera Model 245,134,Approved,2025-08-07 19:09:04
+1029,KE-RA-0022,VisionTech Supplies,Customer pre-orders for Razer Keyboard Model 822,81,Rejected,2024-08-31 10:59:43
+1030,SM-AP-0729,ConnectPro Supplies,Customer pre-orders for Apple Smartwatch Model 609,110,Approved,2025-10-29 04:26:49
+1031,SM-RE-0283,PrintWorks Pvt Ltd,Bulk order request for Realme Smartphone Model 655,191,Pending,2025-08-11 16:35:11
+1032,LA-AP-0394,Visionary Electronics,Seasonal demand increase for Apple Laptop Model 413,64,Pending,2025-08-05 02:21:44
+1033,CA-SO-0428,GadgetHub India,Low stock alert - need restock for Sony Camera Model 352,131,Pending,2024-02-26 11:33:48
+1034,CA-GO-0448,Visionary Electronics,Customer pre-orders for GoPro Camera Model 579,16,Rejected,2025-08-28 04:25:47
+1035,SM-SA-0007,PowerTech Distributors,Customer pre-orders for Samsung Smartphone Model 810,92,Pending,2026-02-17 04:00:58
+1036,LA-MS-0017,GameZone Distributors,Customer pre-orders for MSI Laptop Model 767,116,Rejected,2024-12-20 07:17:51
+1037,EA-JA-0228,ConnectPro Supplies,Low stock alert - need restock for Jabra Earbuds Model 316,109,Approved,2024-01-14 06:02:51
+1038,TV-SO-0778,VisionTech Supplies,Customer pre-orders for Sony TV Model 804,50,Pending,2024-09-01 17:54:20
+1039,KE-ST-0668,PrintWorks Pvt Ltd,Customer pre-orders for SteelSeries Keyboard Model 380,66,Approved,2024-02-25 21:25:48
+1040,SM-MO-0245,AudioMax Distributors,Urgent: Motorola Smartphone Model 532 running out,153,Pending,2025-09-25 15:03:15
+1041,HE-PH-0061,GadgetHub India,Low stock alert - need restock for Philips Headphones Model 293,11,Approved,2025-03-19 08:20:03
+1042,SM-SA-0183,SoundPro Solutions,Bulk order request for Samsung Smartwatch Model 194,13,Pending,2024-10-30 02:44:37
+1043,MO-LO-0006,GameZone Distributors,Low stock alert - need restock for Logitech Mouse Model 258,161,Approved,2025-11-15 17:18:14
+1044,LA-HP-0082,PowerTech Distributors,Urgent: HP Laptop Model 937 running out,184,Rejected,2025-11-20 13:52:16
+1045,MO-HP-0466,ElectroMart Solutions,Urgent: HP Mouse Model 516 running out,145,Approved,2025-08-17 02:34:41
+1046,WE-LO-0105,CameraKing Distributors,Urgent: Logitech Webcam Model 180 running out,170,Approved,2024-07-23 07:45:04
+1047,CA-BE-0113,SmartGear Traders,Urgent: Belkin Cable Model 382 running out,97,Pending,2025-07-11 10:55:54
+1048,EA-AN-0387,GadgetHub India,Customer pre-orders for Anker Earbuds Model 108,61,Pending,2025-03-14 16:56:03
+1049,RO-NE-0692,TechNova Pvt Ltd,Customer pre-orders for Netgear Router Model 689,137,Approved,2025-11-19 13:36:30
+1050,SM-AP-0760,Peripheral Pros,Customer pre-orders for Apple Smartwatch Model 712,179,Pending,2024-08-26 02:16:33
+1051,SM-OP-0147,TechWorld Pvt Ltd,Urgent: Oppo Smartphone Model 299 running out,85,Pending,2025-10-18 07:03:55
+1052,PR-EP-0250,PowerTech Distributors,Customer pre-orders for Epson Printer Model 340,146,Pending,2025-05-14 09:43:19
+1053,CA-AN-0613,Elite Tech Supplies,Low stock alert - need restock for Anker Cable Model 768,166,Approved,2026-02-05 20:59:35
+1054,MO-HP-0227,ConnectPro Supplies,Seasonal demand increase for HP Mouse Model 435,130,Pending,2025-12-29 09:26:02
+1055,WE-MI-0767,Peripheral Pros,Low stock alert - need restock for Microsoft Webcam Model 918,60,Approved,2024-05-27 21:16:40
+1056,CH-SA-0149,DigiHub Electronics,Urgent: Samsung Charger Model 325 running out,172,Rejected,2025-08-25 03:37:22
+1057,CA-BO-0166,DigiHub Electronics,Low stock alert - need restock for Boat Cable Model 267,56,Pending,2025-04-07 23:25:18
+1058,ME-SO-0710,GadgetHub India,Customer pre-orders for Sony Memory Card Model 207,105,Approved,2024-04-16 01:18:50
+1059,TA-SA-0550,PowerTech Distributors,Urgent: Samsung Tablet Model 708 running out,64,Rejected,2024-01-05 21:22:43
+1060,SM-GA-0128,Visionary Electronics,Customer pre-orders for Garmin Smartwatch Model 713,73,Approved,2025-04-04 23:48:51
+1061,ME-SA-0607,AudioMax Distributors,Urgent: Samsung Memory Card Model 489 running out,99,Rejected,2025-05-27 16:08:24
+1062,TA-AP-0005,Elite Tech Supplies,Urgent: Apple Tablet Model 702 running out,13,Approved,2024-11-27 13:27:24
+1063,CA-BO-0139,GadgetHub India,Customer pre-orders for Boat Cable Model 259,39,Approved,2024-08-06 22:12:08
+1064,SM-NO-0689,TechWorld Pvt Ltd,Customer pre-orders for Nokia Smartphone Model 385,37,Pending,2025-04-27 19:30:02
+1065,MO-LO-0563,GameZone Distributors,Urgent: Logitech Mouse Model 323 running out,52,Approved,2024-04-30 08:46:09
+1066,PR-BR-0519,Peripheral Pros,Seasonal demand increase for Brother Printer Model 596,111,Pending,2024-08-22 08:05:28
+1067,EA-JA-0593,ElectroMart Solutions,Urgent: Jabra Earbuds Model 970 running out,102,Approved,2024-05-09 16:58:27
+1068,MO-RA-0328,TechWorld Pvt Ltd,Bulk order request for Razer Mouse Model 435,55,Rejected,2025-09-14 06:26:54
+1069,PO-RE-0507,CameraKing Distributors,Low stock alert - need restock for Realme Power Bank Model 438,60,Pending,2024-12-13 17:47:53
+1070,MO-MI-0701,GadgetHub India,Seasonal demand increase for Microsoft Mouse Model 454,170,Approved,2024-10-05 12:44:48
+1071,SP-UL-0652,ConnectPro Supplies,Low stock alert - need restock for Ultimate Ears Speaker Model 968,172,Pending,2025-03-13 08:51:27
+1072,CA-SO-0529,VisionTech Supplies,Bulk order request for Sony Camera Model 431,95,Rejected,2024-03-12 22:33:13
+1073,RO-AS-0142,SmartLife Traders,Seasonal demand increase for Asus Router Model 524,130,Approved,2025-11-20 11:48:23
+1074,TV-SA-0572,AudioMax Distributors,Urgent: Samsung TV Model 902 running out,192,Pending,2024-01-07 11:12:30
+1075,HE-BE-0256,Visionary Electronics,Seasonal demand increase for Beats Headphones Model 359,14,Rejected,2025-11-23 10:34:43
+1076,PO-AM-0435,GadgetHub India,Bulk order request for Ambrane Power Bank Model 150,103,Approved,2025-09-09 12:21:30
+1077,WE-MI-0329,VisionTech Supplies,Seasonal demand increase for Microsoft Webcam Model 885,39,Rejected,2025-10-07 12:57:33
+1078,SM-OP-0330,MobileMart Pvt Ltd,Bulk order request for Oppo Smartphone Model 348,154,Pending,2025-11-16 09:54:20
+1079,SP-MA-0280,AudioMax Distributors,Urgent: Marshall Speaker Model 107 running out,99,Approved,2024-12-01 10:15:34
+1080,EA-SO-0648,GameZone Distributors,Low stock alert - need restock for Sony Earbuds Model 449,90,Approved,2024-12-19 06:51:39
+1081,TA-RE-0619,MobileMart Pvt Ltd,Seasonal demand increase for Realme Tablet Model 258,74,Pending,2025-09-17 00:55:06
+1082,CA-GO-0457,PowerTech Distributors,Bulk order request for GoPro Camera Model 774,151,Pending,2024-11-21 00:12:21
+1083,WE-RA-0152,ConnectPro Supplies,Customer pre-orders for Razer Webcam Model 278,31,Approved,2024-10-15 22:13:24
+1084,KE-RA-0341,Visionary Electronics,Bulk order request for Razer Keyboard Model 887,112,Pending,2025-11-24 03:15:09
+1085,ME-KI-0408,MobileMart Pvt Ltd,Bulk order request for Kingston Memory Card Model 332,145,Pending,2025-01-15 22:05:19
+1086,SP-UL-0336,ElectroMart Solutions,Seasonal demand increase for Ultimate Ears Speaker Model 840,124,Approved,2025-03-17 08:46:46
+1087,RO-LI-0605,TechNova Pvt Ltd,Bulk order request for Linksys Router Model 533,103,Pending,2025-01-11 07:56:10
+1088,TV-ON-0449,Elite Tech Supplies,Low stock alert - need restock for OnePlus TV Model 241,52,Approved,2025-09-20 20:33:24
+1089,MO-AC-0116,Peripheral Pros,Seasonal demand increase for Acer Monitor Model 248,129,Approved,2024-06-08 18:25:27
+1090,KE-ST-0474,ElectroMart Solutions,Urgent: SteelSeries Keyboard Model 183 running out,166,Approved,2024-09-30 19:09:09
+1091,EA-AN-0164,MobileMart Pvt Ltd,Seasonal demand increase for Anker Earbuds Model 138,12,Pending,2025-04-07 16:53:00
+1092,GA-NI-0659,TechNova Pvt Ltd,Low stock alert - need restock for Nintendo Gaming Console Model 681,54,Pending,2024-09-21 08:01:23
+1093,WE-RA-0048,GadgetHub India,Low stock alert - need restock for Razer Webcam Model 711,194,Approved,2024-04-24 05:10:28
+1094,HE-AU-0076,CameraKing Distributors,Customer pre-orders for Audio-Technica Headphones Model 364,140,Pending,2024-11-21 05:44:04
+1095,CH-RE-0145,GadgetHub India,Seasonal demand increase for Realme Charger Model 246,183,Approved,2024-12-06 21:03:49
+1096,CA-NI-0634,MobileMart Pvt Ltd,Urgent: Nikon Camera Model 982 running out,43,Pending,2025-02-05 08:50:19
+1097,RO-CI-0628,PrintWorks Pvt Ltd,Low stock alert - need restock for Cisco Router Model 899,49,Pending,2024-08-19 14:48:56
+1098,TA-AM-0441,TechNova Pvt Ltd,Low stock alert - need restock for Amazon Tablet Model 838,119,Approved,2024-12-09 19:26:13
+1099,WE-CR-0388,CameraKing Distributors,Customer pre-orders for Creative Webcam Model 721,76,Approved,2024-05-12 05:57:16
+1100,SM-RE-0207,CameraKing Distributors,Urgent: Realme Smartphone Model 136 running out,199,Pending,2024-06-24 17:33:45
+1101,SM-FI-0216,CameraKing Distributors,Bulk order request for Fitbit Smartwatch Model 770,186,Approved,2025-03-13 08:58:58
+1102,SP-UL-0663,PrintWorks Pvt Ltd,Urgent: Ultimate Ears Speaker Model 657 running out,173,Approved,2025-08-08 10:01:55
+1103,SM-AM-0112,VisionTech Supplies,Urgent: Amazfit Smartwatch Model 532 running out,43,Pending,2024-03-13 09:50:06
+1104,CA-AM-0251,Peripheral Pros,Customer pre-orders for AmazonBasics Cable Model 584,52,Approved,2025-05-02 23:26:25
+1105,MO-RA-0328,TechWorld Pvt Ltd,Urgent: Razer Mouse Model 435 running out,196,Pending,2024-06-04 15:33:41
+1106,CA-BO-0139,GadgetHub India,Urgent: Boat Cable Model 259 running out,77,Approved,2025-10-06 00:12:12
+1107,CA-GO-0448,Visionary Electronics,Customer pre-orders for GoPro Camera Model 579,54,Approved,2026-02-22 10:13:42
+1108,GA-NI-0644,Visionary Electronics,Seasonal demand increase for Nintendo Gaming Console Model 468,179,Approved,2025-11-25 04:34:52
+1109,PR-EP-0119,SmartGear Traders,Urgent: Epson Printer Model 285 running out,58,Pending,2024-11-16 04:03:31
+1110,TV-ON-0081,Peripheral Pros,Low stock alert - need restock for OnePlus TV Model 261,45,Rejected,2025-10-22 17:07:58
+1111,SP-MA-0083,AudioMax Distributors,Low stock alert - need restock for Marshall Speaker Model 337,40,Approved,2025-12-14 08:20:57
+1112,PR-HP-0484,PowerTech Distributors,Urgent: HP Printer Model 743 running out,167,Pending,2024-07-28 15:34:33
+1113,SP-SO-0554,AudioMax Distributors,Urgent: Sony Speaker Model 352 running out,21,Approved,2026-02-23 02:02:13
+1114,HE-SO-0294,ConnectPro Supplies,Customer pre-orders for Sony Headphones Model 845,171,Pending,2024-06-05 16:44:06
+1115,MO-LO-0611,SoundPro Solutions,Urgent: Logitech Mouse Model 906 running out,69,Approved,2026-01-02 01:55:25
+1116,LA-DE-0516,Elite Tech Supplies,Customer pre-orders for Dell Laptop Model 871,62,Approved,2025-12-17 14:22:05
+1117,GA-SO-0562,ElectroMart Solutions,Urgent: Sony Gaming Console Model 717 running out,49,Approved,2025-09-30 13:35:29
+1118,CA-OL-0176,ElectroMart Solutions,Customer pre-orders for Olympus Camera Model 886,82,Rejected,2024-03-30 06:10:16
+1119,PO-SA-0194,ElectroMart Solutions,Bulk order request for Samsung Power Bank Model 748,103,Approved,2026-01-29 07:29:55
+1120,SM-BO-0177,Visionary Electronics,Customer pre-orders for Boat Smartwatch Model 984,50,Approved,2025-06-25 17:11:50
+1121,MO-DE-0559,SoundPro Solutions,Low stock alert - need restock for Dell Monitor Model 902,124,Rejected,2026-01-06 09:24:57
+1122,TA-SA-0550,PowerTech Distributors,Customer pre-orders for Samsung Tablet Model 708,30,Approved,2024-06-08 00:51:12
+1123,WE-RA-0214,ElectroMart Solutions,Customer pre-orders for Razer Webcam Model 820,40,Approved,2026-01-26 08:26:54
+1124,MO-AS-0347,GameZone Distributors,Urgent: Asus Monitor Model 424 running out,136,Rejected,2024-09-08 19:23:22
+1125,TA-AM-0170,TechWorld Pvt Ltd,Seasonal demand increase for Amazon Tablet Model 913,19,Approved,2025-04-05 10:14:15
+1126,WE-CR-0698,SmartGear Traders,Customer pre-orders for Creative Webcam Model 498,87,Pending,2025-06-28 14:52:20
+1127,WE-MI-0393,Visionary Electronics,Urgent: Microsoft Webcam Model 846 running out,35,Rejected,2024-04-09 13:47:17
+1128,SP-SO-0404,SoundPro Solutions,Low stock alert - need restock for Sony Speaker Model 553,58,Pending,2025-09-19 11:59:26
+1129,SM-SA-0631,Elite Tech Supplies,Customer pre-orders for Samsung Smartwatch Model 638,123,Pending,2024-11-05 02:41:10
+1130,PR-BR-0427,MobileMart Pvt Ltd,Urgent: Brother Printer Model 698 running out,24,Approved,2024-11-06 02:41:42
+1131,CA-PA-0712,SoundPro Solutions,Low stock alert - need restock for Panasonic Camera Model 842,196,Approved,2025-03-15 20:28:10
+1132,MO-SA-0604,PowerTech Distributors,Customer pre-orders for Samsung Monitor Model 521,195,Approved,2024-09-22 16:20:33
+1133,SP-SO-0554,AudioMax Distributors,Seasonal demand increase for Sony Speaker Model 352,56,Pending,2026-02-05 14:22:06
+1134,EA-ON-0373,Peripheral Pros,Customer pre-orders for OnePlus Earbuds Model 534,169,Pending,2024-05-25 02:31:19
+1135,KE-KE-0504,PrintWorks Pvt Ltd,Bulk order request for Keychron Keyboard Model 777,81,Approved,2024-01-14 04:47:28
+1136,HE-SO-0625,DigiHub Electronics,Customer pre-orders for Sony Headphones Model 426,188,Approved,2024-12-30 07:40:36
+1137,MO-MI-0374,VisionTech Supplies,Bulk order request for Microsoft Mouse Model 417,22,Pending,2025-05-10 19:51:30
+1138,CA-UG-0735,MobileMart Pvt Ltd,Seasonal demand increase for Ugreen Cable Model 653,145,Approved,2025-06-28 14:37:06
+1139,KE-CO-0009,Visionary Electronics,Low stock alert - need restock for Corsair Keyboard Model 632,80,Pending,2025-03-30 21:01:20
+1140,ME-SO-0074,PowerTech Distributors,Seasonal demand increase for Sony Memory Card Model 921,37,Pending,2025-08-27 03:46:25
+1141,EA-SO-0648,GameZone Distributors,Low stock alert - need restock for Sony Earbuds Model 449,33,Approved,2024-07-23 03:32:48
+1142,MO-DE-0497,CameraKing Distributors,Urgent: Dell Mouse Model 392 running out,129,Approved,2025-08-09 04:12:20
+1143,SM-RE-0293,SoundPro Solutions,Seasonal demand increase for Realme Smartphone Model 275,36,Approved,2024-01-18 19:34:51
+1144,MO-CO-0790,TechWorld Pvt Ltd,Bulk order request for Corsair Mouse Model 933,159,Approved,2024-09-13 07:17:29
+1145,WE-RA-0039,Visionary Electronics,Customer pre-orders for Razer Webcam Model 748,40,Pending,2026-02-24 00:04:33
+1146,EA-NO-0198,MobileMart Pvt Ltd,Bulk order request for Noise Earbuds Model 499,43,Pending,2024-12-07 20:29:05
+1147,CA-BE-0113,SmartGear Traders,Urgent: Belkin Cable Model 382 running out,186,Pending,2026-02-14 01:42:04
+1148,LA-RA-0231,MobileMart Pvt Ltd,Customer pre-orders for Razer Laptop Model 918,136,Approved,2025-03-20 12:17:36
+1149,EA-BO-0225,ReadMore Supplies,Customer pre-orders for Boat Earbuds Model 782,51,Approved,2025-03-28 21:36:50
+1150,MO-MI-0606,Visionary Electronics,Customer pre-orders for Microsoft Mouse Model 262,113,Pending,2024-09-05 11:39:35
+1151,EA-SO-0326,PrintWorks Pvt Ltd,Customer pre-orders for Sony Earbuds Model 614,101,Approved,2025-04-11 15:41:00
+1152,TA-RE-0102,MobileMart Pvt Ltd,Customer pre-orders for Realme Tablet Model 595,48,Pending,2025-09-01 07:59:08
+1153,GA-NI-0644,Visionary Electronics,Urgent: Nintendo Gaming Console Model 468 running out,44,Pending,2025-09-13 00:34:19
+1154,HE-BE-0167,TechWorld Pvt Ltd,Seasonal demand increase for Beats Headphones Model 872,104,Pending,2025-11-17 08:44:16
+1155,PO-AM-0459,GameZone Distributors,Customer pre-orders for Ambrane Power Bank Model 269,136,Rejected,2024-11-09 10:19:01
+1156,RO-NE-0238,PowerTech Distributors,Customer pre-orders for Netgear Router Model 983,93,Approved,2025-06-05 20:22:06
+1157,KE-HP-0481,SmartLife Traders,Customer pre-orders for HP Keyboard Model 678,54,Approved,2025-02-18 16:26:00
+1158,MO-CO-0500,ConnectPro Supplies,Customer pre-orders for Corsair Mouse Model 268,196,Pending,2025-05-29 17:51:08
+1159,ME-SO-0040,DigiHub Electronics,Low stock alert - need restock for Sony Memory Card Model 423,91,Approved,2024-03-24 11:33:27
+1160,RO-NE-0440,TechNova Pvt Ltd,Customer pre-orders for Netgear Router Model 787,55,Approved,2025-04-23 06:50:26
+1161,SM-NO-0689,TechWorld Pvt Ltd,Urgent: Nokia Smartphone Model 385 running out,53,Pending,2025-09-26 23:06:39
+1162,KE-HP-0178,Peripheral Pros,Customer pre-orders for HP Keyboard Model 893,63,Pending,2025-07-31 12:19:07
+1163,HE-PH-0577,AudioMax Distributors,Customer pre-orders for Philips Headphones Model 519,83,Approved,2026-01-15 20:51:48
+1164,CH-SA-0420,VisionTech Supplies,Seasonal demand increase for Samsung Charger Model 383,105,Approved,2024-11-14 05:55:36
+1165,HE-SK-0678,SmartGear Traders,Seasonal demand increase for Skullcandy Headphones Model 799,56,Approved,2025-05-27 11:39:18
+1166,KE-RA-0022,VisionTech Supplies,Urgent: Razer Keyboard Model 822 running out,16,Approved,2024-05-19 20:16:45
+1167,TA-SA-0424,GameZone Distributors,Low stock alert - need restock for Samsung Tablet Model 620,159,Approved,2024-02-16 21:13:46
+1168,LA-DE-0089,Peripheral Pros,Bulk order request for Dell Laptop Model 135,79,Approved,2024-07-09 19:27:21
+1169,LA-MI-0616,SmartLife Traders,Low stock alert - need restock for Microsoft Laptop Model 559,138,Pending,2024-05-29 07:31:36
+1170,CH-SA-0420,VisionTech Supplies,Low stock alert - need restock for Samsung Charger Model 383,193,Approved,2024-11-30 16:51:37
+1171,TV-SA-0654,Visionary Electronics,Seasonal demand increase for Samsung TV Model 610,31,Pending,2025-08-09 18:56:11
+1172,PO-SY-0288,ConnectPro Supplies,Customer pre-orders for Syska Power Bank Model 996,162,Approved,2024-06-30 06:59:17
+1173,SM-BO-0222,GameZone Distributors,Bulk order request for Boat Smartwatch Model 269,118,Pending,2024-05-04 00:04:20
+1174,PR-CA-0669,TechWorld Pvt Ltd,Urgent: Canon Printer Model 936 running out,137,Approved,2025-05-19 20:39:59
+1175,SM-MO-0245,AudioMax Distributors,Customer pre-orders for Motorola Smartphone Model 532,30,Approved,2025-12-26 14:03:18
+1176,PR-BR-0427,MobileMart Pvt Ltd,Urgent: Brother Printer Model 698 running out,40,Pending,2025-11-26 18:19:21
+1177,LA-DE-0004,MobileMart Pvt Ltd,Urgent: Dell Laptop Model 259 running out,98,Approved,2025-07-27 10:45:18
+1178,SM-SA-0315,ConnectPro Supplies,Seasonal demand increase for Samsung Smartphone Model 994,71,Rejected,2025-07-05 10:06:56
+1179,TA-MI-0165,SmartLife Traders,Seasonal demand increase for Microsoft Tablet Model 296,57,Pending,2024-03-21 02:52:57
+1180,HE-AU-0219,Elite Tech Supplies,Seasonal demand increase for Audio-Technica Headphones Model 776,71,Approved,2024-07-08 00:21:39
+1181,MO-CO-0079,SmartGear Traders,Seasonal demand increase for Corsair Mouse Model 824,191,Approved,2025-12-06 01:41:49
+1182,SP-HA-0574,ConnectPro Supplies,Seasonal demand increase for Harman Kardon Speaker Model 867,97,Pending,2025-12-14 13:16:27
+1183,SP-UL-0761,TechNova Pvt Ltd,Bulk order request for Ultimate Ears Speaker Model 239,174,Approved,2024-11-21 22:13:14
+1184,CA-UG-0682,PowerTech Distributors,Low stock alert - need restock for Ugreen Cable Model 548,198,Approved,2024-11-12 22:54:10
+1185,LA-MS-0015,AudioMax Distributors,Urgent: MSI Laptop Model 602 running out,15,Pending,2024-01-07 09:50:20
+1186,GA-MI-0421,ReadMore Supplies,Urgent: Microsoft Gaming Console Model 493 running out,158,Approved,2024-10-19 17:00:55
+1187,ME-SA-0301,CameraKing Distributors,Bulk order request for Samsung Memory Card Model 837,169,Approved,2025-08-24 14:24:51
+1188,CA-BO-0139,GadgetHub India,Bulk order request for Boat Cable Model 259,48,Approved,2025-07-10 03:26:50
+1189,CA-SO-0362,VisionTech Supplies,Low stock alert - need restock for Sony Camera Model 187,99,Pending,2024-04-30 07:11:32
+1190,LA-MS-0131,SoundPro Solutions,Customer pre-orders for MSI Laptop Model 890,175,Approved,2025-09-30 08:50:13
+1191,ME-KI-0582,ConnectPro Supplies,Bulk order request for Kingston Memory Card Model 152,99,Approved,2025-05-23 23:00:19
+1192,SM-BO-0239,SmartLife Traders,Low stock alert - need restock for Boat Smartwatch Model 212,53,Approved,2024-03-12 22:23:14
+1193,GA-MI-0031,ReadMore Supplies,Seasonal demand increase for Microsoft Gaming Console Model 411,195,Pending,2024-08-19 05:52:57
+1194,GA-SO-0055,Elite Tech Supplies,Customer pre-orders for Sony Gaming Console Model 352,58,Approved,2024-03-01 14:45:46
+1195,RO-CI-0157,GadgetHub India,Urgent: Cisco Router Model 861 running out,91,Pending,2024-04-15 23:40:47
+1196,KE-DU-0544,ElectroMart Solutions,Seasonal demand increase for Ducky Keyboard Model 326,41,Rejected,2025-10-14 16:55:14
+1197,EA-AN-0508,CameraKing Distributors,Seasonal demand increase for Anker Earbuds Model 619,57,Pending,2024-02-19 16:44:20
+1198,EA-NO-0305,SmartLife Traders,Customer pre-orders for Noise Earbuds Model 969,79,Pending,2025-12-04 21:26:11
+1199,PR-CA-0669,TechWorld Pvt Ltd,Low stock alert - need restock for Canon Printer Model 936,176,Pending,2025-01-09 05:15:17
+1200,LA-RA-0095,SoundPro Solutions,Seasonal demand increase for Razer Laptop Model 189,34,Rejected,2025-11-24 23:51:23

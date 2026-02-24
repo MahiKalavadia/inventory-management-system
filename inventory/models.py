@@ -49,12 +49,11 @@ class Product(models.Model):
             return self.price - self.purchase_price
         return 0
 
-
     @property
     def stock_value(self):
-       if self.purchase_price and self.quantity:
-          return self.purchase_price * self.quantity
-       return 0
+        if self.purchase_price and self.quantity:
+            return self.purchase_price * self.quantity
+        return 0
 
 
 class StockLog(models.Model):
