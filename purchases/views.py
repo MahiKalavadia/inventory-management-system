@@ -20,7 +20,7 @@ from openpyxl import Workbook
 from reportlab.pdfgen import canvas
 from django.db import transaction
 from datetime import timedelta
-from django.db.models.functions import TruncMonth
+from django.db.models.functions import TruncMonth, TruncDate
 
 
 def is_manager_or_staff(user):
@@ -82,7 +82,7 @@ def purchase_dashboard(request):
             F('quantity') * F('product__purchase_price'),
             output_field=DecimalField(max_digits=12, decimal_places=2)
         )
-    ).values('product__category__name').annotate(total=Sum('purchase_total')).order_by('-total')
+    ).values('product__category__name').annotate(total=Sum('purchase_total')).order_by('-total')[:5]
 
     category_labels = []
     category_data = []
@@ -97,7 +97,7 @@ def purchase_dashboard(request):
         'request__product__name'
     ).annotate(
         total_qty=Sum('request__quantity')
-    ).order_by('-total_qty')[:5]   # Top 5 products
+    ).order_by('-total_qty')[:5]  # Top 5 products
 
     product_labels = []
     product_data = []
@@ -134,7 +134,7 @@ def purchase_dashboard(request):
 def purchase_dashboard_ms(request):
     user = request.user
 
-    # 📉 Low / Out stock products
+    # Low / Out stock products
     low_stock_products = Product.objects.filter(
         quantity__lte=get_low_stock_threshold(),
         quantity__gt=0,
@@ -159,9 +159,40 @@ def purchase_dashboard_ms(request):
     out_page = request.GET.get("page_out")
     out = paginator.get_page(out_page)
 
-    paginator = Paginator(my_requests, 5)
+    paginator = Paginator(my_requests, 10)
     req_page = request.GET.get("page_req")
     requests = paginator.get_page(req_page)
+
+    # chart1
+    user = request.user
+    purchase_request_approve = PurchaseRequest.objects.filter(
+        requested_by=user, status='Approved').count()
+    purchase_request_reject = PurchaseRequest.objects.filter(
+        requested_by=user, status='Rejected').count()
+    purchase_request_pending = PurchaseRequest.objects.filter(
+        requested_by=user, status='Pending').count()
+    # chart 2
+    last_seven_days = timezone.now() - timedelta(days=7)
+    request_trend = PurchaseRequest.objects.filter(requested_by=user, created_at__gte=last_seven_days).annotate(days=TruncDate(
+        'created_at')).values('days').annotate(total=Count('id')).order_by('days')
+
+    month_labels = []
+    month_count = []
+
+    for item in request_trend:
+        month_labels.append(item['days'].strftime("%d %b"))
+        month_count.append(item['total'])
+
+    # chart3 Most Requested Products purchase request -> quantity
+    most_requested = PurchaseRequest.objects.filter(requested_by=user).values('product__name').annotate(
+        total=Count('quantity')).order_by('-total')[:5]
+
+    product_name = []
+    product_count = []
+
+    for item in most_requested:
+        product_name.append(item['product__name'])
+        product_count.append(item['total'])
 
     # 📊 Stats cards
     context = {
@@ -177,6 +208,20 @@ def purchase_dashboard_ms(request):
         'low': low,
         'out': out,
         'requests': requests,
+        # purchase request chart
+        'purchase_request_approve': purchase_request_approve,
+        'purchase_request_reject': purchase_request_reject,
+        'purchase_request_pending': purchase_request_pending,
+        'purchase_labels': json.dumps(['Approved', 'Pending', 'Rejected']),
+        'purchase_count': json.dumps([purchase_request_approve, purchase_request_pending, purchase_request_reject]),
+        # Purchase Requests Trend (Last 7 Days Line Chart)
+        'month_labels': json.dumps(month_labels),
+        'month_count': json.dumps(month_count),
+        # Most Requested Products (Bar Chart)
+        'product_name': json.dumps(product_name),
+        'product_count': json.dumps(product_count),
+        # Approval Time Analysis (Manager Level – Optional Advanced)
+
     }
 
     return render(request, "dashboards/purchase_dashboard_ms.html", context)
