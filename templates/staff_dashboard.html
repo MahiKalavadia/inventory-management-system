@@ -174,6 +174,61 @@
   </div>
 </div>
 
+<div>
+    <div class="row mt-3">
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <h5 class="fw-bold mb-0">Analytics Overview</h5>
+        <span class="text-muted small">Real-time inventory insights</span>
+    </div>
+    <!-- Chart 1 -->
+    <div class="col-lg-3 col-md-6 mb-3">
+        <div class="card shadow-sm border-0 h-100">
+            <div class="card-body">
+                <h6 class="fw-semibold mb-3">Purchase Request Status</h6>
+                <div style="position:relative; height:220px;">
+                    <canvas id="purchaseRequestStatusChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Chart 2 -->
+   <div class="col-lg-3 col-md-6 mb-3">
+        <div class="card shadow-sm border-0 h-100">
+            <div class="card-body">
+                <h6 class="fw-semibold mb-3">Top Low Stock Items</h6>
+                <div style="position:relative; height:220px;">
+                    <canvas id="lowStockChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Chart 3 -->
+      <div class="col-lg-3 col-md-6 mb-3">
+        <div class="card shadow-sm border-0 h-100">
+            <div class="card-body">
+                <h6 class="fw-semibold mb-3">Purchase Order Status</h6>
+                <div style="position:relative; height:220px;">
+                    <canvas id="purchaseOrderStatusChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Chart 4 -->
+    <div class="col-lg-3 col-md-6 mb-3">
+        <div class="card shadow-sm border-0 h-100">
+            <div class="card-body">
+                <h6 class="fw-semibold mb-3">Inventory Movement</h6>
+                <div style="position:relative; height:220px;">
+                    <canvas id="inventoryMovementChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
 
 <div class="row g-4">
     <div class="col-lg-9 col-12">
@@ -328,5 +383,96 @@
 
     </div>
 </div>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+const purchaseRequestStatusChart = document.getElementById('purchaseRequestStatusChart').getContext('2d');
+const purchaseOrderStatusChart = document.getElementById('purchaseOrderStatusChart').getContext('2d');
+const lowStockChart = document.getElementById('lowStockChart').getContext('2d');
+const inventoryMovementChart = document.getElementById('inventoryMovementChart').getContext('2d');
 
+new Chart(purchaseRequestStatusChart , {
+    type : 'pie',
+    data : {
+        labels : {{purchase_labels|safe}},
+        datasets : [{
+             data : {{purchase_count|safe}},
+        }]
+    },
+    options : {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins : {
+            legend : {
+                position : 'right',
+            }
+        }
+    }
+});
+
+new Chart(purchaseOrderStatusChart, {
+    type : 'doughnut',
+    data : {
+        labels : {{purchase_order_labels|safe}},
+        datasets : [{
+            label : 'Order Status',
+            data : {{purchase_order_counts|safe }},
+        }]
+    },
+    options : {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins : {
+            legend : {
+                position : 'right',
+            }
+        }
+    }
+});
+
+new Chart(lowStockChart, {
+    type : 'bar',
+    data : {
+        labels : {{low_stock_labels|safe}},
+        datasets : [{
+            label : 'Low Stock Count',
+            data : {{low_stock_data|safe}},
+        }]
+    },
+    options : {
+        responsive: true,
+        maintainAspectRatio: false,
+        indexAxis: 'y',
+    }
+});
+
+new Chart(inventoryMovementChart, {
+    type: 'line',
+    data: {
+        labels: {{ movement_dates|safe }},
+        datasets: [
+            {
+                label: 'Stock In',
+                data: {{ stock_in_data|safe }},
+                borderColor: '#16a34a',
+                tension: 0.4
+            },
+            {
+                label: 'Stock Out',
+                data: {{ stock_out_data|safe }},
+                borderColor: '#dc2626',
+                tension: 0.4
+            }
+        ]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales : {
+           y : {
+            beginAtZero : true,
+           }
+        }
+    }
+});
+</script>
 {% endblock %}
