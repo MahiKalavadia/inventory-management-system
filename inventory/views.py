@@ -21,6 +21,8 @@ from django.utils.timezone import now
 from datetime import timedelta
 from orders.models import Order
 from purchases.models import PurchaseRequest
+from django.utils import timezone
+from datetime import timedelta
 
 
 @login_required
@@ -76,7 +78,7 @@ def product_dashboard(request):
     top_categories = (
         Product.objects.values('category__name')
         .annotate(total=Count('id'))
-        .order_by('-total')[:8]
+        .order_by('-total')[:5]
     )
 
     category_names = [c['category__name']
@@ -107,7 +109,7 @@ def product_dashboard(request):
                 output_field=FloatField()
             )
         )
-    ).order_by('-inventory_value')[:8]
+    ).order_by('-inventory_value')[:5]
 
     total_inventory_value = Product.objects.aggregate(
         value=Sum(
@@ -409,7 +411,7 @@ def category_dashboard(request):
                 Value(0),
                 output_field=DecimalField(max_digits=12, decimal_places=2)
             )
-        ).values(
+        ).order_by('-total_sales')[:5].values(
             'name',
             'total_stock',
             'total_stock_value',
@@ -712,7 +714,7 @@ def stock_dashboard(request):
                 )
             )
         )
-        .order_by('-total_value')
+        .order_by('-total_value')[:5]
     )
 
     category_labels = []
@@ -738,10 +740,10 @@ def stock_dashboard(request):
     # ============================
     # 4️⃣ MONTHLY STOCK SUPPLIED
     # ============================
-
+    last_six_months = timezone.now() - timedelta(days=180)
     monthly_data = (
         PurchaseRequest.objects
-        .filter(status="Approved")
+        .filter(status="Approved", created_at__gte=last_six_months)
         .annotate(month=TruncMonth('created_at'))
         .values('month')
         .annotate(total=Sum('quantity'))
@@ -874,6 +876,11 @@ def stock_history(request):
     page_obj = paginator.get_page(page_number)
 
     return render(request, 'inventory/stock_history.html', {'page_obj': page_obj})
+
+
+@login_required
+def stock_forecast(request):
+    return render(request, 'inventory/stock_forecast.html')
 
 
 @login_required
