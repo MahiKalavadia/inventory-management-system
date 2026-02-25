@@ -47,13 +47,17 @@ class Command(BaseCommand):
                     product = Product.objects.get(sku=row['product_sku'])
                     supplier = Supplier.objects.get(name=row['supplier'])
                     
-                    PurchaseRequest.objects.create(
+                    pr = PurchaseRequest(
                         product=product,
                         supplier=supplier,
                         description=row['description'],
                         quantity=int(row['quantity']),
-                        requested_by=random.choice(request_users),  # Random manager/staff
-                        status=row['status'],
+                        requested_by=random.choice(request_users),
+                        status=row['status']
+                    )
+                    pr.save()
+                    # Update created_at after save to bypass auto_now_add
+                    PurchaseRequest.objects.filter(pk=pr.pk).update(
                         created_at=datetime.strptime(row['created_at'], '%Y-%m-%d %H:%M:%S')
                     )
                     req_count += 1
@@ -89,13 +93,17 @@ class Command(BaseCommand):
                             request = requests.first()
                             linked_requests.add(request.id)  # Mark as linked
                     
-                    PurchaseOrder.objects.create(
+                    po = PurchaseOrder(
                         request=request,
                         supplier=supplier,
                         status=row['status'],
                         expected_delivery=datetime.strptime(row['expected_delivery'], '%Y-%m-%d').date() if row['expected_delivery'] else None,
                         actual_delivery=datetime.strptime(row['actual_delivery'], '%Y-%m-%d').date() if row['actual_delivery'] else None,
-                        total_cost=Decimal(row['total_cost']),
+                        total_cost=Decimal(row['total_cost'])
+                    )
+                    po.save()
+                    # Update created_at after save to bypass auto_now_add
+                    PurchaseOrder.objects.filter(pk=po.pk).update(
                         created_at=datetime.strptime(row['created_at'], '%Y-%m-%d %H:%M:%S')
                     )
                     po_count += 1
