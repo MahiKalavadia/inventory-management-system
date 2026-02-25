@@ -371,7 +371,6 @@ new Chart(TopSupplierByPurchase, {
         }]
     },
     options: {
-        indexAxis: 'y',
         plugins: { legend: { display: false }},
         scales: { x: { beginAtZero: true }},
     }
@@ -395,10 +394,10 @@ new Chart(statusChart, {
 new Chart(categoryCoverageChart, {
     type: 'bar',
     data: {
-        labels: {{ names|safe }},
+        labels: {{ category_name|safe }},
         datasets: [{
             label: "Categories Supplied",
-            data: {{ total_category|safe }},
+            data: {{ category_count|safe }},
             borderRadius: 6
         }]
     },

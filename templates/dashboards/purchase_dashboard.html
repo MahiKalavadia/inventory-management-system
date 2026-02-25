@@ -414,7 +414,6 @@ new Chart(categoryPurchaseChart, {
         labels: {{ category_labels|safe }},
         datasets: [{
             data: {{ category_data|safe }},
-            backgroundColor: ['#7c3aed', '#3b82f6', '#f59e0b', '#ef4444', '#10b981']
         }]
     },
     options: {
@@ -439,10 +438,11 @@ new Chart(topPurchaseproductChart, {
         }]
     },
     options: {
+        indexAxis: 'y',
         responsive: true,
         plugins: { legend: { display: false } },
         scales: {
-            y: { beginAtZero: true }
+            y: { beginAtZero: true },
         }
     }
 });

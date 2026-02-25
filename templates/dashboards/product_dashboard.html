@@ -447,7 +447,6 @@ new Chart(categoryChart, {
     },
     options: {
         maintainAspectRatio: false,
-        indexAxis: 'y',
         plugins: { legend: { display: false }},
         animation: { duration: 700 },
         scales: { x: { beginAtZero: true }}
@@ -465,6 +464,7 @@ new Chart(expensiveChart, {
         }]
     },
     options: {
+        indexAxis: 'y',
         maintainAspectRatio: false,
         plugins: { legend: { display: false }},
         animation: { duration: 600 }

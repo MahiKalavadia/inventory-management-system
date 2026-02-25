@@ -122,7 +122,48 @@
   </a>
 </div>
 </div>
+<div>
+    <div class="row mt-3">
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <h5 class="fw-bold mb-0">Analytics Overview</h5>
+        <span class="text-muted small">Real-time inventory insights</span>
+    </div>
+    <!-- Chart 1 -->
+    <div class="col-lg-4 col-md-6 mb-3">
+        <div class="card shadow-sm border-0 h-100">
+            <div class="card-body">
+                <h6 class="fw-semibold mb-3">Purchase Request Status</h6>
+                <div style="position:relative; height:220px;">
+                    <canvas id="purchaseRequestStatusChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
 
+    <!-- Chart 2 -->
+   <div class="col-lg-4 col-md-6 mb-3">
+        <div class="card shadow-sm border-0 h-100">
+            <div class="card-body">
+                <h6 class="fw-semibold mb-3">Purchase Request Trend</h6>
+                <div style="position:relative; height:220px;">
+                    <canvas id="purchaseRequestTrendChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Chart 3 -->
+      <div class="col-lg-4 col-md-6 mb-3">
+        <div class="card shadow-sm border-0 h-100">
+            <div class="card-body">
+                <h6 class="fw-semibold mb-3">Most Requested Product</h6>
+                <div style="position:relative; height:220px;">
+                    <canvas id="mostRequestProductChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 <div class="row g-3 mb-4">
   <!-- ===== CRITICAL STOCKS ===== -->
   <div class="col-lg-6 col-12">
@@ -257,7 +298,7 @@
           </tr>
         </thead>
         <tbody>
-          {% for r in my_requests %}
+          {% for r in requests %}
           <tr>
             <td>{{ r.product.name }}</td>
             <td>{{ r.quantity }}</td>
@@ -279,23 +320,91 @@
         </tbody>
       </table>
     </div>
-    <div class="p-2 d-flex justify-content-end">
-      <ul class="pagination pagination-sm mb-0">
-        {% if requests.has_previous %}
-        <li class="page-item">
-          <a class="page-link" href="?page_req={{ requests.previous_page_number }}">‹</a>
-        </li>
-        {% endif %}
-        <li class="page-item active">
-          <span class="page-link">{{ requests.number }}</span>
-        </li>
-        {% if requests.has_next %}
-        <li class="page-item">
-          <a class="page-link" href="?page_req={{ requests.next_page_number }}">›</a>
-        </li>
-        {% endif %}
-      </ul>
-    </div>
   </div>
 </div>
+ <nav class="mt-4">
+            <ul class="pagination justify-content-center">
+
+                {% if requests.has_previous %}
+                <li class="page-item">
+                    <a class="page-link"
+                       href="?page_req={{ requests.previous_page_number }}">
+                        Previous
+                    </a>
+                </li>
+                {% endif %}
+
+                <li class="page-item active">
+                    <span class="page-link">
+                        Page {{ requests.number }} of {{ requests.paginator.num_pages }}
+                    </span>
+                </li>
+
+                {% if requests.has_next %}
+                <li class="page-item">
+                    <a class="page-link"
+                       href="?page_req={{ requests.next_page_number }}">
+                        Next
+                    </a>
+                </li>
+                {% endif %}
+
+            </ul>
+        </nav>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+const purchaseRequestStatusChart = document.getElementById('purchaseRequestStatusChart').getContext('2d');
+const purchaseRequestTrendChart = document.getElementById('purchaseRequestTrendChart').getContext('2d');
+const mostRequestProductChart = document.getElementById('mostRequestProductChart').getContext('2d');
+
+new Chart(purchaseRequestStatusChart , {
+    type : 'pie',
+    data : {
+        labels : {{purchase_labels|safe}},
+        datasets : [{
+             data : {{purchase_count|safe}},
+        }]
+    },
+    options : {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins : {
+            legend : {
+                position : 'right',
+            }
+        }
+    }
+});
+
+new Chart(purchaseRequestTrendChart, {
+  type : 'line',
+  data : {
+    labels : {{ month_labels|safe }},
+    datasets : [{
+      label : "Request Trend",
+      data : {{ month_count|safe }}
+    }]
+  },
+  options : {
+    responsive : true,
+    maintainAspectRatio : false,
+  }
+});
+
+new Chart(mostRequestProductChart, {
+  type : 'bar',
+  data : {
+    labels : {{ product_name|safe }},
+    datasets : [{
+      label : 'Most Requested Count',
+      data : {{product_count|safe}},
+    }]
+  },
+  options : {
+    responsive : true,
+    maintainAspectRatio : false,
+    indexAxis: 'y',
+  }
+});
+</script>
 {% endblock %}
