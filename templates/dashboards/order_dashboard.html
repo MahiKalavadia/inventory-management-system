@@ -13,13 +13,13 @@
 
 .table td {
   font-size: 14px;
-  padding: 12px;
+  padding: 10px;
 }
 
 .badge {
-  font-size: 12px;
+  font-size: 10px;
   font-weight: 500;
-  border-radius: 12px;
+  border-radius: 10px;
 }
 
 </style>
@@ -268,7 +268,7 @@
 
       <tbody>
         {% for order in recent_orders %}
-        <tr>
+        <tr style="height:43px;">
           <td>#{{ order.id }}</td>
           <td class="fw-medium">{{ order.customer_name }}</td>
 
@@ -303,10 +303,10 @@
 
   <div class="card-header bg-white d-flex justify-content-between align-items-center">
     <span class="fw-semibold">Best Selling Products</span>
-    <span>Best sold till now</span>
+    <a href="{% url 'order_list' %}" class="btn btn-sm btn-outline-primary">View All →</a>
   </div>
 
-  <div class="card-body p-0" style="height:200px;">
+  <div class="card-body p-0">
     <table class="table table-hover align-middle mb-0">
       <thead class="table-light">
         <tr>
@@ -318,7 +318,7 @@
 
       <tbody>
         {% for order in top_products %}
-        <tr>
+        <tr style="height:43px;">
           <td>{{ order.product__name }}</td>
           <td class="fw-medium">{{ order.total_sold }}</td>
           <td>{{ order.product__supplier__name}}</td>
@@ -359,7 +359,7 @@
 
       <tbody>
         {% for o in pending_payments %}
-        <tr>
+        <tr style="height:52px;">
           <td>#{{ o.id }}</td>
           <td>{{ o.customer_name }}</td>
           <td class="fw-semibold text-danger text-end">₹ {{ o.total_amount|intcomma }}</td>
@@ -404,7 +404,7 @@
         </tr>
         {% empty %}
         <tr>
-          <td colspan="3" class="text-center text-success py-3">No critical issues 🎉</td>
+          <td colspan="4" class="text-center text-success py-3">No critical issues 🎉</td>
         </tr>
         {% endfor %}
       </tbody>
