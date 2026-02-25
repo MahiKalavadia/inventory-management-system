@@ -111,17 +111,18 @@ def purchase_order_signal(sender, instance, created, **kwargs):
         # 📦 DELIVERED
         elif instance.status == "delivered":
 
-            product = instance.request.product
-            qty = instance.request.quantity
+            if instance.request and instance.request.product:
+                product = instance.request.product
+                qty = instance.request.quantity
 
-            # Increase stock safely
-            product.quantity += qty
-            product.save(update_fields=["quantity"])
+                # Increase stock safely
+                product.quantity += qty
+                product.save(update_fields=["quantity"])
 
-            # Update cost safely (no signal recursion)
-            PurchaseOrder.objects.filter(pk=instance.pk).update(
-                total_cost=(product.purchase_price or Decimal("0")) * qty
-            )
+                # Update cost safely (no signal recursion)
+                PurchaseOrder.objects.filter(pk=instance.pk).update(
+                    total_cost=(product.purchase_price or Decimal("0")) * qty
+                )
 
             # Save delivery date
             PurchaseOrder.objects.filter(pk=instance.pk).update(
