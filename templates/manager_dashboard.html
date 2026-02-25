@@ -191,6 +191,45 @@
 
     
 </div>
+<div>
+    <div class="row mt-4">
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <h5 class="fw-bold mb-0">Analytics Overview</h5>
+        <span class="text-muted small">Real-time inventory insights</span>
+    </div>
+    <!-- Chart 1 -->
+    <div class="col-lg-4 col-md-6 mb-3">
+        <div class="card shadow-sm border-0 h-100">
+            <div class="card-body">
+                <h6 class="fw-semibold mb-3">Orders Per Month</h6>
+                <div style="position:relative; height:220px;">
+                    <canvas id="orderPerMonthChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-4 col-md-6 mb-3">
+        <div class="card shadow-sm border-0 h-100">
+            <div class="card-body">
+                <h6 class="fw-semibold mb-3">Category Wise Inventory</h6>
+                <div style="position:relative; height:220px;">
+                    <canvas id="categoryWiseInventoryChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-4 col-md-6 mb-3">
+        <div class="card shadow-sm border-0 h-100">
+            <div class="card-body">
+                <h6 class="fw-semibold mb-3">Top 5 Low Stock Products</h6>
+                <div style="position:relative; height:220px;">
+                    <canvas id="topLowStockChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
 
   <div class="row g-4">
 
@@ -450,5 +489,78 @@
 
     </div>
 </div>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+const orderPerMonthChart = document.getElementById('orderPerMonthChart').getContext('2d');
+const categoryWiseInventoryChart = document.getElementById('categoryWiseInventoryChart').getContext('2d');
+const topLowStockChart = document.getElementById('topLowStockChart').getContext('2d');
 
-{% endblock %}
+new Chart(orderPerMonthChart, {
+    type: 'line',
+    data: {
+        labels: {{ month_labels|safe }},
+        datasets: [{
+            label: 'Orders Per Month',
+            data: {{ monthly_ordertotal|safe }},
+            borderWidth: 2,
+            borderColor: '#4f46e5',
+            backgroundColor: 'rgba(79,70,229,0.1)',
+            tension: 0.4,
+            fill: true
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: { 
+            legend: { display: false } 
+        },
+        scales: {
+            y: {
+                beginAtZero: true,
+                ticks: {
+                    precision: 0
+                }
+            }
+        }
+    }
+});
+
+new Chart(categoryWiseInventoryChart, {
+    type : 'bar',
+    data : {
+        labels: {{ category_names|safe }},
+        datasets : [{
+            label : 'Category Wise Inventory',
+            data : {{ category_value|safe }}
+        }]
+    },
+    options : {
+         maintainAspectRatio: false,
+         responsive: true,
+         scales : {
+            y : {
+                beginAtZero: true
+            }
+         }
+         
+    }
+});
+
+new Chart(topLowStockChart , {
+    type : 'bar',
+    data : {
+        labels : {{ low_stock_name|safe }},
+        datasets : [{
+            label : 'Low Stock Quantity',
+            data : {{ low_stock_quantity|safe }}
+        }]
+    },
+    options :{
+        indexAxis : 'y',
+        responsive: true,
+        maintainAspectRatio: false
+    }
+});
+</script>
+{% endblock content %}
