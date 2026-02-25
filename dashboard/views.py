@@ -7,12 +7,13 @@ from django.contrib.auth.models import User
 from django.utils import timezone
 from datetime import timedelta
 from notifications.models import Notification
-from django.db.models import Sum, F, ExpressionWrapper, DecimalField, Count, FloatField
+from django.db.models import Sum, F, ExpressionWrapper, DecimalField, Count, FloatField, Q
 from orders.models import OrderItem, Order
 from purchases.models import PurchaseRequest, PurchaseOrder
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.core.paginator import Paginator
-from django.db.models.functions import TruncMonth
+from django.db.models.functions import TruncMonth, TruncDate
+import json
 
 
 def landing(request):
@@ -87,9 +88,10 @@ def admin_dashboard(request):
     )
     # 1️⃣ Revenue Trend (Monthly Paid Orders)
     # -----------------------------
+    last_six_months = timezone.now() - timedelta(days=180)
     revenue_data = (
         Order.objects
-        .filter(status="Paid")
+        .filter(status="Paid", created_at__gte=last_six_months)
         .annotate(month=TruncMonth('created_at'))
         .values('month')
         .annotate(total=Sum('items__price'))
@@ -305,6 +307,43 @@ def manager_dashboard(request):
     notifications = get_user_notifications(request.user, 5)
     notifications_count = len(notifications)
 
+    # chart 1
+    last_six_months = timezone.now() - timedelta(days=180)
+    orders_per_month = (Order.objects.filter(created_at__gte=last_six_months).annotate(month=TruncMonth('created_at')).values(
+        'month').annotate(total=Count('id')).order_by('month'))
+
+    months = []
+    monthly_ordertotals = []
+
+    for item in orders_per_month:
+        months.append(item['month'].strftime("%b %Y"))
+        monthly_ordertotals.append(item['total'] or 0)
+
+    # chart 2 category wise inventory category --> product --> price * quantity
+    category_wise_inventory = (Category.objects.
+                               annotate(
+                                   total_inventory=ExpressionWrapper(
+                                       Sum(F('product__price') * F('product__quantity')), output_field=DecimalField(max_digits=12, decimal_places=2)))
+                               .values('name', 'total_inventory').order_by('-total_inventory'))[:5]
+
+    category_names = []
+    category_value = []
+
+    for item in category_wise_inventory:
+        category_names.append(item['name'])
+        category_value.append(float(item['total_inventory'] or 0))
+
+    # chart 3 top 5 low stock product product model used
+    top_low_stock = (Product.objects.filter(
+        quantity__lte=get_low_stock_threshold(), quantity__gt=0).order_by('quantity'))[:5]
+
+    low_stock_name = []
+    low_stock_quantity = []
+
+    for item in top_low_stock:
+        low_stock_name.append(item.name)
+        low_stock_quantity.append(item.quantity)
+
     # monthly summary
     today = timezone.now()
     start_month = today.replace(day=1)
@@ -338,6 +377,12 @@ def manager_dashboard(request):
         'notifications_count': notifications_count,
         "monthly_stockin": monthly_stockin,
         "monthly_stockout": monthly_stockout,
+        'month_labels': json.dumps(months),
+        'monthly_ordertotal': json.dumps(monthly_ordertotals),
+        'category_names': json.dumps(category_names),
+        'category_value': json.dumps(category_value),
+        'low_stock_name': json.dumps(low_stock_name),
+        'low_stock_quantity': json.dumps(low_stock_quantity),
 
     }
     return render(request, "manager_dashboard.html", context)
@@ -363,6 +408,58 @@ def staff_dashboard(request):
     notifications = get_user_notifications(request.user, 5)
     notifications_count = len(notifications)
 
+    # chart1 staff approve reject pie chart
+    user = request.user
+    purchase_request_approve = PurchaseRequest.objects.filter(
+        requested_by=user, status='Approved').count()
+    purchase_request_reject = PurchaseRequest.objects.filter(
+        requested_by=user, status='Rejected').count()
+    purchase_request_pending = PurchaseRequest.objects.filter(
+        requested_by=user, status='Pending').count()
+
+    # chart 2 purchase order status doughnut chart
+    ordered_status = PurchaseOrder.objects.filter(status='ordered').count()
+    shipped_status = PurchaseOrder.objects.filter(status='shipped').count()
+    intransit_status = PurchaseOrder.objects.filter(
+        status='in_transit').count()
+    delivered_status = PurchaseOrder.objects.filter(status='delivered').count()
+    delayed_status = PurchaseOrder.objects.filter(status='delayed').count()
+
+    # chart3 low stock alerts horizontal bar
+    low_stock_alert = Product.objects.filter(
+        quantity__lte=get_low_stock_threshold(), quantity__gt=0).order_by('quantity')[:5]
+
+    low_stock_label = []
+    low_stock_data = []
+
+    for item in low_stock_alert:
+        low_stock_label.append(item.name)
+        low_stock_data.append(item.quantity)
+
+    # chart4 inventory movement last 7 days
+    last_7_days = timezone.now() - timedelta(days=7)
+
+    movement = (
+        StockLog.objects
+        .filter(created_at__gte=last_7_days)
+        .annotate(day=TruncDate('created_at'))
+        .values('day')
+        .annotate(
+            stock_in=Sum('quantity', filter=Q(action='STOCK_IN')),
+            stock_out=Sum('quantity', filter=Q(action='STOCK_OUT')),
+        )
+        .order_by('day')
+    )
+
+    dates = []
+    stock_in_data = []
+    stock_out_data = []
+
+    for item in movement:
+        dates.append(item['day'].strftime("%d %b"))
+        stock_in_data.append(item['stock_in'] or 0)
+        stock_out_data.append(item['stock_out'] or 0)
+
     context = {
         'total_products': total_products,
         'in_stock': in_stock,
@@ -372,6 +469,22 @@ def staff_dashboard(request):
         'recent_stock_logs': recent_stock_logs,
         'notifications': notifications,
         'notifications_count': notifications_count,
+        # purchase request chart
+        'purchase_request_approve': purchase_request_approve,
+        'purchase_request_reject': purchase_request_reject,
+        'purchase_request_pending': purchase_request_pending,
+        'purchase_labels': json.dumps(['Approved', 'Pending', 'Rejected']),
+        'purchase_count': json.dumps([purchase_request_approve, purchase_request_pending, purchase_request_reject]),
+        # purchase order chart
+        'purchase_order_labels': json.dumps(['Ordered', 'Shipped', 'In Transit', 'Delivered', 'Delayed']),
+        'purchase_order_counts': json.dumps([ordered_status, shipped_status, intransit_status, delivered_status, delayed_status]),
+        # top 5 low stock product chart
+        'low_stock_labels': json.dumps(low_stock_label),
+        'low_stock_data': json.dumps(low_stock_data),
+        # inventory movement last 7 days
+        'movement_dates': json.dumps(dates),
+        'stock_in_data': json.dumps(stock_in_data),
+        'stock_out_data': json.dumps(stock_out_data),
     }
     return render(request, "staff_dashboard.html", context)
 
