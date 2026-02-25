@@ -42,6 +42,10 @@ class Command(BaseCommand):
                         }
                     )
                     
+                    # Add category to supplier's categories_supplies
+                    if category not in supplier.categories_supplies.all():
+                        supplier.categories_supplies.add(category)
+                    
                     # Create product if doesn't exist
                     if not Product.objects.filter(sku=row['sku'].strip()).exists():
                         Product.objects.create(
