@@ -85,9 +85,13 @@
                 <div class="col-md-6">
                     <div class="p-3 border rounded-3 bg-light">
                         <h6 class="fw-bold mb-3">📦 Product Details</h6>
+                        {% if order.request %}
                         <p class="mb-1"><strong>Product:</strong> {{ order.request.product.name }}</p>
                         <p class="mb-1"><strong>Quantity:</strong> {{ order.request.quantity }}</p>
                         <p class="mb-0"><strong>Requested By:</strong> {{ order.request.requested_by.username }}</p>
+                        {% else %}
+                        <p class="mb-0 text-muted">No request linked to this order</p>
+                        {% endif %}
                     </div>
                 </div>
 

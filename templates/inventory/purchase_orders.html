@@ -98,8 +98,13 @@
             <td class="fw-semibold">PO-{{ po.id }}</td>
 
             <td>
+              {% if po.request %}
               <div class="fw-semibold">{{ po.request.product.name }}</div>
-              <small class="text-muted">Supplier: {{ po.request.product.supplier.name }}</small>
+              <small class="text-muted">Supplier: {{ po.supplier.name }}</small>
+              {% else %}
+              <div class="fw-semibold text-muted">No Product Linked</div>
+              <small class="text-muted">Supplier: {{ po.supplier.name }}</small>
+              {% endif %}
             </td>
 
             <!-- STATUS -->
@@ -108,6 +113,8 @@
                   <span class="badge bg-success">Completed</span>
                 {% elif po.status == "pending" %}
                   <span class="badge bg-warning text-dark">Pending</span>
+                {% elif po.status == "delayed" %}
+                  <span class="badge bg-danger">delayed</span>
                 {% else %}
                   <span class="badge bg-info text-dark">{{ po.status }}</span>
                 {% endif %}
@@ -119,13 +126,15 @@
                   Fill Details
                  </a>
                {% endif %}
-               {% if po.status != 'delivered' %}
+               {% if po.status != 'delivered' and po.status != 'delayed' %}
                <a href="{% url 'update_po_status' po.pk %}" class="btn btn-sm btn-outline-dark">
                   Update Status
                  </a>
                {% endif %}
                {% if po.status == 'delivered' %}
                 <span class="text-success fw-semibold">✔ Done</span>
+                {% elif po.status == 'delayed' %}
+                  <span class="text-success fw-semibold">✔ Arrived Late but Completed</span>
                {% endif %}
                <a href="{% url 'purchase_order_detail' po.pk %}" class="btn btn-sm btn-outline-primary ms-1">
                 Details
