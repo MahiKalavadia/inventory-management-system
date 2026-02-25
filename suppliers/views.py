@@ -19,6 +19,8 @@ from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph, 
 from reportlab.lib import colors
 from reportlab.lib.styles import getSampleStyleSheet
 from openpyxl import Workbook
+from django.utils import timezone
+from datetime import timedelta
 
 
 def supplier_dashboard(request):
@@ -30,22 +32,26 @@ def supplier_dashboard(request):
     supply = list(Supplier.objects.annotate(
         top_suppliers=Sum(F('product__purchase_price') *
                           F('product__quantity'), output_field=FloatField())
-    ).values(
+    ).order_by('-top_suppliers')[:5].values(
         'name',
         'top_suppliers'
     ))
+    # category coverage supplier -> category -> count
+    category_coverage = Supplier.objects.filter(
+        is_active=True).annotate(total=Count('categories_supplies')).order_by('-total')[:5]
+
+    supplier_name = []
+    category_count = []
+
+    for item in category_coverage:
+        supplier_name.append(item.name)
+        category_count.append(item.total)
 
     supplier_names = [s['name'] for s in supply]
     top_supplier = [s['top_suppliers'] for s in supply]
 
-    supplier_category_data = list(Supplier.objects.annotate(
-        total_categories=Count('categories_supplies')
-    ).values('name', 'total_categories'))
-
-    names = [s['name'] for s in supplier_category_data]
-    total_category = [s['total_categories'] for s in supplier_category_data]
-
-    monthly_suppliers = Supplier.objects.annotate(
+    last_six_months = timezone.now() - timedelta(days=180)
+    monthly_suppliers = Supplier.objects.filter(created_at__gte=last_six_months).annotate(
         month=TruncMonth('created_at')
     ).values('month').annotate(
         total=Count('id')
@@ -60,7 +66,7 @@ def supplier_dashboard(request):
 
     supplied = (
         PurchaseRequest.objects
-        .filter(status='Approved')
+        .filter(status='Approved', created_at__gte=last_six_months)
         .annotate(month=TruncMonth('created_at'))
         .values('month')
         .annotate(total=Sum('quantity'))
@@ -70,7 +76,7 @@ def supplier_dashboard(request):
     # 🛒 USED (Only Paid Orders)
     used = (
         OrderItem.objects
-        .filter(order__status='Paid')
+        .filter(order__status='Paid', order__created_at__gte=last_six_months)
         .annotate(month=TruncMonth('order__created_at'))
         .values('month')
         .annotate(total=Sum('quantity'))
@@ -107,12 +113,12 @@ def supplier_dashboard(request):
         'supplier_names': json.dumps(supplier_names),
         'top_supplier': json.dumps(top_supplier),
         'supplier_status': [active_supplier, inactive_supplier],
-        'names': json.dumps(names),
-        'total_category': json.dumps(total_category),
         'months': months,
         'totals': totals,
         'supplied_totals': json.dumps(supplied_totals),
         'used_totals': json.dumps(used_totals),
+        'category_name': json.dumps(supplier_name),
+        'category_count': json.dumps(category_count),
     }
     return render(request, "dashboards/supplier_dashboard.html", context)
 
