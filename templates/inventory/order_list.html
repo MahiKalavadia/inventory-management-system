@@ -2,6 +2,14 @@
 {% load static %}
 {% load humanize %}
 {% load number_filters %}
+{%block pagetitle%}Order Details{% endblock pagetitle%}
+{%block pagecontent %}Manage orders here.{% endblock pagecontent %}
+{% block link %}
+<a href="{% url 'order_dashboard' %}" class="btn btn-light btn-sm border">
+            ← Back
+        </a>
+{% endblock link %}
+{% block panel %}Order List Panel{% endblock panel%}
 {% block content %}
 <style>
     .stat-card {
@@ -34,57 +42,6 @@
 }
 
 </style>
-<div class="dashboard-topbar fixed-top d-flex justify-content-between align-items-center px-4 py-3 bg-white border-bottom"
-     style="left:260px; right:0; top:0; z-index:999;">
-
-    <!-- Page Title --><div>
-    <div class="fw-semibold text-uppercase text-muted">
-        Order Details
-    </div>
-     <div class="text-muted small">
-            Manage orders here.
-        </div>
-    </div>
-    <!-- Right Section -->
-    <div class="d-flex align-items-center gap-4">
-
-        <!-- Quick Actions -->
-        <div class="d-flex gap-2">
-        <a href="{% url 'order_dashboard' %}" class="btn btn-light btn-sm border">
-            ← Back
-        </a>
-    </div>
-
-        <!-- User -->
-        <div class="d-flex align-items-center gap-2">
-            <div class="text-end">
-                <div class="fw-medium small">{{ request.user.username }}</div>
-                <div class="text-muted small">Order List Panel</div>
-            </div>
-            {% if user.is_superuser %}
-    <img src="{% static 'images/admin.jpeg' %}"
-         class="rounded-circle border"
-         width="36"
-         height="36"
-         style="object-fit: cover;">
-
-{% elif user.groups.first.name == "Manager" %}
-    <img src="{% static 'images/manager.png' %}"
-         class="rounded-circle border"
-         width="36"
-         height="36"
-         style="object-fit: cover;">
-
-{% elif user.groups.first.name == "Staff" %}
-    <img src="{% static 'images/staff.png' %}"
-         class="rounded-circle border"
-         width="36"
-         height="36"
-         style="object-fit: cover;">
-         {% endif %}
-        </div>
-    </div>
-</div>
         <!--Stats-->
 <div class="row mb-3">
     <div class="col-md-4">

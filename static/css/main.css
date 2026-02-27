@@ -40,6 +40,20 @@ body {
     transition: all 0.3 ease;
 }
 
+.dashboard-topbar {
+    left: 260px;
+    right: 0;
+    top: 0;
+    z-index: 999;
+    transition: all 0.3s ease;
+}
+
+/* When sidebar collapsed */
+.sidebar-collapsed .dashboard-topbar {
+    left: 80px;
+    /* collapsed sidebar width */
+}
+
 /* Optional polish */
 .dashboard-topbar .btn-link {
     text-decoration: none;

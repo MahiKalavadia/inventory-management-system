@@ -1,6 +1,28 @@
 {% extends 'base_dashboard.html' %}
 {% load group_tags %}
 {% load static %}
+{%block pagetitle%}Critical Stock Alerts{% endblock pagetitle%}
+{%block pagecontent %}Products having less stock and need immediate attention{% endblock pagecontent %}
+{% block link %}
+<a href="{% url 'stock_dashboard' %}" class="btn btn-outline-secondary btn-sm">
+            <i class="bi bi-arrow-left-circle"></i> Back
+        </a>
+ {% if request.user|has_group:'Manager' or request.user|has_group:'Staff'%}
+        <a href="{% url 'purchase_request' %}" class="btn btn-primary btn-sm">
+                <i class="bi bi-cart-plus"></i> Request Purchase
+        </a>
+<button class="btn btn-outline-secondary btn-sm dropdown-toggle"
+                    data-bs-toggle="dropdown">
+                Export Low Stock List
+            </button>
+            <ul class="dropdown-menu">
+                <li><a class="dropdown-item" href="{% url 'export_lowstock_csv' %}">CSV</a></li>
+                <li><a class="dropdown-item" href="{% url 'export_lowstock_excel' %}">Excel</a></li>
+                <li><a class="dropdown-item" href="{% url 'export_lowstock_pdf' %}">PDF</a></li>
+            </ul>
+{% endif %}
+{% endblock link %}
+{% block panel %}Low Stock Panel{% endblock panel%}
 {% block content %}
 <style>
 .stock-table th {
@@ -37,71 +59,6 @@
 }
 
 </style>
-<div class="dashboard-topbar fixed-top d-flex justify-content-between align-items-center px-4 py-3 bg-white border-bottom"
-     style="left:260px; right:0; top:0; z-index:999;">
-
-    <div>
-        <div class="fw-semibold text-uppercase text-muted">
-            Critical Stock Alerts
-        </div>
-        <div class="text-muted small">
-            Products having less stock and need immediate attention
-        </div>
-    </div>
-
-    <div class="d-flex align-items-center gap-3">
-        <div>
-        <a href="{% url 'stock_dashboard' %}" class="btn btn-outline-secondary btn-sm">
-            <i class="bi bi-arrow-left-circle"></i> Back
-        </a>
-    </div>
-    <div>
-        {% if request.user|has_group:'Manager' or request.user|has_group:'Staff'%}
-        <a href="{% url 'purchase_request' %}" class="btn btn-primary btn-sm">
-                <i class="bi bi-cart-plus"></i> Request Purchase
-        </a>
-        {% endif %}
-    </div>
-    <div>
-        <div class="dropdown">
-            <button class="btn btn-outline-secondary btn-sm dropdown-toggle"
-                    data-bs-toggle="dropdown">
-                Export Low Stock List
-            </button>
-            <ul class="dropdown-menu">
-                <li><a class="dropdown-item" href="{% url 'export_lowstock_csv' %}">CSV</a></li>
-                <li><a class="dropdown-item" href="{% url 'export_lowstock_excel' %}">Excel</a></li>
-                <li><a class="dropdown-item" href="{% url 'export_lowstock_pdf' %}">PDF</a></li>
-            </ul>
-        </div>
-    </div>
-        <div class="text-end">
-                <div class="fw-medium small">{{ request.user.username }}</div>
-                <div class="text-muted small">Low Stock Panel</div>
-            </div>
-        {% if user.is_superuser %}
-    <img src="{% static 'images/admin.jpeg' %}"
-         class="rounded-circle border"
-         width="36"
-         height="36"
-         style="object-fit: cover;">
-
-{% elif user.groups.first.name == "Manager" %}
-    <img src="{% static 'images/manager.png' %}"
-         class="rounded-circle border"
-         width="36"
-         height="36"
-         style="object-fit: cover;">
-
-{% elif user.groups.first.name == "Staff" %}
-    <img src="{% static 'images/staff.png' %}"
-         class="rounded-circle border"
-         width="36"
-         height="36"
-         style="object-fit: cover;">
-         {% endif %}
-    </div>
-</div>
    <div class="card-body p-0">
         <div class="table-responsive">
             <table class="table align-middle mb-0 stock-table">

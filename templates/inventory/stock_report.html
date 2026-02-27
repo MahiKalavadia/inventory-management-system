@@ -1,27 +1,12 @@
 {% extends "base_dashboard.html" %}
 {% load static %}
-{% block content %}
-<div class="dashboard-topbar fixed-top d-flex justify-content-between align-items-center px-4 py-3 bg-white border-bottom"
-     style="left:260px; right:0; top:0; z-index:999;">
-
-    <!-- Page Title --><div>
-    <div class="fw-semibold text-uppercase text-muted">
-        Stock Report
-    </div>
-    </div>
-    <!-- Right Section -->
-    <div class="d-flex align-items-center gap-4">
-
-        <!-- Quick Actions -->
-        <div class="d-flex gap-2">
-         <div>
-        <a href="{% url 'report_dashboard' %}" class="btn btn-light btn-sm border">
+{%block pagetitle%}Stock Report{% endblock pagetitle%}
+{%block pagecontent %}Vendor actively supplying products{% endblock pagecontent %}
+{% block link %}
+<a href="{% url 'report_dashboard' %}" class="btn btn-light btn-sm border">
             ← Back
         </a>
-        </div>
-        <div>
-            <div class="dropdown">
-            <button class="btn btn-outline-secondary btn-sm dropdown-toggle"
+<button class="btn btn-outline-secondary btn-sm dropdown-toggle"
                     data-bs-toggle="dropdown">
                 Export Stock Report
             </button>
@@ -30,41 +15,9 @@
                 <li><a class="dropdown-item" href="{% url 'export_stock_report_excel' %}">Excel</a></li>
                 <li><a class="dropdown-item" href="{% url 'export_stock_report_pdf' %}">PDF</a></li>
             </ul>
-        </div>
-           </div>
-
-    </div>
-
-        <!-- User -->
-        <div class="d-flex align-items-center gap-2">
-          <div class="text-end">
-                <div class="fw-medium small">{{ request.user.username }}</div>
-                <div class="text-muted small">Report Panel</div>
-            </div>
-           {% if user.is_superuser %}
-    <img src="{% static 'images/admin.jpeg' %}"
-         class="rounded-circle border"
-         width="36"
-         height="36"
-         style="object-fit: cover;">
-
-{% elif user.groups.first.name == "Manager" %}
-    <img src="{% static 'images/manager.png' %}"
-         class="rounded-circle border"
-         width="36"
-         height="36"
-         style="object-fit: cover;">
-
-{% elif user.groups.first.name == "Staff" %}
-    <img src="{% static 'images/staff.png' %}"
-         class="rounded-circle border"
-         width="36"
-         height="36"
-         style="object-fit: cover;">
-         {% endif %}
-        </div>
-    </div>
-</div>
+{% endblock link %}
+{% block panel %}Report Panel{% endblock panel%}
+{% block content %}
 <div class="card dashboard-card mb-4">
 
     <!-- TABLE -->

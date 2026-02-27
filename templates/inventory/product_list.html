@@ -3,7 +3,20 @@
 {% block extra_head %}
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 {% endblock %}
+{%block pagetitle%}Inventory Items{% endblock pagetitle%}
+{%block pagecontent %}Manage your premium product catalog and stock levels.{% endblock pagecontent %}
+{% block link %}
+<a href="{% url 'product_dashboard' %}" class="btn btn-light btn-sm border">
+            ← Back
+        </a>
 
+        {% if request.user.is_superuser or request.user.groups.first.name == "Manager" %}
+        <a href="{% url 'add_product' %}" class="btn btn-primary btn-sm">
+            + New Product
+        </a>
+        {% endif %}
+{% endblock link %}
+{% block panel %}Product List Panell{% endblock panel%}
 {% block content %}
 
 <style>
@@ -94,64 +107,6 @@
     color:#374151;
 }
 </style>
-
-<div class="dashboard-topbar fixed-top d-flex justify-content-between align-items-center px-4 py-3 bg-white border-bottom"
-     style="left:260px; right:0; top:0; z-index:999;">
-
-    <!-- Page Title --><div>
-    <div class="fw-semibold text-uppercase text-muted">
-        Inventory Items
-    </div>
-     <div class="text-muted small">
-            Manage your premium product catalog and stock levels.
-        </div>
-    </div>
-    <!-- Right Section -->
-    <div class="d-flex align-items-center gap-4">
-
-        <!-- Quick Actions -->
-        <div class="d-flex gap-2">
-        <a href="{% url 'product_dashboard' %}" class="btn btn-light btn-sm border">
-            ← Back
-        </a>
-
-        {% if request.user.is_superuser or request.user.groups.first.name == "Manager" %}
-        <a href="{% url 'add_product' %}" class="btn btn-primary btn-sm">
-            + New Product
-        </a>
-        {% endif %}
-    </div>
-
-        <!-- User -->
-        <div class="d-flex align-items-center gap-2">
-            <div class="text-end">
-                <div class="fw-medium small">{{ request.user.username }}</div>
-                <div class="text-muted small">Product List Panel</div>
-            </div>
-            {% if user.is_superuser %}
-    <img src="{% static 'images/admin.jpeg' %}"
-         class="rounded-circle border"
-         width="36"
-         height="36"
-         style="object-fit: cover;">
-
-{% elif user.groups.first.name == "Manager" %}
-    <img src="{% static 'images/manager.png' %}"
-         class="rounded-circle border"
-         width="36"
-         height="36"
-         style="object-fit: cover;">
-
-{% elif user.groups.first.name == "Staff" %}
-    <img src="{% static 'images/staff.png' %}"
-         class="rounded-circle border"
-         width="36"
-         height="36"
-         style="object-fit: cover;">
-         {% endif %}
-        </div>
-    </div>
-</div>
 <!-- HEADER -->
 <div class="mb-3">
 <!-- FILTER BAR -->
@@ -225,6 +180,8 @@
         <div class="product-img">
             {% if product.image %}
                 <img src="{{ product.image.url }}">
+            {% elif product.category.image %}
+                <img src="{{ product.category.image.url }}">
             {% else %}
                 <span class="text-muted">No Image</span>
             {% endif %}

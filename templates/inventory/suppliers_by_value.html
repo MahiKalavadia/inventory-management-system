@@ -2,6 +2,14 @@
 {% load static %}
 {% load humanize %}
 {% load number_filters %}
+{%block pagetitle%}Supplier Value{% endblock pagetitle%}
+{%block pagecontent %}Values of products by each supplier.{% endblock pagecontent %}
+{% block link %}
+<a href="{% url 'admin_dashboard' %}" class="btn btn-light btn-sm border">
+            ← Back
+        </a>
+{% endblock link %}
+{% block panel %}Value Panel{% endblock panel%}
 {% block content %}
 <style>
     .stat-card {

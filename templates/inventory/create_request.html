@@ -1,35 +1,71 @@
 {% extends "base_dashboard.html" %}
+{%block pagetitle%}Create Request{% endblock pagetitle%}
+{% block panel %}Request Panel{% endblock panel%}
 {% block content %}
 <div class="container-fluid mt-4">
-    <div class="card shadow-sm p-4">
-        <div class="card-header d-flex justify-content-between align-items-center">
-            <h3 class="mb-0"><b>Request {{product.name}}</b></h3>
-            <div>
-              {% if request.user.is_superuser %}
-              <a href="{% url 'purchase_dashboard' %}" class="btn btn-outline-secondary btn-sm me-2">
-                 <i class="bi bi-arrow-left-circle-fill"></i> Back
-              </a>
-              {% elif request.user.groups.first.name == 'Manager' or request.user.groups.first.name == 'Staff' %}
-              <a href="{% url 'purchase_dashboard2' %}" class="btn btn-outline-secondary btn-sm me-2">
-                 <i class="bi bi-arrow-left-circle-fill"></i> Back
-              </a>
-              {% endif %}
-            </div>
-        </div>
-    </div>
-</div>
 
-<div class="container-fluid mt-4">
-    <div class="card shadow-sm p-4">
-      <div class="alert alert-info">
-         Supplier: <b>{{ product.supplier.name }}</b> 
-      </div>
-      <form method="POST">
-      {% csrf_token %}
-           <input type="text" name='description' class='form-control mb-2' placeholder='Reason for purchase' required>
-          <input type="number" name="quantity" class="form-control mb-2" placeholder="Quantity" required>
-          <button class="btn btn-success">Submit Request</button>
-       </form>
+    <div class="card shadow-sm">
+
+        <!-- Card Header -->
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <h5 class="mb-0 fw-bold">
+                Request {{ product.name }}
+            </h5>
+
+            {% if request.user.is_superuser %}
+                <a href="{% url 'purchase_dashboard' %}" 
+                   class="btn btn-outline-secondary btn-sm">
+                   <i class="bi bi-arrow-left-circle"></i> Back
+                </a>
+
+            {% elif request.user.groups.first.name == 'Manager' or request.user.groups.first.name == 'Staff' %}
+                <a href="{% url 'purchase_dashboard2' %}" 
+                   class="btn btn-outline-secondary btn-sm">
+                   <i class="bi bi-arrow-left-circle"></i> Back
+                </a>
+            {% endif %}
+        </div>
+
+        <!-- Card Body -->
+        <div class="card-body">
+
+            <!-- Supplier Info -->
+            <div class="alert alert-info py-2">
+                Supplier: <span class="fw-semibold">
+                    {{ product.supplier.name }}
+                </span>
+            </div>
+
+            <!-- Form -->
+            <form method="POST">
+                {% csrf_token %}
+
+                <div class="mb-3">
+                    <label class="form-label">Reason for Purchase</label>
+                    <input type="text" 
+                           name="description" 
+                           class="form-control"
+                           placeholder="Enter reason"
+                           required>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Quantity</label>
+                    <input type="number" 
+                           name="quantity" 
+                           class="form-control"
+                           placeholder="Enter quantity"
+                           min="1"
+                           required>
+                </div>
+
+                <button class="btn btn-success">
+                    <i class="bi bi-send"></i> Submit Request
+                </button>
+
+            </form>
+
+        </div>
     </div>
 </div>
 {% endblock %}

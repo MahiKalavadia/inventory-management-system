@@ -1,5 +1,19 @@
 {% extends 'base_dashboard.html' %}
 {% load static %}
+{%block pagetitle%}Vendors Details{% endblock pagetitle%}
+{%block pagecontent %}Manage vendor details here.{% endblock pagecontent %}
+{% block link %}
+<a href="{% url 'supplier_dashboard' %}" class="btn btn-light btn-sm border">
+            ← Back
+        </a>
+
+        {% if request.user.is_superuser or request.user.groups.first.name == "Manager" %}
+        <a href="{% url 'add_supplier' %}" class="btn btn-primary btn-sm">
+            + Add Vendor
+        </a>
+        {% endif %}
+{% endblock link %}
+{% block panel %}Vendor List Panel{% endblock panel%}
 {% block content %}
 
 <style>
@@ -53,63 +67,6 @@
     padding: 4px 8px;
 }
 </style>
-<div class="dashboard-topbar fixed-top d-flex justify-content-between align-items-center px-4 py-3 bg-white border-bottom"
-     style="left:260px; right:0; top:0; z-index:999;">
-
-    <!-- Page Title --><div>
-    <div class="fw-semibold text-uppercase text-muted">
-        Vendors Details
-    </div>
-     <div class="text-muted small">
-            Manage vendor details here.
-        </div>
-    </div>
-    <!-- Right Section -->
-    <div class="d-flex align-items-center gap-4">
-
-        <!-- Quick Actions -->
-        <div class="d-flex gap-2">
-        <a href="{% url 'supplier_dashboard' %}" class="btn btn-light btn-sm border">
-            ← Back
-        </a>
-
-        {% if request.user.is_superuser or request.user.groups.first.name == "Manager" %}
-        <a href="{% url 'add_supplier' %}" class="btn btn-primary btn-sm">
-            + Add Vendor
-        </a>
-        {% endif %}
-    </div>
-
-        <!-- User -->
-        <div class="d-flex align-items-center gap-2">
-            <div class="text-end">
-                <div class="fw-medium small">{{ request.user.username }}</div>
-                <div class="text-muted small">Vendor List Panel</div>
-            </div>
-            {% if user.is_superuser %}
-    <img src="{% static 'images/admin.jpeg' %}"
-         class="rounded-circle border"
-         width="36"
-         height="36"
-         style="object-fit: cover;">
-
-{% elif user.groups.first.name == "Manager" %}
-    <img src="{% static 'images/manager.png' %}"
-         class="rounded-circle border"
-         width="36"
-         height="36"
-         style="object-fit: cover;">
-
-{% elif user.groups.first.name == "Staff" %}
-    <img src="{% static 'images/staff.png' %}"
-         class="rounded-circle border"
-         width="36"
-         height="36"
-         style="object-fit: cover;">
-         {% endif %}
-        </div>
-    </div>
-</div>
 <div class="card dashboard-card mb-4">
 
     <!-- TABLE -->

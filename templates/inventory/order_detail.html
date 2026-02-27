@@ -1,4 +1,6 @@
 {% extends 'base_dashboard.html' %}
+{%block pagetitle%}Receipt generation{% endblock pagetitle%}
+{% block panel %}Receipt Panel{% endblock panel%}
 {% block content %}
 
 <style>
@@ -31,16 +33,6 @@
     padding: 15px;
 }
 </style>
-<div class="dashboard-topbar fixed-top d-flex justify-content-between align-items-center px-4 py-3 bg-white border-bottom"
-     style="left:260px; right:0; top:0; z-index:999;">
-
-    <!-- Page Title -->
-     <div>
-    <div class="fw-semibold text-uppercase text-muted">
-        Receipt generation
-    </div>
-    </div>
-</div>
 <div class="container-fluid mt-4">
 
     <!-- 🔹 ORDER HEADER -->

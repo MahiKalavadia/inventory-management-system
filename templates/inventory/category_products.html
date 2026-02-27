@@ -1,7 +1,10 @@
 {% extends 'base_dashboard.html' %}
-
-
-
+{%block pagetitle%}Category Products List{% endblock pagetitle%}
+{% block link %}
+<b><a href="{% url 'category_list' %}" style="color: grey; font-size: 2rem;">
+        <i class="bi bi-arrow-left-circle-fill"></i></a> Products in {{ category.name }}</b>
+{% endblock link %}
+{% block panel %}Active Supplier Panel{% endblock panel%}
 {% block content %}
 <style>
     .table th {
@@ -14,9 +17,6 @@
     }
 
 </style>
-<h3 class="mb-3"><b><a href="{% url 'category_list' %}" style="color: grey; font-size: 2rem;">
-        <i class="bi bi-arrow-left-circle-fill"></i></a> Products in {{ category.name }}</b></h3>
-<hr>
 <table class="table table-hover align-middle bg-white shadow-sm rounded">
     <tr>
         <th>Image</th>

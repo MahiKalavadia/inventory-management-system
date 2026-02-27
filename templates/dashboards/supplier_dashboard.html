@@ -1,5 +1,27 @@
 {% extends 'base_dashboard.html' %}
 {% load static %}
+{%block pagetitle%}Vendor Management{% endblock pagetitle%}
+{%block pagecontent %}Overview of Vendors & Supply Activity{% endblock pagecontent %}
+{% block link %}
+{% if request.user.is_superuser or request.user.groups.first.name == "Manager" %}
+                <a href="{% url 'add_supplier' %}" class="btn btn-primary btn-sm">
+                    + Add Vendor
+                </a>
+{% endif %}
+<a href="{% url 'supplier_list' %}" class="btn btn-outline-dark btn-sm">
+                Catalog
+            </a>
+ <button class="btn btn-outline-secondary btn-sm dropdown-toggle"
+                    data-bs-toggle="dropdown">
+                Export Supplier List
+            </button>
+            <ul class="dropdown-menu">
+                <li><a class="dropdown-item" href="{% url 'export_supplier_csv' %}">CSV</a></li>
+                <li><a class="dropdown-item" href="{% url 'export_supplier_excel' %}">Excel</a></li>
+                <li><a class="dropdown-item" href="{% url 'export_supplier_pdf' %}">PDF</a></li>
+            </ul>
+{% endblock link %}
+{% block panel %}Vendor Panel{% endblock panel%}
 {% block content %}
 <style>
     .table th {
@@ -12,80 +34,6 @@
     }
 
 </style>
-<div class="dashboard-topbar fixed-top d-flex justify-content-between align-items-center px-4 py-3 bg-white border-bottom"
-     style="left:260px; right:0; top:0; z-index:999;">
-
-    <!-- Page Title -->
-     <div>
-    <div class="fw-semibold text-uppercase text-muted">
-        Vendor Management
-    </div>
-    <div class="text-muted small">
-            Overview of Vendors & Supply Activity
-        </div>
-    </div>
-    <!-- Right Section -->
-    <div class="d-flex align-items-center gap-4">
-
-        <!-- Quick Actions -->
-        <div class="d-flex align-items-center gap-2">
-            <div>
-            {% if request.user.is_superuser or request.user.groups.first.name == "Manager" %}
-                <a href="{% url 'add_supplier' %}" class="btn btn-primary btn-sm">
-                    + Add Vendor
-                </a>
-            {% endif %}
-            </div>
-            <div>
-            <a href="{% url 'supplier_list' %}" class="btn btn-outline-dark btn-sm">
-                Catalog
-            </a>
-        </div>
-        <div>
-            <div class="dropdown">
-            <button class="btn btn-outline-secondary btn-sm dropdown-toggle"
-                    data-bs-toggle="dropdown">
-                Export Supplier List
-            </button>
-            <ul class="dropdown-menu">
-                <li><a class="dropdown-item" href="{% url 'export_supplier_csv' %}">CSV</a></li>
-                <li><a class="dropdown-item" href="{% url 'export_supplier_excel' %}">Excel</a></li>
-                <li><a class="dropdown-item" href="{% url 'export_supplier_pdf' %}">PDF</a></li>
-            </ul>
-        </div>
-        </div>
-        </div>
-        <!-- User -->
-        <div class="d-flex align-items-center gap-2">
-            <div class="text-end">
-                <div class="fw-medium small">{{ request.user.username }}</div>
-                <div class="text-muted small">Vendor Panel</div>
-            </div>
-            {% if user.is_superuser %}
-    <img src="{% static 'images/admin.jpeg' %}"
-         class="rounded-circle border"
-         width="36"
-         height="36"
-         style="object-fit: cover;">
-
-{% elif user.groups.first.name == "Manager" %}
-    <img src="{% static 'images/manager.png' %}"
-         class="rounded-circle border"
-         width="36"
-         height="36"
-         style="object-fit: cover;">
-
-{% elif user.groups.first.name == "Staff" %}
-    <img src="{% static 'images/staff.png' %}"
-         class="rounded-circle border"
-         width="36"
-         height="36"
-         style="object-fit: cover;">
-         {% endif %}
-        </div>
-    </div>
-</div>
-
 <!--Stats-->
 <div class="row mb-3">
     <div class="col-md-3">
@@ -166,7 +114,7 @@
                 <div class="card-body">
                    <h6 class="fw-semibold mb-3">Purchase Value per Supplier</h6>
 
-                  <div class="chart-container">
+                  <div style="position: relative; height: 242px; width: 100%;">
                      <canvas id="TopSupplierByPurchase"></canvas>
                   </div>
 
@@ -398,7 +346,7 @@ new Chart(categoryCoverageChart, {
         datasets: [{
             label: "Categories Supplied",
             data: {{ category_count|safe }},
-            borderRadius: 6
+            borderRadius: 6,
         }]
     },
     options: {
@@ -416,7 +364,9 @@ new Chart(growthChart, {
             label: "New Suppliers",
             data: {{ totals|safe }},
             fill: false,
-            tension: 0.3
+            tension: 0.3,
+            borderColor: '#4f46e5',
+            backgroundColor: 'rgba(79,70,229,0.1)',
         }]
     },
     options: {

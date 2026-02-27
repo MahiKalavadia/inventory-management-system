@@ -2,94 +2,11 @@
 {% load humanize tz%}
 {% load static %}
 {% load number_filters %}
+{%block pagetitle%}Inventory Control Dashboard{%endblock pagetitle%}
+{%block user%}Administrator{% endblock user%}
+{%block panel%}Admin{% endblock panel%}
 {% block content %}
-<div class="dashboard-topbar fixed-top d-flex justify-content-between align-items-center px-4 py-3 bg-white border-bottom">
 
-
-    <!-- Page Title -->
-    <div class="fw-semibold text-uppercase text-muted">
-        Inventory Control Dashboard
-    </div>
-
-    <!-- Right Section -->
-    <div class="d-flex align-items-center gap-4">
-
-        <!-- Notifications -->
-        <div class="dropdown">
-            <button class="btn btn-link position-relative p-0 text-dark"
-                    type="button"
-                    data-bs-toggle="dropdown"
-                    aria-expanded="false">
-                <i class="bi bi-bell fs-5"></i>
-
-                {% if notifications_count > 0 %}
-                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                        {{ notifications_count }}
-                    </span>
-                {% endif %}
-            </button>
-
-            <ul class="dropdown-menu dropdown-menu-end shadow-sm p-2"
-                style="width: 320px; max-height: 380px; overflow-y: auto;">
-
-                <!-- Header -->
-                <li class="d-flex justify-content-between align-items-center px-2 mb-2">
-                    <span class="fw-semibold small text-muted">Notifications</span>
-                    <form method="POST" action="{% url 'notifications:mark_all_notifications_read' %}">
-                        {% csrf_token %}
-                        <button type="submit" class="btn btn-sm btn-link p-0">
-                            Mark all
-                        </button>
-                    </form>
-                </li>
-
-                <li><hr class="dropdown-divider"></li>
-
-                {% for n in notifications %}
-                <li>
-                    <a href="{% url 'notifications:mark_as_read' n.pk %}"
-                       class="dropdown-item rounded small {% if not n.is_read %}bg-light{% endif %}">
-                        <div class="fw-semibold">{{ n.title }}</div>
-                        <div class="text-muted small">{{ n.message }}</div>
-                        <div class="text-muted small">{{ n.created_at|naturaltime }}</div>
-                    </a>
-                </li>
-                {% empty %}
-                <li class="text-center text-muted small py-3">
-                    No notifications
-                </li>
-                {% endfor %}
-
-                <li><hr class="dropdown-divider"></li>
-                <li class="text-center">
-                    <a href="{% url 'notifications:all_notifications' %}" class="small">
-                        See all →
-                    </a>
-                </li>
-            </ul>
-        </div>
-
-        <!-- User -->
-        <div class="d-flex align-items-center gap-2">
-            <div class="text-end">
-                <div class="fw-medium small">Administrator</div>
-                <div class="text-muted small">Admin</div>
-            </div>
-            {% with user.groups.first as role %}
-    {% if user.is_superuser %}
-        <img src="{% static 'images/admin.jpeg' %}" class="rounded-circle border" width="36" height="36">
-    {% elif role and role.name == "Manager" %}
-        <img src="{% static 'images/manager.png' %}" class="rounded-circle border" width="36" height="36">
-    {% elif role and role.name == "Staff" %}
-        <img src="{% static 'images/staff.png' %}" class="rounded-circle border" width="36" height="36">
-    {% else %}
-        <img src="{% static 'images/default.png' %}" class="rounded-circle border" width="36" height="36">
-    {% endif %}
-{% endwith %}
-
-        </div>
-    </div>
-</div>
 
 <!-- ================= ROW 1 ================= -->
 <div class="row g-3 mb-4">
@@ -862,7 +779,9 @@ new Chart(document.getElementById('revenueChart'), {
             label: 'Revenue',
             data: {{ revenue_values|safe }},
             borderWidth: 2,
-            fill: true
+            fill: true,
+            borderColor: '#4f46e5',
+            backgroundColor: 'rgba(79,70,229,0.1)',
         }]
     },
     options: {

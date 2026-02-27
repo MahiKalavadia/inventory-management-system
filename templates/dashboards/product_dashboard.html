@@ -1,35 +1,17 @@
 {% extends 'base_dashboard.html' %}
 {% load number_filters %}
 {% load static %}
-{% block content %}
-<div class="dashboard-topbar fixed-top d-flex justify-content-between align-items-center px-4 py-3 bg-white border-bottom"
-     style="left:260px; right:0; top:0; z-index:999;">
-
-    <!-- Page Title -->
-    <div class="fw-semibold text-uppercase text-muted">
-        Product Insights Dashboard
-    </div>
-
-    <!-- Right Section -->
-    <div class="d-flex align-items-center gap-4">
-
-        <!-- Quick Actions -->
-        <div class="d-flex align-items-center gap-2">
-            <div>
-            {% if request.user.is_superuser or request.user.groups.first.name == "Manager" %}
-                <a href="{% url 'add_product' %}" class="btn btn-primary btn-sm">
-                    + Add Item
-                </a>
-            {% endif %}
-            </div>
-            <div>
-            <a href="{% url 'product_list' %}" class="btn btn-outline-dark btn-sm">
-                Catalog
-            </a>
-        </div>
-        <div>
-            <div class="dropdown">
-            <button class="btn btn-outline-secondary btn-sm dropdown-toggle"
+{%block pagetitle%}Product Insights Dashboard{% endblock pagetitle%}
+{% block link %}
+{% if request.user.is_superuser or request.user.groups.first.name == "Manager" %}
+<a href="{% url 'add_product' %}" class="btn btn-primary btn-sm">
+    + Add Item
+</a>
+{% endif %}
+<a href="{% url 'product_list' %}" class="btn btn-outline-dark btn-sm">
+        Catalog
+</a>
+<button class="btn btn-outline-secondary btn-sm dropdown-toggle"
                     data-bs-toggle="dropdown">
                 Export Products List
             </button>
@@ -38,46 +20,11 @@
                 <li><a class="dropdown-item" href="{% url 'export_product_excel' %}">Excel</a></li>
                 <li><a class="dropdown-item" href="{% url 'export_product_pdf' %}">PDF</a></li>
             </ul>
-        </div>
-           </div>
-        </div>
-
-        <!-- User -->
-        <div class="d-flex align-items-center gap-2">
-            <div class="text-end">
-                <div class="fw-medium small">{{ request.user.username }}</div>
-                <div class="text-muted small">Product Panel</div>
-            </div>
-            {% if user.is_superuser %}
-    <img src="{% static 'images/admin.jpeg' %}"
-         class="rounded-circle border"
-         width="36"
-         height="36"
-         style="object-fit: cover;">
-
-{% elif user.groups.first.name == "Manager" %}
-    <img src="{% static 'images/manager.png' %}"
-         class="rounded-circle border"
-         width="36"
-         height="36"
-         style="object-fit: cover;">
-
-{% elif user.groups.first.name == "Staff" %}
-    <img src="{% static 'images/staff.png' %}"
-         class="rounded-circle border"
-         width="36"
-         height="36"
-         style="object-fit: cover;">
-         {% endif %}
-        </div>
-    </div>
-</div>
-
+{% endblock link %}
+{% block panel %}Product Panel{% endblock panel%}
+{% block content %}
 <!-- Stats -->
 <div class="row mb-4">
-
-    
-
     <div class="col-md-2">
   <a href="{% url 'product_list' %}" class="text-decoration-none text-dark">
     <div class="stat-card">
@@ -479,7 +426,9 @@ new Chart(trendChart, {
         datasets: [{
             data: {{ monthly_counts|safe }},
             tension: 0.4,
-            fill: true
+            fill: true,
+            borderColor: '#4f46e5',
+            backgroundColor: 'rgba(79,70,229,0.1)',
         }]
     },
     options: {

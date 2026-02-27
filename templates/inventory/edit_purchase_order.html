@@ -1,6 +1,14 @@
 {% extends 'base_dashboard.html' %}
 {% load crispy_forms_tags %}
 {% load static %}
+{%block pagetitle%}Update Purchase Ordre{% endblock pagetitle%}
+{%block pagecontent %}Update the details and place the order.{% endblock pagecontent %}
+{% block link %}
+ <a href="{% url 'purchase_dashboard' %}" class="btn btn-outline-secondary btn-sm">
+            <i class="bi bi-arrow-left-circle"></i> Back
+        </a>
+{% endblock link %}
+{% block panel %}Update PO Panel{% endblock panel%}
 {% block content %}
 <style>
     .page-wrapper {
@@ -32,50 +40,6 @@
 
     .asteriskField { display: none; }
 </style>
-<div class="dashboard-topbar fixed-top d-flex justify-content-between align-items-center px-4 py-3 bg-white border-bottom"
-     style="left:260px; right:0; top:0; z-index:999;">
-
-    <div>
-        <div class="fw-semibold text-uppercase text-muted">
-            Update Purchase Ordre
-        </div>
-        <div class="text-muted small">
-            Update the details and place the order.
-        </div>
-    </div>
-
-    <div class="d-flex align-items-center gap-3">
-        <a href="{% url 'purchase_dashboard' %}" class="btn btn-outline-secondary btn-sm">
-            <i class="bi bi-arrow-left-circle"></i> Back
-        </a>
-        <div class="text-end">
-                <div class="fw-medium small">{{ request.user.username }}</div>
-                <div class="text-muted small">Update PO Panel</div>
-            </div>
-        {% if user.is_superuser %}
-    <img src="{% static 'images/admin.jpeg' %}"
-         class="rounded-circle border"
-         width="36"
-         height="36"
-         style="object-fit: cover;">
-
-{% elif user.groups.first.name == "Manager" %}
-    <img src="{% static 'images/manager.png' %}"
-         class="rounded-circle border"
-         width="36"
-         height="36"
-         style="object-fit: cover;">
-
-{% elif user.groups.first.name == "Staff" %}
-    <img src="{% static 'images/staff.png' %}"
-         class="rounded-circle border"
-         width="36"
-         height="36"
-         style="object-fit: cover;">
-         {% endif %}
-    </div>
-</div>
-
 <div class="card shadow-sm border-0 form-card">
 
         <form method="POST" enctype="multipart/form-data">
