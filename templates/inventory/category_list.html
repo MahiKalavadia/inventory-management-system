@@ -17,155 +17,127 @@
 
 <style>
 .category-card {
-    background: #ffffff;
-    border-radius: 16px;
-    padding: 20px;
-    box-shadow: 0 6px 18px rgba(0,0,0,0.05);
-    position: relative;
-    transition: 0.2s ease;
-    height: 100%;
-}
-.category-card:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 10px 22px rgba(0,0,0,0.08);
-}
-
-.icon-box {
-    width: 48px;
-    height: 48px;
+    transition: all 0.25s ease;
     border-radius: 12px;
-    background: #eef2ff;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 22px;
-    color: #4f46e5;
 }
 
-.count-badge {
-    position: absolute;
-    top: 18px;
-    right: 50px;
-    background: #e0e7ff;
-    color: #3730a3;
-    font-weight: 600;
-    font-size: 12px;
-    padding: 6px 12px;
-    border-radius: 20px;
+.category-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.08);
 }
 
-.dropdown-btn {
-    position: absolute;
-    top: 18px;
-    right: 12px;
-}
-
-.category-name {
-    font-weight: 700;
-    font-size: 18px;
-    margin-top: 14px;
-}
-
-.category-desc {
-    color: #6b7280;
-    font-size: 13px;
-    margin-top: 6px;
-}
-
-.category-footer {
-    margin-top: 18px;
-    font-size: 12px;
-    color: #9ca3af;
+.icon-wrapper {
+    width: 70px;
+    height: 70px;
 }
 </style>
-<div class="row">
+<div class="row g-4">
+
 {% for item in page_obj %}
-<div class="col-md-3 mb-4">
-    <div class="category-card">
+<div class="col-xl-3 col-lg-4 col-md-6">
 
-        <!-- count badge -->
-        <div class="count-badge">
-            {{ item.total_products }} Items
+    <div class="card border-0 shadow-sm h-100 category-card">
+
+        <!-- Card Header (Top Controls) -->
+        <div class="card-body position-relative pb-3">
+
+            <!-- Product Count Badge -->
+            <span class="badge bg-primary-subtle text-primary fw-semibold px-3 py-2 position-absolute top-0 start-0 m-3">
+                {{ item.total_products }} Items
+            </span>
+
+            <!-- Dropdown Menu -->
+            <div class="dropdown position-absolute top-0 end-0 m-2">
+                <button class="btn btn-sm btn-light border-0" data-bs-toggle="dropdown">
+                    <i class="bi bi-three-dots-vertical text-muted"></i>
+                </button>
+                <ul class="dropdown-menu dropdown-menu-end shadow-sm">
+                    <li>
+                        <a class="dropdown-item" href="{% url 'update_category' item.category.id %}">
+                            <i class="bi bi-pencil me-2"></i> Edit
+                        </a>
+                    </li>
+                    {% if request.user.is_superuser %}
+                    <li>
+                        <a class="dropdown-item text-danger" href="{% url 'delete_category' item.category.id %}">
+                            <i class="bi bi-trash me-2"></i> Delete
+                        </a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </div>
+
+            <!-- Icon -->
+            <div class="text-center mt-4 mb-3">
+                <div class="icon-wrapper bg-light rounded-circle d-inline-flex align-items-center justify-content-center">
+                    {% if item.category.name == "Smartphone" %}
+                        <i class="bi bi-phone fs-3 text-primary"></i>
+                    {% elif item.category.name == "Laptop" %}
+                        <i class="bi bi-laptop fs-3 text-primary"></i>
+                    {% elif item.category.name == "Headphones" %}
+                        <i class="bi bi-headphones fs-3 text-primary"></i>
+                    {% elif item.category.name == "Earbuds" %}
+                        <i class="bi bi-earbuds fs-3 text-primary"></i>
+                    {% elif item.category.name == "Mouse" %}
+                        <i class="bi bi-mouse fs-3 text-primary"></i>
+                    {% elif item.category.name == "Keyboard" %}
+                        <i class="bi bi-keyboard fs-3 text-primary"></i>
+                    {% elif item.category.name == "TV" %}
+                        <i class="bi bi-tv fs-3 text-primary"></i>
+                    {% elif item.category.name == "Printer" %}
+                        <i class="bi bi-printer fs-3 text-primary"></i>
+                    {% elif item.category.name == "Tablet" %}
+                        <i class="bi bi-tablet fs-3 text-primary"></i>
+                    {% elif item.category.name == "Desktop" %}
+                        <i class="bi bi-pc-display fs-3 text-primary"></i>
+                    {% elif item.category.name == "Camera" %}
+                        <i class="bi bi-camera fs-3 text-primary"></i>
+                    {% elif item.category.name == "Smartwatch" %}
+                        <i class="bi bi-smartwatch fs-3 text-primary"></i>
+                    {% else %}
+                        <i class="bi bi-box-seam fs-3 text-primary"></i>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Category Name -->
+            <h6 class="text-center fw-semibold mb-1">
+                {{ item.category.name }}
+            </h6>
+
+            <!-- Description -->
+            <p class="text-center text-muted small mb-3">
+                Inventory items under this category
+            </p>
+
         </div>
 
-        <!-- 3 dot menu -->
-        <div class="dropdown dropdown-btn">
-            <button class="btn btn-sm btn-light" data-bs-toggle="dropdown">
-                <i class="bi bi-three-dots-vertical"></i>
-            </button>
-            <ul class="dropdown-menu dropdown-menu-end shadow">
-                <li>
-                    <a class="dropdown-item" href="{% url 'update_category' item.category.id %}">
-                        <i class="bi bi-pencil me-2"></i> Edit
-                    </a>
-                </li>
-                {% if request.user.is_superuser %}
-                <li>
-                    <a class="dropdown-item text-danger" href="{% url 'delete_category' item.category.id %}">
-                        <i class="bi bi-trash me-2"></i> Delete
-                    </a>
-                </li>
-                {% endif %}
-            </ul>
-        </div>
-
-        <!-- icon -->
-        <div class="icon-box">
-            {% if item.category.name == "Smartphone" %}
-                <i class="bi bi-phone"></i>
-            {% elif item.category.name == "Laptop" %}
-                <i class="bi bi-laptop"></i>
-            {% elif item.category.name == "Headphones" %}
-                <i class="bi bi-headphones"></i>
-            {% elif item.category.name == "Earbuds" %}
-                <i class="bi bi-earbuds"></i>
-            {% elif item.category.name == "Mouse" %}
-                <i class="bi bi-mouse"></i>
-            {% elif item.category.name == "Keyboard" %}
-                <i class="bi bi-keyboard"></i>
-            {% elif item.category.name == "TV" %}
-                <i class="bi bi-tv"></i>
-            {% elif item.category.name == "Printer" %}
-                <i class="bi bi-printer"></i>
-            {% elif item.category.name == "Tablet" %}
-                <i class="bi bi-tablet"></i>
-            {% elif item.category.name == "Desktop" %}
-                <i class="bi bi-pc-display"></i>
-            {% elif item.category.name == "Camera" %}
-                <i class="bi bi-camera"></i>
-            {% elif item.category.name == "Smartwatch" %}
-                <i class="bi bi-smartwatch"></i>
-            {% else %}
-                <i class="bi bi-box-seam"></i>
-            {% endif %}
-        </div>
-
-        <!-- name -->
-        <div class="category-name">
-            {{ item.category.name }}
-        </div>
-
-        <!-- description -->
-        <div class="category-desc">
-            Inventory items under this category
-        </div>
-
-        <!-- footer -->
-        <div class="category-footer">
-            Updated recently
+        <!-- Footer -->
+        <div class="card-footer bg-white border-top text-center small text-muted">
+            Last updated recently
         </div>
 
     </div>
 </div>
 {% endfor %}
+
 </div>
-    <div class="mt-4">
+
+
+<!-- Professional Pagination -->
+<div class="mt-4">
     <nav>
-        <ul class="pagination justify-content-center">
+        <ul class="pagination pagination-sm justify-content-center">
 
             {% if page_obj.has_previous %}
             <li class="page-item">
-                <a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous</a>
+                <a class="page-link" href="?page={{ page_obj.previous_page_number }}">
+                    &laquo;
+                </a>
+            </li>
+            {% else %}
+            <li class="page-item disabled">
+                <span class="page-link">&laquo;</span>
             </li>
             {% endif %}
 
@@ -174,7 +146,7 @@
                     <li class="page-item active">
                         <span class="page-link">{{ num }}</span>
                     </li>
-                {% else %}
+                {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
                     <li class="page-item">
                         <a class="page-link" href="?page={{ num }}">{{ num }}</a>
                     </li>
@@ -183,13 +155,18 @@
 
             {% if page_obj.has_next %}
             <li class="page-item">
-                <a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a>
+                <a class="page-link" href="?page={{ page_obj.next_page_number }}">
+                    &raquo;
+                </a>
+            </li>
+            {% else %}
+            <li class="page-item disabled">
+                <span class="page-link">&raquo;</span>
             </li>
             {% endif %}
 
         </ul>
     </nav>
-</div>
 </div>
 
 

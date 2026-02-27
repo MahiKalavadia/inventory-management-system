@@ -21,7 +21,7 @@
         <span class="stat-title">TOTAL PURCHASE REQUESTS</span>
         <i class="bi bi-clipboard-data-fill text-primary"></i>
       </div>
-      <h2>{{ total_requests }}</h2>
+      <h4><b>{{ total_requests }}</b></h4>
       <p class="stat-sub text-primary">
         Requests received
       </p>
@@ -36,7 +36,7 @@
         <span class="stat-title">TOTAL PENDING REQUESTS</span>
         <i class="bi bi-hourglass-split text-warning"></i>
       </div>
-      <h2>{{ pending_requests }}</h2>
+      <h4><b>{{ pending_requests }}</b></h4>
       <p class="stat-sub text-warning">
         Requests approval/rejection remaining
       </p>
@@ -50,7 +50,7 @@
         <span class="stat-title">TOTAL APPROVED REQUESTS</span>
         <i class="bi bi-check-circle-fill text-success"></i>
       </div>
-      <h2>{{ approved_requests }}</h2>
+      <h4><b>{{ approved_requests }}</b></h4>
       <p class="stat-sub text-success">
         Approved Requests
       </p>
@@ -64,7 +64,7 @@
         <span class="stat-title">TOTAL REJECTED REQUESTS</span>
         <i class="bi bi-x-octagon-fill text-danger"></i>
       </div>
-      <h2>{{ rejected_requests }}</h2>
+      <h4><b>{{ rejected_requests }}</b></h4>
       <p class="stat-sub text-danger">
         Rejected Requests
       </p>
@@ -85,7 +85,7 @@
         <span class="stat-title">TOTAL ORDERS</span>
         <i class="bi bi-bag-check-fill text-muted"></i>
       </div>
-      <h2>{{ total_orders }}</h2>
+      <h4><b>{{ total_orders }}</b></h4>
       <p class="stat-sub text-muted">Orders Received</p>
     </div>
   </a>
@@ -98,7 +98,7 @@
         <span class="stat-title">IN TRANSIT</span>
         <i class="bi bi-truck text-muted"></i>
       </div>
-      <h2>{{ in_transit }}</h2>
+      <h4><b>{{ in_transit }}</b></h4>
       <p class="stat-sub text-muted">In Transit</p>
     </div>
   </div>
@@ -110,7 +110,7 @@
         <span class="stat-title">DELIVERED</span>
         <i class="bi bi-box-seam-fill text-muted"></i>
       </div>
-      <h2>{{ delivered }}</h2>
+      <h4><b>{{ delivered }}</b></h4>
       <p class="stat-sub text-muted">Order received</p>
     </div>
   </div>
@@ -122,7 +122,7 @@
         <span class="stat-title">TOTAL PURCHASE COST</span>
         <i class="bi bi-cash-stack text-muted"></i>
       </div>
-      <h2>₹{{ total_purchase_cost|short_number }}</h2>
+      <h4><b>₹{{ total_purchase_cost|short_number }}</b></h4>
       <p class="stat-sub text-muted">Cost required to buy stock</p>
     </div>
   </div>
@@ -172,11 +172,13 @@
 
 <!-- ================= Manage Requests ================= -->
 <div class="col-md-6">
-  <div class="card shadow-sm border-0 h-100">
+  <div class="card shadow-sm border-0 h-100 dashboard-card">
 
-    <div class="card-header bg-white d-flex justify-content-between align-items-center">
-      <h6 class="mb-0 fw-bold">Manage Requests</h6>
-      <a href="{% url 'manage_requests' %}" class="btn btn-sm btn-outline-primary">
+    <div class="card-header bg-white d-flex justify-content-between align-items-center py-3">
+      <h6 class="mb-0 fw-semibold text-uppercase text-muted small">
+        Manage Requests
+      </h6>
+      <a href="{% url 'manage_requests' %}" class="btn btn-sm btn-light border">
         View All →
       </a>
     </div>
@@ -184,7 +186,7 @@
     <div class="card-body p-0">
       <div class="table-responsive">
         <table class="table table-hover align-middle mb-0">
-          <thead class="table-light">
+          <thead class="table-light small text-muted">
             <tr>
               <th>Product</th>
               <th>Qty</th>
@@ -201,21 +203,29 @@
 
               <td>
                 {% if r.status == "Pending" %}
-                  <span class="badge bg-warning text-dark">Pending</span>
+                  <span class="badge bg-warning-subtle text-warning border">Pending</span>
                 {% elif r.status == "Approved" %}
-                  <span class="badge bg-success">Approved</span>
+                  <span class="badge bg-success-subtle text-success border">Approved</span>
                 {% elif r.status == "Rejected" %}
-                  <span class="badge bg-danger">Rejected</span>
+                  <span class="badge bg-danger-subtle text-danger border">Rejected</span>
                 {% endif %}
               </td>
 
               <td class="text-end">
                 {% if r.status == "Pending" %}
-                  <a href="{% url 'approve_request' r.id %}" class="btn btn-sm btn-success">Approve</a>
-                  <a href="{% url 'reject_request' r.id %}" class="btn btn-sm btn-outline-danger">Reject</a>
+                  <a href="{% url 'approve_request' r.id %}" 
+                     class="btn btn-sm btn-success me-1">Approve</a>
+                  <a href="{% url 'reject_request' r.id %}" 
+                     class="btn btn-sm btn-outline-danger">Reject</a>
                 {% else %}
                   <span class="text-muted small">Completed</span>
                 {% endif %}
+              </td>
+            </tr>
+            {% empty %}
+            <tr>
+              <td colspan="4" class="text-center text-muted py-4">
+                No requests found
               </td>
             </tr>
             {% endfor %}
@@ -225,41 +235,51 @@
       </div>
     </div>
 
-    <!-- Pagination -->
-    <div class="card-footer bg-white border-0">
+    <div class="card-footer bg-white border-0 py-2">
       <nav>
-        <ul class="pagination pagination-sm justify-content-center mb-0">
+  <ul class="pagination pagination-sm justify-content-center mb-0">
 
-          {% if reque.has_previous %}
-          <li class="page-item">
-            <a class="page-link" href="?page={{ reque.previous_page_number }}">Previous</a>
-          </li>
-          {% endif %}
+    {% if page_obj.has_previous %}
+      <li class="page-item">
+        <a class="page-link" href="?page={{ page_obj.previous_page_number }}">‹</a>
+      </li>
+    {% endif %}
 
+    {% for num in page_obj.paginator.page_range %}
+      {% if num >= page_obj.number|add:'-1' and num <= page_obj.number|add:'1' %}
+        {% if page_obj.number == num %}
           <li class="page-item active">
-            <span class="page-link">{{ reque.number }}</span>
+            <span class="page-link">{{ num }}</span>
           </li>
-
-          {% if reque.has_next %}
+        {% else %}
           <li class="page-item">
-            <a class="page-link" href="?page={{ reque.next_page_number }}">Next</a>
+            <a class="page-link" href="?page={{ num }}">{{ num }}</a>
           </li>
-          {% endif %}
+        {% endif %}
+      {% endif %}
+    {% endfor %}
 
-        </ul>
-      </nav>
+    {% if page_obj.has_next %}
+      <li class="page-item">
+        <a class="page-link" href="?page={{ page_obj.next_page_number }}">›</a>
+      </li>
+    {% endif %}
+
+  </ul>
+</nav>
     </div>
 
   </div>
 </div>
-
 <!-- ================= Purchase Orders ================= -->
 <div class="col-md-6">
-  <div class="card shadow-sm border-0 h-100">
+  <div class="card shadow-sm border-0 h-100 dashboard-card">
 
-    <div class="card-header bg-white d-flex justify-content-between align-items-center">
-      <h6 class="mb-0 fw-bold">Purchase Orders</h6>
-      <a href="{% url 'purchase_orders' %}" class="btn btn-sm btn-outline-primary">
+    <div class="card-header bg-white d-flex justify-content-between align-items-center py-3">
+      <h6 class="mb-0 fw-semibold text-uppercase text-muted small">
+        Purchase Orders
+      </h6>
+      <a href="{% url 'purchase_orders' %}" class="btn btn-sm btn-light border">
         View All →
       </a>
     </div>
@@ -267,7 +287,7 @@
     <div class="card-body p-0">
       <div class="table-responsive">
         <table class="table table-hover align-middle mb-0">
-          <thead class="table-light">
+          <thead class="table-light small text-muted">
             <tr>
               <th>ID</th>
               <th>Product</th>
@@ -284,22 +304,35 @@
 
               <td>
                 {% if po.status == "delivered" %}
-                  <span class="badge bg-success">Completed</span>
+                  <span class="badge bg-success-subtle text-success border">
+                    Completed
+                  </span>
                 {% elif po.status == "pending" %}
-                  <span class="badge bg-warning text-dark">Pending</span>
+                  <span class="badge bg-warning-subtle text-warning border">
+                    Pending
+                  </span>
                 {% else %}
-                  <span class="badge bg-info text-dark">{{ po.status }}</span>
+                  <span class="badge bg-info-subtle text-info border">
+                    {{ po.status }}
+                  </span>
                 {% endif %}
               </td>
 
               <td class="text-end">
                 {% if po.status != "delivered" %}
-                  <a href="{% url 'update_po_status' po.id %}" class="btn btn-sm btn-dark">
+                  <a href="{% url 'update_po_status' po.id %}" 
+                     class="btn btn-sm btn-dark">
                     Update
                   </a>
                 {% else %}
                   <span class="text-muted small">Completed</span>
                 {% endif %}
+              </td>
+            </tr>
+            {% empty %}
+            <tr>
+              <td colspan="4" class="text-center text-muted py-4">
+                No purchase orders found
               </td>
             </tr>
             {% endfor %}
@@ -309,34 +342,43 @@
       </div>
     </div>
 
-    <!-- Pagination -->
-    <div class="card-footer bg-white border-0">
+    <div class="card-footer bg-white border-0 py-2">
       <nav>
-        <ul class="pagination pagination-sm justify-content-center mb-0">
+  <ul class="pagination pagination-sm justify-content-center mb-0">
 
-          {% if urder.has_previous %}
-          <li class="page-item">
-            <a class="page-link" href="?page={{ urder.previous_page_number }}">Previous</a>
-          </li>
-          {% endif %}
+    {% if page_obj.has_previous %}
+      <li class="page-item">
+        <a class="page-link" href="?page={{ page_obj.previous_page_number }}">‹</a>
+      </li>
+    {% endif %}
 
+    {% for num in page_obj.paginator.page_range %}
+      {% if num >= page_obj.number|add:'-1' and num <= page_obj.number|add:'1' %}
+        {% if page_obj.number == num %}
           <li class="page-item active">
-            <span class="page-link">{{ urder.number }}</span>
+            <span class="page-link">{{ num }}</span>
           </li>
-
-          {% if urder.has_next %}
+        {% else %}
           <li class="page-item">
-            <a class="page-link" href="?page={{ urder.next_page_number }}">Next</a>
+            <a class="page-link" href="?page={{ num }}">{{ num }}</a>
           </li>
-          {% endif %}
+        {% endif %}
+      {% endif %}
+    {% endfor %}
 
-        </ul>
-      </nav>
+    {% if page_obj.has_next %}
+      <li class="page-item">
+        <a class="page-link" href="?page={{ page_obj.next_page_number }}">›</a>
+      </li>
+    {% endif %}
+
+  </ul>
+</nav>
     </div>
 
   </div>
 </div>
-</div>
+  
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
 const monthlyPurchaseChart = document.getElementById('monthlyPurchaseChart').getContext('2d');

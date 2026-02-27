@@ -44,7 +44,7 @@
         <span class="stat-title">TOTAL INVENTORY ITEMS </span>
         <i class="bi bi-box-fill text-primary"></i>
       </div>
-      <h2>{{ total_products }}</h2>
+      <h4><b>{{ total_products }}</b></h4>
       <p class="stat-sub text-muted">
         Inventory items present 
       </p>
@@ -59,7 +59,7 @@
         <span class="stat-title">IN STOCK</span>
         <i class="bi bi-check-circle-fill text-success"></i>
       </div>
-      <h2>{{ in_stock }}</h2>
+      <h4><b>{{ in_stock }}</b></h4>
       <p class="stat-sub text-success">
         Items currently available
       </p>
@@ -75,7 +75,7 @@
         <span class="stat-title">REORDER ALERTS</span>
         <i class="bi bi-exclamation-triangle-fill text-warning"></i>
       </div>
-      <h2>{{ low_stock }}</h2>
+      <h4><b>{{ low_stock }}</b></h4>
       <p class="stat-sub text-warning">
         Critical Items identified.
       </p>
@@ -91,7 +91,7 @@
         <span class="stat-title">STOCKOUTS</span>
         <i class="bi bi-x-circle-fill text-danger"></i>
       </div>
-      <h2>{{ out_stock }}</h2>
+      <h4><b>{{ out_stock }}</b></h4>
       <p class="stat-sub text-danger">
         Attention required
       </p>
@@ -210,128 +210,228 @@
     </div>
 </div>
 <div class="row g-4">
-    <!-- Inventory Snapshot -->
-  <div class="col-md-6">
-    <div class="card shadow-sm border-0 rounded-4">
-      <div class="card-header bg-white fw-semibold d-flex justify-content-between align-items-center">
-        <span>📦 Inventory Snapshot</span>
-        <small class="text-muted">Latest stock overview</small>
-      </div>
 
-      <div class="card-body p-0">
-        <table class="table table-hover align-middle mb-0">
-          <thead class="table-light">
-            <tr>
-              <th>Product</th>
-              <th>Category</th>
-              <th class="text-center">Qty</th>
-              <th>Status</th>
-            </tr>
-          </thead>
+    <!-- ================= Inventory Snapshot ================= -->
+    <div class="col-lg-6">
+        <div class="card border-0 shadow-sm h-100">
 
-          <tbody>
-            {% for product in products %}
-            <tr>
-              <td class="fw-medium">{{ product.name }}</td>
-              <td class="text-muted">{{ product.category.name }}</td>
-              <td class="text-center">{{ product.quantity }}</td>
-              <td>
-                {% if product.quantity == 0 %}
-                  <span class="badge bg-danger-subtle text-danger px-3">Out of Stock</span>
-                {% elif product.quantity <= 5 %}
-                  <span class="badge bg-warning-subtle text-warning px-3">Low</span>
-                {% else %}
-                  <span class="badge bg-success-subtle text-success px-3">In Stock</span>
-                {% endif %}
-              </td>
-            </tr>
-            {% endfor %}
-          </tbody>
-        </table>
-      </div>
+            <!-- Header -->
+            <div class="card-header bg-white border-bottom d-flex justify-content-between align-items-center">
+                <div>
+                    <h6 class="mb-0 fw-semibold">Inventory Snapshot</h6>
+                    <small class="text-muted">Latest stock overview</small>
+                </div>
+                <span class="small text-muted">
+                    Total: {{ products.paginator.count }}
+                </span>
+            </div>
 
-      <!-- Pagination -->
-      <div class="p-2 d-flex justify-content-end">
-        <ul class="pagination pagination-sm mb-0">
-          {% if products.has_previous %}
-            <li class="page-item">
-              <a class="page-link" href="?page_products={{ products.previous_page_number }}">‹</a>
-            </li>
-          {% endif %}
+            <!-- Table -->
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead class="table-light">
+                            <tr>
+                                <th class="ps-4">Product</th>
+                                <th>Category</th>
+                                <th class="text-center">Quantity</th>
+                                <th class="text-center pe-4">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
 
-          <li class="page-item active">
-            <span class="page-link">{{ products.number }}</span>
-          </li>
+                            {% for product in products %}
+                            <tr>
+                                <td class="ps-4 fw-medium">
+                                    {{ product.name }}
+                                </td>
 
-          {% if products.has_next %}
-            <li class="page-item">
-              <a class="page-link" href="?page_products={{ products.next_page_number }}">›</a>
-            </li>
-          {% endif %}
-        </ul>
-      </div>
-    </div>
-  </div>
-  <div class="col-md-6">
-    <div class="card shadow-sm border-0 rounded-4">
-      <div class="card-header bg-danger-subtle text-danger fw-semibold">
-        ⚠️ Critical Stock Alerts
-      </div>
+                                <td class="text-muted">
+                                    {{ product.category.name }}
+                                </td>
 
-      <div class="card-body p-0">
-        <table class="table table-hover align-middle mb-0">
-          <thead class="table-light">
-            <tr>
-              <th>Product</th>
-              <th>Category</th>
-              <th>Supplier</th>
-              <th class="text-center">Qty</th>
-            </tr>
-          </thead>
+                                <td class="text-center fw-semibold">
+                                    {{ product.quantity }}
+                                </td>
 
-          <tbody>
-            {% for product in low_stock_products %}
-            <tr>
-              <td class="fw-medium">{{ product.name }}</td>
-              <td class="text-muted">{{ product.category.name }}</td>
-              <td>{{ product.supplier.name }}</td>
-              <td class="text-danger fw-bold text-center">{{ product.quantity }}</td>
-            </tr>
+                                <td class="text-center pe-4">
+                                    {% if product.quantity == 0 %}
+                                        <span class="badge bg-danger-subtle text-danger px-3 py-2">
+                                            Out of Stock
+                                        </span>
+                                    {% elif product.quantity <= 5 %}
+                                        <span class="badge bg-warning-subtle text-warning px-3 py-2">
+                                            Low Stock
+                                        </span>
+                                    {% else %}
+                                        <span class="badge bg-success-subtle text-success px-3 py-2">
+                                            In Stock
+                                        </span>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% endfor %}
 
-            {% empty %}
-            <tr>
-              <td colspan="4" class="text-center text-success py-3">
-                ✅ All products are safe
-              </td>
-            </tr>
-            {% endfor %}
-          </tbody>
-        </table>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
 
-        <!-- Pagination -->
-        <div class="p-2 d-flex justify-content-end">
-          <ul class="pagination pagination-sm mb-0">
-            {% if low_stock_products.has_previous %}
-              <li class="page-item">
-                <a class="page-link" href="?page_low={{ low_stock_products.previous_page_number }}">‹</a>
-              </li>
-            {% endif %}
+            <!-- Pagination Footer -->
+            <div class="border-top bg-light p-2">
+                <nav>
+                    <ul class="pagination pagination-sm justify-content-end mb-0">
 
-            <li class="page-item active">
-              <span class="page-link">{{ low_stock_products.number }}</span>
-            </li>
+                        {% if products.has_previous %}
+                        <li class="page-item">
+                            <a class="page-link"
+                               href="?page_products={{ products.previous_page_number }}">
+                                &laquo;
+                            </a>
+                        </li>
+                        {% else %}
+                        <li class="page-item disabled">
+                            <span class="page-link">&laquo;</span>
+                        </li>
+                        {% endif %}
 
-            {% if low_stock_products.has_next %}
-              <li class="page-item">
-                <a class="page-link" href="?page_low={{ low_stock_products.next_page_number }}">›</a>
-              </li>
-            {% endif %}
-          </ul>
+                        <li class="page-item disabled">
+                            <span class="page-link small">
+                                Page {{ products.number }} of {{ products.paginator.num_pages }}
+                            </span>
+                        </li>
+
+                        {% if products.has_next %}
+                        <li class="page-item">
+                            <a class="page-link"
+                               href="?page_products={{ products.next_page_number }}">
+                                &raquo;
+                            </a>
+                        </li>
+                        {% else %}
+                        <li class="page-item disabled">
+                            <span class="page-link">&raquo;</span>
+                        </li>
+                        {% endif %}
+
+                    </ul>
+                </nav>
+            </div>
+
         </div>
-
-      </div>
     </div>
-  </div>
+
+
+    <!-- ================= Critical Stock Alerts ================= -->
+    <div class="col-lg-6">
+        <div class="card border-0 shadow-sm h-100">
+
+            <!-- Header -->
+            <div class="card-header bg-white border-bottom d-flex justify-content-between align-items-center">
+                <div>
+                    <h6 class="mb-0 fw-semibold text-danger">
+                        Critical Stock Alerts
+                    </h6>
+                    <small class="text-muted">
+                        Items below minimum threshold
+                    </small>
+                </div>
+                <span class="small text-muted">
+                    Total: {{ low_stock_products.paginator.count }}
+                </span>
+            </div>
+
+            <!-- Table -->
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead class="table-light">
+                            <tr>
+                                <th class="ps-4">Product</th>
+                                <th>Category</th>
+                                <th>Supplier</th>
+                                <th class="text-center pe-4">Quantity</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                            {% for product in low_stock_products %}
+                            <tr>
+                                <td class="ps-4 fw-medium">
+                                    {{ product.name }}
+                                </td>
+
+                                <td class="text-muted">
+                                    {{ product.category.name }}
+                                </td>
+
+                                <td>
+                                    {{ product.supplier.name }}
+                                </td>
+
+                                <td class="text-center pe-4">
+                                    <span class="badge bg-danger-subtle text-danger fw-semibold px-3 py-2">
+                                        {{ product.quantity }}
+                                    </span>
+                                </td>
+                            </tr>
+
+                            {% empty %}
+                            <tr>
+                                <td colspan="4" class="text-center py-5 text-muted">
+                                    No critical stock items found.
+                                </td>
+                            </tr>
+                            {% endfor %}
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Pagination Footer -->
+            <div class="border-top bg-light p-2">
+                <nav>
+                    <ul class="pagination pagination-sm justify-content-end mb-0">
+
+                        {% if low_stock_products.has_previous %}
+                        <li class="page-item">
+                            <a class="page-link"
+                               href="?page_low={{ low_stock_products.previous_page_number }}">
+                                &laquo;
+                            </a>
+                        </li>
+                        {% else %}
+                        <li class="page-item disabled">
+                            <span class="page-link">&laquo;</span>
+                        </li>
+                        {% endif %}
+
+                        <li class="page-item disabled">
+                            <span class="page-link small">
+                                Page {{ low_stock_products.number }} of {{ low_stock_products.paginator.num_pages }}
+                            </span>
+                        </li>
+
+                        {% if low_stock_products.has_next %}
+                        <li class="page-item">
+                            <a class="page-link"
+                               href="?page_low={{ low_stock_products.next_page_number }}">
+                                &raquo;
+                            </a>
+                        </li>
+                        {% else %}
+                        <li class="page-item disabled">
+                            <span class="page-link">&raquo;</span>
+                        </li>
+                        {% endif %}
+
+                    </ul>
+                </nav>
+            </div>
+
+        </div>
+    </div>
 
 </div>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>

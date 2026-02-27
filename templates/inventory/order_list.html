@@ -51,7 +51,7 @@
         <span class="stat-title">TOTAL ORDERS</span>
         <i class="bi bi-cart-check-fill text-primary"></i>
       </div>
-      <h2>{{ total_orders }}</h2>
+      <h4><b>{{ total_orders }}</b></h4>
       <p class="stat-sub text-muted">Orders received till now</p>
     </div>
   </a>
@@ -64,7 +64,7 @@
         <span class="stat-title">RECEIVED AMOUNT</span>
         <i class="bi bi-wallet2 text-success"></i>
       </div>
-      <h2>{{ total_sales|short_number }}</h2>
+      <h4><b>{{ total_sales|short_number }}</b></h4>
       <p class="stat-sub text-success">Amount that has been received</p>
     </div>
   </a>
@@ -77,7 +77,7 @@
         <span class="stat-title">PAYMENT PENDING</span>
         <i class="bi bi-clock-history text-warning"></i>
       </div>
-      <h2>{{ pending_amount|short_number }}</h2>
+      <h4><b>{{ pending_amount|short_number }}</b></h4>
       <p class="stat-sub text-warning">Amount yet to be received</p>
     </div>
   </a>

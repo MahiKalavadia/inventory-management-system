@@ -42,9 +42,9 @@
     <div class="stat-card">
       <div class="stat-header">
         <span class="stat-title">PENDING DRAFTS</span>
-        <i class="bi bi-clock text-muted"></i>
+        <i class="bi bi-clock text-warning"></i>
       </div>
-      <h2>{{ draft_orders }}</h2>
+      <h4><b>{{ draft_orders }}</b></h4>
       <p class="stat-sub text-muted">
         Pending orders
       </p>
@@ -54,9 +54,9 @@
     <div class="stat-card">
       <div class="stat-header">
         <span class="stat-title">CONFIRMED ORDERS</span>
-        <i class="bi-check2-circle text-muted"></i>
+        <i class="bi-check2-circle text-success"></i>
       </div>
-      <h2>{{ confirmed_orders }}</h2>
+      <h4><b>{{ confirmed_orders }}</b></h4>
       <p class="stat-sub text-muted">
         Orders that has been confirmed but not yet paid
       </p>
@@ -66,9 +66,9 @@
     <div class="stat-card">
       <div class="stat-header">
         <span class="stat-title">CANCELLED ORDERS</span>
-        <i class="bi bi-x-circle text-muted"></i>
+        <i class="bi bi-x-circle text-danger"></i>
       </div>
-      <h2>{{ cancelled_orders }}</h2>
+      <h4><b>{{ cancelled_orders }}</b></h4>
       <p class="stat-sub text-muted">
         Orders that has been cancelled
       </p>
@@ -78,9 +78,9 @@
     <div class="stat-card">
       <div class="stat-header">
         <span class="stat-title">OUTSTANDING PAYMENTS</span>
-        <i class="bi bi-hourglass-split text-muted"></i>
+        <i class="bi bi-hourglass-split text-warning"></i>
       </div>
-      <h2>₹{{ pending_amount|short_number }}</h2>
+      <h4><b>₹{{ pending_amount|short_number }}</b></h4>
       <p class="stat-sub text-muted">
         Payments not yet received.
       </p>
@@ -90,9 +90,9 @@
     <div class="stat-card">
       <div class="stat-header">
         <span class="stat-title">TOTAL REVENUE</span>
-        <i class="bi bi-currency-rupee text-muted"></i>
+        <i class="bi bi-currency-rupee text-success"></i>
       </div>
-      <h2>₹{{ total_sales|short_number }}</h2>
+      <h4><b>₹{{ total_sales|short_number }}</b></h4>
       <p class="stat-sub text-muted">
         MTD Performance
       </p>
@@ -104,7 +104,7 @@
         <span class="stat-title">REVENUE TODAY</span>
         <i class="bi bi-calendar-day text-muted"></i>
       </div>
-      <h2>₹{{ today_sales|short_number }}</h2>
+      <h4><b>₹{{ today_sales|short_number }}</b></h4>
       <p class="stat-sub text-muted">
         Performance rate today
       </p>
@@ -116,7 +116,7 @@
         <span class="stat-title">REVENUE THIS MONTH</span>
         <i class="bi bi-calendar-week text-muted"></i>
       </div>
-      <h2>₹{{ monthly_sales|short_number }}</h2>
+      <h4><b>₹{{ monthly_sales|short_number }}</b></h4>
       <p class="stat-sub text-muted">
         Performance in this month
       </p>
@@ -126,9 +126,9 @@
     <div class="stat-card">
       <div class="stat-header">
         <span class="stat-title">TOTAL UNITS SOLD</span>
-        <i class="bi bi-box-seam text-muted"></i>
+        <i class="bi bi-box-seam text-info"></i>
       </div>
-      <h2>{{ total_products_sold }}</h2>
+      <h4><b>{{ total_products_sold }}</b></h4>
       <p class="stat-sub text-muted">
         Products sold till now
       </p>
@@ -138,7 +138,7 @@
     <div class="stat-card">
       <div class="stat-header">
         <span class="stat-title">BEST SELLING PRODUCTS</span>
-        <i class="bi bi-fire fs-3 text-muted"></i>
+        <i class="bi bi-fire fs-3 text-danger"></i>
       </div>
       {% if top_product %}
             <h5 class="fw-bold mb-1">{{ top_product.product__name }}</h5>
@@ -147,9 +147,6 @@
             <p class="mb-0">No sales yet</p>
         {% endif %}
       
-      <p class="stat-sub text-muted">
-        Best Selling product till now
-      </p>
     </div>
   </div>
   <div class="col-md-3">
@@ -157,9 +154,9 @@
     <div class="stat-card">
       <div class="stat-header">
         <span class="stat-title">ALL ORDERS</span>
-        <i class="bi bi-receipt-cutoff text-muted"></i>
+        <i class="bi bi-receipt-cutoff text-info"></i>
       </div>
-      <h2>{{ total_orders }}</h2>
+      <h4><b>{{ total_orders }}</b></h4>
       <p class="stat-sub text-muted">
         Orders Received
       </p>
@@ -199,176 +196,238 @@
 
     </div>
 </div>
-<div class="row">
-<div class="col-md-6">
-<div class="card shadow-sm border-0 rounded-4 mb-4">
+<div class="row g-4">
 
-  <div class="card-header bg-white d-flex justify-content-between align-items-center">
-    <span class="fw-semibold">🧾 Recent Orders</span>
-    <a href="{% url 'order_list' %}" class="btn btn-sm btn-outline-primary">View All →</a>
+  <!-- ================= Recent Orders ================= -->
+  <div class="col-lg-6">
+    <div class="card border-0 shadow-sm rounded-4 h-100">
+
+      <div class="card-header bg-white border-0 d-flex justify-content-between align-items-center py-3">
+        <div>
+          <h6 class="mb-0 fw-bold">Recent Orders</h6>
+          <small class="text-muted">Latest customer transactions</small>
+        </div>
+        <a href="{% url 'order_list' %}" class="btn btn-sm btn-outline-dark">
+          View All
+        </a>
+      </div>
+
+      <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+          <thead class="bg-light">
+            <tr class="text-muted small text-uppercase">
+              <th>#</th>
+              <th>Customer</th>
+              <th>Status</th>
+              <th>Payment</th>
+              <th class="text-end">Total</th>
+              <th class="text-end">Date</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for order in recent_orders %}
+            <tr>
+              <td class="text-muted">#{{ order.id }}</td>
+              <td class="fw-semibold">{{ order.customer_name }}</td>
+
+              <td>
+                <span class="badge bg-light text-dark border">
+                  {{ order.status|title }}
+                </span>
+              </td>
+
+              <td>
+                {% if order.payment_status == 'paid' %}
+                  <span class="badge bg-success-subtle text-success">
+                    Paid
+                  </span>
+                {% else %}
+                  <span class="badge bg-warning-subtle text-warning">
+                    Pending
+                  </span>
+                {% endif %}
+              </td>
+
+              <td class="text-end fw-semibold">
+                ₹ {{ order.total_amount|intcomma }}
+              </td>
+
+              <td class="text-end text-muted small">
+                {{ order.created_at|date:"d M Y" }}
+              </td>
+            </tr>
+            {% empty %}
+            <tr>
+              <td colspan="6" class="text-center text-muted py-4">
+                No recent orders available.
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+
+    </div>
   </div>
 
-  <div class="card-body p-0">
-    <table class="table table-hover align-middle mb-0">
-      <thead class="table-light">
-        <tr>
-          <th>#</th>
-          <th>Customer</th>
-          <th>Status</th>
-          <th>Payment</th>
-          <th class="text-end">Total</th>
-          <th class="text-end">Date</th>
-        </tr>
-      </thead>
 
-      <tbody>
-        {% for order in recent_orders %}
-        <tr style="height:43px;">
-          <td>#{{ order.id }}</td>
-          <td class="fw-medium">{{ order.customer_name }}</td>
+  <!-- ================= Best Selling Products ================= -->
+  <div class="col-lg-6">
+    <div class="card border-0 shadow-sm rounded-4 h-100">
 
-          <td>
-            <span class="badge bg-info-subtle text-info">{{ order.status }}</span>
-          </td>
+      <div class="card-header bg-white border-0 d-flex justify-content-between align-items-center py-3">
+        <div>
+          <h6 class="mb-0 fw-bold">Best Selling Products</h6>
+          <small class="text-muted">Top performing inventory items</small>
+        </div>
+        <a href="{% url 'order_list' %}" class="btn btn-sm btn-outline-dark">
+          View All
+        </a>
+      </div>
 
-          <td>
-            {% if payment_status == 'paid' %}
-               <span class='badge bg-success-subtle text-success'>{{ order.payment_status|title }}</span>
-            {% else %}
-            <span class='badge bg-warning-subtle text-warning'>{{ order.payment_status|title }}</span>
-            {% endif %}
-          </td>
+      <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+          <thead class="bg-light">
+            <tr class="text-muted small text-uppercase">
+              <th>Product</th>
+              <th>Quantity Sold</th>
+              <th>Supplier</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for product in top_products %}
+            <tr>
+              <td class="fw-semibold">{{ product.product__name }}</td>
+              <td>{{ product.total_sold }}</td>
+              <td class="text-muted">
+                {{ product.product__supplier__name }}
+              </td>
+            </tr>
+            {% empty %}
+            <tr>
+              <td colspan="3" class="text-center text-muted py-4">
+                No sales data available.
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
 
-          <td class="text-end fw-semibold">₹ {{ order.total_amount|intcomma }}</td>
-          <td class="text-muted text-end small">{{ order.created_at|date:"d M Y" }}</td>
-        </tr>
-        {% empty %}
-        <tr>
-          <td colspan="6" class="text-center text-muted py-3">No recent orders</td>
-        </tr>
-        {% endfor %}
-      </tbody>
-    </table>
-  </div>
-
-</div>
-</div>
-<div class="col-md-6">
-<div class="card shadow-sm border-0 rounded-4 mb-4">
-
-  <div class="card-header bg-white d-flex justify-content-between align-items-center">
-    <span class="fw-semibold">Best Selling Products</span>
-    <a href="{% url 'order_list' %}" class="btn btn-sm btn-outline-primary">View All →</a>
-  </div>
-
-  <div class="card-body p-0">
-    <table class="table table-hover align-middle mb-0">
-      <thead class="table-light">
-        <tr>
-          <th>Product Name</th>
-          <th>Quantity Sold</th>
-          <th>Supplier</th>
-        </tr>
-      </thead>
-
-      <tbody>
-        {% for order in top_products %}
-        <tr style="height:43px;">
-          <td>{{ order.product__name }}</td>
-          <td class="fw-medium">{{ order.total_sold }}</td>
-          <td>{{ order.product__supplier__name}}</td>
-        </tr>
-        {% empty %}
-        <tr>
-          <td colspan="6" class="text-center text-muted py-3">No best selling products</td>
-        </tr>
-        {% endfor %}
-      </tbody>
-    </table>
-  </div>
-
-</div>
-</div>
-
-</div>
-
-<div class="row">
-<div class="col-md-6">
-<div class="card shadow-sm border-0 rounded-4 mb-4">
-
-  <div class="card-header bg-white d-flex justify-content-between align-items-center">
-    <span class="fw-semibold">💰 Pending Payments</span>
-    <a href="{% url 'pending_payments' %}" class="btn btn-sm btn-outline-primary">View All →</a>
-  </div>
-
-  <div class="card-body p-0">
-    <table class="table table-hover align-middle mb-0">
-      <thead class="table-light">
-        <tr>
-          <th>Order</th>
-          <th>Customer</th>
-          <th class="text-end">Amount</th>
-          <th class="text-end">Due</th>
-        </tr>
-      </thead>
-
-      <tbody>
-        {% for o in pending_payments %}
-        <tr style="height:52px;">
-          <td>#{{ o.id }}</td>
-          <td>{{ o.customer_name }}</td>
-          <td class="fw-semibold text-danger text-end">₹ {{ o.total_amount|intcomma }}</td>
-          <td class="text-muted text-end small">{{ o.created_at|timesince }} ago</td>
-        </tr>
-        {% empty %}
-        <tr>
-          <td colspan="4" class="text-center text-success py-3">No pending payments 🎯</td>
-        </tr>
-        {% endfor %}
-      </tbody>
-    </table>
+    </div>
   </div>
 
 </div>
-</div>
-<div class="col-md-6">
-<div class="card shadow-sm border-0 rounded-4 mb-4">
 
-  <div class="card-header bg-white d-flex justify-content-between align-items-center">
-    <span class="fw-semibold">⚠ Orders Requiring Attention</span>
-    <a href="{% url 'order_attention' %}" class="btn btn-sm btn-outline-primary">View All →</a>
+
+
+<div class="row g-4 mt-1">
+
+  <!-- ================= Pending Payments ================= -->
+  <div class="col-lg-6">
+    <div class="card border-0 shadow-sm rounded-4 h-100">
+
+      <div class="card-header bg-white border-0 d-flex justify-content-between align-items-center py-3">
+        <div>
+          <h6 class="mb-0 fw-bold">Pending Payments</h6>
+          <small class="text-muted">Outstanding customer balances</small>
+        </div>
+        <a href="{% url 'pending_payments' %}" class="btn btn-sm btn-outline-dark">
+          View All
+        </a>
+      </div>
+
+      <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+          <thead class="bg-light">
+            <tr class="text-muted small text-uppercase">
+              <th>Order</th>
+              <th>Customer</th>
+              <th class="text-end">Amount</th>
+              <th class="text-end">Due</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for o in pending_payments %}
+            <tr>
+              <td>#{{ o.id }}</td>
+              <td class="fw-semibold">{{ o.customer_name }}</td>
+              <td class="text-end text-danger fw-semibold">
+                ₹ {{ o.total_amount|intcomma }}
+              </td>
+              <td class="text-end text-muted small">
+                {{ o.created_at|timesince }} ago
+              </td>
+            </tr>
+            {% empty %}
+            <tr>
+              <td colspan="4" class="text-center text-success py-4">
+                All payments are up to date.
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+
+    </div>
   </div>
 
-  <div class="card-body p-0">
-    <table class="table table-hover align-middle mb-0">
-      <thead class="table-light">
-        <tr>
-          <th>Order</th>
-          <th>Issue</th>
-          <th class="text-end">Action</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for o in attention_orders %}
-        <tr>
-          <td>#{{ o.id }}</td>
-          <td class="text-muted">Confirmed but payment pending</td>
-          <td class="text-end">
-            <a href="{% url 'order_detail' o.id %}" class="btn btn-sm btn-outline-danger">Review</a>
-          </td>
-        </tr>
-        {% empty %}
-        <tr>
-          <td colspan="4" class="text-center text-success py-3">No critical issues 🎉</td>
-        </tr>
-        {% endfor %}
-      </tbody>
-    </table>
+
+
+  <!-- ================= Orders Requiring Attention ================= -->
+  <div class="col-lg-6">
+    <div class="card border-0 shadow-sm rounded-4 h-100">
+
+      <div class="card-header bg-white border-0 d-flex justify-content-between align-items-center py-3">
+        <div>
+          <h6 class="mb-0 fw-bold">Orders Requiring Attention</h6>
+          <small class="text-muted">Orders with pending issues</small>
+        </div>
+        <a href="{% url 'order_attention' %}" class="btn btn-sm btn-outline-dark">
+          View All
+        </a>
+      </div>
+
+      <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+          <thead class="bg-light">
+            <tr class="text-muted small text-uppercase">
+              <th>Order</th>
+              <th>Issue</th>
+              <th class="text-end">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for o in attention_orders %}
+            <tr>
+              <td>#{{ o.id }}</td>
+              <td class="text-muted">
+                Confirmed but payment pending
+              </td>
+              <td class="text-end">
+                <a href="{% url 'order_detail' o.id %}" 
+                   class="btn btn-sm btn-outline-danger rounded-pill px-3">
+                  Review
+                </a>
+              </td>
+            </tr>
+            {% empty %}
+            <tr>
+              <td colspan="3" class="text-center text-success py-4">
+                No critical issues found.
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+
+    </div>
   </div>
 
 </div>
-</div>
-</div>
+
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
 const orderChart = document.getElementById('orderChart');

@@ -19,7 +19,7 @@
         <span class="stat-title">TOTAL ITEMS</span>
         <i class="bi bi-box text-muted"></i>
       </div>
-      <h2>{{ total_products }}</h2>
+      <h4><b>{{ total_products }}</b></h4>
       <p class="stat-sub text-muted">
         Inventory Total
       </p>
@@ -35,7 +35,7 @@
         <span class="stat-title">CATEGORIES</span>
         <i class="bi bi-grid text-purple"></i>
       </div>
-      <h2>{{ total_categories }}</h2>
+      <h4><b>{{ total_categories }}</b></h4>
       <p class="stat-sub text-muted">
         Spanning 5 departments
       </p>
@@ -51,7 +51,7 @@
         <span class="stat-title">VENDORS</span>
         <i class="bi bi-truck text-success"></i>
       </div>
-      <h2>{{ total_suppliers }}</h2>
+      <h4><b>{{ total_suppliers }}</b></h4>
 
       {% if pending_reviews > 0 %}
         <p class="stat-sub text-warning">
@@ -74,7 +74,7 @@
         <span class="stat-title">REORDER ALERTS</span>
         <i class="bi bi-exclamation-triangle text-danger"></i>
       </div>
-      <h2>{{ low_stock }}</h2>
+      <h4><b>{{ low_stock }}</b></h4>
       <p class="stat-sub text-danger">
         Critical items identified
       </p>
@@ -94,7 +94,7 @@
         <span class="stat-title">STOCKOUTS</span>
         <i class="bi bi-x-circle text-danger"></i>
       </div>
-      <h2>{{ out_of_stock }}</h2>
+      <h4><b>{{ out_of_stock }}</b></h4>
       <p class="stat-sub text-danger">Attention required</p>
     </div>
 </a>
@@ -108,7 +108,7 @@
         <span class="stat-title">TOTAL REVENUE</span>
         <i class="bi bi-currency-rupee"></i>
       </div>
-      <h2>₹{{ total_sales|short_number }}</h2>
+      <h4><b>₹{{ total_sales|short_number }}</b></h4>
       <p class="stat-sub text-muted">MTD performance</p>
     </div>
 </a>
@@ -122,7 +122,7 @@
         <span class="stat-title">COGS</span>
         <i class="fa-solid fa-file-invoice-dollar"></i>
       </div>
-      <h2>₹{{ total_cogs|floatformat:2|short_number }}</h2>
+      <h4><b>₹{{ total_cogs|floatformat:2|short_number }}</b></h4>
       <p class="stat-sub text-muted">Cost of goods sold</p>
     </div>
 </a>
@@ -136,7 +136,7 @@
         <span class="stat-title">GROSS MARGIN</span>
         <i class="fas fa-chart-line"></i>
       </div>
-      <h2>₹{{ gross_margin|floatformat:2|short_number }}</h2>
+      <h4><b>₹{{ gross_margin|floatformat:2|short_number }}</b></h4>
       <p class="stat-sub text-primary">Profit earned</p>
     </div>
 </a>
@@ -764,14 +764,12 @@
 </div>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-
-document.addEventListener("DOMContentLoaded", function() {
 const revenueChart = document.getElementById('revenueChart');
 const poStatusChart = document.getElementById('poStatusChart');
 const paymentStatusChart = document.getElementById('paymentStatusChart');
 const inventoryFlowChart = document.getElementById('inventoryFlowChart');
 
-new Chart(document.getElementById('revenueChart'), {
+new Chart(revenueChart, {
     type: 'line',
     data: {
         labels: {{revenue_labels|safe}},
@@ -790,7 +788,7 @@ new Chart(document.getElementById('revenueChart'), {
     }
 });
 
-new Chart(document.getElementById('poStatusChart'), {
+new Chart(poStatusChart, {
     type: 'doughnut',
     data: {
         labels: {{ po_labels|safe }},
@@ -804,7 +802,7 @@ new Chart(document.getElementById('poStatusChart'), {
     }
 });
 
-new Chart(document.getElementById('paymentStatusChart'), {
+new Chart(paymentStatusChart, {
     type: 'doughnut',
     data: {
         labels: {{ payment_labels|safe }},
@@ -819,7 +817,7 @@ new Chart(document.getElementById('paymentStatusChart'), {
     }
 });
 
-new Chart(document.getElementById('inventoryFlowChart'), {
+new Chart(inventoryFlowChart, {
     type: 'bar',
     data: {
         labels: ['Inventory'],
@@ -840,6 +838,6 @@ new Chart(document.getElementById('inventoryFlowChart'), {
     }
 });
 
-})
+
 </script>
 {% endblock %}

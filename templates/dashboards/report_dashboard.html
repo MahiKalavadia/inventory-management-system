@@ -12,23 +12,27 @@
 {% block panel %}Reports Panel{% endblock panel%}
 {% block content %}
 <style>
-    .report-card {
+/* ================= REPORT CARDS ================= */
+.report-card {
     border: none;
-    border-radius: 16px;
-    padding: 10px;
+    border-radius: 10px;
+    padding: 5px;
+    background: #ffffff;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.05);
     transition: all 0.25s ease;
-    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.05);
 }
 
+
 .card-label {
-    font-size: 0.85rem;
+    font-size: 0.8rem;
+    font-weight: 500;
     color: #6c757d;
     margin-bottom: 5px;
 }
 
 .card-value {
     font-weight: 700;
-    margin-bottom: 0;
+    margin-bottom: 4px;
 }
 
 .card-top {
@@ -38,19 +42,27 @@
 }
 
 .icon-box {
-    width: 48px;
-    height: 48px;
-    border-radius: 14px;
+    width: 52px;
+    height: 52px;
+    border-radius: 16px;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 1.2rem;
+    font-size: 1.25rem;
 }
 
+/* Icon Variants */
+.icon-primary { background: rgba(13,110,253,0.08); color:#0d6efd; }
+.icon-danger { background: rgba(220,53,69,0.08); color:#dc3545; }
+.icon-success { background: rgba(25,135,84,0.08); color:#198754; }
+.icon-warning { background: rgba(255,193,7,0.12); color:#ffc107; }
+.icon-info { background: rgba(13,202,240,0.12); color:#0dcaf0; }
+.icon-secondary { background: rgba(108,117,125,0.12); color:#6c757d; }
+
 </style>
-<div class="mb-4">
-    <h4 class="fw-semibold mb-1">Inventory Overview</h4>
-    <p class="text-muted small mb-0">
+<div class="section-header mb-4">
+    <h5 class="mb-1"><b>Inventory Overview</b></h5>
+    <p class="mb-0">
         Real-time snapshot of stock performance and valuation
     </p>
 </div>
@@ -62,9 +74,9 @@
     <div class="stat-card">
       <div class="stat-header">
         <span class="stat-title">STOCK HEALTH SCORE</span>
-        <i class="fas fa-chart-line"></i>
+        <i class="fas fa-chart-line text-info"></i>
       </div>
-      <h2>{{ in_stock_bar }}%</h2>
+      <h4><b>{{ in_stock_bar }}%</b></h4>
       <p class="stat-sub text-muted">{{ in_stock }} of {{ total_products }} healthy.</p>
     </div>
 </a>
@@ -75,9 +87,9 @@
     <div class="stat-card">
       <div class="stat-header">
         <span class="stat-title">TOTAL INVENTORY VALUE</span>
-        <i class="bi bi-currency-rupee"></i>
+        <i class="bi bi-currency-rupee text-success"></i>
       </div>
-      <h2>₹{{ total_inventory_value|short_number }}</h2>
+      <h4><b>₹{{ total_inventory_value|short_number }}</b></h4>
       <p class="stat-sub text-muted">{{ total_inventory_count }} total units</p>
     </div>
 </a>
@@ -88,9 +100,9 @@
     <div class="stat-card">
       <div class="stat-header">
         <span class="stat-title">AVERAGE PRODUCT PRICE</span>
-       <i class="bi bi-box text-muted"></i>
+       <i class="bi bi-box text-info"></i>
       </div>
-      <h2>₹{{ avg_price|short_number }}</h2>
+      <h4><b>₹{{ avg_price|short_number }}</b></h4>
       <p class="stat-sub text-muted">Across all products</p>
     </div>
 </a>
@@ -103,7 +115,7 @@
         <span class="stat-title">EST. REORDER COST</span>
         <i class="bi bi-x-circle text-muted"></i>
       </div>
-      <h2>₹{{ reorder_cost|short_number }}</h2>
+      <h4><b>₹{{ reorder_cost|short_number }}</b></h4>
       <p class="stat-sub text-muted">{{ reorder_count }} items need reorder</p>
     </div>
 </a>
@@ -113,20 +125,15 @@
 
 
 <!-- ================= REPORTS DASHBOARD ================= -->
-<div class="container-fluid mt-4">
-
-    <!-- Header -->
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <div>
-            <h3 class="fw-bold mb-1">
-                <i class="bi bi-bar-chart-line-fill text-primary me-2"></i>
-                Report Overview
-            </h3>
-            <p class="text-muted mb-0">
-                Inventory insights and operational analytics overview
-            </p>
-        </div>
-    </div>
+<div class="section-header mb-4">
+    <h5 class="mb-1"><b>
+        <i class="bi bi-bar-chart-line-fill text-primary me-2"></i>
+        Report Overview</b>
+    </h5>
+    <p class="mb-0">
+        Inventory insights and operational analytics overview
+    </p>
+</div>
 
     <div class="row g-4">
 

@@ -33,7 +33,7 @@
         <span class="stat-title">CATEGORIES</span>
         <i class="bi bi-grid-fill text-primary"></i>
       </div>
-      <h2>{{ total_category }}</h2>
+      <h4><b>{{ total_category }}</b></h4>
       <p class="stat-sub text-muted">System-wide product classifications</p>
     </div>
   </a>
@@ -46,7 +46,7 @@
         <span class="stat-title">ACTIVE CATEGORIES</span>
         <i class="bi bi-box-seam-fill text-success"></i>
       </div>
-      <h2>{{ categories_with_products }}</h2>
+      <h4><b>{{ categories_with_products }}</b></h4>
       <p class="stat-sub text-success">Currently stocked and selling</p>
     </div>
   </a>
@@ -59,7 +59,7 @@
         <span class="stat-title">EMPTY CATEGORIES</span>
         <i class="bi bi-exclamation-circle-fill text-warning"></i>
       </div>
-      <h2>{{ categories_without_products }}</h2>
+      <h4><b>{{ categories_without_products }}</b></h4>
       <p class="stat-sub text-danger">No items added yet</p>
     </div>
   </a>
@@ -80,7 +80,7 @@
                 <div class="card-body">
                    <h6 class="fw-semibold mb-3">Stock Per Category</h6>
 
-                  <div class="chart-container">
+                  <div style="position: relative; height: 220px; width: 100%;">
                      <canvas id="stockPerCategory"></canvas>
                   </div>
 
@@ -94,7 +94,7 @@
                 <div class="card-body">
                    <h6 class="fw-semibold mb-3">Stock Value Per Category</h6>
 
-                  <div class="chart-container">
+                  <div style="position: relative; height: 220px; width: 100%;">
                      <canvas id="stockValueCategory"></canvas>
                   </div>
 
@@ -108,11 +108,10 @@
                 <div class="card-body">
                    <h6 class="fw-semibold mb-3">Sales Per Category</h6>
 
-                  <div class="chart-scroll-wrapper">
-    <div class="chart-scroll-inner">
+                  <div style="position: relative; height: 220px; width: 100%;">
         <canvas id="salesPerCategory"></canvas>
     </div>
-</div>
+
 
                 </div>
               </div>
@@ -120,90 +119,177 @@
     </div>
 
 <br>
-<div class="card shadow-sm mb-4 border-0">
-    
+<div class="card border-0 shadow-sm mb-4">
+
     <!-- Header -->
-    <div class="card-header bg-light d-flex justify-content-between align-items-center">
-        <span class="fw-bold"><i class="bi bi-folder2-open me-2"></i> Category List</span>
-        
-        <form method="get" class="d-flex">
-            <input type="text" 
-                   name="q" 
-                   placeholder="Search categories..." 
-                   class="form-control form-control-sm me-2" 
-                   value="{{ search|default:'' }}">
-            <button type="submit" class="btn btn-primary btn-sm">Search</button>
+    <div class="card-header bg-white border-bottom d-flex justify-content-between align-items-center flex-wrap gap-2">
+
+        <div>
+            <h6 class="mb-0 fw-semibold">
+                <i class="bi bi-folder2-open me-2 text-primary"></i>
+                Category Management
+            </h6>
+            <small class="text-muted">
+                Total Categories: {{ categoriess.paginator.count }}
+            </small>
+        </div>
+
+        <!-- Search Form -->
+        <form method="get" class="d-flex" style="max-width: 280px; width: 100%;">
+            <div class="input-group input-group-sm">
+                <input type="text"
+                       name="q"
+                       class="form-control"
+                       placeholder="Search categories..."
+                       value="{{ search|default:'' }}">
+                <button class="btn btn-outline-primary" type="submit">
+                    <i class="bi bi-search"></i>
+                </button>
+            </div>
         </form>
-        
+
     </div>
 
     <!-- Table -->
     <div class="card-body p-0">
-        <table class="table table-hover align-middle mb-0">
-            <thead class="table-light">
-                <tr>
-                    <th class="ps-3">Category Name</th>
-                    <th>Products Count</th>
-                    <th class="text-center pe-3">Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for category in categoriess %}
-                <tr>
-                    <td class="ps-3 fw-semibold">{{ category.name }}</td>
-                    <td>
-                        <span class="badge bg-secondary">
-                            {{ category.product_count }}
-                        </span>
-                    </td>
-                    <td class="text-center pe-3">
-                        {% if request.user.is_superuser %}
-                            <a href="{% url 'update_category' category.id %}" class="btn btn-sm btn-outline-warning me-1">
-                                Manage
-                            </a>
-                            <a href="{% url 'delete_category' category.id %}" class="btn btn-sm btn-outline-danger">
-                                Delete
-                            </a>
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="table-light">
+                    <tr>
+                        <th class="ps-4">Category Name</th>
+                        <th class="text-center">Products</th>
+                        <th class="text-center pe-4">Actions</th>
+                    </tr>
+                </thead>
 
-                        {% elif request.user.groups.first.name == "Manager" %}
-                            <a href="{% url 'update_category' category.id %}" class="btn btn-sm btn-outline-warning">
-                                Manage
-                            </a>
-                        {% else %}
-                            <span class="text-muted small">Read-Only Access</span>
-                        {% endif %}
-                    </td>
-                </tr>
+                <tbody>
+                    {% for category in categoriess %}
+                    <tr>
 
-                {% empty %}
-                <tr>
-                    <td colspan="3" class="text-center py-4 text-muted">
-                        No categories found
-                    </td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+                        <!-- Category Name -->
+                        <td class="ps-4 fw-medium">
+                            {{ category.name }}
+                        </td>
+
+                        <!-- Product Count -->
+                        <td class="text-center">
+                            <span class="badge bg-primary-subtle text-primary fw-semibold px-3 py-2">
+                                {{ category.product_count }}
+                            </span>
+                        </td>
+
+                        <!-- Actions -->
+                        <td class="text-center pe-4">
+                            {% if request.user.is_superuser %}
+
+                                <div class="btn-group btn-group-sm">
+
+                                    <a href="{% url 'update_category' category.id %}"
+                                       class="btn btn-outline-secondary">
+                                        Manage
+                                    </a>
+
+                                    <a href="{% url 'delete_category' category.id %}"
+                                       class="btn btn-outline-danger">
+                                        Delete
+                                    </a>
+
+                                </div>
+
+                            {% elif request.user.groups.first.name == "Manager" %}
+
+                                <a href="{% url 'update_category' category.id %}"
+                                   class="btn btn-outline-primary btn-sm">
+                                    Manage
+                                </a>
+
+                            {% else %}
+                                <span class="text-muted small">
+                                    Read-Only Access
+                                </span>
+                            {% endif %}
+                        </td>
+
+                    </tr>
+
+                    {% empty %}
+                    <tr>
+                        <td colspan="3" class="text-center py-5 text-muted">
+                            No categories available.
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+
+            </table>
+        </div>
     </div>
+
 </div>
 
 <!-- Pagination -->
 <nav class="mt-4">
-    <ul class="pagination justify-content-center">
+
+    <!-- Showing Info -->
+    <div class="text-center text-muted small mb-2">
+        Showing {{ categoriess.start_index }} –
+        {{ categoriess.end_index }}
+        of {{ categoriess.paginator.count }} categories
+    </div>
+
+    <ul class="pagination justify-content-center flex-wrap">
 
         {% if categoriess.has_previous %}
+        <!-- First -->
         <li class="page-item">
-            <a class="page-link" href="?page={{ categoriess.previous_page_number }}">Previous</a>
+            <a class="page-link" href="?page=1">
+                «
+            </a>
+        </li>
+
+        <!-- Previous -->
+        <li class="page-item">
+            <a class="page-link"
+               href="?page={{ categoriess.previous_page_number }}">
+                ‹
+            </a>
         </li>
         {% endif %}
 
-        <li class="page-item active">
-            <span class="page-link">{{ categoriess.number }}</span>
-        </li>
+        <!-- Page Numbers -->
+        {% for num in categoriess.paginator.page_range %}
+            {% if num >= categoriess.number|add:'-2' and num <= categoriess.number|add:'2' %}
+                {% if categoriess.number == num %}
+                    <li class="page-item active">
+                        <span class="page-link">
+                            {{ num }}
+                        </span>
+                    </li>
+                {% else %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ num }}">
+                            {{ num }}
+                        </a>
+                    </li>
+                {% endif %}
+            {% endif %}
+        {% endfor %}
 
         {% if categoriess.has_next %}
+        <!-- Next -->
         <li class="page-item">
-            <a class="page-link" href="?page={{ categoriess.next_page_number }}">Next</a>
+            <a class="page-link"
+               href="?page={{ categoriess.next_page_number }}">
+                ›
+            </a>
+        </li>
+
+        <!-- Last -->
+        <li class="page-item">
+            <a class="page-link"
+               href="?page={{ categoriess.paginator.num_pages }}">
+                »
+            </a>
         </li>
         {% endif %}
 
@@ -212,8 +298,6 @@
 <!-- ===================== CHART JS ===================== -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-document.addEventListener("DOMContentLoaded", function() {
-
 const stockPerCategory = document.getElementById('stockPerCategory');
 const stockValueCategory = document.getElementById('stockValueCategory');
 const salesPerCategory = document.getElementById('salesPerCategory');
@@ -230,6 +314,8 @@ new Chart(stockPerCategory, {
         }]
     },
     options: {
+        responsive: true,
+        animation: { duration: 1000 },
         plugins: { legend: { display: false }},
         scales: { x: { beginAtZero: true }},
     }
@@ -247,6 +333,8 @@ new Chart(stockValueCategory, {
         }]
     },
     options: {
+        responsive: true,
+        animation: { duration: 1000 },
         indexAxis: 'y',
         plugins: { legend: { display: false }},
         scales: { y: { beginAtZero: true }},
@@ -263,12 +351,13 @@ new Chart(salesPerCategory, {
         }]
     },
     options: {
+        responsive: true,
+        animation: { duration: 1000 },
         plugins: { legend: { display: false }},
         scales: { x: { beginAtZero: true }},
     }
 });
 
-});
 </script>
 
 {% endblock content %}

@@ -33,7 +33,7 @@ thead th {
         <span class="stat-title">TOTAL ACTIVE USERS</span>
         <i class="bi bi-people-fill text-muted"></i>
       </div>
-      <h2>{{ total_users }}</h2>
+      <h4><b>{{ total_users }}</b></h4>
       <p class="stat-sub text-muted">
         Users currently using inventory
       </p>
@@ -47,7 +47,7 @@ thead th {
         <span class="stat-title">MANAGERS</span>
         <i class="bi bi-person-badge-fill text-muted"></i>
       </div>
-      <h2>{{ total_managers }}</h2>
+      <h4><b>{{ total_managers }}</b></h4>
       <p class="stat-sub text-muted">
         Inventory Manager
       </p>
@@ -61,7 +61,7 @@ thead th {
         <span class="stat-title">STAFF MEMBERS</span>
         <i class="bi bi-person-fill text-muted"></i>
       </div>
-      <h2>{{ total_staff }}</h2>
+      <h4><b>{{ total_staff }}</b></h4>
       <p class="stat-sub text-muted">
         Inventory staff
       </p>
@@ -75,7 +75,7 @@ thead th {
         <span class="stat-title">DEACTIVATED ACCOUNTS</span>
         <i class="bi bi-person-x-fill text-muted"></i>
       </div>
-      <h2>{{ inactive_users }}</h2>
+      <h4><b>{{ inactive_users }}</b></h4>
       <p class="stat-sub text-muted">
         Accounts no longer using inventory
       </p>
@@ -96,7 +96,7 @@ thead th {
         <div class="card shadow-sm border-0 h-100">
             <div class="card-body">
                 <h6 class="fw-semibold mb-3">Users Status</h6>
-                <div style="position:relative; height:220px;">
+                <div style="position:relative; height:210px;">
                     <canvas id="statusChart"></canvas>
                 </div>
             </div>
@@ -106,7 +106,7 @@ thead th {
         <div class="card shadow-sm border-0 h-100">
             <div class="card-body">
                 <h6 class="fw-semibold mb-3">User Role Status</h6>
-                <div style="position:relative; height:220px;">
+                <div style="position:relative; height:210px;">
                     <canvas id="rolebasedChart"></canvas>
                 </div>
             </div>

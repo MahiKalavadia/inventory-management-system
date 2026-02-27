@@ -32,7 +32,7 @@
         <span class="stat-title">TOTAL ITEMS</span>
         <i class="bi bi-box-fill text-primary"></i>
       </div>
-      <h2>{{ total_products }}</h2>
+      <h4><b>{{ total_products }}</b></h4>
       <p class="stat-sub text-muted">All inventory products</p>
     </div>
   </a>
@@ -45,7 +45,7 @@
         <span class="stat-title">IN STOCK</span>
         <i class="bi bi-check-circle-fill text-success"></i>
       </div>
-      <h2>{{ in_stock }}</h2>
+      <h4><b>{{ in_stock }}</b></h4>
       <p class="stat-sub text-success">Ready for sale</p>
     </div>
   </a>
@@ -58,7 +58,7 @@
         <span class="stat-title">LOW STOCK</span>
         <i class="bi bi-exclamation-triangle-fill text-warning"></i>
       </div>
-      <h2>{{ low_stock }}</h2>
+      <h4><b>{{ low_stock }}</b></h4>
       <p class="stat-sub text-danger">Critical items identified</p>
     </div>
   </a>
@@ -71,7 +71,7 @@
         <span class="stat-title">STOCKOUTS</span>
         <i class="bi bi-x-circle-fill text-danger"></i>
       </div>
-      <h2>{{ out_of_stock }}</h2>
+      <h4><b>{{ out_of_stock }}</b></h4>
       <p class="stat-sub text-danger">Attention Required</p>
     </div>
   </a>
@@ -84,7 +84,7 @@
         <span class="stat-title">CATEGORIES</span>
         <i class="bi bi-grid-fill text-purple"></i>
       </div>
-      <h2>{{ total_categories }}</h2>
+      <h4><b>{{ total_categories }}</b></h4>
       <p class="stat-sub text-muted">Product groups</p>
     </div>
   </a>
@@ -97,7 +97,7 @@
         <span class="stat-title">SUPPLIERS</span>
         <i class="bi bi-truck-front-fill text-info"></i>
       </div>
-      <h2>{{ total_suppliers }}</h2>
+      <h4><b>{{ total_suppliers }}</b></h4>
       <p class="stat-sub text-muted">Active vendors</p>
     </div>
   </a>
@@ -120,7 +120,7 @@
                    <h6 class="fw-semibold mb-3">Stock Distribution</h6>
 
                   <div class="chart-container">
-                     <canvas id="stockChart" height = '200px'></canvas>
+                     <canvas id="stockChart" height = '190px'></canvas>
                   </div>
 
                 </div>
@@ -134,7 +134,7 @@
                    <h6 class="fw-semibold mb-3">Products by Category</h6>
 
                   <div class="chart-container">
-                     <canvas id="categoryChart" height='200px'></canvas>
+                     <canvas id="categoryChart" height='190px'></canvas>
                   </div>
 
                 </div>
@@ -149,7 +149,7 @@
 
                   <div class="chart-scroll-wrapper">
                     <div class="chart-scroll-inner">
-                      <canvas id="expensiveChart" height='200px'></canvas>
+                      <canvas id="expensiveChart" height='190px'></canvas>
                     </div>
                   </div>
 
@@ -170,7 +170,7 @@
         <div class="card shadow-sm border-0 h-100">
             <div class="card-body">
                 <h6 class="fw-semibold mb-3">Monthly Product Additions</h6>
-                <div style="position:relative; height:220px;">
+                <div style="position:relative; height:190px;">
                     <canvas id="trendChart"></canvas>
                 </div>
             </div>
@@ -186,16 +186,13 @@
                         <span class="fw-bold text-dark">₹ {{ total_inventory_value|floatformat:0|short_number }}</span>
                     </div>
                 </div>
-                <div style="position:relative; height:220px;">
+                <div style="position:relative; height:190px;">
                     <canvas id="inventoryValueChart" height='250px'></canvas>
                 </div>
             </div>
         </div>
     </div>
-
     </div>
-
-   
 </div>
 
 <!-- ===================== FILTER BAR ===================== -->
@@ -254,108 +251,158 @@
     </div>
 </div>
 
-<!-- ===================== PRODUCT TABLE ===================== -->
-<div class="card dashboard-card shadow-sm border-0">
-    <div class="card-body">
+<div class="card border rounded-4" style="border-color:#e5e7eb;">
+  <div class="card-body p-0">
 
-        <div class="d-flex justify-content-between align-items-center mb-3">
-            <h6 class="fw-semibold mb-0">Product Directory</h6>
-            <span class="text-muted small">
-                Showing {{ products.paginator.count }} items
-            </span>
-        </div>
-
-        <div class="table-responsive">
-            <table class="table align-middle table-hover">
-                <thead class="table-light">
-                    <tr>
-                        <th>Name</th>
-                        <th>Category</th>
-                        <th>Supplier</th>
-                        <th>Brand</th>
-                        <th>Qty</th>
-                        <th>Price</th>
-                        <th>Status</th>
-                        <th class="text-end"></th>
-                    </tr>
-                </thead>
-                <tbody>
-
-                {% for product in products %}
-                <tr>
-                    <td class="fw-medium">{{ product.name }}</td>
-                    <td>{{ product.category.name }}</td>
-                    <td>{{ product.supplier.name }}</td>
-                    <td>{{ product.brand }}</td>
-
-                    <td class="fw-bold 
-                        {% if product.quantity == 0 %}text-danger
-                        {% elif product.quantity <= low_stock_limit %}text-warning
-                        {% else %}text-success
-                        {% endif %}">
-                        {{ product.quantity }}
-                    </td>
-
-                    <td class="fw-medium">₹ {{ product.price }}</td>
-
-                    <td>
-                        {% if product.quantity == 0 %}
-                            <span class="badge bg-danger-subtle text-danger">Out Stock</span>
-                        {% elif product.quantity <= low_stock_limit %}
-                            <span class="badge bg-warning-subtle text-warning">Low Stock</span>
-                        {% else %}
-                            <span class="badge bg-success-subtle text-success">In Stock</span>
-                        {% endif %}
-                    </td>
-
-                    <td class="text-end">
-                        {% if request.user.is_superuser or request.user.groups.first.name == "Manager" %}
-                            <a href="{% url 'update_product' product.id %}" class="btn btn-sm btn-outline-primary">Manage</a>
-                            <a href="{% url 'delete_product' product.id %}" class="btn btn-sm btn-outline-danger">Delete</a>
-                        {% else %}
-                            <span class="text-muted small">Read-only</span>
-                        {% endif %}
-                    </td>
-                </tr>
-                {% endfor %}
-
-                </tbody>
-            </table>
-        </div>
-
-        <!-- Pagination -->
-        <nav class="mt-4">
-            <ul class="pagination justify-content-center">
-
-                {% if products.has_previous %}
-                <li class="page-item">
-                    <a class="page-link"
-                       href="?page={{ products.previous_page_number }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}{% if request.GET.category %}&category={{ request.GET.category }}{% endif %}{% if request.GET.supplier %}&supplier={{ request.GET.supplier }}{% endif %}{% if request.GET.status %}&status={{ request.GET.status }}{% endif %}">
-                        Previous
-                    </a>
-                </li>
-                {% endif %}
-
-                <li class="page-item active">
-                    <span class="page-link">
-                        Page {{ products.number }} of {{ products.paginator.num_pages }}
-                    </span>
-                </li>
-
-                {% if products.has_next %}
-                <li class="page-item">
-                    <a class="page-link"
-                       href="?page={{ products.next_page_number }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}{% if request.GET.category %}&category={{ request.GET.category }}{% endif %}{% if request.GET.supplier %}&supplier={{ request.GET.supplier }}{% endif %}{% if request.GET.status %}&status={{ request.GET.status }}{% endif %}">
-                        Next
-                    </a>
-                </li>
-                {% endif %}
-
-            </ul>
-        </nav>
+    <!-- Header -->
+    <div class="px-4 py-3 border-bottom bg-white d-flex justify-content-between align-items-center">
+      <div>
+        <h6 class="fw-semibold mb-1">Product Directory</h6>
+        <small class="text-muted">
+          {{ products.paginator.count }} total products
+        </small>
+      </div>
     </div>
-</div>
 
+    <!-- Table -->
+    <div class="table-responsive">
+      <table class="table align-middle mb-0">
+        <thead style="background:#f9fafb;">
+          <tr class="text-uppercase text-muted small">
+            <th class="px-4">Product</th>
+            <th>Category</th>
+            <th>Supplier</th>
+            <th>Brand</th>
+            <th>Stock</th>
+            <th>Price</th>
+            <th>Status</th>
+            <th class="text-end pe-4">Action</th>
+          </tr>
+        </thead>
+
+        <tbody>
+        {% for product in products %}
+        <tr class="border-top">
+
+          <td class="px-4 fw-medium">
+            {{ product.name }}
+          </td>
+
+          <td class="text-muted">
+            {{ product.category.name }}
+          </td>
+
+          <td class="text-muted">
+            {{ product.supplier.name }}
+          </td>
+
+          <td>
+            {{ product.brand }}
+          </td>
+
+          <!-- Quantity -->
+          <td class="fw-semibold
+              {% if product.quantity == 0 %}
+                text-danger
+              {% elif product.quantity <= low_stock_limit %}
+                text-warning
+              {% else %}
+                text-success
+              {% endif %}">
+            {{ product.quantity }}
+          </td>
+
+          <!-- Price -->
+          <td class="fw-medium">
+            ₹ {{ product.price }}
+          </td>
+
+          <!-- Status Badge -->
+          <td>
+            {% if product.quantity == 0 %}
+              <span class="badge rounded-pill px-3 py-1"
+                    style="background:#fee2e2; color:#b91c1c;">
+                Out of Stock
+              </span>
+            {% elif product.quantity <= low_stock_limit %}
+              <span class="badge rounded-pill px-3 py-1"
+                    style="background:#fffbeb; color:#b45309;">
+                Low Stock
+              </span>
+            {% else %}
+              <span class="badge rounded-pill px-3 py-1"
+                    style="background:#ecfdf5; color:#047857;">
+                In Stock
+              </span>
+            {% endif %}
+          </td>
+
+          <!-- Actions -->
+          <td class="text-end pe-4">
+            {% if request.user.is_superuser or request.user.groups.first.name == "Manager" %}
+              <a href="{% url 'update_product' product.id %}"
+                 class="btn btn-sm rounded-pill px-3"
+                 style="border:1px solid #d1d5db;">
+                Manage
+              </a>
+
+              <a href="{% url 'delete_product' product.id %}"
+                 class="btn btn-sm rounded-pill px-3"
+                 style="border:1px solid #ef4444; color:#ef4444;">
+                Delete
+              </a>
+            {% else %}
+              <span class="text-muted small">Read-only</span>
+            {% endif %}
+          </td>
+
+        </tr>
+        {% empty %}
+        <tr>
+          <td colspan="8" class="text-center text-muted py-5">
+            No products available.
+          </td>
+        </tr>
+        {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Pagination -->
+    <div class="px-4 py-3 border-top bg-white">
+      <nav>
+        <ul class="pagination pagination-sm justify-content-center mb-0">
+
+          {% if products.has_previous %}
+          <li class="page-item">
+            <a class="page-link border-0"
+               href="?page={{ products.previous_page_number }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}{% if request.GET.category %}&category={{ request.GET.category }}{% endif %}{% if request.GET.supplier %}&supplier={{ request.GET.supplier }}{% endif %}{% if request.GET.status %}&status={{ request.GET.status }}{% endif %}">
+              Previous
+            </a>
+          </li>
+          {% endif %}
+
+          <li class="page-item active">
+            <span class="page-link border-0 bg-dark text-white rounded-pill px-3">
+              {{ products.number }} / {{ products.paginator.num_pages }}
+            </span>
+          </li>
+
+          {% if products.has_next %}
+          <li class="page-item">
+            <a class="page-link border-0"
+               href="?page={{ products.next_page_number }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}{% if request.GET.category %}&category={{ request.GET.category }}{% endif %}{% if request.GET.supplier %}&supplier={{ request.GET.supplier }}{% endif %}{% if request.GET.status %}&status={{ request.GET.status }}{% endif %}">
+              Next
+            </a>
+          </li>
+          {% endif %}
+
+        </ul>
+      </nav>
+    </div>
+
+  </div>
+</div>
 <!-- ===================== CHART JS ===================== -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
