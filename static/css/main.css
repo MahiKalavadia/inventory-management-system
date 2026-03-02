@@ -431,6 +431,51 @@ body {
     body {
         padding-top: 60px;
     }
+    
+    /* Responsive Tables */
+    .table-responsive {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+    
+    table {
+        font-size: 12px;
+    }
+    
+    table th, table td {
+        padding: 8px 6px !important;
+        white-space: nowrap;
+    }
+    
+    /* Stack cards */
+    .col-md-3, .col-md-4, .col-md-6 {
+        flex: 0 0 100%;
+        max-width: 100%;
+    }
+    
+    /* Smaller stat cards */
+    .stat-card {
+        padding: 12px;
+    }
+    
+    .stat-card h2, .stat-card h4 {
+        font-size: 1.5rem;
+    }
+    
+    .stat-title {
+        font-size: 10px;
+    }
+    
+    /* Smaller buttons */
+    .btn {
+        font-size: 13px;
+        padding: 6px 12px;
+    }
+    
+    /* Hide less important columns */
+    .d-none-mobile {
+        display: none !important;
+    }
 }
 
 

@@ -16,7 +16,7 @@
 
     <!-- Custom CSS -->
      <link rel="stylesheet" href="{% static 'css/main.css' %}">
-
+     <style>.table-responsive{overflow-x:auto;-webkit-overflow-scrolling:touch}@media(max-width:767px){.dashboard-topbar .text-end{display:none}.page-title{font-size:18px}}</style>
 </head>
 
 <body>
@@ -303,7 +303,9 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 </script>
 
-{% block extra_js %}{% endblock %}
+<script>
+document.addEventListener('DOMContentLoaded',function(){document.querySelectorAll('table').forEach(t=>{if(!t.parentElement.classList.contains('table-responsive')){const w=document.createElement('div');w.className='table-responsive';t.parentNode.insertBefore(w,t);w.appendChild(t)}})});
+</script>{% block extra_js %}{% endblock %}
 </body>
 </html>
 {% endwith %}
