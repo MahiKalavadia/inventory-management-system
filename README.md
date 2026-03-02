@@ -170,13 +170,20 @@ Group.objects.create(name='Manager')
 Group.objects.create(name='Staff')
 exit()
 ```
+8. **Add data into models**
+```bash
+python manage.py import_bulk_products
+python manage.py import_bulk_purchases
+python manage.py import_bulk_orders
+python manage.py import_bulk_stocklogs
+```
 
-8. **Run development server**
+9. **Run development server**
 ```bash
 python manage.py runserver
 ```
 
-9. **Access the application**
+10. **Access the application**
 - Main site: `http://localhost:8000`
 - Admin panel: `http://localhost:8000/admin`
 
