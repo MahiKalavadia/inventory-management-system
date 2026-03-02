@@ -81,7 +81,6 @@ urlpatterns = [
     path('low-stock/', views.low_stock_products, name='low_stock'),
     path('out-stock/', views.out_stock_products, name='out_stock'),
     path('stock/history/', views.stock_history, name='stock_history'),
-    path('stock/stock-forecast/', views.stock_forecast, name="stock_forecast"),
     path('stock/export/instock/csv', views.export_instock_csv,
          name="export_instock_csv"),
     path('stock/export/instock/excel', views.export_instock_excel,
