@@ -172,10 +172,10 @@ exit()
 ```
 8. **Add data into models**
 ```bash
-python manage.py import_bulk_products
-python manage.py import_bulk_purchases
-python manage.py import_bulk_orders
-python manage.py import_bulk_stocklogs
+python manage.py import_bulk_products // import products , category and supplier data // takes around 5-10 minutes
+python manage.py import_bulk_purchases // import purchase request and purchase order // takes around 5-10 minutes
+python manage.py import_bulk_orders // import order and orderitem // takes around 5-10 minutes
+python manage.py import_bulk_stocklogs // import stock // takes around 5 minutes
 ```
 
 9. **Run development server**
