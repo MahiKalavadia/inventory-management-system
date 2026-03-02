@@ -877,12 +877,6 @@ def stock_history(request):
 
     return render(request, 'inventory/stock_history.html', {'page_obj': page_obj})
 
-
-@login_required
-def stock_forecast(request):
-    return render(request, 'inventory/stock_forecast.html')
-
-
 @login_required
 def in_stock_products(request):
     products = Product.objects.filter(
