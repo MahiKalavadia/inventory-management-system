@@ -14,16 +14,17 @@ from notifications.models import Notification
 def store_old_request_status(sender, instance, **kwargs):
     """
     Store the previous status of a PurchaseRequest.
-    This works for normal saves and skips safely if the object
-    is being created (like during fixture loading).
+    Works normally for updates, safely skips if object is being created (fixture load).
     """
+    if kwargs.get("raw", False):  # skip during fixture load
+        instance._old_status = None
+        return
+
     try:
-        # Try to get the existing object from DB
         old = PurchaseRequest.objects.get(pk=instance.pk)
-        instance.old_status = old.status  # or whatever field you track
+        instance._old_status = old.status
     except PurchaseRequest.DoesNotExist:
-        # Object does not exist yet (newly created) → do nothing
-        pass
+        instance._old_status = None
 
 # ==========================================
 # PURCHASE REQUEST LOGIC
@@ -32,7 +33,6 @@ def store_old_request_status(sender, instance, **kwargs):
 
 @receiver(post_save, sender=PurchaseRequest)
 def purchase_request_signal(sender, instance, created, **kwargs):
-
     if created:
         Notification.objects.create(
             title="New Purchase Request",
@@ -43,14 +43,12 @@ def purchase_request_signal(sender, instance, created, **kwargs):
         )
         return
 
-    if instance._old_status != instance.status:
-
+    old_status = getattr(instance, "_old_status", None)
+    if old_status != instance.status:
         group = instance.requested_by.groups.first()
         creator_role = group.name.lower() if group else "staff"
 
-        # ✅ APPROVED
         if instance.status == "Approved":
-
             Notification.objects.create(
                 title="Request Approved",
                 message=f"Your request for {instance.product.name} was approved",
@@ -58,10 +56,7 @@ def purchase_request_signal(sender, instance, created, **kwargs):
                 notification_type="purchase",
                 allowed_roles=creator_role
             )
-
-        # ❌ REJECTED
         elif instance.status == "Rejected":
-
             Notification.objects.create(
                 title="Request Rejected",
                 message=f"Your request for {instance.product.name} was rejected",
@@ -70,22 +65,27 @@ def purchase_request_signal(sender, instance, created, **kwargs):
                 allowed_roles=creator_role
             )
 
-
 # ==========================================
 # STORE OLD STATUS FOR PO
 # ==========================================
+
+
 @receiver(pre_save, sender=PurchaseOrder)
 def store_old_po_status(sender, instance, **kwargs):
     """
     Store the previous status of a PurchaseOrder.
     Works normally for updates, safely skips if object is being created (fixture load).
     """
+    if kwargs.get("raw", False):
+        instance._old_status = None
+        return
+
     try:
         old = PurchaseOrder.objects.get(pk=instance.pk)
         instance._old_status = old.status
     except PurchaseOrder.DoesNotExist:
-        # Object does not exist yet → new creation or fixture load
         instance._old_status = None
+
 # ==========================================
 # PURCHASE ORDER LOGIC
 # ==========================================
@@ -93,12 +93,11 @@ def store_old_po_status(sender, instance, **kwargs):
 
 @receiver(post_save, sender=PurchaseOrder)
 def purchase_order_signal(sender, instance, created, **kwargs):
-
     if created:
         return  # no notification on creation
 
-    if instance._old_status != instance.status:
-
+    old_status = getattr(instance, "_old_status", None)
+    if old_status != instance.status:
         notify_roles = "manager,staff"
 
         # 🚚 SHIPPED
@@ -123,7 +122,6 @@ def purchase_order_signal(sender, instance, created, **kwargs):
 
         # 📦 DELIVERED
         elif instance.status == "delivered":
-
             if instance.request and instance.request.product:
                 product = instance.request.product
                 qty = instance.request.quantity
