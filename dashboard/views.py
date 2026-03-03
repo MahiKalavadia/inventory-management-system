@@ -130,6 +130,15 @@ def admin_dashboard(request):
     payment_labels = [item['payment_status'] for item in payment_status_data]
     payment_values = [item['count'] for item in payment_status_data]
 
+    color_map = {
+        'Paid': '#16a34a',    # green
+        'Failed': '#dc2626',  # red
+        'Pending': '#f97316',  # orange
+    }
+
+    payment_colors = [color_map.get(status, '#888')
+                      for status in payment_labels]
+
     # -----------------------------
     # 4️⃣ Inventory Supplied vs Sold
     # -----------------------------
@@ -274,6 +283,7 @@ def admin_dashboard(request):
 
         "payment_labels": payment_labels,
         "payment_values": payment_values,
+        "payment_colors": payment_colors,
 
         "supplied": supplied,
         "sold": sold,
