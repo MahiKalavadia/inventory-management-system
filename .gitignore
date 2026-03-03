@@ -23,3 +23,12 @@ staticfiles/
 # OS files
 .DS_Store
 Thumbs.db
+
+# Ignore fixture files
+categories.json
+groups.json
+inventory.json
+orders.json.gz
+purchases.json
+suppliers.json
+users.json
