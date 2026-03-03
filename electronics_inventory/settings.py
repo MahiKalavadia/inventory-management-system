@@ -32,13 +32,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.environ.get('INVENT_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = "RENDER" not in os.environ
+DEBUG = os.environ.get("DEBUG", "False") == "True"
 
-if "RENDER" in os.environ:
-    ALLOWED_HOSTS = ["electrnoics_inventory.onrender.com"]
-else:
-    ALLOWED_HOSTS = ["127.0.0.1", "localhost"]
-
+ALLOWED_HOSTS = os.environ.get(
+    "ALLOWED_HOSTS",
+    "127.0.0.1,localhost"
+).split(",")
 
 # Application definition
 
