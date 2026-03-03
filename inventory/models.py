@@ -2,6 +2,7 @@ from django.db import models
 from suppliers.models import Supplier
 from django.core.validators import MinValueValidator
 from django.contrib.auth.models import User
+from cloudinary.models import CloudinaryField
 
 
 class Category(models.Model):
@@ -26,8 +27,7 @@ class Product(models.Model):
     category = models.ForeignKey(Category, on_delete=models.PROTECT)
     supplier = models.ForeignKey(
         Supplier, on_delete=models.SET_NULL, null=True)   # ✅ add this
-    image = models.ImageField(
-        upload_to='product_images/', blank=True, null=True)
+    image = CloudinaryField('image')
     description = models.TextField(blank=True, null=True)
     warranty_months = models.PositiveIntegerField(
         help_text="Warranty period in months")

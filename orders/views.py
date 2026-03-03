@@ -414,7 +414,7 @@ def warranty_check(request):
 
     return render(
         request,
-        "orders/warranty_check.html",
+        "inventory/warranty_check.html",
         {"items": items}
     )
 
