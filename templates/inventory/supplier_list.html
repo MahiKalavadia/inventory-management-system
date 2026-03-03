@@ -83,6 +83,7 @@
             <table class="table table-hover align-middle mb-0">
                 <thead class="table-light">
                     <tr>
+                        <th>ID</th>
                         <th>Vendor Name</th>
                         <th>Categories</th>
                         <th>Brands</th>
@@ -96,6 +97,9 @@
                 <tbody>
                     {% for item in page_obj %}
                     <tr>
+                         <td class="fw-medium">
+                            {{ item.supplier.id }}
+                        </td>
                         <td class="fw-medium">
                             {{ item.supplier.name }}
                         </td>
