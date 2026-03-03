@@ -76,16 +76,21 @@ def purchase_request_signal(sender, instance, created, **kwargs):
 # ==========================================
 @receiver(pre_save, sender=PurchaseOrder)
 def store_old_po_status(sender, instance, **kwargs):
-    if instance.pk:
+    """
+    Store the previous status of a PurchaseOrder.
+    Works normally for updates, safely skips if object is being created (fixture load).
+    """
+    try:
         old = PurchaseOrder.objects.get(pk=instance.pk)
         instance._old_status = old.status
-    else:
+    except PurchaseOrder.DoesNotExist:
+        # Object does not exist yet → new creation or fixture load
         instance._old_status = None
-
-
 # ==========================================
 # PURCHASE ORDER LOGIC
 # ==========================================
+
+
 @receiver(post_save, sender=PurchaseOrder)
 def purchase_order_signal(sender, instance, created, **kwargs):
 

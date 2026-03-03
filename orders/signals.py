@@ -6,7 +6,11 @@ from datetime import timedelta
 
 
 @receiver(post_save, sender=Order)
-def start_warranty_on_completion(sender, instance, **kwargs):
+def start_warranty_on_completion(sender, instance, created, raw, **kwargs):
+    if raw:
+        # Skip during fixture load
+        return
+
     if instance.status == "completed":
         for item in instance.orderitem_set.all():
             if not item.warranty_start:
