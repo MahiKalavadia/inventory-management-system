@@ -808,7 +808,7 @@ new Chart(paymentStatusChart, {
         labels: {{ payment_labels|safe }},
         datasets: [{
             data: {{ payment_values|safe }},
-            backgroundColor: ['#dc2626','#16a34a','#f97316']
+            backgroundColor: {{ payment_colors|safe }}
         }]
     },
     options: {
