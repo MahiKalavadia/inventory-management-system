@@ -102,13 +102,14 @@ def purchase_order_signal(sender, instance, created, **kwargs):
 
         # 🚚 SHIPPED
         if instance.status == "shipped":
-            Notification.objects.create(
-                title="Order Shipped",
-                message=f"PO-{instance.id} for {instance.request.product.name} has been shipped",
-                type="info",
-                notification_type="order",
-                allowed_roles=notify_roles
-            )
+            if instance.request and instance.request.product:
+                Notification.objects.create(
+                    title="Order Shipped",
+                    message=f"PO-{instance.id} for {instance.request.product.name} has been shipped",
+                    type="info",
+                    notification_type="order",
+                    allowed_roles=notify_roles
+                )
 
         # 🚛 IN TRANSIT
         elif instance.status == "in_transit":
@@ -122,6 +123,8 @@ def purchase_order_signal(sender, instance, created, **kwargs):
 
         # 📦 DELIVERED
         elif instance.status == "delivered":
+            product = None
+            qty = 0
             if instance.request and instance.request.product:
                 product = instance.request.product
                 qty = instance.request.quantity
@@ -140,13 +143,15 @@ def purchase_order_signal(sender, instance, created, **kwargs):
                 actual_delivery=now().date()
             )
 
-            Notification.objects.create(
-                title="Order Delivered",
-                message=f"{product.name} has arrived in inventory",
-                type="success",
-                notification_type="order",
-                allowed_roles=notify_roles
-            )
+            # Only send notification if product exists
+            if product:
+                Notification.objects.create(
+                    title="Order Delivered",
+                    message=f"{product.name} has arrived in inventory",
+                    type="success",
+                    notification_type="order",
+                    allowed_roles=notify_roles
+                )
 
         # ⏳ DELAYED
         elif instance.status == "delayed":
