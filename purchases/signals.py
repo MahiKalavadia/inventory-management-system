@@ -12,16 +12,24 @@ from notifications.models import Notification
 # ==========================================
 @receiver(pre_save, sender=PurchaseRequest)
 def store_old_request_status(sender, instance, **kwargs):
-    if instance.pk:
+    """
+    Store the previous status of a PurchaseRequest.
+    This works for normal saves and skips safely if the object
+    is being created (like during fixture loading).
+    """
+    try:
+        # Try to get the existing object from DB
         old = PurchaseRequest.objects.get(pk=instance.pk)
-        instance._old_status = old.status
-    else:
-        instance._old_status = None
-
+        instance.old_status = old.status  # or whatever field you track
+    except PurchaseRequest.DoesNotExist:
+        # Object does not exist yet (newly created) → do nothing
+        pass
 
 # ==========================================
 # PURCHASE REQUEST LOGIC
 # ==========================================
+
+
 @receiver(post_save, sender=PurchaseRequest)
 def purchase_request_signal(sender, instance, created, **kwargs):
 
