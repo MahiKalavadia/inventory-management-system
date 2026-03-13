@@ -91,7 +91,7 @@ urlpatterns = [
          name="export_lowstock_csv"),
     path('stock/export/lowstock/excel', views.export_lowstock_excel,
          name="export_lowstock_excel"),
-    path('stock/export/lowstock/pdf', views.export_lowstock_pdf,
+    path('stock/forecast/', views.stock_forecast, name='stock_forecast'),    path('stock/export/lowstock/pdf', views.export_lowstock_pdf,
          name="export_lowstock_pdf"),
     path('stock/export/outstock/csv', views.export_outstock_csv,
          name="export_outstock_csv"),

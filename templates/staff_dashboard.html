@@ -1,19 +1,8 @@
 {% extends 'base_dashboard.html' %}
 {% load humanize tz %}
 {% load static %}
-{%block pagetitle%}Order & Sales Insights Dashboard{% endblock pagetitle%}
-{%block pagecontent %}Manage your orders and sales efficiently{% endblock pagecontent %}
-{% block link %}
-{% if request.user.is_superuser or request.user.groups.first.name == "Manager" or request.user.groups.first.name == "Staff" %}
-    <a href="{% url 'create_order' %}" class="btn btn-primary btn-sm">
-        + New Invoice
-    </a>
-    <a href="{% url 'order_list' %}" class="btn btn-outline-dark btn-sm">
-        Order History
-    </a>
-{% endif %}
-{% endblock link %}
-{% block panel %}Order Panel{% endblock panel%}
+{%block pagetitle%}Inventory Staff Dashboard{% endblock pagetitle%}
+{% block panel %}Staff Panel{% endblock panel%}
 {% block content %}
 
 <style>

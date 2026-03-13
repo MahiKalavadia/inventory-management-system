@@ -1,11 +1,402 @@
 {% extends 'base_dashboard.html' %}
 {% load static %}
-{%block pagetitle%} Stock forecastiing Dashboard{% endblock pagetitle%}
-{%block pagecontent %}See the product forecast{% endblock pagecontent %}
+{% block pagetitle %}Stock Forecasting Dashboard{% endblock pagetitle %}
+{% block pagecontent %}30-Day Sales Velocity & Stock Forecast{% endblock pagecontent %}
 {% block link %}
 <a href="{% url 'stock_dashboard' %}" class="btn btn-outline-secondary btn-sm">
-                Back
+    <i class="bi bi-arrow-left"></i> Back
+</a>
 {% endblock link %}
-{% block panel %}Forecast Panel{% endblock panel%}
+{% block panel %}Forecast Panel{% endblock panel %}
 {% block content %}
+
+<style>
+.forecast-table {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+.forecast-table thead {
+    background: #f8f9fa;
+    color: #495057;
+}
+.forecast-table th {
+    font-weight: 600;
+    font-size: 13px;
+    padding: 14px 10px;
+    border: none;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+.forecast-table td {
+    padding: 12px 10px;
+    vertical-align: middle;
+    font-size: 14px;
+}
+.forecast-table tbody tr {
+    border-bottom: 1px solid #f0f0f0;
+    transition: background 0.2s;
+}
+.forecast-table tbody tr:hover {
+    background: #f8f9fa;
+}
+.product-img {
+    width: 50px;
+    height: 50px;
+    object-fit: cover;
+    border-radius: 6px;
+    border: 2px solid #e9ecef;
+}
+.product-info {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+.product-name {
+    font-weight: 600;
+    color: #2d3748;
+    margin: 0;
+    font-size: 14px;
+}
+.product-sku {
+    color: #718096;
+    font-size: 12px;
+    margin: 0;
+}
+.badge {
+    padding: 6px 12px;
+    font-size: 11px;
+    font-weight: 600;
+    border-radius: 12px;
+}
+.pagination {
+    margin-top: 30px;
+}
+.pagination .page-link {
+    border-radius: 6px;
+    margin: 0 3px;
+    border: 1px solid #dee2e6;
+    color: #0d6efd;
+    font-weight: 500;
+}
+.pagination .page-item.active .page-link {
+    background: #0d6efd;
+    border-color: #0d6efd;
+}
+.pagination .page-link:hover {
+    background: #f8f9fa;
+    border-color: #0d6efd;
+}
+.chart-container {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    margin-bottom: 30px;
+}
+.section-title {
+    font-size: 20px;
+    font-weight: 700;
+    color: #2d3748;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 3px solid #0d6efd;
+    display: inline-block;
+}
+.alert-critical {
+    background: #0d6efd;
+    color: white;
+    padding: 15px 20px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    font-weight: 500;
+}
+</style>
+
+<!-- Alert Banner -->
+<div class="alert-critical">
+    <i class="bi bi-fire"></i> 
+    <strong>Top Selling Products:</strong> These 10 products have the highest sales velocity in the last 30 days - priority for restocking!
+</div>
+
+<!-- Chart -->
+<div class="chart-container">
+    <canvas id="forecastChart" height="80"></canvas>
+</div>
+
+<!-- TOP 10 CRITICAL PRODUCTS -->
+<h3 class="section-title">
+    <i class="bi bi-graph-up-arrow text-danger"></i> Top 10 Best Selling Products - Restock Priority
+</h3>
+
+<div class="table-responsive forecast-table mb-5">
+    <table class="table table-hover mb-0">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Product</th>
+                <th>Category</th>
+                <th class="text-center">Sold (30d)</th>
+                <th class="text-center">Daily Avg</th>
+                <th class="text-center">Current Stock</th>
+                <th class="text-center">Reorder Qty</th>
+                <th class="text-center">Days Left</th>
+                <th class="text-center">Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in top_10_critical %}
+            <tr>
+                <td><strong>{{ forloop.counter }}</strong></td>
+                <td>
+                    <div class="product-info">
+                        <img src="{{ item.image.url }}" alt="{{ item.name }}" class="product-img" onerror="this.src='{% static 'images/image.png' %}'">
+                        <div>
+                            <p class="product-name">{{ item.name|truncatewords:4 }}</p>
+                            <p class="product-sku">{{ item.sku }}</p>
+                        </div>
+                    </div>
+                </td>
+                <td>{{ item.category }}</td>
+                <td class="text-center"><strong class="text-primary" style="font-size: 16px;">{{ item.sold_30_days }}</strong></td>
+                <td class="text-center">{{ item.daily_avg }}</td>
+                <td class="text-center"><strong>{{ item.current_stock }}</strong></td>
+                <td class="text-center">
+                    {% if item.reorder_qty > 0 %}
+                    <span class="badge bg-danger" style="font-size: 14px; padding: 8px 12px;">
+                        +{{ item.reorder_qty }}
+                    </span>
+                    {% else %}
+                    <span class="badge bg-success">OK</span>
+                    {% endif %}
+                </td>
+                <td class="text-center">
+                    {% if item.days_until_stockout < 999 %}
+                        <span class="{% if item.days_until_stockout < 7 %}text-danger{% elif item.days_until_stockout < 14 %}text-warning{% else %}text-success{% endif %}" style="font-size: 15px; font-weight: 600;">
+                            {{ item.days_until_stockout|floatformat:1 }} days
+                        </span>
+                    {% else %}
+                        ∞
+                    {% endif %}
+                </td>
+                <td class="text-center">
+                    {% if item.status == 'critical' %}
+                    <span class="badge bg-danger">Critical</span>
+                    {% elif item.status == 'warning' %}
+                    <span class="badge bg-warning text-dark">Warning</span>
+                    {% else %}
+                    <span class="badge bg-success">Good</span>
+                    {% endif %}
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="9" class="text-center py-5">
+                    <i class="bi bi-inbox" style="font-size: 48px; color: #cbd5e0;"></i>
+                    <p class="text-muted mt-3">No sales data available for the last 30 days</p>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<!-- ALL PRODUCTS FORECAST -->
+<h3 class="section-title">
+    <i class="bi bi-graph-up"></i> All Products Forecast
+</h3>
+
+<div class="table-responsive forecast-table">
+    <table class="table table-hover mb-0">
+        <thead>
+            <tr>
+                <th>Product</th>
+                <th>Category</th>
+                <th class="text-center">Current Stock</th>
+                <th class="text-center">Sold (30d)</th>
+                <th class="text-center">Forecast (30d)</th>
+                <th class="text-center">Reorder Qty</th>
+                <th class="text-center">Days Left</th>
+                <th class="text-center">Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in page_obj %}
+            <tr>
+                <td>
+                    <div class="product-info">
+                        <img src="{{ item.image.url }}" alt="{{ item.name }}" class="product-img" onerror="this.src='{% static 'images/image.png' %}'">
+                        <div>
+                            <p class="product-name">{{ item.name|truncatewords:4 }}</p>
+                            <p class="product-sku">{{ item.sku }}</p>
+                        </div>
+                    </div>
+                </td>
+                <td>{{ item.category }}</td>
+                <td class="text-center"><strong>{{ item.current_stock }}</strong></td>
+                <td class="text-center">{{ item.sold_30_days }}</td>
+                <td class="text-center"><strong>{{ item.forecast_30_days|floatformat:0 }}</strong></td>
+                <td class="text-center">
+                    {% if item.reorder_qty > 0 %}
+                    <span class="badge bg-warning text-dark">+{{ item.reorder_qty }}</span>
+                    {% else %}
+                    <span class="text-success">—</span>
+                    {% endif %}
+                </td>
+                <td class="text-center">
+                    {% if item.days_until_stockout < 999 %}
+                        {{ item.days_until_stockout|floatformat:1 }}
+                    {% else %}
+                        ∞
+                    {% endif %}
+                </td>
+                <td class="text-center">
+                    {% if item.status == 'critical' %}
+                    <span class="badge bg-danger">Critical</span>
+                    {% elif item.status == 'warning' %}
+                    <span class="badge bg-warning text-dark">Warning</span>
+                    {% else %}
+                    <span class="badge bg-success">Good</span>
+                    {% endif %}
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="8" class="text-center py-5">
+                    <i class="bi bi-inbox" style="font-size: 48px; color: #cbd5e0;"></i>
+                    <p class="text-muted mt-3">No sales data available for the last 30 days</p>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+{% if page_obj.has_other_pages %}
+<nav aria-label="Page navigation">
+    <ul class="pagination justify-content-center">
+        {% if page_obj.has_previous %}
+        <li class="page-item">
+            <a class="page-link" href="?page=1" aria-label="First">
+                <i class="bi bi-chevron-double-left"></i>
+            </a>
+        </li>
+        <li class="page-item">
+            <a class="page-link" href="?page={{ page_obj.previous_page_number }}" aria-label="Previous">
+                <i class="bi bi-chevron-left"></i>
+            </a>
+        </li>
+        {% else %}
+        <li class="page-item disabled">
+            <span class="page-link"><i class="bi bi-chevron-double-left"></i></span>
+        </li>
+        <li class="page-item disabled">
+            <span class="page-link"><i class="bi bi-chevron-left"></i></span>
+        </li>
+        {% endif %}
+
+        {% for num in page_obj.paginator.page_range %}
+            {% if page_obj.number == num %}
+            <li class="page-item active"><span class="page-link">{{ num }}</span></li>
+            {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+            <li class="page-item"><a class="page-link" href="?page={{ num }}">{{ num }}</a></li>
+            {% endif %}
+        {% endfor %}
+
+        {% if page_obj.has_next %}
+        <li class="page-item">
+            <a class="page-link" href="?page={{ page_obj.next_page_number }}" aria-label="Next">
+                <i class="bi bi-chevron-right"></i>
+            </a>
+        </li>
+        <li class="page-item">
+            <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}" aria-label="Last">
+                <i class="bi bi-chevron-double-right"></i>
+            </a>
+        </li>
+        {% else %}
+        <li class="page-item disabled">
+            <span class="page-link"><i class="bi bi-chevron-right"></i></span>
+        </li>
+        <li class="page-item disabled">
+            <span class="page-link"><i class="bi bi-chevron-double-right"></i></span>
+        </li>
+        {% endif %}
+    </ul>
+</nav>
+{% endif %}
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+const ctx = document.getElementById('forecastChart').getContext('2d');
+new Chart(ctx, {
+    type: 'bar',
+    data: {
+        labels: {{ chart_labels|safe }},
+        datasets: [{
+            label: 'Sold (Last 30 Days)',
+            data: {{ chart_sold|safe }},
+            backgroundColor: 'rgba(13, 110, 253, 0.7)',
+            borderColor: 'rgba(13, 110, 253, 1)',
+            borderWidth: 2,
+            borderRadius: 6
+        }, {
+            label: 'Forecast (Next 30 Days)',
+            data: {{ chart_forecast|safe }},
+            backgroundColor: 'rgba(25, 135, 84, 0.7)',
+            borderColor: 'rgba(25, 135, 84, 1)',
+            borderWidth: 2,
+            borderRadius: 6
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: true,
+        scales: {
+            y: {
+                beginAtZero: true,
+                title: {
+                    display: true,
+                    text: 'Quantity Sold',
+                    font: { size: 14, weight: 'bold' },
+                    color: '#495057'
+                },
+                grid: {
+                    color: 'rgba(0, 0, 0, 0.05)'
+                },
+                ticks: {
+                    color: '#6c757d'
+                }
+            },
+            x: {
+                grid: {
+                    display: false
+                },
+                ticks: {
+                    color: '#6c757d'
+                }
+            }
+        },
+        plugins: {
+            title: {
+                display: true,
+                text: 'Top 10 Best Selling Products - Past Sales vs Future Forecast',
+                font: { size: 16, weight: 'bold' },
+                padding: 20,
+                color: '#212529'
+            },
+            legend: {
+                display: true,
+                position: 'top',
+                labels: {
+                    usePointStyle: true,
+                    padding: 15,
+                    color: '#495057'
+                }
+            }
+        }
+    }
+});
+</script>
+
 {% endblock content %}

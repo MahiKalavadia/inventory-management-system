@@ -2212,3 +2212,75 @@ def view_all_reports(request):
         'total_inventory_count': total_inventory_count,
     }
     return render(request, 'inventory/view_all_reports.html', context)
+
+
+@login_required
+def stock_forecast(request):
+    from orders.models import OrderItem
+    
+    thirty_days_ago = timezone.now() - timedelta(days=30)
+    
+    # Calculate sales velocity for each product
+    sales_data = OrderItem.objects.filter(
+        order__created_at__gte=thirty_days_ago,
+        order__payment_status='Paid'
+    ).values(
+        'product__id',
+        'product__name',
+        'product__sku',
+        'product__quantity',
+        'product__category__name',
+        'product__image'
+    ).annotate(
+        total_sold=Sum('quantity')
+    ).order_by('-total_sold')
+    
+    forecast_list = []
+    for item in sales_data:
+        if item['product__id']:
+            daily_avg = item['total_sold'] / 30
+            days_until_stockout = item['product__quantity'] / daily_avg if daily_avg > 0 else 999
+            forecast_30_days = daily_avg * 30
+            
+            # Calculate reorder quantity (forecast - current stock, minimum 0)
+            reorder_qty = max(0, int(forecast_30_days - item['product__quantity']))
+            
+            status = 'critical' if days_until_stockout < 7 else 'warning' if days_until_stockout < 14 else 'good'
+            
+            forecast_list.append({
+                'product_id': item['product__id'],
+                'name': item['product__name'],
+                'sku': item['product__sku'],
+                'category': item['product__category__name'],
+                'current_stock': item['product__quantity'],
+                'sold_30_days': item['total_sold'],
+                'daily_avg': round(daily_avg, 2),
+                'forecast_30_days': round(forecast_30_days, 0),
+                'reorder_qty': reorder_qty,
+                'days_until_stockout': round(days_until_stockout, 1),
+                'status': status,
+                'image': item['product__image']
+            })
+    
+    # Top 10 by highest sales (already sorted by total_sold descending)
+    top_10_critical = forecast_list[:10]
+    
+    # All products sorted by sales velocity
+    paginator = Paginator(forecast_list, 15)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    
+    # Chart data - Top 10 by sales
+    chart_labels = [p['name'][:20] for p in top_10_critical]
+    chart_sold = [p['sold_30_days'] for p in top_10_critical]
+    chart_forecast = [p['forecast_30_days'] for p in top_10_critical]
+    
+    context = {
+        'top_10_critical': top_10_critical,
+        'page_obj': page_obj,
+        'chart_labels': json.dumps(chart_labels),
+        'chart_sold': json.dumps(chart_sold),
+        'chart_forecast': json.dumps(chart_forecast),
+    }
+    
+    return render(request, 'inventory/stock_forecast.html', context)
