@@ -9,7 +9,11 @@ Django==6.0.1
 django-apscheduler==0.7.0
 django-cloudinary-storage==0.3.0
 django-crispy-forms==2.5
+django-extensions==4.1
+eralchemy==1.6.0
 et_xmlfile==2.0.0
+graphviz==0.21
+greenlet==3.3.2
 gunicorn==25.1.0
 idna==3.11
 openpyxl==3.1.5
@@ -20,7 +24,9 @@ python-dotenv==1.2.2
 reportlab==4.4.9
 requests==2.32.5
 six==1.17.0
+SQLAlchemy==2.0.48
 sqlparse==0.5.5
+typing_extensions==4.15.0
 tzlocal==5.3.1
 urllib3==2.6.3
 whitenoise==6.12.0
