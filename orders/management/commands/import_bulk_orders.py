@@ -42,28 +42,27 @@ class Command(BaseCommand):
             order_count = 0
             
             for row in reader:
-                if not Order.objects.filter(bill_number=row['bill_number']).exists():
-                    # Create order instance without saving
-                    order = Order(
-                        bill_number=row['bill_number'],
-                        customer_name=row['customer_name'],
-                        customer_email=row['customer_email'],
-                        customer_phonenumber=row['customer_phone'],
-                        customer_address=row['customer_address'],
-                        pincode=row['pincode'],
-                        city=row['city'],
-                        state=row['state'],
-                        status=row['status'],
-                        payment_status=row['payment_status'],
-                        created_by=random.choice(users),
-                    )
-                    # Bypass auto_now_add by using update_fields
-                    order.save()
-                    # Make datetime timezone-aware
-                    naive_dt = datetime.strptime(row['created_at'], '%Y-%m-%d %H:%M:%S')
-                    aware_dt = timezone.make_aware(naive_dt)
-                    Order.objects.filter(pk=order.pk).update(created_at=aware_dt)
-                    order_count += 1
+                if Order.objects.filter(bill_number=row['bill_number']).exists():
+                    self.stdout.write(f"  Skipped: Order {row['bill_number']} already exists")
+                    continue
+                order = Order(
+                    bill_number=row['bill_number'],
+                    customer_name=row['customer_name'],
+                    customer_email=row['customer_email'],
+                    customer_phonenumber=row['customer_phone'],
+                    customer_address=row['customer_address'],
+                    pincode=row['pincode'],
+                    city=row['city'],
+                    state=row['state'],
+                    status=row['status'],
+                    payment_status=row['payment_status'],
+                    created_by=random.choice(users),
+                )
+                order.save()
+                naive_dt = datetime.strptime(row['created_at'], '%Y-%m-%d %H:%M:%S')
+                aware_dt = timezone.make_aware(naive_dt)
+                Order.objects.filter(pk=order.pk).update(created_at=aware_dt)
+                order_count += 1
         
         self.stdout.write(self.style.SUCCESS(f'✓ Imported {order_count} orders'))
         

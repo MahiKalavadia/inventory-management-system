@@ -39,13 +39,21 @@ class Command(BaseCommand):
             for row in reader:
                 try:
                     product = Product.objects.get(sku=row['product_sku'])
-                    
+                    created_at = datetime.strptime(row['created_at'], '%Y-%m-%d %H:%M:%S')
+
+                    if StockLog.objects.filter(
+                        product=product, action=row['action'],
+                        quantity=int(row['quantity']), created_at=created_at
+                    ).exists():
+                        self.stdout.write(f"  Skipped: StockLog for {row['product_sku']} already exists")
+                        continue
+
                     StockLog.objects.create(
                         product=product,
-                        user=random.choice(users),  # Random user
+                        user=random.choice(users),
                         action=row['action'],
                         quantity=int(row['quantity']),
-                        created_at=datetime.strptime(row['created_at'], '%Y-%m-%d %H:%M:%S')
+                        created_at=created_at
                     )
                     count += 1
                 except Product.DoesNotExist:

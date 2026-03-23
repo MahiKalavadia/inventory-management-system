@@ -47,6 +47,15 @@ class Command(BaseCommand):
                     product = Product.objects.get(sku=row['product_sku'])
                     supplier = Supplier.objects.get(name=row['supplier'])
                     
+                    created_at = datetime.strptime(row['created_at'], '%Y-%m-%d %H:%M:%S')
+                    if PurchaseRequest.objects.filter(
+                        product=product, supplier=supplier,
+                        quantity=int(row['quantity']), status=row['status'],
+                        created_at=created_at
+                    ).exists():
+                        self.stdout.write(f"  Skipped: PurchaseRequest for {row['product_sku']} already exists")
+                        continue
+
                     pr = PurchaseRequest(
                         product=product,
                         supplier=supplier,
@@ -56,10 +65,7 @@ class Command(BaseCommand):
                         status=row['status']
                     )
                     pr.save()
-                    # Update created_at after save to bypass auto_now_add
-                    PurchaseRequest.objects.filter(pk=pr.pk).update(
-                        created_at=datetime.strptime(row['created_at'], '%Y-%m-%d %H:%M:%S')
-                    )
+                    PurchaseRequest.objects.filter(pk=pr.pk).update(created_at=created_at)
                     req_count += 1
                 except (Product.DoesNotExist, Supplier.DoesNotExist):
                     continue
@@ -93,6 +99,14 @@ class Command(BaseCommand):
                             request = requests.first()
                             linked_requests.add(request.id)  # Mark as linked
                     
+                    created_at = datetime.strptime(row['created_at'], '%Y-%m-%d %H:%M:%S')
+                    if PurchaseOrder.objects.filter(
+                        supplier=supplier, status=row['status'],
+                        total_cost=Decimal(row['total_cost']), created_at=created_at
+                    ).exists():
+                        self.stdout.write(f"  Skipped: PurchaseOrder for {row['supplier']} already exists")
+                        continue
+
                     po = PurchaseOrder(
                         request=request,
                         supplier=supplier,
@@ -102,10 +116,7 @@ class Command(BaseCommand):
                         total_cost=Decimal(row['total_cost'])
                     )
                     po.save()
-                    # Update created_at after save to bypass auto_now_add
-                    PurchaseOrder.objects.filter(pk=po.pk).update(
-                        created_at=datetime.strptime(row['created_at'], '%Y-%m-%d %H:%M:%S')
-                    )
+                    PurchaseOrder.objects.filter(pk=po.pk).update(created_at=created_at)
                     po_count += 1
                 except (Supplier.DoesNotExist, Product.DoesNotExist):
                     continue

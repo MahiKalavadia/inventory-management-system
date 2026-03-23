@@ -47,21 +47,23 @@ class Command(BaseCommand):
                         supplier.categories_supplies.add(category)
                     
                     # Create product if doesn't exist
-                    if not Product.objects.filter(sku=row['sku'].strip()).exists():
-                        Product.objects.create(
-                            sku=row['sku'].strip(),
-                            name=row['name'].strip(),
-                            brand=row['brand'].strip(),
-                            purchase_price=Decimal(row['purchase_price'].strip()),
-                            price=Decimal(row['price'].strip()),
-                            quantity=int(row['quantity'].strip()),
-                            category=category,
-                            supplier=supplier,
-                            description=row['description'].strip(),
-                            warranty_months=int(row['warranty_months'].strip()),
-                            is_active=True
-                        )
-                        count += 1
+                    if Product.objects.filter(sku=row['sku'].strip()).exists():
+                        self.stdout.write(f"  Skipped: Product {row['sku'].strip()} already exists")
+                        continue
+                    Product.objects.create(
+                        sku=row['sku'].strip(),
+                        name=row['name'].strip(),
+                        brand=row['brand'].strip(),
+                        purchase_price=Decimal(row['purchase_price'].strip()),
+                        price=Decimal(row['price'].strip()),
+                        quantity=int(row['quantity'].strip()),
+                        category=category,
+                        supplier=supplier,
+                        description=row['description'].strip(),
+                        warranty_months=int(row['warranty_months'].strip()),
+                        is_active=True
+                    )
+                    count += 1
                 except Exception as e:
                     errors += 1
                     self.stdout.write(self.style.ERROR(f'Error on row {idx}: {e}'))

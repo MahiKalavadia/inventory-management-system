@@ -3,28 +3,54 @@ __pycache__/
 *.pyc
 *.pyo
 *.pyd
+*.py[cod]
+*$py.class
+*.so
 
 # Virtual Environment
 venv/
 ENV/
 .env
 .venv/
+env/
+pip-log.txt
+pip-delete-this-directory.txt
 
 # Django
 db.sqlite3
+db.sqlite3-journal
 media/
 *.log
 staticfiles/
+local_settings.py
 
 # IDE
 .vscode/
 .idea/
+*.swp
+*.swo
+*~
+.project
+.pydevproject
+.settings/
 
 # OS files
 .DS_Store
 Thumbs.db
+*.bak
 
-# Ignore fixture files
+# Testing
+.coverage
+.pytest_cache/
+htmlcov/
+.tox/
+.hypothesis/
+
+# Migrations (optional - uncomment if needed)
+# */migrations/*.py
+# !*/migrations/__init__.py
+
+# Fixture files
 categories.json
 groups.json
 inventory.json
@@ -32,3 +58,11 @@ orders.json.gz
 purchases.json
 suppliers.json
 users.json
+
+# Docker
+*.pid
+*.seed
+*.pid.lock
+
+# Kiro CLI
+.kiro/
