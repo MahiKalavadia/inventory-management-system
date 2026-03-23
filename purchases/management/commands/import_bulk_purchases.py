@@ -10,7 +10,7 @@ from django.contrib.auth.models import User
 import csv
 import random
 from decimal import Decimal
-from datetime import datetime
+from django.utils import timezone
 
 
 class Command(BaseCommand):
@@ -47,7 +47,7 @@ class Command(BaseCommand):
                     product = Product.objects.get(sku=row['product_sku'])
                     supplier = Supplier.objects.get(name=row['supplier'])
                     
-                    created_at = datetime.strptime(row['created_at'], '%Y-%m-%d %H:%M:%S')
+                    created_at = timezone.make_aware(timezone.datetime.strptime(row['created_at'], '%Y-%m-%d %H:%M:%S'))
                     if PurchaseRequest.objects.filter(
                         product=product, supplier=supplier,
                         quantity=int(row['quantity']), status=row['status'],
@@ -99,7 +99,7 @@ class Command(BaseCommand):
                             request = requests.first()
                             linked_requests.add(request.id)  # Mark as linked
                     
-                    created_at = datetime.strptime(row['created_at'], '%Y-%m-%d %H:%M:%S')
+                    created_at = timezone.make_aware(timezone.datetime.strptime(row['created_at'], '%Y-%m-%d %H:%M:%S'))
                     if PurchaseOrder.objects.filter(
                         supplier=supplier, status=row['status'],
                         total_cost=Decimal(row['total_cost']), created_at=created_at
@@ -111,8 +111,8 @@ class Command(BaseCommand):
                         request=request,
                         supplier=supplier,
                         status=row['status'],
-                        expected_delivery=datetime.strptime(row['expected_delivery'], '%Y-%m-%d').date() if row['expected_delivery'] else None,
-                        actual_delivery=datetime.strptime(row['actual_delivery'], '%Y-%m-%d').date() if row['actual_delivery'] else None,
+                        expected_delivery=timezone.datetime.strptime(row['expected_delivery'], '%Y-%m-%d').date() if row['expected_delivery'] else None,
+                        actual_delivery=timezone.datetime.strptime(row['actual_delivery'], '%Y-%m-%d').date() if row['actual_delivery'] else None,
                         total_cost=Decimal(row['total_cost'])
                     )
                     po.save()

@@ -77,7 +77,11 @@ class Command(BaseCommand):
                 try:
                     order = Order.objects.get(bill_number=f"BILL-{int(row['order_id']):05d}")
                     product = Product.objects.get(sku=row['product_sku'])
-                    
+
+                    if OrderItem.objects.filter(order=order, product=product).exists():
+                        self.stdout.write(f"  Skipped: OrderItem for {row['product_sku']} in {order.bill_number} already exists")
+                        continue
+
                     OrderItem.objects.create(
                         order=order,
                         product=product,
