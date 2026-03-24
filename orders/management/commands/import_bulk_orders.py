@@ -82,12 +82,22 @@ class Command(BaseCommand):
                         self.stdout.write(f"  Skipped: OrderItem for {row['product_sku']} in {order.bill_number} already exists")
                         continue
 
+                    warranty_months = int(row['warranty_months'])
+                    warranty_start = None
+                    warranty_end = None
+                    if order.status == 'Paid':
+                        from datetime import timedelta
+                        warranty_start = order.created_at.date()
+                        warranty_end = warranty_start + timedelta(days=30 * warranty_months)
+
                     OrderItem.objects.create(
                         order=order,
                         product=product,
                         quantity=int(row['quantity']),
                         price=Decimal(row['price']),
-                        warranty_months=int(row['warranty_months'])
+                        warranty_months=warranty_months,
+                        warranty_start=warranty_start,
+                        warranty_end=warranty_end,
                     )
                     item_count += 1
                 except (Order.DoesNotExist, Product.DoesNotExist):

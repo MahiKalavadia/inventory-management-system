@@ -142,12 +142,36 @@ pip install -r requirements.txt
 
 4. **Create environment file**
 
-Create `.env` file in project root:
-```env
-INVENT_KEY=your-django-secret-key
-EMAIL_USER=your-email@gmail.com
-EMAIL_PASS=your-email-app-password
+Copy the example file and fill in your values:
+```bash
+cp .env.example .env
 ```
+
+Then open `.env` and set the following:
+
+```env
+# Django secret key — generate one at https://djecrety.ir
+INVENT_KEY=your-django-secret-key
+
+# Set to True for local development
+DEBUG=True
+
+# Gmail credentials for email notifications
+# Use an App Password (not your real password)
+# Generate at: https://myaccount.google.com/apppasswords
+EMAIL_USER=your-email@gmail.com
+EMAIL_PASS=your-gmail-app-password
+
+# Cloudinary — for storing product images
+# Sign up free at https://cloudinary.com, get values from your dashboard
+CLOUD_NAME=your-cloudinary-cloud-name
+API_KEY=your-cloudinary-api-key
+API_SECRET=your-cloudinary-api-secret
+```
+
+> **Note:** `EMAIL_USER`/`EMAIL_PASS` are optional — the app runs without them but email notifications won't work.
+
+> **Important — Product Images:** The database does **not** include product images. Images are stored and served directly from Cloudinary. After setting up your Cloudinary credentials, you'll need to upload images manually for each product through the app. Until then, products will show a placeholder icon.
 
 5. **Run migrations**
 ```bash
@@ -172,13 +196,18 @@ exit()
 ```
 8. **Add data into models**
 ```bash
-python manage.py import_bulk_products // import products , category and supplier data // takes around 5-10 minutes
-python manage.py import_bulk_purchases // import purchase request and purchase order // takes around 5-10 minutes
-python manage.py import_bulk_orders // import order and orderitem // takes around 5-10 minutes
+python manage.py import_bulk_products // import products , category and supplier data // takes around 2 minutes
+python manage.py import_bulk_purchases // import purchase request and purchase order // takes around 5 minutes
+python manage.py import_bulk_orders // import order and orderitem // takes around 5 minutes
 python manage.py import_bulk_stocklogs // import stock // takes around 5 minutes
 ```
 
-9. **Run development server**
+9. **Collect static files** *(production only — skip for local dev)*
+```bash
+python manage.py collectstatic
+```
+
+10. **Run development server**
 ```bash
 python manage.py runserver
 ```
