@@ -185,7 +185,7 @@ def purchase_dashboard_ms(request):
 
     # chart3 Most Requested Products purchase request -> quantity
     most_requested = PurchaseRequest.objects.filter(requested_by=user).values('product__name').annotate(
-        total=Count('quantity')).order_by('-total')[:5]
+        total=Sum('quantity')).order_by('-total')[:5]
 
     product_name = []
     product_count = []

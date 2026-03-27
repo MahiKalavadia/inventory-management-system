@@ -188,7 +188,7 @@ def product_list(request):
 @login_required
 def add_product(request):
     if request.method == "POST":
-        form = ProductForm(request.POST)
+        form = ProductForm(request.POST, request.FILES)
         if form.is_valid():
             form.save()
             return redirect('product_dashboard')
@@ -730,7 +730,7 @@ def stock_dashboard(request):
 
     low_products = (
         Product.objects
-        .filter(quantity__gt=0)
+        .filter(quantity__gt=0, quantity__lte=get_low_stock_threshold())
         .order_by('quantity')[:5]
     )
 

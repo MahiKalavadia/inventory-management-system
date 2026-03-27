@@ -458,7 +458,7 @@ new Chart(revenueChart, {
 new Chart(orderChart, {
     type: 'doughnut',
     data: {
-        labels: ['Paid', 'Failed', 'Cancelled'],
+        labels: ['Paid', 'Failed', 'Pending'],
         datasets: [{
             data: [{{ payment_paid }}, {{ payment_fail }}, {{ payment_cancel }}],
             backgroundColor: ['#16a34a','#f97316','#dc2626']

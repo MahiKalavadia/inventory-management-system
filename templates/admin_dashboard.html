@@ -455,7 +455,7 @@
     </div>
 
     <!-- Body -->
-    <div class="card-body p-0">
+    <div class="card-body p-4">
         <div class="table-responsive">
             <table class="table table-hover align-middle mb-0">
                 <thead class="table-light">
@@ -824,11 +824,11 @@ new Chart(inventoryFlowChart, {
         datasets: [
             {
                 label: 'Supplied',
-                data: {{supplied|safe}}
+                data: [{{supplied|safe}}]
             },
             {
                 label: 'Sold',
-                data: {{sold|safe}}
+                data: [{{sold|safe}}]
             }
         ]
     },

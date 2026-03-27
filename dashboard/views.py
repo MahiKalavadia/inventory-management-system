@@ -94,7 +94,12 @@ def admin_dashboard(request):
         .filter(status="Paid", created_at__gte=last_six_months)
         .annotate(month=TruncMonth('created_at'))
         .values('month')
-        .annotate(total=Sum('items__price'))
+        .annotate(total=Sum(
+            ExpressionWrapper(
+                F('items__price') * F('items__quantity'),
+                output_field=DecimalField()
+            )
+        ))
         .order_by('month')
     )
 
@@ -455,8 +460,8 @@ def staff_dashboard(request):
         .annotate(day=TruncDate('created_at'))
         .values('day')
         .annotate(
-            stock_in=Sum('quantity', filter=Q(action='STOCK_IN')),
-            stock_out=Sum('quantity', filter=Q(action='STOCK_OUT')),
+            stock_in=Sum('quantity', filter=Q(action='IN')),
+            stock_out=Sum('quantity', filter=Q(action='OUT')),
         )
         .order_by('day')
     )

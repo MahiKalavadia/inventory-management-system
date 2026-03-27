@@ -1,92 +1,59 @@
 {% extends 'base_dashboard.html' %}
 {% load static %}
-{% load crispy_forms_tags %}
-{%block pagetitle%} Add product Category{% endblock pagetitle%}
-{%block pagecontent %}Create a new category entry in your inventory{% endblock pagecontent %}
+{%block pagetitle%}Add Category{% endblock pagetitle%}
+{%block pagecontent %}Create a new product category{% endblock pagecontent %}
 {% block link %}
-<a href="{% url 'category_dashboard' %}" class="btn btn-outline-secondary btn-sm">
-            <i class="bi bi-arrow-left-circle"></i> Back
-        </a>
+<a href="{% url 'category_dashboard' %}" class="btn btn-outline-secondary btn-sm"><i class="bi bi-arrow-left-circle"></i> Back</a>
 {% endblock link %}
-{% block panel %}Add Category Panel{% endblock panel%}
+{% block panel %}Category Panel{% endblock panel%}
 {% block content %}
-
 <style>
-    .page-wrapper {
-        margin-top: 90px;
-    }
-
-    .form-card {
-        max-width: 950px;
-        margin: auto;
-    }
-
-    .form-section {
-        background: #ffffff;
-        border-radius: 12px;
-        border: 1px solid #eee;
-        padding: 24px;
-    }
-
-    .form-control, .form-select {
-        border-radius: 8px;
-    }
-
-    .action-bar {
-        background: #fafafa;
-        border-top: 1px solid #eee;
-        padding: 16px 24px;
-        border-radius: 0 0 12px 12px;
-    }
-
-    .asteriskField { display: none; }
+.form-card { max-width: 600px; margin: auto; }
+.section-card { background:#fff; border:1px solid #e5e7eb; border-radius:12px; padding:24px; margin-bottom:20px; }
+.section-title { font-size:0.8rem; font-weight:700; text-transform:uppercase; letter-spacing:0.05em; color:#6b7280; margin-bottom:16px; }
+.form-label { font-size:0.875rem; font-weight:500; color:#374151; }
+.form-control { border-radius:8px; border-color:#d1d5db; font-size:0.9rem; }
+.form-control:focus { border-color:#6366f1; box-shadow:0 0 0 3px rgba(99,102,241,0.1); }
+.action-bar { background:#fafafa; border-top:1px solid #eee; padding:16px 24px; border-radius:0 0 12px 12px; }
+.required-star { color:#ef4444; }
 </style>
-<!-- Page Content -->
-    <div class="card shadow-sm border-0 form-card">
-
-        <form method="POST" enctype="multipart/form-data">
-            {% csrf_token %}
-
-            <div class="card-body p-4">
-
-                <!-- Section Header -->
-                <div class="mb-4">
-                    <h5 class="fw-bold mb-1">Category Information</h5>
-                    <p class="text-muted small mb-0">
-                        Fill in the details below to add a new inventory category.
-                    </p>
-                </div>
-
-                <!-- Form -->
-                <div class="form-section">
-                    {{ form|crispy }}
-                </div>
-
+<div class="card shadow-sm border-0 form-card">
+    <form method="POST">
+        {% csrf_token %}
+        <div class="card-body p-4">
+            <div class="mb-4">
+                <h5 class="fw-bold mb-1">Add Category</h5>
+                <p class="text-muted small mb-0">Create a new product classification for your inventory.</p>
             </div>
-
-            <!-- Footer Actions -->
-            <div class="action-bar d-flex justify-content-between align-items-center">
-
-                <div class="text-muted small">
-                    Write name properly.
-                </div>
-
-                <div class="d-flex gap-2">
-                    <a href="{% url 'category_dashboard' %}" class="btn btn-light border px-4">
-                        Cancel
-                    </a>
-
-                    <button type="submit" class="btn btn-success px-4 fw-semibold">
-                        <i class="bi bi-check-circle me-1"></i>
-                        Save Category
-                    </button>
-                </div>
-
+            {% if form.errors %}
+            <div class="alert alert-danger rounded-3 mb-4">
+                {% for field in form %}{% for error in field.errors %}<div>{{ field.label }}: {{ error }}</div>{% endfor %}{% endfor %}
             </div>
-
-        </form>
-
-    </div>
-
+            {% endif %}
+            <div class="section-card">
+                <div class="section-title">Category Details</div>
+                <div class="mb-3">
+                    <label class="form-label">Category Name <span class="required-star">*</span></label>
+                    {{ form.name }}
+                    {% if form.name.errors %}<div class="text-danger small mt-1">{{ form.name.errors.0 }}</div>{% endif %}
+                    <div class="form-text text-muted mt-1">Use a clear, descriptive name (e.g. Laptops, Mobile Phones)</div>
+                </div>
+            </div>
+        </div>
+        <div class="action-bar d-flex justify-content-between align-items-center">
+            <span class="text-muted small">Fields marked <span class="required-star">*</span> are required.</span>
+            <div class="d-flex gap-2">
+                <a href="{% url 'category_dashboard' %}" class="btn btn-light border px-4">Cancel</a>
+                <button type="submit" class="btn btn-success px-4 fw-semibold"><i class="bi bi-check-circle me-1"></i> Save Category</button>
+            </div>
+        </div>
+    </form>
+</div>
+<script>
+document.querySelectorAll('input, select, textarea').forEach(el => {
+    if (el.type !== 'hidden' && el.type !== 'submit' && !el.classList.contains('btn')) {
+        el.classList.add('form-control');
+    }
+});
+</script>
 {% endblock %}
-

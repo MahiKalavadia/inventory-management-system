@@ -137,7 +137,7 @@ def order_dashboard(request):
 
     # revenue chart
     today = timezone.now().date()
-    last_30_days = today - timedelta(days=1)
+    last_30_days = today - timedelta(days=30)
 
     revenue = OrderItem.objects.filter(
         order__created_at__date__gte=last_30_days, order__payment_status='Paid').annotate(date=TruncDate('order__created_at'), item_total=ExpressionWrapper(

@@ -176,171 +176,134 @@
         </div>
 </div>
 <br>
-     <div class="card shadow-sm mb-4 border-0">
+<style>
+.sup-table-wrap { border-radius: 14px; overflow: hidden; border: 1px solid #e5e7eb; background: #fff; }
+.sup-table-header { padding: 18px 24px; border-bottom: 1px solid #f0f0f0; }
+.sup-table thead th { background: #f8fafc; font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #94a3b8; padding: 12px 16px; border-bottom: 1px solid #f0f0f0; white-space: nowrap; }
+.sup-table tbody tr { border-bottom: 1px solid #f8f9fa; transition: background 0.15s; }
+.sup-table tbody tr:hover { background: #fafbff; }
+.sup-table tbody tr:last-child { border-bottom: none; }
+.sup-table td { padding: 13px 16px; vertical-align: middle; font-size: 0.875rem; }
+.sup-avatar { width: 36px; height: 36px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 700; flex-shrink: 0; background: linear-gradient(135deg, #0ea5e9, #6366f1); color: #fff; }
+.sup-name { font-weight: 600; color: #111827; }
+.sup-contact { font-size: 0.72rem; color: #9ca3af; margin-top: 1px; }
+.status-active { background: #ecfdf5; color: #047857; border: 1px solid #a7f3d0; display: inline-flex; align-items: center; gap: 5px; border-radius: 20px; padding: 4px 12px; font-size: 0.72rem; font-weight: 600; }
+.status-inactive { background: #fef2f2; color: #b91c1c; border: 1px solid #fecaca; display: inline-flex; align-items: center; gap: 5px; border-radius: 20px; padding: 4px 12px; font-size: 0.72rem; font-weight: 600; }
+.status-dot { width: 6px; height: 6px; border-radius: 50%; display: inline-block; }
+.btn-action { width: 30px; height: 30px; border-radius: 8px; display: inline-flex; align-items: center; justify-content: center; font-size: 0.8rem; border: none; transition: all 0.15s; text-decoration: none; }
+.btn-edit { background: #eff6ff; color: #2563eb; }
+.btn-edit:hover { background: #2563eb; color: #fff; }
+.btn-del { background: #fef2f2; color: #dc2626; }
+.btn-del:hover { background: #dc2626; color: #fff; }
+.btn-toggle-off { background: #fef9c3; color: #854d0e; }
+.btn-toggle-off:hover { background: #ca8a04; color: #fff; }
+.btn-toggle-on { background: #f0fdf4; color: #166534; }
+.btn-toggle-on:hover { background: #16a34a; color: #fff; }
+.page-btn { display: inline-flex; align-items: center; gap: 6px; padding: 6px 14px; border-radius: 8px; font-size: 0.8rem; font-weight: 500; border: 1px solid #e5e7eb; background: #fff; color: #374151; text-decoration: none; transition: all 0.15s; }
+.page-btn:hover { background: #f3f4f6; color: #111; }
+.page-btn.disabled { opacity: 0.4; pointer-events: none; }
+.page-counter { display: inline-flex; align-items: center; justify-content: center; background: #111827; color: #fff; border-radius: 8px; padding: 5px 14px; font-size: 0.8rem; font-weight: 600; }
+</style>
 
-    <!-- Header -->
-    <div class="card-header bg-light d-flex justify-content-between align-items-center">
-        <span class="fw-bold">
-            <i class="bi bi-truck me-2"></i> Vendor Directory
-        </span>
-
-        <!-- Search -->
-        <form method="get" class="d-flex">
-            <input type="text"
-                   name="q"
-                   placeholder="Search vendors..."
-                   class="form-control form-control-sm me-2"
-                   value="{{ search|default:'' }}">
-            <button type="submit" class="btn btn-primary btn-sm">Search</button>
-        </form>
+<div class="sup-table-wrap mb-4">
+    <div class="sup-table-header d-flex justify-content-between align-items-center flex-wrap gap-2">
+        <div>
+            <h6 class="fw-bold mb-0" style="font-size:0.95rem;">Vendor Directory</h6>
+            <span class="text-muted" style="font-size:0.78rem;">
+                Showing {{ page_obj.start_index }}–{{ page_obj.end_index }} of {{ page_obj.paginator.count }} vendors
+            </span>
+        </div>
+        <div class="d-flex gap-2 align-items-center">
+            <form method="get" class="d-flex">
+                <div class="input-group input-group-sm">
+                    <input type="text" name="q" class="form-control" placeholder="Search vendors..." value="{{ search|default:'' }}" style="border-radius:8px 0 0 8px; font-size:0.8rem;">
+                    <button class="btn btn-dark btn-sm" type="submit" style="border-radius:0 8px 8px 0;"><i class="bi bi-search"></i></button>
+                </div>
+            </form>
+            {% if request.user.is_superuser or request.user.groups.first.name == "Manager" %}
+            <a href="{% url 'add_supplier' %}" class="btn btn-sm btn-primary rounded-3 px-3" style="font-size:0.8rem; white-space:nowrap;">
+                <i class="bi bi-plus-lg me-1"></i> Add Vendor
+            </a>
+            {% endif %}
+        </div>
     </div>
 
-    <!-- Table -->
-    <div class="card-body p-0">
-        <table class="table table-hover align-middle mb-0">
-            <thead class="table-light">
+    <div class="table-responsive">
+        <table class="table sup-table mb-0">
+            <thead>
                 <tr>
-                    <th class="ps-3">Vendor Name</th>
+                    <th style="padding-left:24px;">Vendor</th>
                     <th>Email</th>
                     <th>Phone</th>
                     <th>Address</th>
                     <th>Status</th>
-                    <th class="text-center pe-3">Actions</th>
+                    <th class="text-end" style="padding-right:24px;">Actions</th>
                 </tr>
             </thead>
-
             <tbody>
-                {% for supplier in page_obj %}
-                <tr>
-                    <td class="ps-3 fw-semibold">{{ supplier.name }}</td>
-                    <td>{{ supplier.email }}</td>
-                    <td>{{ supplier.phone }}</td>
-                    <td>{{ supplier.address }}</td>
-
-                    <!-- Status Badge -->
-                    <td>
+            {% for supplier in page_obj %}
+            <tr>
+                <td style="padding-left:24px;">
+                    <div class="d-flex align-items-center gap-3">
+                        <div class="sup-avatar">{{ supplier.name|slice:":2"|upper }}</div>
+                        <div>
+                            <div class="sup-name">{{ supplier.name }}</div>
+                            <div class="sup-contact">{{ supplier.contact_person|default:"—" }}</div>
+                        </div>
+                    </div>
+                </td>
+                <td style="font-size:0.82rem; color:#374151;">{{ supplier.email|default:"—" }}</td>
+                <td style="font-size:0.82rem; color:#374151;">{{ supplier.phone }}</td>
+                <td style="font-size:0.82rem; color:#6b7280; max-width:160px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">{{ supplier.address|default:"—" }}</td>
+                <td>
+                    {% if supplier.is_active %}
+                    <span class="status-active"><span class="status-dot bg-success"></span> Active</span>
+                    {% else %}
+                    <span class="status-inactive"><span class="status-dot bg-danger"></span> Inactive</span>
+                    {% endif %}
+                </td>
+                <td class="text-end" style="padding-right:24px;">
+                    {% if request.user.is_superuser %}
+                    <div class="d-flex justify-content-end gap-2">
+                        <a href="{% url 'update_supplier' supplier.id %}" class="btn-action btn-edit" title="Edit"><i class="bi bi-pencil-fill"></i></a>
+                        <a href="{% url 'delete_supplier' supplier.id %}" class="btn-action btn-del" title="Delete"><i class="bi bi-trash-fill"></i></a>
                         {% if supplier.is_active %}
-                            <span class="badge bg-success">Active</span>
+                        <a href="{% url 'toggle_supplier_status' supplier.pk %}" class="btn-action btn-toggle-off" title="Deactivate"><i class="bi bi-toggle-on"></i></a>
                         {% else %}
-                            <span class="badge bg-danger">Inactive</span>
+                        <a href="{% url 'toggle_supplier_status' supplier.pk %}" class="btn-action btn-toggle-on" title="Activate"><i class="bi bi-toggle-off"></i></a>
                         {% endif %}
-                    </td>
-
-                    <!-- Actions -->
-                    <td class="text-center pe-3">
-
-                        {% if request.user.is_superuser %}
-                            <a href="{% url 'update_supplier' supplier.id %}"
-                               class="btn btn-sm btn-outline-warning me-1">
-                                Manage
-                            </a>
-
-                            <a href="{% url 'delete_supplier' supplier.id %}"
-                               class="btn btn-sm btn-outline-danger me-1">
-                                Delete
-                            </a>
-
-                            {% if supplier.is_active %}
-                                <a href="{% url 'toggle_supplier_status' supplier.pk %}"
-                                   class="btn btn-sm btn-outline-danger">
-                                   Deactivate
-                                </a>
-                            {% else %}
-                                <a href="{% url 'toggle_supplier_status' supplier.pk %}"
-                                   class="btn btn-sm btn-outline-success">
-                                   Activate
-                                </a>
-                            {% endif %}
-
-                        {% elif request.user.groups.first.name == "Manager" %}
-                            <a href="{% url 'update_supplier' supplier.id %}"
-                               class="btn btn-sm btn-outline-warning">
-                                Manage
-                            </a>
-                        {% else %}
-                            <span class="text-muted small">Read-Only Access</span>
-                        {% endif %}
-
-                    </td>
-                </tr>
-
-                {% empty %}
-                <tr>
-                    <td colspan="6" class="text-center py-4 text-muted">
-                        No vendors found
-                    </td>
-                </tr>
-                {% endfor %}
+                    </div>
+                    {% elif request.user.groups.first.name == "Manager" %}
+                    <a href="{% url 'update_supplier' supplier.id %}" class="btn-action btn-edit" title="Edit"><i class="bi bi-pencil-fill"></i></a>
+                    {% else %}
+                    <span class="text-muted" style="font-size:0.75rem;">Read-only</span>
+                    {% endif %}
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="6" class="text-center py-5">
+                    <div class="text-muted"><i class="bi bi-truck fs-2 d-block mb-2 opacity-25"></i>No vendors found.</div>
+                </td>
+            </tr>
+            {% endfor %}
             </tbody>
         </table>
     </div>
-</div>
 
-<!--Pagination-->
-<nav class="mt-4">
-
-    <!-- Showing Info -->
-    <div class="text-center text-muted small mb-2">
-        Showing {{ page_obj.start_index }} –
-        {{ page_obj.end_index }}
-        of {{ page_obj.paginator.count }} items
+    <div style="padding:14px 24px; border-top:1px solid #f0f0f0; background:#fafafa;" class="d-flex justify-content-between align-items-center">
+        <span style="font-size:0.8rem; color:#6b7280;">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
+        <div class="d-flex align-items-center gap-2">
+            {% if page_obj.has_previous %}
+            <a class="page-btn" href="?page={{ page_obj.previous_page_number }}{% if search %}&q={{ search }}{% endif %}"><i class="bi bi-chevron-left"></i> Prev</a>
+            {% else %}<span class="page-btn disabled"><i class="bi bi-chevron-left"></i> Prev</span>{% endif %}
+            <span class="page-counter">{{ page_obj.number }} / {{ page_obj.paginator.num_pages }}</span>
+            {% if page_obj.has_next %}
+            <a class="page-btn" href="?page={{ page_obj.next_page_number }}{% if search %}&q={{ search }}{% endif %}">Next <i class="bi bi-chevron-right"></i></a>
+            {% else %}<span class="page-btn disabled">Next <i class="bi bi-chevron-right"></i></span>{% endif %}
+        </div>
     </div>
-
-    <ul class="pagination justify-content-center flex-wrap">
-
-        {% if page_obj.has_previous %}
-            <!-- First -->
-            <li class="page-item">
-                <a class="page-link" href="?page=1">
-                    «
-                </a>
-            </li>
-
-            <!-- Previous -->
-            <li class="page-item">
-                <a class="page-link" href="?page={{ page_obj.previous_page_number }}">
-                    ‹
-                </a>
-            </li>
-        {% endif %}
-
-        <!-- Page Numbers -->
-        {% for num in page_obj.paginator.page_range %}
-            {% if num >= page_obj.number|add:'-2' and num <= page_obj.number|add:'2' %}
-                {% if page_obj.number == num %}
-                    <li class="page-item active">
-                        <span class="page-link">
-                            {{ num }}
-                        </span>
-                    </li>
-                {% else %}
-                    <li class="page-item">
-                        <a class="page-link" href="?page={{ num }}">
-                            {{ num }}
-                        </a>
-                    </li>
-                {% endif %}
-            {% endif %}
-        {% endfor %}
-
-        {% if page_obj.has_next %}
-            <!-- Next -->
-            <li class="page-item">
-                <a class="page-link" href="?page={{ page_obj.next_page_number }}">
-                    ›
-                </a>
-            </li>
-
-            <!-- Last -->
-            <li class="page-item">
-                <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">
-                    »
-                </a>
-            </li>
-        {% endif %}
-
-    </ul>
-</nav>
+</div>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
 const TopSupplierByPurchase = document.getElementById('TopSupplierByPurchase');

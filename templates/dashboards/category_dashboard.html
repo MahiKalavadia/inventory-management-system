@@ -118,183 +118,112 @@
         </div>
     </div>
 
-<br>
-<div class="card border-0 shadow-sm mb-4">
+<style>
+.cat-table-wrap { border-radius: 14px; overflow: hidden; border: 1px solid #e5e7eb; background: #fff; }
+.cat-table-header { padding: 18px 24px; border-bottom: 1px solid #f0f0f0; }
+.cat-table thead th { background: #f8fafc; font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #94a3b8; padding: 12px 16px; border-bottom: 1px solid #f0f0f0; }
+.cat-table tbody tr { border-bottom: 1px solid #f8f9fa; transition: background 0.15s; }
+.cat-table tbody tr:hover { background: #fafbff; }
+.cat-table tbody tr:last-child { border-bottom: none; }
+.cat-table td { padding: 13px 16px; vertical-align: middle; font-size: 0.875rem; }
+.cat-avatar { width: 36px; height: 36px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 700; flex-shrink: 0; background: linear-gradient(135deg, #f59e0b, #ef4444); color: #fff; }
+.cat-name { font-weight: 600; color: #111827; }
+.count-badge { display: inline-flex; align-items: center; gap: 5px; background: #eff6ff; color: #2563eb; border-radius: 20px; padding: 4px 12px; font-size: 0.75rem; font-weight: 600; }
+.btn-action { width: 30px; height: 30px; border-radius: 8px; display: inline-flex; align-items: center; justify-content: center; font-size: 0.8rem; border: none; transition: all 0.15s; text-decoration: none; }
+.btn-edit { background: #eff6ff; color: #2563eb; }
+.btn-edit:hover { background: #2563eb; color: #fff; }
+.btn-del { background: #fef2f2; color: #dc2626; }
+.btn-del:hover { background: #dc2626; color: #fff; }
+.page-btn { display: inline-flex; align-items: center; gap: 6px; padding: 6px 14px; border-radius: 8px; font-size: 0.8rem; font-weight: 500; border: 1px solid #e5e7eb; background: #fff; color: #374151; text-decoration: none; transition: all 0.15s; }
+.page-btn:hover { background: #f3f4f6; color: #111; }
+.page-btn.disabled { opacity: 0.4; pointer-events: none; }
+.page-counter { display: inline-flex; align-items: center; justify-content: center; background: #111827; color: #fff; border-radius: 8px; padding: 5px 14px; font-size: 0.8rem; font-weight: 600; }
+</style>
 
-    <!-- Header -->
-    <div class="card-header bg-white border-bottom d-flex justify-content-between align-items-center flex-wrap gap-2">
-
+<div class="cat-table-wrap mb-4">
+    <div class="cat-table-header d-flex justify-content-between align-items-center flex-wrap gap-2">
         <div>
-            <h6 class="mb-0 fw-semibold">
-                <i class="bi bi-folder2-open me-2 text-primary"></i>
-                Category Management
-            </h6>
-            <small class="text-muted">
-                Total Categories: {{ categoriess.paginator.count }}
-            </small>
+            <h6 class="fw-bold mb-0" style="font-size:0.95rem;">Category Directory</h6>
+            <span class="text-muted" style="font-size:0.78rem;">
+                Showing {{ categoriess.start_index }}–{{ categoriess.end_index }} of {{ categoriess.paginator.count }} categories
+            </span>
         </div>
-
-        <!-- Search Form -->
-        <form method="get" class="d-flex" style="max-width: 280px; width: 100%;">
-            <div class="input-group input-group-sm">
-                <input type="text"
-                       name="q"
-                       class="form-control"
-                       placeholder="Search categories..."
-                       value="{{ search|default:'' }}">
-                <button class="btn btn-outline-primary" type="submit">
-                    <i class="bi bi-search"></i>
-                </button>
-            </div>
-        </form>
-
-    </div>
-
-    <!-- Table -->
-    <div class="card-body p-0">
-        <div class="table-responsive">
-            <table class="table table-hover align-middle mb-0">
-                <thead class="table-light">
-                    <tr>
-                        <th class="ps-4">Category Name</th>
-                        <th class="text-center">Products</th>
-                        <th class="text-center pe-4">Actions</th>
-                    </tr>
-                </thead>
-
-                <tbody>
-                    {% for category in categoriess %}
-                    <tr>
-
-                        <!-- Category Name -->
-                        <td class="ps-4 fw-medium">
-                            {{ category.name }}
-                        </td>
-
-                        <!-- Product Count -->
-                        <td class="text-center">
-                            <span class="badge bg-primary-subtle text-primary fw-semibold px-3 py-2">
-                                {{ category.product_count }}
-                            </span>
-                        </td>
-
-                        <!-- Actions -->
-                        <td class="text-center pe-4">
-                            {% if request.user.is_superuser %}
-
-                                <div class="btn-group btn-group-sm">
-
-                                    <a href="{% url 'update_category' category.id %}"
-                                       class="btn btn-outline-secondary">
-                                        Manage
-                                    </a>
-
-                                    <a href="{% url 'delete_category' category.id %}"
-                                       class="btn btn-outline-danger">
-                                        Delete
-                                    </a>
-
-                                </div>
-
-                            {% elif request.user.groups.first.name == "Manager" %}
-
-                                <a href="{% url 'update_category' category.id %}"
-                                   class="btn btn-outline-primary btn-sm">
-                                    Manage
-                                </a>
-
-                            {% else %}
-                                <span class="text-muted small">
-                                    Read-Only Access
-                                </span>
-                            {% endif %}
-                        </td>
-
-                    </tr>
-
-                    {% empty %}
-                    <tr>
-                        <td colspan="3" class="text-center py-5 text-muted">
-                            No categories available.
-                        </td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-
-            </table>
-        </div>
-    </div>
-
-</div>
-
-<!-- Pagination -->
-<nav class="mt-4">
-
-    <!-- Showing Info -->
-    <div class="text-center text-muted small mb-2">
-        Showing {{ categoriess.start_index }} –
-        {{ categoriess.end_index }}
-        of {{ categoriess.paginator.count }} categories
-    </div>
-
-    <ul class="pagination justify-content-center flex-wrap">
-
-        {% if categoriess.has_previous %}
-        <!-- First -->
-        <li class="page-item">
-            <a class="page-link" href="?page=1">
-                «
+        <div class="d-flex gap-2 align-items-center">
+            <form method="get" class="d-flex">
+                <div class="input-group input-group-sm">
+                    <input type="text" name="q" class="form-control" placeholder="Search..." value="{{ search|default:'' }}" style="border-radius:8px 0 0 8px; font-size:0.8rem;">
+                    <button class="btn btn-dark btn-sm" type="submit" style="border-radius:0 8px 8px 0;"><i class="bi bi-search"></i></button>
+                </div>
+            </form>
+            {% if request.user.is_superuser or request.user.groups.first.name == "Manager" %}
+            <a href="{% url 'add_category' %}" class="btn btn-sm btn-primary rounded-3 px-3" style="font-size:0.8rem; white-space:nowrap;">
+                <i class="bi bi-plus-lg me-1"></i> Add Category
             </a>
-        </li>
-
-        <!-- Previous -->
-        <li class="page-item">
-            <a class="page-link"
-               href="?page={{ categoriess.previous_page_number }}">
-                ‹
-            </a>
-        </li>
-        {% endif %}
-
-        <!-- Page Numbers -->
-        {% for num in categoriess.paginator.page_range %}
-            {% if num >= categoriess.number|add:'-2' and num <= categoriess.number|add:'2' %}
-                {% if categoriess.number == num %}
-                    <li class="page-item active">
-                        <span class="page-link">
-                            {{ num }}
-                        </span>
-                    </li>
-                {% else %}
-                    <li class="page-item">
-                        <a class="page-link" href="?page={{ num }}">
-                            {{ num }}
-                        </a>
-                    </li>
-                {% endif %}
             {% endif %}
-        {% endfor %}
+        </div>
+    </div>
 
-        {% if categoriess.has_next %}
-        <!-- Next -->
-        <li class="page-item">
-            <a class="page-link"
-               href="?page={{ categoriess.next_page_number }}">
-                ›
-            </a>
-        </li>
+    <div class="table-responsive">
+        <table class="table cat-table mb-0">
+            <thead>
+                <tr>
+                    <th style="padding-left:24px;">Category</th>
+                    <th>Products</th>
+                    <th class="text-end" style="padding-right:24px;">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for category in categoriess %}
+            <tr>
+                <td style="padding-left:24px;">
+                    <div class="d-flex align-items-center gap-3">
+                        <div class="cat-avatar">{{ category.name|slice:":2"|upper }}</div>
+                        <div class="cat-name">{{ category.name }}</div>
+                    </div>
+                </td>
+                <td>
+                    <span class="count-badge">
+                        <i class="bi bi-box-seam" style="font-size:0.65rem;"></i>
+                        {{ category.product_count }} product{{ category.product_count|pluralize }}
+                    </span>
+                </td>
+                <td class="text-end" style="padding-right:24px;">
+                    {% if request.user.is_superuser or request.user.groups.first.name == "Manager" %}
+                    <div class="d-flex justify-content-end gap-2">
+                        <a href="{% url 'update_category' category.id %}" class="btn-action btn-edit" title="Edit"><i class="bi bi-pencil-fill"></i></a>
+                        {% if request.user.is_superuser %}
+                        <a href="{% url 'delete_category' category.id %}" class="btn-action btn-del" title="Delete"><i class="bi bi-trash-fill"></i></a>
+                        {% endif %}
+                    </div>
+                    {% else %}
+                    <span class="text-muted" style="font-size:0.75rem;">Read-only</span>
+                    {% endif %}
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="3" class="text-center py-5">
+                    <div class="text-muted"><i class="bi bi-folder-x fs-2 d-block mb-2 opacity-25"></i>No categories found.</div>
+                </td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
 
-        <!-- Last -->
-        <li class="page-item">
-            <a class="page-link"
-               href="?page={{ categoriess.paginator.num_pages }}">
-                »
-            </a>
-        </li>
-        {% endif %}
-
-    </ul>
-</nav>
+    <div style="padding:14px 24px; border-top:1px solid #f0f0f0; background:#fafafa;" class="d-flex justify-content-between align-items-center">
+        <span style="font-size:0.8rem; color:#6b7280;">Page {{ categoriess.number }} of {{ categoriess.paginator.num_pages }}</span>
+        <div class="d-flex align-items-center gap-2">
+            {% if categoriess.has_previous %}
+            <a class="page-btn" href="?page={{ categoriess.previous_page_number }}{% if search %}&q={{ search }}{% endif %}"><i class="bi bi-chevron-left"></i> Prev</a>
+            {% else %}<span class="page-btn disabled"><i class="bi bi-chevron-left"></i> Prev</span>{% endif %}
+            <span class="page-counter">{{ categoriess.number }} / {{ categoriess.paginator.num_pages }}</span>
+            {% if categoriess.has_next %}
+            <a class="page-btn" href="?page={{ categoriess.next_page_number }}{% if search %}&q={{ search }}{% endif %}">Next <i class="bi bi-chevron-right"></i></a>
+            {% else %}<span class="page-btn disabled">Next <i class="bi bi-chevron-right"></i></span>{% endif %}
+        </div>
+    </div>
+</div>
 <!-- ===================== CHART JS ===================== -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>

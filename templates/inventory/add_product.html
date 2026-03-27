@@ -1,92 +1,212 @@
 {% extends 'base_dashboard.html' %}
 {% load static %}
-{% load crispy_forms_tags %}
 {%block pagetitle%}Add Inventory Item{% endblock pagetitle%}
 {%block pagecontent %}Create a new product entry in your inventory{% endblock pagecontent %}
 {% block link %}
 <a href="{% url 'product_dashboard' %}" class="btn btn-outline-secondary btn-sm">
-            <i class="bi bi-arrow-left-circle"></i> Back
-        </a>
+    <i class="bi bi-arrow-left-circle"></i> Back
+</a>
 {% endblock link %}
 {% block panel %}Add Product Panel{% endblock panel%}
 {% block content %}
 
 <style>
-    .page-wrapper {
-        margin-top: 90px;
-    }
-
-    .form-card {
-        max-width: 950px;
-        margin: auto;
-    }
-
-    .form-section {
-        background: #ffffff;
-        border-radius: 12px;
-        border: 1px solid #eee;
-        padding: 24px;
-    }
-
-    .form-control, .form-select {
-        border-radius: 8px;
-    }
-
-    .action-bar {
-        background: #fafafa;
-        border-top: 1px solid #eee;
-        padding: 16px 24px;
-        border-radius: 0 0 12px 12px;
-    }
-
-    .asteriskField { display: none; }
+    .form-card { max-width: 960px; margin: auto; }
+    .section-card { background: #fff; border: 1px solid #e5e7eb; border-radius: 12px; padding: 24px; margin-bottom: 20px; }
+    .section-title { font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: #6b7280; margin-bottom: 16px; }
+    .calc-box { background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 10px; padding: 16px; }
+    .calc-box.negative { background: #fef2f2; border-color: #fecaca; }
+    .calc-label { font-size: 0.75rem; color: #6b7280; margin-bottom: 2px; }
+    .calc-value { font-size: 1.3rem; font-weight: 700; color: #16a34a; }
+    .calc-value.negative { color: #dc2626; }
+    .form-label { font-size: 0.875rem; font-weight: 500; color: #374151; }
+    .form-control, .form-select { border-radius: 8px; border-color: #d1d5db; font-size: 0.9rem; }
+    .form-control:focus, .form-select:focus { border-color: #6366f1; box-shadow: 0 0 0 3px rgba(99,102,241,0.1); }
+    .form-text { font-size: 0.78rem; }
+    .action-bar { background: #fafafa; border-top: 1px solid #eee; padding: 16px 24px; border-radius: 0 0 12px 12px; }
+    .required-star { color: #ef4444; }
 </style>
-<!-- Page Content -->
 
-    <div class="card shadow-sm border-0 form-card">
+<div class="card shadow-sm border-0 form-card">
+    <form method="POST" enctype="multipart/form-data" id="productForm">
+        {% csrf_token %}
+        <div class="card-body p-4">
 
-        <form method="POST" enctype="multipart/form-data">
-            {% csrf_token %}
-
-            <div class="card-body p-4">
-
-                <!-- Section Header -->
-                <div class="mb-4">
-                    <h5 class="fw-bold mb-1">Product Information</h5>
-                    <p class="text-muted small mb-0">
-                        Fill in the details below to add a new inventory product.
-                    </p>
-                </div>
-
-                <!-- Form -->
-                <div class="form-section">
-                    {{ form|crispy }}
-                </div>
-
+            <div class="mb-4">
+                <h5 class="fw-bold mb-1">Add New Product</h5>
+                <p class="text-muted small mb-0">Fill in the details below to add a new inventory product.</p>
             </div>
 
-            <!-- Footer Actions -->
-            <div class="action-bar d-flex justify-content-between align-items-center">
+            {% if form.errors %}
+            <div class="alert alert-danger rounded-3 mb-4">
+                <strong>Please fix the errors below:</strong>
+                <ul class="mb-0 mt-1">
+                    {% for field in form %}
+                        {% for error in field.errors %}
+                            <li>{{ field.label }}: {{ error }}</li>
+                        {% endfor %}
+                    {% endfor %}
+                    {% for error in form.non_field_errors %}
+                        <li>{{ error }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+            {% endif %}
 
-                <div class="text-muted small">
-                    Fields marked required must be completed.
+            <!-- Basic Info -->
+            <div class="section-card">
+                <div class="section-title">Basic Information</div>
+                <div class="row g-3">
+                    <div class="col-md-4">
+                        <label class="form-label">SKU <span class="required-star">*</span></label>
+                        {{ form.sku }}
+                        {% if form.sku.errors %}<div class="text-danger small mt-1">{{ form.sku.errors.0 }}</div>{% endif %}
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">Product Name <span class="required-star">*</span></label>
+                        {{ form.name }}
+                        {% if form.name.errors %}<div class="text-danger small mt-1">{{ form.name.errors.0 }}</div>{% endif %}
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">Brand <span class="required-star">*</span></label>
+                        {{ form.brand }}
+                        {% if form.brand.errors %}<div class="text-danger small mt-1">{{ form.brand.errors.0 }}</div>{% endif %}
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Category <span class="required-star">*</span></label>
+                        {{ form.category }}
+                        {% if form.category.errors %}<div class="text-danger small mt-1">{{ form.category.errors.0 }}</div>{% endif %}
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Supplier</label>
+                        {{ form.supplier }}
+                    </div>
+                    <div class="col-12">
+                        <label class="form-label">Description</label>
+                        {{ form.description }}
+                    </div>
                 </div>
-
-                <div class="d-flex gap-2">
-                    <a href="{% url 'product_dashboard' %}" class="btn btn-light border px-4">
-                        Cancel
-                    </a>
-
-                    <button type="submit" class="btn btn-success px-4 fw-semibold">
-                        <i class="bi bi-check-circle me-1"></i>
-                        Save Product
-                    </button>
-                </div>
-
             </div>
 
-        </form>
+            <!-- Pricing -->
+            <div class="section-card">
+                <div class="section-title">Pricing & Profit</div>
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label class="form-label">Purchase Price (Cost) <span class="required-star">*</span></label>
+                        {{ form.purchase_price }}
+                        <div class="form-text text-muted">Cost price you paid to the supplier</div>
+                        {% if form.purchase_price.errors %}<div class="text-danger small mt-1">{{ form.purchase_price.errors.0 }}</div>{% endif %}
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Selling Price <span class="required-star">*</span></label>
+                        {{ form.price }}
+                        <div class="form-text text-muted">Selling price to the customer</div>
+                        {% if form.price.errors %}<div class="text-danger small mt-1">{{ form.price.errors.0 }}</div>{% endif %}
+                    </div>
 
-    </div>
+                    <!-- Live Profit/Margin Preview -->
+                    <div class="col-md-6">
+                        <div class="calc-box" id="profitBox">
+                            <div class="calc-label">Profit per Unit (auto-calculated)</div>
+                            <div class="calc-value" id="profitDisplay">—</div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="calc-box" id="marginBox">
+                            <div class="calc-label">Margin % (auto-calculated)</div>
+                            <div class="calc-value" id="marginDisplay">—</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Stock & Warranty -->
+            <div class="section-card">
+                <div class="section-title">Stock & Warranty</div>
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label class="form-label">Initial Quantity</label>
+                        {{ form.quantity }}
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Warranty (Months) <span class="required-star">*</span></label>
+                        {{ form.warranty_months }}
+                        <div class="form-text text-muted">Pre-filled from system default — edit if needed</div>
+                        {% if form.warranty_months.errors %}<div class="text-danger small mt-1">{{ form.warranty_months.errors.0 }}</div>{% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Image -->
+            <div class="section-card">
+                <div class="section-title">Product Image</div>
+                {{ form.image }}
+                {% if form.image.errors %}<div class="text-danger small mt-1">{{ form.image.errors.0 }}</div>{% endif %}
+            </div>
+
+        </div>
+
+        <div class="action-bar d-flex justify-content-between align-items-center">
+            <div class="text-muted small">Fields marked <span class="required-star">*</span> are required.</div>
+            <div class="d-flex gap-2">
+                <a href="{% url 'product_dashboard' %}" class="btn btn-light border px-4">Cancel</a>
+                <button type="submit" class="btn btn-success px-4 fw-semibold">
+                    <i class="bi bi-check-circle me-1"></i> Save Product
+                </button>
+            </div>
+        </div>
+
+    </form>
+</div>
+
+<script>
+const purchaseInput = document.getElementById('id_purchase_price');
+const priceInput = document.getElementById('id_price');
+const profitDisplay = document.getElementById('profitDisplay');
+const marginDisplay = document.getElementById('marginDisplay');
+const profitBox = document.getElementById('profitBox');
+const marginBox = document.getElementById('marginBox');
+
+function updateCalc() {
+    const cost = parseFloat(purchaseInput.value);
+    const sell = parseFloat(priceInput.value);
+
+    if (!isNaN(cost) && !isNaN(sell) && cost > 0) {
+        const profit = sell - cost;
+        const margin = (profit / cost) * 100;
+        const isPositive = profit >= 0;
+
+        profitDisplay.textContent = '₹' + profit.toFixed(2);
+        marginDisplay.textContent = margin.toFixed(2) + '%';
+
+        profitDisplay.className = 'calc-value' + (isPositive ? '' : ' negative');
+        marginDisplay.className = 'calc-value' + (isPositive ? '' : ' negative');
+        profitBox.className = 'calc-box' + (isPositive ? '' : ' negative');
+        marginBox.className = 'calc-box' + (isPositive ? '' : ' negative');
+    } else {
+        profitDisplay.textContent = '—';
+        marginDisplay.textContent = '—';
+        profitDisplay.className = 'calc-value';
+        marginDisplay.className = 'calc-value';
+        profitBox.className = 'calc-box';
+        marginBox.className = 'calc-box';
+    }
+}
+
+purchaseInput.addEventListener('input', updateCalc);
+priceInput.addEventListener('input', updateCalc);
+
+// Add Bootstrap classes to all form inputs
+document.querySelectorAll('#productForm input, #productForm select, #productForm textarea').forEach(el => {
+    if (!el.classList.contains('btn') && el.type !== 'hidden' && el.type !== 'file') {
+        el.classList.add('form-control');
+    }
+    if (el.tagName === 'SELECT') {
+        el.classList.remove('form-control');
+        el.classList.add('form-select');
+    }
+});
+</script>
 
 {% endblock %}
