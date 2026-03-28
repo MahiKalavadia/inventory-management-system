@@ -1,154 +1,241 @@
 {% extends 'base_dashboard.html' %}
-{%block pagetitle%}Receipt generation{% endblock pagetitle%}
-{% block panel %}Receipt Panel{% endblock panel%}
+{% load humanize %}
+{%block pagetitle%}Order {{ order.bill_number }}{% endblock pagetitle%}
+{%block pagecontent%}Order details and invoice summary{% endblock pagecontent%}
+{% block link %}
+<a href="{% url 'order_list' %}" class="btn btn-outline-secondary btn-sm">
+    <i class="bi bi-arrow-left-circle"></i> Back
+</a>
+{% if order.status == "Draft" %}
+    {% if request.user.is_superuser or request.user.groups.first.name == "Manager" %}
+    <a href="{% url 'confirm_order' order.id %}" class="btn btn-warning btn-sm fw-semibold">
+        <i class="bi bi-check2-circle me-1"></i> Confirm Order
+    </a>
+    {% endif %}
+{% endif %}
+{% if order.status == "Confirmed" and order.payment_status == "Pending" %}
+    {% if request.user.is_superuser or request.user.groups.first.name == "Manager" %}
+    <a href="{% url 'mark_paid' order.id %}" class="btn btn-success btn-sm fw-semibold">
+        <i class="bi bi-currency-rupee me-1"></i> Mark Paid
+    </a>
+    {% endif %}
+{% endif %}
+{% if order.payment_status == "Paid" %}
+<a href="{% url 'order_receipt' order.id %}" class="btn btn-primary btn-sm fw-semibold">
+    <i class="bi bi-download me-1"></i> Receipt
+</a>
+{% endif %}
+{% endblock link %}
+{% block panel %}Order Panel{% endblock panel%}
 {% block content %}
 
 <style>
-.order-header {
-    background: #ffffff;
-    border-radius: 14px;
-    box-shadow: 0 6px 18px rgba(0,0,0,0.05);
-}
+/* ── Status bar ── */
+.od-status-bar { display:flex; align-items:center; gap:10px; margin-bottom:20px; flex-wrap:wrap; }
+.od-bill { font-size:0.82rem; font-weight:700; color:#4f46e5; font-family:monospace; background:#eff6ff; border:1px solid #bfdbfe; border-radius:20px; padding:4px 14px; }
+.status-pill { display:inline-flex; align-items:center; gap:4px; border-radius:20px; padding:4px 12px; font-size:0.72rem; font-weight:600; }
+.sdot { width:6px; height:6px; border-radius:50%; display:inline-block; }
+.s-draft     { background:#f3f4f6; color:#374151; border:1px solid #e5e7eb; }
+.s-confirmed { background:#eff6ff; color:#2563eb; border:1px solid #bfdbfe; }
+.s-paid      { background:#ecfdf5; color:#047857; border:1px solid #a7f3d0; }
+.s-cancelled { background:#fef2f2; color:#b91c1c; border:1px solid #fecaca; }
+.s-pending   { background:#fffbeb; color:#b45309; border:1px solid #fde68a; }
 
-.order-card {
-    border-radius: 14px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-}
+/* ── Info cards ── */
+.info-card { background:#fff; border:1px solid #e5e7eb; border-radius:12px; padding:20px; height:100%; }
+.info-card-title { font-size:0.7rem; font-weight:700; text-transform:uppercase; letter-spacing:0.06em; color:#9ca3af; margin-bottom:14px; display:flex; align-items:center; gap:7px; }
+.info-card-title i { width:24px; height:24px; border-radius:7px; display:inline-flex; align-items:center; justify-content:center; font-size:0.7rem; }
+.info-row { display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:10px; font-size:0.85rem; }
+.info-row:last-child { margin-bottom:0; }
+.info-label { color:#9ca3af; font-weight:500; flex-shrink:0; margin-right:12px; }
+.info-val { color:#111827; font-weight:600; text-align:right; }
 
-.table th {
-    font-size: 13px;
-    text-transform: uppercase;
-    letter-spacing: .5px;
-}
+/* ── Items table ── */
+.items-wrap { background:#fff; border:1px solid #e5e7eb; border-radius:12px; overflow:hidden; }
+.items-header { padding:16px 20px; border-bottom:1px solid #f0f0f0; display:flex; justify-content:space-between; align-items:center; }
+.items-title { font-size:0.875rem; font-weight:700; color:#111827; margin:0; }
+.items-table thead th { background:#f8fafc; font-size:0.67rem; font-weight:700; text-transform:uppercase; letter-spacing:0.07em; color:#94a3b8; padding:10px 16px; border-bottom:1px solid #f0f0f0; white-space:nowrap; }
+.items-table tbody tr { border-bottom:1px solid #f8f9fa; }
+.items-table tbody tr:last-child { border-bottom:none; }
+.items-table td { padding:13px 16px; vertical-align:middle; font-size:0.875rem; }
+.prod-name { font-weight:600; color:#111827; }
 
-.badge-status {
-    font-size: 12px;
-    padding: 6px 12px;
-    border-radius: 20px;
-}
+/* Warranty */
+.w-active   { display:inline-flex; align-items:center; gap:4px; background:#ecfdf5; color:#047857; border:1px solid #a7f3d0; border-radius:20px; padding:2px 9px; font-size:0.68rem; font-weight:600; }
+.w-expired  { display:inline-flex; align-items:center; gap:4px; background:#fef2f2; color:#b91c1c; border:1px solid #fecaca; border-radius:20px; padding:2px 9px; font-size:0.68rem; font-weight:600; }
+.w-pending  { display:inline-flex; align-items:center; gap:4px; background:#f3f4f6; color:#6b7280; border:1px solid #e5e7eb; border-radius:20px; padding:2px 9px; font-size:0.68rem; font-weight:600; }
 
-.summary-box {
-    background: #f9fafb;
-    border-radius: 12px;
-    padding: 15px;
-}
+/* ── Total box ── */
+.total-box { background:#f8fafc; border-top:1px solid #f0f0f0; padding:16px 20px; display:flex; justify-content:flex-end; align-items:center; gap:16px; }
+.total-label { font-size:0.82rem; color:#6b7280; font-weight:500; }
+.total-val { font-size:1.3rem; font-weight:800; color:#111827; }
 </style>
-<div class="container-fluid mt-4">
 
-    <!-- 🔹 ORDER HEADER -->
-    <div class="order-header p-3 d-flex justify-content-between align-items-center mb-4">
-        <div>
-            <h5 class="fw-bold mb-1">Invoice #{{ order.bill_number }}</h5>
-            <small class="text-muted">Order ID: {{ order.id }}</small>
-        </div>
+<!-- Status bar -->
+<div class="od-status-bar">
+    <span class="od-bill">{{ order.bill_number }}</span>
 
-        <div class="d-flex gap-2">
-            <a href="{% url 'order_list' %}" class="btn btn-outline-secondary btn-sm">
-                <i class="bi bi-arrow-left-circle"></i> Back
-            </a>
+    {% if order.status == 'Draft' %}
+    <span class="status-pill s-draft"><span class="sdot" style="background:#9ca3af;"></span>Draft</span>
+    {% elif order.status == 'Confirmed' %}
+    <span class="status-pill s-confirmed"><span class="sdot bg-primary"></span>Confirmed</span>
+    {% elif order.status == 'Paid' %}
+    <span class="status-pill s-paid"><span class="sdot bg-success"></span>Paid</span>
+    {% elif order.status == 'Cancelled' %}
+    <span class="status-pill s-cancelled"><span class="sdot bg-danger"></span>Cancelled</span>
+    {% endif %}
 
-            {% if order.status == "Draft" %}
-                {% if request.user.is_superuser or request.user.groups.first.name == "Manager" %}
-                    <a href="{% url 'confirm_order' order.id %}" class="btn btn-warning btn-sm">Confirm Order</a>
-                {% endif %}
-            {% endif %}
+    {% if order.payment_status == 'Paid' %}
+    <span class="status-pill s-paid"><span class="sdot bg-success"></span>Payment Received</span>
+    {% elif order.payment_status == 'Failed' %}
+    <span class="status-pill s-cancelled"><span class="sdot bg-danger"></span>Payment Failed</span>
+    {% else %}
+    <span class="status-pill s-pending"><span class="sdot" style="background:#d97706;"></span>Payment Pending</span>
+    {% endif %}
 
-            {% if order.status == "Confirmed" and order.payment_status == "Pending" %}
-                {% if request.user.is_superuser or request.user.groups.first.name == "Manager" %}
-                    <a href="{% url 'mark_paid' order.id %}" class="btn btn-success btn-sm">Mark Paid</a>
-                {% endif %}
-            {% endif %}
+    <span style="font-size:0.75rem; color:#9ca3af; margin-left:auto;">
+        <i class="bi bi-calendar3 me-1"></i>{{ order.created_at|date:"d M Y, H:i" }}
+    </span>
+</div>
 
-            {% if order.payment_status == "Paid" %}
-                <a href="{% url 'order_receipt' order.id %}" class="btn btn-primary btn-sm">
-                    <i class="bi bi-download"></i> Receipt
-                </a>
-            {% endif %}
+<!-- Info cards row -->
+<div class="row g-3 mb-4">
+
+    <!-- Customer -->
+    <div class="col-md-4">
+        <div class="info-card">
+            <div class="info-card-title">
+                <i class="bi bi-person-fill" style="background:#eff6ff; color:#2563eb;"></i>
+                Customer
+            </div>
+            <div class="info-row">
+                <span class="info-label">Name</span>
+                <span class="info-val">{{ order.customer_name }}</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">Email</span>
+                <span class="info-val" style="font-size:0.8rem;">{{ order.customer_email }}</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">Phone</span>
+                <span class="info-val">{{ order.customer_phonenumber }}</span>
+            </div>
         </div>
     </div>
 
-    <!-- 🔹 STATUS ROW -->
-    <div class="mb-3 d-flex gap-2">
-        <span class="badge badge-status bg-info">Status: {{ order.status }}</span>
-        <span class="badge badge-status {% if order.payment_status == 'Paid' %}bg-success{% else %}bg-danger{% endif %}">
-            Payment: {{ order.payment_status }}
-        </span>
+    <!-- Delivery -->
+    <div class="col-md-4">
+        <div class="info-card">
+            <div class="info-card-title">
+                <i class="bi bi-geo-alt-fill" style="background:#f0fdf4; color:#16a34a;"></i>
+                Delivery Address
+            </div>
+            <div class="info-row">
+                <span class="info-label">Address</span>
+                <span class="info-val" style="font-size:0.82rem;">{{ order.customer_address }}</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">City</span>
+                <span class="info-val">{{ order.city }} — {{ order.pincode }}</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">State</span>
+                <span class="info-val">{{ order.get_state_display }}</span>
+            </div>
+        </div>
     </div>
 
-    <div class="row g-4">
-
-        <!-- 🔹 CUSTOMER INFO -->
-        <div class="col-md-4">
-            <div class="card order-card p-3 mb-3">
-                <h6 class="fw-bold">Customer Details</h6>
-                <hr>
-                <p><strong>Name:</strong> {{ order.customer_name }}</p>
-                <p><strong>Email:</strong> {{ order.customer_email }}</p>
-                <p><strong>Phone:</strong> {{ order.customer_phonenumber }}</p>
+    <!-- Order Meta -->
+    <div class="col-md-4">
+        <div class="info-card">
+            <div class="info-card-title">
+                <i class="bi bi-receipt-cutoff" style="background:#f5f3ff; color:#7c3aed;"></i>
+                Order Info
             </div>
-
-            <div class="card order-card p-3">
-                <h6 class="fw-bold">Delivery Address</h6>
-                <hr>
-                <p>{{ order.customer_address }}</p>
-                <p>{{ order.city }} - {{ order.pincode }}</p>
-                <p>{{ order.get_state_display }}</p>
+            <div class="info-row">
+                <span class="info-label">Bill No</span>
+                <span class="info-val" style="font-family:monospace; color:#4f46e5;">{{ order.bill_number }}</span>
             </div>
-        </div>
-
-        <!-- 🔹 ORDER ITEMS -->
-        <div class="col-md-8">
-            <div class="card order-card">
-                <div class="card-header bg-white fw-bold">
-                    Order Items
-                </div>
-
-                <div class="table-responsive">
-                    <table class="table align-middle mb-0">
-                        <thead class="table-light">
-                            <tr>
-                                <th>Product</th>
-                                <th>Price</th>
-                                <th>Qty</th>
-                                <th>Warranty</th>
-                                <th class="text-end">Total</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for item in order.items.all %}
-                            <tr>
-                                <td class="fw-semibold">{{ item.product }}</td>
-                                <td>₹ {{ item.price|floatformat:2 }}</td>
-                                <td>{{ item.quantity }}</td>
-                                <td>
-                                    {{ item.warranty_months }} months <br>
-
-                                    {% if item.warranty_end %}
-                                        <small class="text-muted">Valid till {{ item.warranty_end }}</small><br>
-
-                                        {% if item.is_under_warranty %}
-                                            <span class="badge bg-success">Under Warranty</span>
-                                        {% else %}
-                                            <span class="badge bg-danger">Expired</span>
-                                        {% endif %}
-                                    {% else %}
-                                        <span class="text-muted">Not Started</span>
-                                    {% endif %}
-                                </td>
-                                <td class="text-end fw-bold">₹ {{ item.total|floatformat:2 }}</td>
-                            </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
-                </div>
-
-                <!-- 🔹 ORDER SUMMARY -->
-                <div class="summary-box text-end">
-                    <h5 class="fw-bold">Grand Total: ₹ {{ order.total_amount|floatformat:2 }}</h5>
-                </div>
+            <div class="info-row">
+                <span class="info-label">Created By</span>
+                <span class="info-val">{{ order.created_by.username|default:"—" }}</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">Date</span>
+                <span class="info-val">{{ order.created_at|date:"d M Y" }}</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">Items</span>
+                <span class="info-val">{{ order.items.count }} item{{ order.items.count|pluralize }}</span>
             </div>
         </div>
+    </div>
 
+</div>
+
+<!-- Order Items -->
+<div class="items-wrap">
+    <div class="items-header">
+        <p class="items-title">Order Items</p>
+        <span style="font-size:0.78rem; color:#9ca3af;">{{ order.items.count }} item{{ order.items.count|pluralize }}</span>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table items-table mb-0">
+            <thead>
+                <tr>
+                    <th style="padding-left:24px;">#</th>
+                    <th>Product</th>
+                    <th class="text-center">Unit Price</th>
+                    <th class="text-center">Qty</th>
+                    <th>Warranty</th>
+                    <th class="text-end" style="padding-right:24px;">Total</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for item in order.items.all %}
+            <tr>
+                <td style="padding-left:24px; color:#9ca3af; font-size:0.78rem; font-weight:600;">{{ forloop.counter }}</td>
+                <td>
+                    <div class="prod-name">{{ item.product }}</div>
+                </td>
+                <td class="text-center" style="color:#374151; font-weight:500;">₹{{ item.price|floatformat:2 }}</td>
+                <td class="text-center">
+                    <span style="font-weight:700; color:#111827; background:#f3f4f6; border-radius:6px; padding:2px 10px; font-size:0.82rem;">
+                        × {{ item.quantity }}
+                    </span>
+                </td>
+                <td>
+                    <div style="font-size:0.8rem; color:#374151; font-weight:500;">{{ item.warranty_months }} month{{ item.warranty_months|pluralize }}</div>
+                    {% if item.warranty_end %}
+                    <div style="font-size:0.7rem; color:#9ca3af; margin-top:2px;">Until {{ item.warranty_end }}</div>
+                    {% if item.is_under_warranty %}
+                    <span class="w-active"><i class="bi bi-shield-check" style="font-size:0.6rem;"></i> Active</span>
+                    {% else %}
+                    <span class="w-expired"><i class="bi bi-shield-x" style="font-size:0.6rem;"></i> Expired</span>
+                    {% endif %}
+                    {% else %}
+                    <span class="w-pending"><i class="bi bi-clock" style="font-size:0.6rem;"></i> Not started</span>
+                    {% endif %}
+                </td>
+                <td class="text-end" style="padding-right:24px; font-weight:700; color:#111827; font-size:0.95rem;">
+                    ₹{{ item.total|floatformat:2 }}
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="6" class="text-center py-5">
+                    <div class="text-muted"><i class="bi bi-inbox fs-2 d-block mb-2 opacity-25"></i>No items in this order.</div>
+                </td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <div class="total-box">
+        <span class="total-label">Grand Total</span>
+        <span class="total-val">₹{{ order.total_amount|floatformat:2|intcomma }}</span>
     </div>
 </div>
 

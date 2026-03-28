@@ -1,169 +1,156 @@
 {% extends "base_dashboard.html" %}
 {% load static %}
 {%block pagetitle%}Purchase Records{% endblock pagetitle%}
-{%block pagecontent %}All records related to purchases{% endblock pagecontent %}
+{%block pagecontent%}All purchase requests and orders in one view{% endblock pagecontent%}
 {% block link %}
 {% if request.user.is_superuser %}
-              <a href="{% url 'purchase_dashboard' %}" class="btn btn-outline-secondary btn-sm me-2">
-                 <i class="bi bi-arrow-left-circle-fill"></i> Back
-              </a>
-              {% elif request.user.groups.first.name == 'Manager' or request.user.groups.first.name == 'Staff' %}
-              <a href="{% url 'purchase_dashboard2' %}" class="btn btn-outline-secondary btn-sm me-2">
-                 <i class="bi bi-arrow-left-circle-fill"></i> Back
-              </a>
-              {% endif %}
+<a href="{% url 'purchase_dashboard' %}" class="btn btn-outline-secondary btn-sm"><i class="bi bi-arrow-left-circle"></i> Back</a>
+{% elif request.user.groups.first.name == 'Manager' or request.user.groups.first.name == 'Staff' %}
+<a href="{% url 'purchase_dashboard2' %}" class="btn btn-outline-secondary btn-sm"><i class="bi bi-arrow-left-circle"></i> Back</a>
+{% endif %}
 {% endblock link %}
-{% block panel %}Purchase Record Panel{% endblock panel%}
+{% block panel %}Purchase Panel{% endblock panel%}
 {% block content %}
-<div class="container-fluid mt-4">
 
+<style>
+.rec-wrap { border-radius:14px; overflow:hidden; border:1px solid #e5e7eb; background:#fff; margin-bottom:24px; }
+.rec-header { padding:16px 24px; border-bottom:1px solid #f0f0f0; display:flex; justify-content:space-between; align-items:center; }
+.rec-title { font-size:0.9rem; font-weight:700; color:#111827; margin:0; }
+.rec-sub { font-size:0.75rem; color:#9ca3af; margin-top:1px; }
+.rec-table thead th { background:#f8fafc; font-size:0.67rem; font-weight:700; text-transform:uppercase; letter-spacing:0.07em; color:#94a3b8; padding:10px 16px; border-bottom:1px solid #f0f0f0; white-space:nowrap; }
+.rec-table tbody tr { border-bottom:1px solid #f8f9fa; }
+.rec-table tbody tr:last-child { border-bottom:none; }
+.rec-table td { padding:12px 16px; vertical-align:middle; font-size:0.875rem; }
+.po-id { font-weight:700; color:#4f46e5; font-size:0.8rem; font-family:monospace; }
+.s-pending  { display:inline-flex;align-items:center;gap:4px;background:#fffbeb;color:#b45309;border:1px solid #fde68a;border-radius:20px;padding:3px 9px;font-size:0.7rem;font-weight:700; }
+.s-approved { display:inline-flex;align-items:center;gap:4px;background:#ecfdf5;color:#047857;border:1px solid #a7f3d0;border-radius:20px;padding:3px 9px;font-size:0.7rem;font-weight:700; }
+.s-rejected { display:inline-flex;align-items:center;gap:4px;background:#fef2f2;color:#b91c1c;border:1px solid #fecaca;border-radius:20px;padding:3px 9px;font-size:0.7rem;font-weight:700; }
+.s-delivered{ display:inline-flex;align-items:center;gap:4px;background:#ecfdf5;color:#047857;border:1px solid #a7f3d0;border-radius:20px;padding:3px 9px;font-size:0.7rem;font-weight:700; }
+.s-transit  { display:inline-flex;align-items:center;gap:4px;background:#eff6ff;color:#2563eb;border:1px solid #bfdbfe;border-radius:20px;padding:3px 9px;font-size:0.7rem;font-weight:700; }
+.s-delayed  { display:inline-flex;align-items:center;gap:4px;background:#fef2f2;color:#b91c1c;border:1px solid #fecaca;border-radius:20px;padding:3px 9px;font-size:0.7rem;font-weight:700; }
+.s-other    { display:inline-flex;align-items:center;gap:4px;background:#f3f4f6;color:#374151;border:1px solid #e5e7eb;border-radius:20px;padding:3px 9px;font-size:0.7rem;font-weight:700; }
+.sdot { width:5px; height:5px; border-radius:50%; display:inline-block; }
+.btn-act { width:28px; height:28px; border-radius:7px; display:inline-flex; align-items:center; justify-content:center; font-size:0.75rem; border:none; transition:all 0.15s; text-decoration:none; }
+.btn-approve { background:#ecfdf5; color:#16a34a; }
+.btn-approve:hover { background:#16a34a; color:#fff; }
+.btn-reject  { background:#fef2f2; color:#dc2626; }
+.btn-reject:hover  { background:#dc2626; color:#fff; }
+.btn-update  { background:#111827; color:#fff; }
+.btn-update:hover  { background:#374151; color:#fff; }
+</style>
 
-
-<!-- ================= Manage Requests ================= -->
-
-  <div class="card shadow-sm border-0 h-100">
-
-    <div class="card-header bg-white d-flex justify-content-between align-items-center">
-      <h6 class="mb-0 fw-bold">Manage Requests</h6>
-
-      <div class="d-flex gap-2">
-        <a href="{% url 'manage_requests' %}" class="btn btn-sm btn-outline-primary">
-          View All →
-        </a>
-
-        <div class="dropdown">
-          <button class="btn btn-sm btn-outline-secondary dropdown-toggle" data-bs-toggle="dropdown">
-            Export
-          </button>
-          <ul class="dropdown-menu dropdown-menu-end">
-            <li><a class="dropdown-item" href="{% url 'export_requests_csv' %}">CSV</a></li>
-            <li><a class="dropdown-item" href="{% url 'export_requests_excel' %}">Excel</a></li>
-            <li><a class="dropdown-item" href="{% url 'export_requests_pdf' %}">PDF</a></li>
-          </ul>
+<!-- Purchase Requests -->
+<div class="rec-wrap">
+    <div class="rec-header">
+        <div>
+            <p class="rec-title">Purchase Requests</p>
+            <p class="rec-sub">Latest 10 requests</p>
         </div>
-      </div>
+        <div class="d-flex gap-2">
+            <a href="{% url 'manage_requests' %}" style="font-size:0.78rem;font-weight:600;color:#4f46e5;text-decoration:none;">View All →</a>
+            <button class="btn btn-outline-secondary btn-sm dropdown-toggle" data-bs-toggle="dropdown" style="font-size:0.75rem;">Export</button>
+            <ul class="dropdown-menu dropdown-menu-end">
+                <li><a class="dropdown-item" href="{% url 'export_requests_csv' %}">CSV</a></li>
+                <li><a class="dropdown-item" href="{% url 'export_requests_excel' %}">Excel</a></li>
+                <li><a class="dropdown-item" href="{% url 'export_requests_pdf' %}">PDF</a></li>
+            </ul>
+        </div>
     </div>
-
-    <div class="card-body p-0">
-      <div class="table-responsive">
-        <table class="table table-hover align-middle mb-0">
-          <thead class="table-light">
-            <tr>
-              <th>Product</th>
-              <th>Qty</th>
-              <th>Status</th>
-              <th class="text-end">Action</th>
-            </tr>
-          </thead>
-
-          <tbody>
+    <div class="table-responsive">
+        <table class="table rec-table mb-0">
+            <thead>
+                <tr>
+                    <th style="padding-left:24px;">Product</th>
+                    <th>Supplier</th>
+                    <th class="text-center">Qty</th>
+                    <th>Status</th>
+                    <th class="text-end" style="padding-right:24px;">Action</th>
+                </tr>
+            </thead>
+            <tbody>
             {% for r in requests %}
             <tr>
-              <td class="fw-medium">{{ r.product.name }}</td>
-              <td>{{ r.quantity }}</td>
-
-              <td>
-                {% if r.status == "Pending" %}
-                  <span class="badge bg-warning text-dark">Pending</span>
-                {% elif r.status == "Approved" %}
-                  <span class="badge bg-success">Approved</span>
-                {% elif r.status == "Rejected" %}
-                  <span class="badge bg-danger">Rejected</span>
-                {% endif %}
-              </td>
-
-              <td class="text-end">
-                {% if r.status == "Pending" %}
-                  <a href="{% url 'approve_request' r.id %}" class="btn btn-sm btn-success">Approve</a>
-                  <a href="{% url 'reject_request' r.id %}" class="btn btn-sm btn-outline-danger">Reject</a>
-                {% else %}
-                  <span class="text-muted small">Completed</span>
-                {% endif %}
-              </td>
+                <td style="padding-left:24px; font-weight:600; color:#111827;">{{ r.product.name }}</td>
+                <td style="font-size:0.82rem; color:#6b7280;">{{ r.supplier.name }}</td>
+                <td class="text-center" style="font-weight:600; color:#374151;">{{ r.quantity }}</td>
+                <td>
+                    {% if r.status == "Pending" %}<span class="s-pending"><span class="sdot" style="background:#d97706;"></span>Pending</span>
+                    {% elif r.status == "Approved" %}<span class="s-approved"><span class="sdot bg-success"></span>Approved</span>
+                    {% else %}<span class="s-rejected"><span class="sdot bg-danger"></span>Rejected</span>{% endif %}
+                </td>
+                <td class="text-end" style="padding-right:24px;">
+                    {% if r.status == "Pending" %}
+                    <div class="d-flex justify-content-end gap-2">
+                        <a href="{% url 'approve_request' r.id %}" class="btn-act btn-approve" title="Approve"><i class="bi bi-check-lg"></i></a>
+                        <a href="{% url 'reject_request' r.id %}" class="btn-act btn-reject" title="Reject"><i class="bi bi-x-lg"></i></a>
+                    </div>
+                    {% else %}
+                    <span style="font-size:0.75rem; color:#9ca3af;">Done</span>
+                    {% endif %}
+                </td>
             </tr>
+            {% empty %}
+            <tr><td colspan="5" class="text-center py-4 text-muted">No requests found.</td></tr>
             {% endfor %}
-          </tbody>
-
+            </tbody>
         </table>
-      </div>
     </div>
+</div>
 
-  </div>
-
-<br>
-<!-- ================= Purchase Orders ================= -->
-
-  <div class="card shadow-sm border-0 h-100">
-
-    <div class="card-header bg-white d-flex justify-content-between align-items-center">
-      <h6 class="mb-0 fw-bold">Purchase Orders</h6>
-
-      <div class="d-flex gap-2">
-        <a href="{% url 'purchase_orders' %}" class="btn btn-sm btn-outline-primary">
-          View All →
-        </a>
-
-        <div class="dropdown">
-          <button class="btn btn-sm btn-outline-secondary dropdown-toggle" data-bs-toggle="dropdown">
-            Export
-          </button>
-          <ul class="dropdown-menu dropdown-menu-end">
-            <li><a class="dropdown-item" href="{% url 'export_orders_csv' %}">CSV</a></li>
-            <li><a class="dropdown-item" href="{% url 'export_orders_excel' %}">Excel</a></li>
-            <li><a class="dropdown-item" href="{% url 'export_orders_pdf' %}">PDF</a></li>
-          </ul>
+<!-- Purchase Orders -->
+<div class="rec-wrap">
+    <div class="rec-header">
+        <div>
+            <p class="rec-title">Purchase Orders</p>
+            <p class="rec-sub">Latest 10 orders</p>
         </div>
-      </div>
+        <div class="d-flex gap-2">
+            <a href="{% url 'purchase_orders' %}" style="font-size:0.78rem;font-weight:600;color:#4f46e5;text-decoration:none;">View All →</a>
+            <button class="btn btn-outline-secondary btn-sm dropdown-toggle" data-bs-toggle="dropdown" style="font-size:0.75rem;">Export</button>
+            <ul class="dropdown-menu dropdown-menu-end">
+                <li><a class="dropdown-item" href="{% url 'export_orders_csv' %}">CSV</a></li>
+                <li><a class="dropdown-item" href="{% url 'export_orders_excel' %}">Excel</a></li>
+                <li><a class="dropdown-item" href="{% url 'export_orders_pdf' %}">PDF</a></li>
+            </ul>
+        </div>
     </div>
-
-    <div class="card-body p-0">
-      <div class="table-responsive">
-        <table class="table table-hover align-middle mb-0">
-          <thead class="table-light">
-            <tr>
-              <th>ID</th>
-              <th>Product</th>
-              <th>Status</th>
-              <th class="text-end">Action</th>
-            </tr>
-          </thead>
-
-          <tbody>
+    <div class="table-responsive">
+        <table class="table rec-table mb-0">
+            <thead>
+                <tr>
+                    <th style="padding-left:24px;">PO ID</th>
+                    <th>Product</th>
+                    <th>Supplier</th>
+                    <th>Status</th>
+                    <th class="text-end" style="padding-right:24px;">Action</th>
+                </tr>
+            </thead>
+            <tbody>
             {% for po in orders %}
             <tr>
-              <td class="fw-bold text-muted">PO-{{ po.id }}</td>
-              <td>{{ po.request.product.name }}</td>
-
-              <td>
-                {% if po.status == "delivered" %}
-                  <span class="badge bg-success">Completed</span>
-                {% elif po.status == "pending" %}
-                  <span class="badge bg-warning text-dark">Pending</span>
-                {% else %}
-                  <span class="badge bg-info text-dark">{{ po.status }}</span>
-                {% endif %}
-              </td>
-
-              <td class="text-end">
-                {% if po.status != "delivered" %}
-                  <a href="{% url 'update_po_status' po.id %}" class="btn btn-sm btn-dark">Update</a>
-                {% else %}
-                  <span class="text-muted small">Completed</span>
-                {% endif %}
-              </td>
+                <td style="padding-left:24px;"><span class="po-id">PO-{{ po.id }}</span></td>
+                <td style="font-weight:600; color:#111827;">{{ po.request.product.name }}</td>
+                <td style="font-size:0.82rem; color:#6b7280;">{{ po.supplier.name }}</td>
+                <td>
+                    {% if po.status == "delivered" %}<span class="s-delivered"><span class="sdot bg-success"></span>Delivered</span>
+                    {% elif po.status == "in_transit" %}<span class="s-transit"><span class="sdot bg-primary"></span>In Transit</span>
+                    {% elif po.status == "delayed" %}<span class="s-delayed"><span class="sdot bg-danger"></span>Delayed</span>
+                    {% else %}<span class="s-other"><span class="sdot" style="background:#9ca3af;"></span>{{ po.status|capfirst }}</span>{% endif %}
+                </td>
+                <td class="text-end" style="padding-right:24px;">
+                    {% if po.status != "delivered" %}
+                    <a href="{% url 'update_po_status' po.id %}" class="btn-act btn-update" title="Update Status"><i class="bi bi-arrow-repeat"></i></a>
+                    {% else %}
+                    <span style="font-size:0.75rem; color:#9ca3af;">Done</span>
+                    {% endif %}
+                </td>
             </tr>
+            {% empty %}
+            <tr><td colspan="5" class="text-center py-4 text-muted">No orders found.</td></tr>
             {% endfor %}
-          </tbody>
-
+            </tbody>
         </table>
-      </div>
     </div>
-
-  </div>
 </div>
-
-</div>
-
-
 
 {% endblock %}

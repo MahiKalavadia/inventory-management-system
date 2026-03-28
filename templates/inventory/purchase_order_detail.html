@@ -1,116 +1,148 @@
 {% extends "base_dashboard.html" %}
 {% load static %}
-{%block pagetitle%} Purchase Orders Details{% endblock pagetitle%}
-{% block panel %}Purchase Order Detail Panel{% endblock panel%}
+{%block pagetitle%}PO-{{ order.id }} Details{% endblock pagetitle%}
+{%block pagecontent%}Purchase order information and delivery tracking{% endblock pagecontent%}
+{% block link %}
+<a href="{% url 'purchase_orders' %}" class="btn btn-outline-secondary btn-sm"><i class="bi bi-arrow-left-circle"></i> Back</a>
+{% if order.status == 'draft' %}
+<a href="{% url 'edit_purchase_order' order.id %}" class="btn btn-outline-primary btn-sm"><i class="bi bi-pencil me-1"></i> Edit</a>
+{% endif %}
+{% if order.status != 'delivered' and order.status != 'delayed' %}
+<a href="{% url 'update_po_status' order.id %}" class="btn btn-dark btn-sm"><i class="bi bi-arrow-repeat me-1"></i> Update Status</a>
+{% endif %}
+{% endblock link %}
+{% block panel %}Purchase Panel{% endblock panel%}
 {% block content %}
-<div class="container mt-5">
 
-    <div class="card shadow border-0 rounded-4">
+<style>
+.po-status-bar { display:flex; align-items:center; gap:10px; margin-bottom:20px; flex-wrap:wrap; }
+.po-id-chip { font-weight:700; color:#4f46e5; font-family:monospace; background:#eff6ff; border:1px solid #bfdbfe; border-radius:20px; padding:4px 14px; font-size:0.82rem; }
+.s-delivered { display:inline-flex;align-items:center;gap:4px;background:#ecfdf5;color:#047857;border:1px solid #a7f3d0;border-radius:20px;padding:4px 12px;font-size:0.72rem;font-weight:700; }
+.s-transit   { display:inline-flex;align-items:center;gap:4px;background:#eff6ff;color:#2563eb;border:1px solid #bfdbfe;border-radius:20px;padding:4px 12px;font-size:0.72rem;font-weight:700; }
+.s-delayed   { display:inline-flex;align-items:center;gap:4px;background:#fef2f2;color:#b91c1c;border:1px solid #fecaca;border-radius:20px;padding:4px 12px;font-size:0.72rem;font-weight:700; }
+.s-ordered   { display:inline-flex;align-items:center;gap:4px;background:#f5f3ff;color:#7c3aed;border:1px solid #ddd6fe;border-radius:20px;padding:4px 12px;font-size:0.72rem;font-weight:700; }
+.s-shipped   { display:inline-flex;align-items:center;gap:4px;background:#f0fdf4;color:#16a34a;border:1px solid #bbf7d0;border-radius:20px;padding:4px 12px;font-size:0.72rem;font-weight:700; }
+.s-draft     { display:inline-flex;align-items:center;gap:4px;background:#f3f4f6;color:#374151;border:1px solid #e5e7eb;border-radius:20px;padding:4px 12px;font-size:0.72rem;font-weight:700; }
+.sdot { width:6px; height:6px; border-radius:50%; display:inline-block; }
 
-        <!-- Header -->
-        <div class="card-header bg-white border-bottom d-flex justify-content-between align-items-center py-3 px-4">
-            <div>
-                <h5 class="fw-bold mb-0">Purchase Order</h5>
-                <small class="text-muted">PO-{{ order.id }}</small>
+.info-card { background:#fff; border:1px solid #e5e7eb; border-radius:12px; padding:20px; height:100%; }
+.info-card-title { font-size:0.7rem; font-weight:700; text-transform:uppercase; letter-spacing:0.06em; color:#9ca3af; margin-bottom:14px; display:flex; align-items:center; gap:7px; }
+.info-card-title i { width:24px; height:24px; border-radius:7px; display:inline-flex; align-items:center; justify-content:center; font-size:0.7rem; }
+.info-row { display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:10px; font-size:0.85rem; }
+.info-row:last-child { margin-bottom:0; }
+.info-label { color:#9ca3af; font-weight:500; flex-shrink:0; margin-right:12px; }
+.info-val { color:#111827; font-weight:600; text-align:right; }
+
+/* Timeline */
+.timeline { display:flex; align-items:center; gap:0; margin:20px 0; }
+.tl-step { flex:1; text-align:center; position:relative; }
+.tl-step::before { content:''; position:absolute; top:14px; left:50%; right:-50%; height:2px; background:#e5e7eb; z-index:0; }
+.tl-step:last-child::before { display:none; }
+.tl-dot { width:28px; height:28px; border-radius:50%; display:inline-flex; align-items:center; justify-content:center; font-size:0.7rem; font-weight:700; position:relative; z-index:1; border:2px solid #e5e7eb; background:#fff; color:#9ca3af; }
+.tl-dot.active { background:#4f46e5; border-color:#4f46e5; color:#fff; }
+.tl-dot.done { background:#16a34a; border-color:#16a34a; color:#fff; }
+.tl-label { font-size:0.65rem; font-weight:600; color:#9ca3af; margin-top:5px; text-transform:uppercase; letter-spacing:0.04em; }
+.tl-label.active { color:#4f46e5; }
+.tl-label.done { color:#16a34a; }
+</style>
+
+<!-- Status bar -->
+<div class="po-status-bar">
+    <span class="po-id-chip">PO-{{ order.id }}</span>
+    {% if order.status == "delivered" %}<span class="s-delivered"><span class="sdot bg-success"></span>Delivered</span>
+    {% elif order.status == "in_transit" %}<span class="s-transit"><span class="sdot bg-primary"></span>In Transit</span>
+    {% elif order.status == "shipped" %}<span class="s-shipped"><span class="sdot bg-success"></span>Shipped</span>
+    {% elif order.status == "ordered" %}<span class="s-ordered"><span class="sdot" style="background:#7c3aed;"></span>Ordered</span>
+    {% elif order.status == "delayed" %}<span class="s-delayed"><span class="sdot bg-danger"></span>Delayed</span>
+    {% else %}<span class="s-draft"><span class="sdot" style="background:#9ca3af;"></span>Draft</span>{% endif %}
+    <span style="font-size:0.75rem; color:#9ca3af; margin-left:auto;">Created {{ order.created_at|date:"d M Y, H:i" }}</span>
+</div>
+
+<!-- Progress timeline -->
+<div style="background:#fff; border:1px solid #e5e7eb; border-radius:12px; padding:20px 28px; margin-bottom:20px;">
+    {% with s=order.status %}
+    <div class="timeline">
+        <div class="tl-step">
+            <div class="tl-dot {% if s == 'draft' %}active{% elif s != 'draft' %}done{% endif %}">{% if s != 'draft' %}✓{% else %}1{% endif %}</div>
+            <div class="tl-label {% if s == 'draft' %}active{% elif s != 'draft' %}done{% endif %}">Draft</div>
+        </div>
+        <div class="tl-step">
+            <div class="tl-dot {% if s == 'ordered' %}active{% elif s in 'shipped,in_transit,delivered,delayed' %}done{% endif %}">{% if s in 'shipped,in_transit,delivered,delayed' %}✓{% else %}2{% endif %}</div>
+            <div class="tl-label {% if s == 'ordered' %}active{% elif s in 'shipped,in_transit,delivered,delayed' %}done{% endif %}">Ordered</div>
+        </div>
+        <div class="tl-step">
+            <div class="tl-dot {% if s == 'shipped' %}active{% elif s in 'in_transit,delivered' %}done{% endif %}">{% if s in 'in_transit,delivered' %}✓{% else %}3{% endif %}</div>
+            <div class="tl-label {% if s == 'shipped' %}active{% elif s in 'in_transit,delivered' %}done{% endif %}">Shipped</div>
+        </div>
+        <div class="tl-step">
+            <div class="tl-dot {% if s == 'in_transit' %}active{% elif s == 'delivered' %}done{% endif %}">{% if s == 'delivered' %}✓{% else %}4{% endif %}</div>
+            <div class="tl-label {% if s == 'in_transit' %}active{% elif s == 'delivered' %}done{% endif %}">In Transit</div>
+        </div>
+        <div class="tl-step">
+            <div class="tl-dot {% if s == 'delivered' %}done{% endif %}">{% if s == 'delivered' %}✓{% else %}5{% endif %}</div>
+            <div class="tl-label {% if s == 'delivered' %}done{% endif %}">Delivered</div>
+        </div>
+    </div>
+    {% endwith %}
+</div>
+
+<!-- Info cards -->
+<div class="row g-3">
+
+    <!-- Product -->
+    <div class="col-md-4">
+        <div class="info-card">
+            <div class="info-card-title">
+                <i class="bi bi-box-seam-fill" style="background:#eff6ff; color:#2563eb;"></i>
+                Product
             </div>
+            {% if order.request %}
+            <div class="info-row"><span class="info-label">Name</span><span class="info-val">{{ order.request.product.name }}</span></div>
+            <div class="info-row"><span class="info-label">Quantity</span><span class="info-val">{{ order.request.quantity }} units</span></div>
+            <div class="info-row"><span class="info-label">Requested By</span><span class="info-val">{{ order.request.requested_by.username }}</span></div>
+            {% else %}
+            <div style="font-size:0.82rem; color:#9ca3af;">No request linked.</div>
+            {% endif %}
+        </div>
+    </div>
 
-            <div class="d-flex align-items-center gap-2">
+    <!-- Supplier -->
+    <div class="col-md-4">
+        <div class="info-card">
+            <div class="info-card-title">
+                <i class="bi bi-truck-fill" style="background:#f0fdf4; color:#16a34a;"></i>
+                Supplier
+            </div>
+            <div class="info-row"><span class="info-label">Name</span><span class="info-val">{{ order.supplier.name }}</span></div>
+            <div class="info-row"><span class="info-label">Phone</span><span class="info-val">{{ order.supplier.phone }}</span></div>
+            {% if order.supplier.email %}
+            <div class="info-row"><span class="info-label">Email</span><span class="info-val" style="font-size:0.78rem;">{{ order.supplier.email }}</span></div>
+            {% endif %}
+        </div>
+    </div>
 
-                <!-- Status Badge -->
-                {% if order.status == "draft" %}
-                    <span class="badge bg-secondary px-3 py-2">Draft</span>
-                {% elif order.status == "ordered" %}
-                    <span class="badge bg-primary px-3 py-2">Ordered</span>
-                {% elif order.status == "shipped" %}
-                    <span class="badge bg-info px-3 py-2">Shipped</span>
-                {% elif order.status == "in_transit" %}
-                    <span class="badge bg-warning text-dark px-3 py-2">In Transit</span>
-                {% elif order.status == "delivered" %}
-                    <span class="badge bg-success px-3 py-2">Delivered</span>
-                {% elif order.status == "delayed" %}
-                    <span class="badge bg-danger px-3 py-2">Delayed</span>
-                {% endif %}
-
-                {% if order.status == "draft" %}
-                    <a href="{% url 'edit_purchase_order' order.id %}" 
-                       class="btn btn-outline-warning btn-sm">
-                        Edit
-                    </a>
-                {% endif %}
-
+    <!-- Delivery & Cost -->
+    <div class="col-md-4">
+        <div class="info-card">
+            <div class="info-card-title">
+                <i class="bi bi-calendar-check-fill" style="background:#f5f3ff; color:#7c3aed;"></i>
+                Delivery & Cost
+            </div>
+            <div class="info-row">
+                <span class="info-label">Expected</span>
+                <span class="info-val">{% if order.expected_delivery %}{{ order.expected_delivery|date:"d M Y" }}{% else %}<span style="color:#9ca3af;">Not set</span>{% endif %}</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">Actual</span>
+                <span class="info-val">{% if order.actual_delivery %}{{ order.actual_delivery|date:"d M Y" }}{% else %}<span style="color:#9ca3af;">Pending</span>{% endif %}</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">Total Cost</span>
+                <span class="info-val" style="color:#16a34a; font-size:1rem;">₹{{ order.total_cost }}</span>
             </div>
         </div>
-
-        <!-- Body -->
-        <div class="card-body p-4">
-
-            <div class="row g-4">
-
-                <!-- Product Section -->
-                <div class="col-md-6">
-                    <div class="p-3 border rounded-3 bg-light">
-                        <h6 class="fw-bold mb-3">📦 Product Details</h6>
-                        {% if order.request %}
-                        <p class="mb-1"><strong>Product:</strong> {{ order.request.product.name }}</p>
-                        <p class="mb-1"><strong>Quantity:</strong> {{ order.request.quantity }}</p>
-                        <p class="mb-0"><strong>Requested By:</strong> {{ order.request.requested_by.username }}</p>
-                        {% else %}
-                        <p class="mb-0 text-muted">No request linked to this order</p>
-                        {% endif %}
-                    </div>
-                </div>
-
-                <!-- Supplier Section -->
-                <div class="col-md-6">
-                    <div class="p-3 border rounded-3 bg-light">
-                        <h6 class="fw-bold mb-3">🏢 Supplier Details</h6>
-                        <p class="mb-0"><strong>Supplier:</strong> {{ order.supplier.name }}</p>
-                    </div>
-                </div>
-
-                <!-- Delivery Section -->
-                <div class="col-md-6">
-                    <div class="p-3 border rounded-3 bg-light">
-                        <h6 class="fw-bold mb-3">🚚 Delivery Information</h6>
-                        <p class="mb-1">
-                            <strong>Expected Delivery:</strong>
-                            {{ order.expected_delivery|default:"Not Set" }}
-                        </p>
-                        <p class="mb-0">
-                            <strong>Actual Delivery:</strong>
-                            {{ order.actual_delivery|default:"Not Delivered Yet" }}
-                        </p>
-                    </div>
-                </div>
-
-                <!-- Cost Section -->
-                <div class="col-md-6">
-                    <div class="p-3 border rounded-3 bg-light">
-                        <h6 class="fw-bold mb-3">💰 Cost Information</h6>
-                        <p class="mb-1">
-                            <strong>Total Cost:</strong> 
-                            <span class="fw-semibold text-success">₹ {{ order.total_cost }}</span>
-                        </p>
-                        <p class="mb-0">
-                            <strong>Created At:</strong> {{ order.created_at }}
-                        </p>
-                    </div>
-                </div>
-
-            </div>
-
-        </div>
-
-        <!-- Footer -->
-        <div class="card-footer bg-white border-top text-end px-4 py-3">
-            <a href="{% url 'purchase_orders' %}" class="btn btn-outline-secondary">
-                Back to Orders
-            </a>
-        </div>
-
     </div>
 
 </div>
-
 
 {% endblock %}

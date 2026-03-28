@@ -1,102 +1,146 @@
 {% extends 'base_dashboard.html' %}
 {% load static %}
-{%block pagetitle%}Inactive Category{% endblock pagetitle%}
-{%block pagecontent %}Category without products{% endblock pagecontent %}
+{%block pagetitle%}Empty Categories{% endblock pagetitle%}
+{%block pagecontent%}Categories with no products assigned yet{% endblock pagecontent%}
 {% block link %}
- <a href="{% url 'category_dashboard' %}" class="btn btn-outline-secondary btn-sm">
-            <i class="bi bi-arrow-left-circle"></i> Back
-        </a>
+<a href="{% url 'category_dashboard' %}" class="btn btn-outline-secondary btn-sm">
+    <i class="bi bi-arrow-left-circle"></i> Back
+</a>
+{% if request.user.is_superuser or request.user.groups.first.name == "Manager" %}
+<a href="{% url 'add_product' %}" class="btn btn-primary btn-sm">
+    <i class="bi bi-plus-lg me-1"></i> Add Product
+</a>
+{% endif %}
 {% endblock link %}
-{% block panel %}Inactive Category Panel{% endblock panel%}
+{% block panel %}Category Panel{% endblock panel%}
 {% block content %}
+
 <style>
-    .table th {
-    background-color: #f8f9fa;
-    font-weight: 600;
+.cl-wrap { border-radius:14px; overflow:hidden; border:1px solid #e5e7eb; background:#fff; }
+.cl-header { padding:20px 24px; border-bottom:1px solid #f0f0f0; }
+.cl-badge-empty { display:inline-flex; align-items:center; gap:6px; background:#fffbeb; color:#b45309; border:1px solid #fde68a; border-radius:20px; padding:4px 14px; font-size:0.75rem; font-weight:600; }
+
+.cl-grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(220px, 1fr)); gap:16px; padding:24px; }
+
+.cl-card {
+    border:1px solid #e5e7eb;
+    border-radius:12px;
+    padding:20px;
+    background:#fff;
+    transition:box-shadow 0.15s, transform 0.15s;
+    position:relative;
+}
+.cl-card:hover {
+    box-shadow:0 4px 20px rgba(0,0,0,0.07);
+    transform:translateY(-2px);
+    border-color:#fde68a;
 }
 
-.table tbody tr:hover {
-    background-color: #f1f3f5;
-    }
-.card {
-    border-radius: 12px;
+.cl-card-avatar {
+    width:44px; height:44px; border-radius:12px;
+    background:linear-gradient(135deg,#9ca3af,#6b7280);
+    display:flex; align-items:center; justify-content:center;
+    font-size:0.85rem; font-weight:800; color:#fff;
+    margin-bottom:14px;
 }
-
-.table-hover tbody tr:hover {
-    background-color: #f9fafb;
+.cl-card-name { font-size:0.9rem; font-weight:700; color:#111827; margin-bottom:8px; }
+.cl-empty-chip {
+    display:inline-flex; align-items:center; gap:5px;
+    background:#f9fafb; color:#9ca3af;
+    border:1px solid #e5e7eb;
+    border-radius:20px; padding:3px 10px;
+    font-size:0.72rem; font-weight:600;
 }
+.cl-card-hint { font-size:0.72rem; color:#9ca3af; margin-top:10px; }
 
-.badge {
-    font-size: 12px;
-    padding: 6px 10px;
+{% if request.user.is_superuser or request.user.groups.first.name == "Manager" %}
+.cl-card-actions { display:flex; gap:8px; margin-top:14px; }
+.cl-btn-edit {
+    flex:1; display:inline-flex; align-items:center; justify-content:center; gap:5px;
+    padding:6px 10px; border-radius:8px; font-size:0.75rem; font-weight:600;
+    background:#eff6ff; color:#2563eb; border:none; text-decoration:none;
+    transition:background 0.15s;
 }
+.cl-btn-edit:hover { background:#2563eb; color:#fff; }
+.cl-btn-del {
+    width:30px; height:30px; border-radius:8px; display:inline-flex; align-items:center; justify-content:center;
+    background:#fef2f2; color:#dc2626; border:none; text-decoration:none; font-size:0.78rem;
+    transition:background 0.15s; flex-shrink:0;
+}
+.cl-btn-del:hover { background:#dc2626; color:#fff; }
+{% endif %}
 
+.page-btn { display:inline-flex; align-items:center; gap:6px; padding:6px 14px; border-radius:8px; font-size:0.8rem; font-weight:500; border:1px solid #e5e7eb; background:#fff; color:#374151; text-decoration:none; transition:all 0.15s; }
+.page-btn:hover { background:#f3f4f6; color:#111; }
+.page-btn.disabled { opacity:0.4; pointer-events:none; }
+.page-counter { display:inline-flex; align-items:center; justify-content:center; background:#f59e0b; color:#fff; border-radius:8px; padding:5px 14px; font-size:0.8rem; font-weight:600; }
 </style>
-<div class="card shadow-sm border-0">
-    <div class="card-header bg-white d-flex justify-content-between align-items-center">
-        <h5 class="mb-0 fw-bold">
-            <i class="bi bi-tags text-primary"></i> Categories Without Products
-        </h5>
-        <span class="badge bg-warning text-dark">Empty Categories</span>
-    </div>
 
-    <div class="card-body p-0">
-        <div class="table-responsive">
-            <table class="table table-hover align-middle mb-0">
-                <thead class="table-light text-uppercase small">
-                    <tr>
-                        <th>Category Name</th>
-                    </tr>
-                </thead>
+<div class="cl-wrap">
 
-                <tbody>
-                {% for product in page_obj %}
-                    <tr>
-                        <td class="fw-semibold">
-                            <i class="bi bi-folder2 text-secondary"></i>
-                            {{ product.name }}
-                        </td>
-                    </tr>
-                {% empty %}
-                    <tr>
-                        <td class="text-center text-muted py-4">
-                            No categories without products found
-                        </td>
-                    </tr>
-                {% endfor %}
-                </tbody>
-
-            </table>
+    <!-- Header -->
+    <div class="cl-header d-flex justify-content-between align-items-center">
+        <div>
+            <div class="d-flex align-items-center gap-2 mb-1">
+                <span class="cl-badge-empty"><i class="bi bi-exclamation-circle-fill" style="font-size:0.65rem;"></i> Empty</span>
+            </div>
+            <h6 class="fw-bold mb-0" style="font-size:0.95rem;">Categories Without Products</h6>
+            <span class="text-muted" style="font-size:0.78rem;">
+                {{ page_obj.paginator.count }} categor{{ page_obj.paginator.count|pluralize:"y,ies" }} with no products assigned
+            </span>
+        </div>
+        <div class="text-muted" style="font-size:0.78rem;">
+            Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
         </div>
     </div>
+
+    <!-- Card Grid -->
+    <div class="cl-grid">
+        {% for category in page_obj %}
+        <div class="cl-card">
+            <div class="cl-card-avatar">{{ category.name|slice:":2"|upper }}</div>
+            <div class="cl-card-name">{{ category.name }}</div>
+            <span class="cl-empty-chip">
+                <i class="bi bi-inbox" style="font-size:0.6rem;"></i> No products
+            </span>
+            <div class="cl-card-hint">Assign products to activate this category.</div>
+
+            {% if request.user.is_superuser or request.user.groups.first.name == "Manager" %}
+            <div class="cl-card-actions">
+                <a href="{% url 'update_category' category.id %}" class="cl-btn-edit">
+                    <i class="bi bi-pencil-fill"></i> Edit
+                </a>
+                {% if request.user.is_superuser %}
+                <a href="{% url 'delete_category' category.id %}" class="cl-btn-del" title="Delete">
+                    <i class="bi bi-trash-fill"></i>
+                </a>
+                {% endif %}
+            </div>
+            {% endif %}
+        </div>
+        {% empty %}
+        <div class="text-center py-5 text-muted" style="grid-column:1/-1;">
+            <i class="bi bi-check-circle fs-2 d-block mb-2 text-success opacity-50"></i>
+            All categories have products assigned.
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Pagination -->
+    <div style="padding:14px 24px; border-top:1px solid #f0f0f0; background:#fafafa;" class="d-flex justify-content-between align-items-center">
+        <span style="font-size:0.8rem; color:#6b7280;">
+            Showing {{ page_obj.start_index }}–{{ page_obj.end_index }} of {{ page_obj.paginator.count }}
+        </span>
+        <div class="d-flex align-items-center gap-2">
+            {% if page_obj.has_previous %}
+            <a class="page-btn" href="?page={{ page_obj.previous_page_number }}"><i class="bi bi-chevron-left"></i> Prev</a>
+            {% else %}<span class="page-btn disabled"><i class="bi bi-chevron-left"></i> Prev</span>{% endif %}
+            <span class="page-counter">{{ page_obj.number }} / {{ page_obj.paginator.num_pages }}</span>
+            {% if page_obj.has_next %}
+            <a class="page-btn" href="?page={{ page_obj.next_page_number }}">Next <i class="bi bi-chevron-right"></i></a>
+            {% else %}<span class="page-btn disabled">Next <i class="bi bi-chevron-right"></i></span>{% endif %}
+        </div>
+    </div>
+
 </div>
-
-
-<!--Pagination-->
-<nav class="mt-4">
-    <ul class="pagination justify-content-center pagination-sm">
-
-        {% if page_obj.has_previous %}
-        <li class="page-item">
-            <a class="page-link" href="?page={{ page_obj.previous_page_number }}">
-                <i class="bi bi-chevron-left"></i>
-            </a>
-        </li>
-        {% endif %}
-
-        <li class="page-item active">
-            <span class="page-link fw-bold">{{ page_obj.number }}</span>
-        </li>
-
-        {% if page_obj.has_next %}
-        <li class="page-item">
-            <a class="page-link" href="?page={{ page_obj.next_page_number }}">
-                <i class="bi bi-chevron-right"></i>
-            </a>
-        </li>
-        {% endif %}
-
-    </ul>
-</nav>
-
 {% endblock %}

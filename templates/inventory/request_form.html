@@ -1,8 +1,46 @@
 {% extends 'base_dashboard.html' %}
-<h4>Request Purchase for {{ product.name }}</h4>
+{%block pagetitle%}Request Purchase{% endblock pagetitle%}
+{%block pagecontent%}Raise a purchase request for a product{% endblock pagecontent%}
+{% block link %}
+<a href="{% url 'purchase_dashboard2' %}" class="btn btn-outline-secondary btn-sm"><i class="bi bi-arrow-left-circle"></i> Back</a>
+{% endblock link %}
+{% block panel %}Purchase Panel{% endblock panel%}
+{% block content %}
 
-<form method="POST">
-    {% csrf_token %}
-    <input type="number" name="quantity" class="form-control mb-2" placeholder="Enter Quantity" required>
-    <button class="btn btn-primary">Send Request</button>
-</form>
+<style>
+.form-card { max-width:520px; margin:auto; }
+.section-card { background:#fff; border:1px solid #e5e7eb; border-radius:12px; padding:24px; margin-bottom:20px; }
+.section-title { font-size:0.8rem; font-weight:700; text-transform:uppercase; letter-spacing:0.05em; color:#6b7280; margin-bottom:16px; }
+.form-label { font-size:0.875rem; font-weight:500; color:#374151; }
+.form-control { border-radius:8px; border-color:#d1d5db; font-size:0.9rem; }
+.form-control:focus { border-color:#6366f1; box-shadow:0 0 0 3px rgba(99,102,241,0.1); }
+.action-bar { background:#fafafa; border-top:1px solid #eee; padding:16px 24px; border-radius:0 0 12px 12px; }
+.required-star { color:#ef4444; }
+</style>
+
+<div class="card shadow-sm border-0 form-card">
+    <form method="POST">
+        {% csrf_token %}
+        <div class="card-body p-4">
+            <div class="mb-4">
+                <h5 class="fw-bold mb-1">Request Purchase</h5>
+                <p class="text-muted small mb-0">For: <strong>{{ product.name }}</strong></p>
+            </div>
+            <div class="section-card">
+                <div class="section-title">Request Details</div>
+                <div class="mb-3">
+                    <label class="form-label">Quantity <span class="required-star">*</span></label>
+                    <input type="number" name="quantity" class="form-control" placeholder="Enter quantity" min="1" required>
+                </div>
+            </div>
+        </div>
+        <div class="action-bar d-flex justify-content-end gap-2">
+            <a href="{% url 'purchase_dashboard2' %}" class="btn btn-light border px-4">Cancel</a>
+            <button type="submit" class="btn btn-primary px-4 fw-semibold">
+                <i class="bi bi-send me-1"></i> Send Request
+            </button>
+        </div>
+    </form>
+</div>
+
+{% endblock %}

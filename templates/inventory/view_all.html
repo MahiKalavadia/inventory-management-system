@@ -1,92 +1,71 @@
 {% extends 'base_dashboard.html' %}
 {% load humanize tz %}
 {% load static %}
-{%block pagetitle%}User login activity{% endblock pagetitle%}
+{%block pagetitle%}User Login Activity{% endblock pagetitle%}
+{%block pagecontent%}Full login history for all users{% endblock pagecontent%}
 {% block link %}
- <a href="{% url 'user_dashboard' %}" class="btn btn-light btn-sm border">
-            ← Back
-        </a>
+<a href="{% url 'user_dashboard' %}" class="btn btn-outline-secondary btn-sm"><i class="bi bi-arrow-left-circle"></i> Back</a>
 {% endblock link %}
-{% block panel %}User Activity Panel{% endblock panel%}
+{% block panel %}User Panel{% endblock panel%}
 {% block content %}
+
 <style>
-    .bg-soft-primary {
-    background: rgba(13,110,253,0.12);
-    padding: 5px 10px;
-    border-radius: 8px;
-    font-size: 12px;
-}
-
+.ut-wrap { border-radius:14px; overflow:hidden; border:1px solid #e5e7eb; background:#fff; }
+.ut-header { padding:18px 24px; border-bottom:1px solid #f0f0f0; display:flex; justify-content:space-between; align-items:center; }
+.ut-title { font-size:0.95rem; font-weight:700; color:#111827; margin:0; }
+.ut-sub { font-size:0.78rem; color:#9ca3af; margin-top:2px; }
+.ut-table thead th { background:#f8fafc; font-size:0.68rem; font-weight:700; text-transform:uppercase; letter-spacing:0.07em; color:#94a3b8; padding:11px 16px; border-bottom:1px solid #f0f0f0; }
+.ut-table tbody tr { border-bottom:1px solid #f8f9fa; }
+.ut-table tbody tr:last-child { border-bottom:none; }
+.ut-table td { padding:13px 16px; vertical-align:middle; font-size:0.875rem; }
+.user-av { width:32px; height:32px; border-radius:8px; display:inline-flex; align-items:center; justify-content:center; font-size:0.7rem; font-weight:800; color:#fff; background:linear-gradient(135deg,#6366f1,#0ea5e9); flex-shrink:0; }
+.role-admin   { display:inline-flex;align-items:center;background:#eff6ff;color:#2563eb;border:1px solid #bfdbfe;border-radius:20px;padding:3px 10px;font-size:0.7rem;font-weight:700; }
+.role-manager { display:inline-flex;align-items:center;background:#f5f3ff;color:#7c3aed;border:1px solid #ddd6fe;border-radius:20px;padding:3px 10px;font-size:0.7rem;font-weight:700; }
+.role-staff   { display:inline-flex;align-items:center;background:#ecfdf5;color:#047857;border:1px solid #a7f3d0;border-radius:20px;padding:3px 10px;font-size:0.7rem;font-weight:700; }
+.role-none    { display:inline-flex;align-items:center;background:#f3f4f6;color:#6b7280;border:1px solid #e5e7eb;border-radius:20px;padding:3px 10px;font-size:0.7rem;font-weight:700; }
 </style>
-<div class="card shadow-sm border-0">
-    <div class="card-header bg-white d-flex justify-content-between align-items-center">
-        <h5 class="mb-0 fw-bold">
-            <i class="bi bi-people text-primary"></i>
-            Recent User Activity
-        </h5>
 
-        <span class="badge bg-primary">
-            {{ recent_logins|length }} Active Users
-        </span>
-    </div>
-
-    <div class="card-body p-0">
-        <div class="table-responsive">
-            <table class="table table-hover align-middle mb-0">
-                <thead class="table-light text-uppercase small">
-                    <tr>
-                        <th>User</th>
-                        <th>Role Access</th>
-                        <th>Last Login</th>
-                    </tr>
-                </thead>
-
-                <tbody>
-                {% for user in recent_logins %}
-                <tr>
-                    <!-- Username -->
-                    <td class="fw-semibold">
-                        <i class="bi bi-person-circle text-secondary"></i>
-                        {{ user.username }}
-                    </td>
-
-                    <!-- Role Badge -->
-                    <td>
-                        {% if user.groups.all %}
-                            <span class="badge bg-soft-primary text-primary">
-                                {{ user.groups.first.name }}
-                            </span>
-                        {% else %}
-                            <span class="badge bg-light text-muted">
-                                No Role
-                            </span>
-                        {% endif %}
-                    </td>
-
-                    <!-- Last Login -->
-                    <td>
-                        {% if user.last_login %}
-                            <span class="text-muted">
-                                {{ user.last_login|localtime|naturaltime }}
-                            </span>
-                        {% else %}
-                            <span class="text-danger small">
-                                Never Logged In
-                            </span>
-                        {% endif %}
-                    </td>
-                </tr>
-                {% empty %}
-                <tr>
-                    <td colspan="3" class="text-center text-muted py-4">
-                        No recent user activity
-                    </td>
-                </tr>
-                {% endfor %}
-                </tbody>
-
-            </table>
+<div class="ut-wrap">
+    <div class="ut-header">
+        <div>
+            <p class="ut-title">User Login Activity</p>
+            <p class="ut-sub">{{ recent_logins|length }} user{{ recent_logins|length|pluralize }} tracked</p>
         </div>
+    </div>
+    <div class="table-responsive">
+        <table class="table ut-table mb-0">
+            <thead>
+                <tr>
+                    <th style="padding-left:24px;">User</th>
+                    <th>Role</th>
+                    <th>Last Login</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for user in recent_logins %}
+            <tr>
+                <td style="padding-left:24px;">
+                    <div class="d-flex align-items-center gap-3">
+                        <div class="user-av">{{ user.username|slice:":2"|upper }}</div>
+                        <span style="font-weight:600; color:#111827;">{{ user.username }}</span>
+                    </div>
+                </td>
+                <td>
+                    {% if user.is_superuser %}<span class="role-admin">Admin</span>
+                    {% elif user.groups.first.name == "Manager" %}<span class="role-manager">Manager</span>
+                    {% elif user.groups.first.name == "Staff" %}<span class="role-staff">Staff</span>
+                    {% else %}<span class="role-none">No Role</span>{% endif %}
+                </td>
+                <td style="font-size:0.82rem; color:#6b7280;">
+                    {% if user.last_login %}{{ user.last_login|localtime|naturaltime }}
+                    {% else %}<span style="color:#dc2626;">Never logged in</span>{% endif %}
+                </td>
+            </tr>
+            {% empty %}
+            <tr><td colspan="3" class="text-center py-5 text-muted">No activity recorded.</td></tr>
+            {% endfor %}
+            </tbody>
+        </table>
     </div>
 </div>
 

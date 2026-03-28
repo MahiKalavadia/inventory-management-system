@@ -2,208 +2,202 @@
 {% load static %}
 {% load humanize %}
 {% load number_filters %}
-{%block pagetitle%}Order Details{% endblock pagetitle%}
-{%block pagecontent %}Manage orders here.{% endblock pagecontent %}
+{%block pagetitle%}Order History{% endblock pagetitle%}
+{%block pagecontent%}All customer orders and invoices{% endblock pagecontent%}
 {% block link %}
-<a href="{% url 'order_dashboard' %}" class="btn btn-light btn-sm border">
-            ← Back
-        </a>
+<a href="{% url 'order_dashboard' %}" class="btn btn-outline-secondary btn-sm">
+    <i class="bi bi-arrow-left-circle"></i> Back
+</a>
+<a href="{% url 'create_order' %}" class="btn btn-primary btn-sm">
+    <i class="bi bi-plus-lg me-1"></i> New Order
+</a>
+<button class="btn btn-outline-secondary btn-sm dropdown-toggle" data-bs-toggle="dropdown">
+    <i class="bi bi-download me-1"></i> Export
+</button>
+<ul class="dropdown-menu">
+    <li><a class="dropdown-item" href="{% url 'export_orderlist_csv' %}"><i class="bi bi-filetype-csv me-2 text-success"></i>CSV</a></li>
+    <li><a class="dropdown-item" href="{% url 'export_orderlist_excel' %}"><i class="bi bi-file-earmark-excel me-2 text-success"></i>Excel</a></li>
+    <li><a class="dropdown-item" href="{% url 'export_orderlist_pdf' %}"><i class="bi bi-file-earmark-pdf me-2 text-danger"></i>PDF</a></li>
+</ul>
 {% endblock link %}
-{% block panel %}Order List Panel{% endblock panel%}
+{% block panel %}Order Panel{% endblock panel%}
 {% block content %}
+
 <style>
-    .stat-card {
-  border: 1px solid #eef1f5;
-  border-radius: 14px;
-}
+/* Stat cards */
+.ol-stat { background:#fff; border:1px solid #e5e7eb; border-radius:12px; padding:18px 20px; height:100%; }
+.ol-stat-label { font-size:0.68rem; font-weight:700; text-transform:uppercase; letter-spacing:0.06em; color:#9ca3af; margin-bottom:6px; }
+.ol-stat-val { font-size:1.5rem; font-weight:800; color:#111827; line-height:1; }
+.ol-stat-sub { font-size:0.72rem; color:#9ca3af; margin-top:4px; }
+.ol-stat-icon { width:38px; height:38px; border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:0.95rem; margin-bottom:12px; }
 
-.table th {
-  font-size: 13px;
-  font-weight: 600;
-  color: #6b7280;
-}
+/* Table wrap */
+.ol-wrap { border-radius:14px; overflow:hidden; border:1px solid #e5e7eb; background:#fff; margin-top:20px; }
+.ol-header { padding:16px 24px; border-bottom:1px solid #f0f0f0; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; }
+.ol-title { font-size:0.95rem; font-weight:700; color:#111827; margin:0; }
+.ol-sub { font-size:0.78rem; color:#9ca3af; margin-top:2px; }
 
-.table td {
-  font-size: 14px;
-}
+.ol-search { position:relative; }
+.ol-search input { padding:8px 14px 8px 36px; border:1.5px solid #e5e7eb; border-radius:9px; font-size:0.82rem; width:220px; outline:none; transition:border-color 0.15s; }
+.ol-search input:focus { border-color:#6366f1; }
+.ol-search i { position:absolute; left:11px; top:50%; transform:translateY(-50%); color:#9ca3af; font-size:0.78rem; pointer-events:none; }
 
-.badge {
-  border-radius: 20px;
-  font-size: 12px;
-  padding: 4px 10px;
-}
+.ol-table thead th { background:#f8fafc; font-size:0.68rem; font-weight:700; text-transform:uppercase; letter-spacing:0.07em; color:#94a3b8; padding:11px 16px; border-bottom:1px solid #f0f0f0; white-space:nowrap; }
+.ol-table tbody tr { border-bottom:1px solid #f8f9fa; }
+.ol-table tbody tr:last-child { border-bottom:none; }
+.ol-table td { padding:13px 16px; vertical-align:middle; font-size:0.875rem; }
 
-.card {
-  border-radius: 16px;
-}
+.bill-no { font-weight:700; color:#4f46e5; font-size:0.82rem; font-family:monospace; }
+.cust-name { font-weight:600; color:#111827; font-size:0.875rem; }
+.cust-email { font-size:0.72rem; color:#9ca3af; }
 
-.card:hover {
-  box-shadow: 0 12px 30px rgba(0,0,0,0.05);
-}
+/* Status badges */
+.s-draft     { background:#f3f4f6; color:#374151; border:1px solid #e5e7eb; }
+.s-confirmed { background:#eff6ff; color:#2563eb; border:1px solid #bfdbfe; }
+.s-paid      { background:#ecfdf5; color:#047857; border:1px solid #a7f3d0; }
+.s-cancelled { background:#fef2f2; color:#b91c1c; border:1px solid #fecaca; }
+.s-pending   { background:#fffbeb; color:#b45309; border:1px solid #fde68a; }
+.status-pill { display:inline-flex; align-items:center; gap:4px; border-radius:20px; padding:3px 10px; font-size:0.7rem; font-weight:600; }
+.sdot { width:5px; height:5px; border-radius:50%; display:inline-block; }
 
+.amount-val { font-weight:700; color:#111827; font-size:0.9rem; }
+
+.btn-act { width:28px; height:28px; border-radius:7px; display:inline-flex; align-items:center; justify-content:center; font-size:0.75rem; border:none; transition:all 0.15s; text-decoration:none; }
+.btn-view { background:#eff6ff; color:#2563eb; }
+.btn-view:hover { background:#2563eb; color:#fff; }
+.btn-edit { background:#f0fdf4; color:#16a34a; }
+.btn-edit:hover { background:#16a34a; color:#fff; }
+.btn-del  { background:#fef2f2; color:#dc2626; }
+.btn-del:hover  { background:#dc2626; color:#fff; }
+
+.ol-footer { padding:13px 24px; border-top:1px solid #f0f0f0; background:#fafafa; display:flex; justify-content:space-between; align-items:center; }
+.page-btn { display:inline-flex; align-items:center; gap:5px; padding:6px 14px; border-radius:8px; font-size:0.8rem; font-weight:500; border:1px solid #e5e7eb; background:#fff; color:#374151; text-decoration:none; transition:background 0.15s; }
+.page-btn:hover { background:#f3f4f6; }
+.page-btn.disabled { opacity:0.4; pointer-events:none; }
+.page-counter { display:inline-flex; align-items:center; justify-content:center; background:#111827; color:#fff; border-radius:8px; padding:5px 14px; font-size:0.8rem; font-weight:600; }
 </style>
-        <!--Stats-->
-<div class="row mb-3">
+
+<!-- Stat Cards -->
+<div class="row g-3 mb-2">
     <div class="col-md-4">
-  <a href="{% url 'category_list' %}" class="text-decoration-none text-dark">
-    <div class="stat-card">
-      <div class="stat-header">
-        <span class="stat-title">TOTAL ORDERS</span>
-        <i class="bi bi-cart-check-fill text-primary"></i>
-      </div>
-      <h4><b>{{ total_orders }}</b></h4>
-      <p class="stat-sub text-muted">Orders received till now</p>
+        <div class="ol-stat">
+            <div class="ol-stat-icon" style="background:#eff6ff; color:#2563eb;"><i class="bi bi-receipt-cutoff"></i></div>
+            <div class="ol-stat-label">Total Orders</div>
+            <div class="ol-stat-val">{{ total_orders }}</div>
+            <div class="ol-stat-sub">All orders received</div>
+        </div>
     </div>
-  </a>
-</div>
-
-<div class="col-md-4">
-  <a href="{% url 'category_with_products' %}" class="text-decoration-none text-dark">
-    <div class="stat-card">
-      <div class="stat-header">
-        <span class="stat-title">RECEIVED AMOUNT</span>
-        <i class="bi bi-wallet2 text-success"></i>
-      </div>
-      <h4><b>{{ total_sales|short_number }}</b></h4>
-      <p class="stat-sub text-success">Amount that has been received</p>
+    <div class="col-md-4">
+        <div class="ol-stat">
+            <div class="ol-stat-icon" style="background:#ecfdf5; color:#16a34a;"><i class="bi bi-currency-rupee"></i></div>
+            <div class="ol-stat-label">Revenue Received</div>
+            <div class="ol-stat-val" style="color:#16a34a;">₹{{ total_sales|short_number }}</div>
+            <div class="ol-stat-sub">From paid orders</div>
+        </div>
     </div>
-  </a>
-</div>
-
-<div class="col-md-4">
-  <a href="{% url 'category_without_products' %}" class="text-decoration-none text-dark">
-    <div class="stat-card">
-      <div class="stat-header">
-        <span class="stat-title">PAYMENT PENDING</span>
-        <i class="bi bi-clock-history text-warning"></i>
-      </div>
-      <h4><b>{{ pending_amount|short_number }}</b></h4>
-      <p class="stat-sub text-warning">Amount yet to be received</p>
+    <div class="col-md-4">
+        <div class="ol-stat">
+            <div class="ol-stat-icon" style="background:#fffbeb; color:#d97706;"><i class="bi bi-hourglass-split"></i></div>
+            <div class="ol-stat-label">Pending Amount</div>
+            <div class="ol-stat-val" style="color:#d97706;">₹{{ pending_amount|short_number }}</div>
+            <div class="ol-stat-sub">Yet to be received</div>
+        </div>
     </div>
-  </a>
 </div>
 
-</div>
-<div class="card shadow-sm border-0 rounded-4 mb-3">
-  <div class="card-body d-flex justify-content-between align-items-center">
+<!-- Table -->
+<div class="ol-wrap">
+    <div class="ol-header">
+        <div>
+            <p class="ol-title">Order Directory</p>
+            <p class="ol-sub">{{ page_obj.paginator.count }} order{{ page_obj.paginator.count|pluralize }} total</p>
+        </div>
+        <form method="GET" class="ol-search">
+            <i class="bi bi-search"></i>
+            <input type="text" name="search" value="{{ search|default:'' }}" placeholder="Bill no / customer...">
+        </form>
+    </div>
 
-    <!-- Search & Filters -->
-    <form method="GET" class="d-flex gap-2">
-      <input type="text" name="search" value="{{ search_query }}" 
-             class="form-control" placeholder="Search orders..." style="width:250px;">
-      <button class="btn btn-outline-secondary">
-        <i class="bi bi-funnel"></i> Search
-      </button>
-    </form>
-<div class="d-flex align-items-center gap-4">
+    <div class="table-responsive">
+        <table class="table ol-table mb-0">
+            <thead>
+                <tr>
+                    <th style="padding-left:24px;">Bill No</th>
+                    <th>Customer</th>
+                    <th>Order Status</th>
+                    <th>Payment</th>
+                    <th class="text-end">Amount</th>
+                    <th class="text-end">Date</th>
+                    <th class="text-end" style="padding-right:24px;">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for order in page_obj %}
+            <tr>
+                <td style="padding-left:24px;"><span class="bill-no">{{ order.bill_number }}</span></td>
+                <td>
+                    <div class="cust-name">{{ order.customer_name }}</div>
+                    <div class="cust-email">{{ order.customer_email }}</div>
+                </td>
+                <td>
+                    {% if order.status == 'Draft' %}
+                    <span class="status-pill s-draft"><span class="sdot" style="background:#9ca3af;"></span>Draft</span>
+                    {% elif order.status == 'Confirmed' %}
+                    <span class="status-pill s-confirmed"><span class="sdot bg-primary"></span>Confirmed</span>
+                    {% elif order.status == 'Paid' %}
+                    <span class="status-pill s-paid"><span class="sdot bg-success"></span>Paid</span>
+                    {% elif order.status == 'Cancelled' %}
+                    <span class="status-pill s-cancelled"><span class="sdot bg-danger"></span>Cancelled</span>
+                    {% else %}
+                    <span class="status-pill s-draft">{{ order.status }}</span>
+                    {% endif %}
+                </td>
+                <td>
+                    {% if order.payment_status == 'Paid' %}
+                    <span class="status-pill s-paid"><span class="sdot bg-success"></span>Paid</span>
+                    {% elif order.payment_status == 'Failed' %}
+                    <span class="status-pill s-cancelled"><span class="sdot bg-danger"></span>Failed</span>
+                    {% else %}
+                    <span class="status-pill s-pending"><span class="sdot" style="background:#d97706;"></span>Pending</span>
+                    {% endif %}
+                </td>
+                <td class="text-end"><span class="amount-val">₹{{ order.total_amount|intcomma }}</span></td>
+                <td class="text-end" style="font-size:0.8rem; color:#6b7280;">{{ order.created_at|date:"d M Y" }}</td>
+                <td class="text-end" style="padding-right:24px;">
+                    <div class="d-flex justify-content-end gap-2">
+                        <a href="{% url 'order_detail' order.id %}" class="btn-act btn-view" title="View"><i class="bi bi-eye-fill"></i></a>
+                        {% if order.payment_status == 'Pending' %}
+                        <a href="{% url 'update_order' order.id %}" class="btn-act btn-edit" title="Edit"><i class="bi bi-pencil-fill"></i></a>
+                        {% endif %}
+                        {% if request.user.is_superuser %}
+                        <a href="{% url 'delete_order' order.id %}" class="btn-act btn-del" title="Delete"><i class="bi bi-trash-fill"></i></a>
+                        {% endif %}
+                    </div>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="7" class="text-center py-5">
+                    <div class="text-muted"><i class="bi bi-receipt fs-2 d-block mb-2 opacity-25"></i>No orders found.</div>
+                </td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <div class="ol-footer">
+        <span style="font-size:0.8rem; color:#6b7280;">Showing {{ page_obj.start_index }}–{{ page_obj.end_index }} of {{ page_obj.paginator.count }}</span>
         <div class="d-flex align-items-center gap-2">
-                <a href="{% url 'order_list' %}" class="btn btn-light btn-sm border">
-                  ← Back
-                </a>
-                <a href="{% url 'create_order' %}" class="btn btn-primary btn-sm">
-                  <i class="bi bi-plus-lg"></i> Create Order
-                </a>
-                <div class="dropdown">
-            <button class="btn btn-outline-secondary btn-sm dropdown-toggle"
-                    data-bs-toggle="dropdown">
-                Export Order Details
-            </button>
-            <ul class="dropdown-menu">
-                <li><a class="dropdown-item" href="{% url 'export_orderlist_csv' %}">CSV</a></li>
-                <li><a class="dropdown-item" href="{% url 'export_orderlist_excel' %}">Excel</a></li>
-                <li><a class="dropdown-item" href="{% url 'export_orderlist_pdf' %}">PDF</a></li>
-            </ul>
+            {% if page_obj.has_previous %}
+            <a class="page-btn" href="?page={{ page_obj.previous_page_number }}{% if search %}&search={{ search }}{% endif %}"><i class="bi bi-chevron-left"></i> Prev</a>
+            {% else %}<span class="page-btn disabled"><i class="bi bi-chevron-left"></i> Prev</span>{% endif %}
+            <span class="page-counter">{{ page_obj.number }} / {{ page_obj.paginator.num_pages }}</span>
+            {% if page_obj.has_next %}
+            <a class="page-btn" href="?page={{ page_obj.next_page_number }}{% if search %}&search={{ search }}{% endif %}">Next <i class="bi bi-chevron-right"></i></a>
+            {% else %}<span class="page-btn disabled">Next <i class="bi bi-chevron-right"></i></span>{% endif %}
         </div>
-        </div>
-  </div>
-</div>
-
-
-
-<div class="card shadow-sm border-0 rounded-4">
-<div class="table-responsive">
-
-<table class="table table-hover align-middle mb-0">
-<thead class="table-light">
-<tr>
-  <th># ORDER ID</th>
-  <th>CUSTOMER</th>
-  <th>STATUS</th>
-  <th>PAYMENT</th>
-  <th class="text-end">TOTAL AMOUNT</th>
-  <th class="text-end">DATE</th>
-  <th class="text-end">ACTION</th>
-</tr>
-</thead>
-
-<tbody>
-{% for order in page_obj %}
-<tr>
-  <td class="fw-semibold text-primary">{{ order.bill_number }}</td>
-
-  <td>
-    <strong>{{ order.customer_name }}</strong><br>
-    <small class="text-muted">{{ order.customer_email }}</small>
-  </td>
-
-  <td>
-    <span class="badge bg-info-subtle text-info">{{ order.status }}</span>
-  </td>
-
-  <td>
-    {% if order.payment_status == "Paid" %}
-      <span class="badge bg-success-subtle text-success">Paid</span>
-    {% else %}
-      <span class="badge bg-warning-subtle text-warning">Pending</span>
-    {% endif %}
-  </td>
-
-  <td class="text-end fw-semibold">₹ {{ order.total_amount|intcomma }}</td>
-
-  <td class="text-end text-muted small">{{ order.created_at|date:"d M Y" }}</td>
-
-  <td class="text-end">
-    <a href="{% url 'order_detail' order.id %}" class="btn btn-sm btn-outline-primary">View</a>
-    {% if order.payment_status == 'Pending' %}
-     <a href="{% url 'update_order' order.id %}" class="btn btn-sm btn-outline-danger">Edit</a>
-     {% endif %}
-    {% if request.user.is_superuser %}
-    <a href="{% url 'delete_order' order.id %}" class="btn btn-sm btn-outline-danger">Delete</a>
-    {% endif %}
-  </td>
-</tr>
-{% empty %}
-<tr>
-  <td colspan="7" class="text-center text-muted py-4">No orders found</td>
-</tr>
-{% endfor %}
-</tbody>
-
-</table>
-</div>
-</div>
-<div class="d-flex justify-content-between align-items-center mt-2">
-  <small class="text-muted">
-    Showing {{ page_obj.start_index }} to {{ page_obj.end_index }} of {{ page_obj.paginator.count }} entries
-  </small>
-
-  <ul class="pagination pagination-sm mb-0">
-    {% if page_obj.has_previous %}
-      <li class="page-item">
-        <a class="page-link" href="?page={{ page_obj.previous_page_number }}">‹</a>
-      </li>
-    {% endif %}
-
-    <li class="page-item active">
-      <span class="page-link">{{ page_obj.number }}</span>
-    </li>
-
-    {% if page_obj.has_next %}
-      <li class="page-item">
-        <a class="page-link" href="?page={{ page_obj.next_page_number }}">›</a>
-      </li>
-    {% endif %}
-  </ul>
+    </div>
 </div>
 
 {% endblock %}

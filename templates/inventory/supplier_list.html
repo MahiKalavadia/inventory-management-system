@@ -1,236 +1,180 @@
 {% extends 'base_dashboard.html' %}
 {% load static %}
-{%block pagetitle%}Vendors Details{% endblock pagetitle%}
-{%block pagecontent %}Manage vendor details here.{% endblock pagecontent %}
+{%block pagetitle%}Vendor Catalog{% endblock pagetitle%}
+{%block pagecontent%}Full directory of all registered vendors{% endblock pagecontent%}
 {% block link %}
-<a href="{% url 'supplier_dashboard' %}" class="btn btn-light btn-sm border">
-            ← Back
-        </a>
-
-        {% if request.user.is_superuser or request.user.groups.first.name == "Manager" %}
-        <a href="{% url 'add_supplier' %}" class="btn btn-primary btn-sm">
-            + Add Vendor
-        </a>
-        {% endif %}
+<a href="{% url 'supplier_dashboard' %}" class="btn btn-outline-secondary btn-sm">
+    <i class="bi bi-arrow-left-circle"></i> Back
+</a>
+{% if request.user.is_superuser or request.user.groups.first.name == "Manager" %}
+<a href="{% url 'add_supplier' %}" class="btn btn-primary btn-sm">
+    <i class="bi bi-plus-lg me-1"></i> Add Vendor
+</a>
+{% endif %}
 {% endblock link %}
-{% block panel %}Vendor List Panel{% endblock panel%}
+{% block panel %}Vendor Panel{% endblock panel%}
 {% block content %}
 
 <style>
-/* Card Styling */
-.dashboard-card {
-    border: none;
-    border-radius: 12px;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.08);
-}
+.vt-wrap { border-radius:14px; overflow:hidden; border:1px solid #e5e7eb; background:#fff; }
+.vt-header { padding:16px 24px; border-bottom:1px solid #f0f0f0; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; }
+.vt-title { font-size:0.95rem; font-weight:700; color:#111827; margin:0; }
+.vt-sub { font-size:0.78rem; color:#9ca3af; margin-top:2px; }
 
-/* Table Styling */
-.table thead th {
-    background: #f8fafc;
-    font-weight: 600;
-    font-size: 14px;
-    border-bottom: 2px solid #e5e7eb;
-}
+.vt-search { position:relative; }
+.vt-search input { padding:8px 14px 8px 36px; border:1.5px solid #e5e7eb; border-radius:9px; font-size:0.82rem; width:220px; outline:none; transition:border-color 0.15s; }
+.vt-search input:focus { border-color:#6366f1; }
+.vt-search i { position:absolute; left:11px; top:50%; transform:translateY(-50%); color:#9ca3af; font-size:0.78rem; pointer-events:none; }
 
-.table tbody tr:hover {
-    background-color: #f1f5f9;
-    transition: 0.2s ease;
-}
+.vt-table thead th { background:#f8fafc; font-size:0.68rem; font-weight:700; text-transform:uppercase; letter-spacing:0.07em; color:#94a3b8; padding:11px 16px; border-bottom:1px solid #f0f0f0; white-space:nowrap; }
+.vt-table tbody tr { border-bottom:1px solid #f8f9fa; }
+.vt-table tbody tr:last-child { border-bottom:none; }
+.vt-table td { padding:14px 16px; vertical-align:middle; font-size:0.875rem; }
 
-.table td {
-    vertical-align: middle;
-    font-size: 14px;
-}
+.vt-avatar { width:38px; height:38px; border-radius:10px; flex-shrink:0; display:flex; align-items:center; justify-content:center; font-size:0.75rem; font-weight:800; color:#fff; background:linear-gradient(135deg,#6366f1,#0ea5e9); }
+.vt-name { font-weight:700; color:#111827; font-size:0.875rem; }
+.vt-contact { font-size:0.72rem; color:#9ca3af; margin-top:1px; }
 
-/* Action Buttons */
-.action-btn {
-    padding: 4px 10px;
-    font-size: 12px;
-    border-radius: 6px;
-}
+.vt-phone { font-size:0.82rem; color:#374151; font-weight:500; }
+.vt-email { font-size:0.75rem; color:#6b7280; margin-top:2px; }
 
-/* Header */
-.page-title {
-    font-size: 18px;
-    font-weight: 600;
-}
+.tag-wrap { display:flex; flex-wrap:wrap; gap:3px; max-width:220px; }
+.cat-tag { display:inline-flex; align-items:center; background:#f0f4ff; color:#4f46e5; border-radius:5px; padding:2px 7px; font-size:0.67rem; font-weight:600; white-space:nowrap; }
+.brand-tag { display:inline-flex; align-items:center; background:#f8fafc; color:#374151; border:1px solid #e5e7eb; border-radius:5px; padding:2px 7px; font-size:0.67rem; font-weight:500; white-space:nowrap; }
+.more-tag { display:inline-flex; align-items:center; background:#f3f4f6; color:#6b7280; border-radius:5px; padding:2px 7px; font-size:0.67rem; font-weight:600; }
 
-/* Pagination */
-.pagination .page-link {
-    border-radius: 6px;
-    margin: 0 3px;
-}
+.prod-chip { display:inline-flex; align-items:center; gap:4px; background:#eff6ff; color:#2563eb; border-radius:20px; padding:3px 10px; font-size:0.72rem; font-weight:700; }
 
-/* Badge Style */
-.badge-custom {
-    font-size: 12px;
-    padding: 4px 8px;
-}
+.status-active   { display:inline-flex; align-items:center; gap:4px; background:#ecfdf5; color:#047857; border:1px solid #a7f3d0; border-radius:20px; padding:3px 10px; font-size:0.7rem; font-weight:600; }
+.status-inactive { display:inline-flex; align-items:center; gap:4px; background:#f3f4f6; color:#6b7280; border:1px solid #e5e7eb; border-radius:20px; padding:3px 10px; font-size:0.7rem; font-weight:600; }
+.sdot { width:6px; height:6px; border-radius:50%; display:inline-block; }
+
+.btn-act { width:30px; height:30px; border-radius:8px; display:inline-flex; align-items:center; justify-content:center; font-size:0.78rem; border:none; transition:all 0.15s; text-decoration:none; }
+.btn-edit  { background:#eff6ff; color:#2563eb; }
+.btn-edit:hover  { background:#2563eb; color:#fff; }
+.btn-del   { background:#fef2f2; color:#dc2626; }
+.btn-del:hover   { background:#dc2626; color:#fff; }
+.btn-off   { background:#fffbeb; color:#b45309; }
+.btn-off:hover   { background:#d97706; color:#fff; }
+.btn-on    { background:#f0fdf4; color:#16a34a; }
+.btn-on:hover    { background:#16a34a; color:#fff; }
+
+.vt-footer { padding:13px 24px; border-top:1px solid #f0f0f0; background:#fafafa; display:flex; justify-content:space-between; align-items:center; }
+.page-btn { display:inline-flex; align-items:center; gap:5px; padding:6px 14px; border-radius:8px; font-size:0.8rem; font-weight:500; border:1px solid #e5e7eb; background:#fff; color:#374151; text-decoration:none; transition:background 0.15s; }
+.page-btn:hover { background:#f3f4f6; }
+.page-btn.disabled { opacity:0.4; pointer-events:none; }
+.page-counter { display:inline-flex; align-items:center; justify-content:center; background:#111827; color:#fff; border-radius:8px; padding:5px 14px; font-size:0.8rem; font-weight:600; }
 </style>
-<div class="card border-0 shadow-sm mb-4">
 
-    <!-- Header -->
-    <div class="card-header bg-white border-bottom d-flex justify-content-between align-items-center">
-        <h6 class="mb-0 fw-semibold">Vendor Management</h6>
-        <span class="small text-muted">
-            Total Vendors: {{ page_obj.paginator.count }}
-        </span>
+<div class="vt-wrap">
+
+    <div class="vt-header">
+        <div>
+            <p class="vt-title">Vendor Directory</p>
+            <p class="vt-sub">{{ page_obj.paginator.count }} vendor{{ page_obj.paginator.count|pluralize }} registered</p>
+        </div>
+        <form method="get" class="vt-search">
+            <i class="bi bi-search"></i>
+            <input type="text" name="q" placeholder="Search vendors..." value="{{ request.GET.q|default:'' }}">
+        </form>
     </div>
 
-    <!-- TABLE -->
-    <div class="card-body p-0">
-        <div class="table-responsive">
-            <table class="table table-hover align-middle mb-0">
-                <thead class="table-light">
-                    <tr>
-                        <th>ID</th>
-                        <th>Vendor Name</th>
-                        <th>Categories</th>
-                        <th>Brands</th>
-                        <th class="text-center">Products</th>
-                        <th>Phone</th>
-                        <th class="text-center">Status</th>
-                        <th class="text-center">Actions</th>
-                    </tr>
-                </thead>
+    <div class="table-responsive">
+        <table class="table vt-table mb-0">
+            <thead>
+                <tr>
+                    <th style="padding-left:24px;">#</th>
+                    <th>Vendor</th>
+                    <th>Contact</th>
+                    <th>Categories</th>
+                    <th>Brands</th>
+                    <th>Products</th>
+                    <th>Status</th>
+                    <th class="text-end" style="padding-right:24px;">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for item in page_obj %}
+            <tr>
+                <td style="padding-left:24px; color:#9ca3af; font-size:0.75rem; font-weight:600;">#{{ item.supplier.id }}</td>
+                <td>
+                    <div class="d-flex align-items-center gap-3">
+                        <div class="vt-avatar">{{ item.supplier.name|slice:":2"|upper }}</div>
+                        <div>
+                            <div class="vt-name">{{ item.supplier.name }}</div>
+                            <div class="vt-contact">{{ item.supplier.contact_person|default:"—" }}</div>
+                        </div>
+                    </div>
+                </td>
+                <td>
+                    <div class="vt-phone"><i class="bi bi-telephone-fill me-1" style="font-size:0.62rem; color:#9ca3af;"></i>{{ item.supplier.phone }}</div>
+                    {% if item.supplier.email %}<div class="vt-email"><i class="bi bi-envelope me-1" style="font-size:0.62rem;"></i>{{ item.supplier.email }}</div>{% endif %}
+                </td>
+                <td>
+                    {% if item.categories %}
+                    <div class="tag-wrap">
+                        {% for cat in item.categories|slice:":4" %}<span class="cat-tag">{{ cat }}</span>{% endfor %}
+                        {% if item.categories|length > 4 %}<span class="more-tag">+{{ item.categories|length|add:"-4" }}</span>{% endif %}
+                    </div>
+                    {% else %}<span class="text-muted small">—</span>{% endif %}
+                </td>
+                <td>
+                    {% if item.brands %}
+                    <div class="tag-wrap">
+                        {% for brand in item.brands|slice:":3" %}<span class="brand-tag">{{ brand }}</span>{% endfor %}
+                        {% if item.brands|length > 3 %}<span class="more-tag">+{{ item.brands|length|add:"-3" }}</span>{% endif %}
+                    </div>
+                    {% else %}<span class="text-muted small">—</span>{% endif %}
+                </td>
+                <td><span class="prod-chip"><i class="bi bi-box-seam" style="font-size:0.62rem;"></i>{{ item.total_products }}</span></td>
+                <td>
+                    {% if item.supplier.is_active %}
+                    <span class="status-active"><span class="sdot bg-success"></span> Active</span>
+                    {% else %}
+                    <span class="status-inactive"><span class="sdot" style="background:#9ca3af;"></span> Inactive</span>
+                    {% endif %}
+                </td>
+                <td class="text-end" style="padding-right:24px;">
+                    {% if request.user.is_superuser %}
+                    <div class="d-flex justify-content-end gap-2">
+                        <a href="{% url 'update_supplier' item.supplier.id %}" class="btn-act btn-edit" title="Edit"><i class="bi bi-pencil-fill"></i></a>
+                        <a href="{% url 'delete_supplier' item.supplier.id %}" class="btn-act btn-del" title="Delete"><i class="bi bi-trash-fill"></i></a>
+                        {% if item.supplier.is_active %}
+                        <a href="{% url 'toggle_supplier_status' item.supplier.pk %}" class="btn-act btn-off" title="Deactivate"><i class="bi bi-toggle-on"></i></a>
+                        {% else %}
+                        <a href="{% url 'toggle_supplier_status' item.supplier.pk %}" class="btn-act btn-on" title="Activate"><i class="bi bi-toggle-off"></i></a>
+                        {% endif %}
+                    </div>
+                    {% elif request.user.groups.first.name == "Manager" %}
+                    <a href="{% url 'update_supplier' item.supplier.id %}" class="btn-act btn-edit" title="Edit"><i class="bi bi-pencil-fill"></i></a>
+                    {% else %}
+                    <span class="text-muted" style="font-size:0.75rem;">Read-only</span>
+                    {% endif %}
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="8" class="text-center py-5">
+                    <div class="text-muted"><i class="bi bi-truck fs-2 d-block mb-2 opacity-25"></i>No vendors found.</div>
+                </td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
 
-                <tbody>
-                    {% for item in page_obj %}
-                    <tr>
-                         <td class="fw-medium">
-                            {{ item.supplier.id }}
-                        </td>
-                        <td class="fw-medium">
-                            {{ item.supplier.name }}
-                        </td>
-
-                        <td class="text-muted small">
-                            {{ item.categories }}
-                        </td>
-
-                        <td class="text-muted small">
-                            {{ item.brands }}
-                        </td>
-
-                        <td class="text-center">
-                            <span class="badge bg-primary-subtle text-primary fw-semibold px-3 py-2">
-                                {{ item.total_products }}
-                            </span>
-                        </td>
-
-                        <td>
-                            {{ item.supplier.phone }}
-                        </td>
-
-                        <td class="text-center">
-                            {% if item.supplier.is_active %}
-                                <span class="badge bg-success-subtle text-success px-3 py-2">
-                                    Active
-                                </span>
-                            {% else %}
-                                <span class="badge bg-danger-subtle text-danger px-3 py-2">
-                                    Inactive
-                                </span>
-                            {% endif %}
-                        </td>
-
-                        <td class="text-center">
-                            {% if request.user.is_superuser %}
-
-                                <div class="btn-group btn-group-sm" role="group">
-
-                                    <a href="{% url 'update_supplier' item.supplier.id %}" 
-                                       class="btn btn-outline-warning">
-                                        <i class="bi bi-pencil-square"></i>
-                                    </a>
-
-                                    <a href="{% url 'delete_supplier' item.supplier.id %}" 
-                                       class="btn btn-outline-danger">
-                                        <i class="bi bi-trash"></i>
-                                    </a>
-
-                                    {% if item.supplier.is_active %}
-                                        <a href="{% url 'toggle_supplier_status' item.supplier.pk %}" 
-                                           class="btn btn-outline-secondary">
-                                            Deactivate
-                                        </a>
-                                    {% else %}
-                                        <a href="{% url 'toggle_supplier_status' item.supplier.pk %}" 
-                                           class="btn btn-outline-success">
-                                            Activate
-                                        </a>
-                                    {% endif %}
-
-                                </div>
-
-                            {% elif request.user.groups.first.name == "Manager" %}
-
-                                <a href="{% url 'update_supplier' item.supplier.id %}" 
-                                   class="btn btn-outline-primary btn-sm">
-                                   Edit
-                                </a>
-
-                            {% else %}
-                                <span class="text-muted small">Read Only</span>
-                            {% endif %}
-                        </td>
-                    </tr>
-
-                    {% empty %}
-                    <tr>
-                        <td colspan="7" class="text-center py-5 text-muted">
-                            No vendors available.
-                        </td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+    <div class="vt-footer">
+        <span style="font-size:0.8rem; color:#6b7280;">Showing {{ page_obj.start_index }}–{{ page_obj.end_index }} of {{ page_obj.paginator.count }}</span>
+        <div class="d-flex align-items-center gap-2">
+            {% if page_obj.has_previous %}
+            <a class="page-btn" href="?page={{ page_obj.previous_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}"><i class="bi bi-chevron-left"></i> Prev</a>
+            {% else %}<span class="page-btn disabled"><i class="bi bi-chevron-left"></i> Prev</span>{% endif %}
+            <span class="page-counter">{{ page_obj.number }} / {{ page_obj.paginator.num_pages }}</span>
+            {% if page_obj.has_next %}
+            <a class="page-btn" href="?page={{ page_obj.next_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">Next <i class="bi bi-chevron-right"></i></a>
+            {% else %}<span class="page-btn disabled">Next <i class="bi bi-chevron-right"></i></span>{% endif %}
         </div>
     </div>
 
-    <!-- Pagination Footer -->
-    <div class="border-top bg-light p-2">
-        <nav>
-            <ul class="pagination pagination-sm justify-content-end mb-0">
-
-                {% if page_obj.has_previous %}
-                <li class="page-item">
-                    <a class="page-link"
-                       href="?page={{ page_obj.previous_page_number }}"
-                       aria-label="Previous">
-                        &laquo;
-                    </a>
-                </li>
-                {% else %}
-                <li class="page-item disabled">
-                    <span class="page-link">&laquo;</span>
-                </li>
-                {% endif %}
-
-                <li class="page-item disabled">
-                    <span class="page-link small">
-                        Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
-                    </span>
-                </li>
-
-                {% if page_obj.has_next %}
-                <li class="page-item">
-                    <a class="page-link"
-                       href="?page={{ page_obj.next_page_number }}"
-                       aria-label="Next">
-                        &raquo;
-                    </a>
-                </li>
-                {% else %}
-                <li class="page-item disabled">
-                    <span class="page-link">&raquo;</span>
-                </li>
-                {% endif %}
-
-            </ul>
-        </nav>
-    </div>
-
 </div>
-
 {% endblock %}

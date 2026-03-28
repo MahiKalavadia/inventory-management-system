@@ -1,90 +1,109 @@
 {% extends 'base_dashboard.html' %}
-{% load crispy_forms_tags %}
 {% load static %}
-{%block pagetitle%}Update Purchase Ordre{% endblock pagetitle%}
-{%block pagecontent %}Update the details and place the order.{% endblock pagecontent %}
+{%block pagetitle%}Edit Purchase Order{% endblock pagetitle%}
+{%block pagecontent%}Fill in delivery details and place the order{% endblock pagecontent%}
 {% block link %}
- <a href="{% url 'purchase_dashboard' %}" class="btn btn-outline-secondary btn-sm">
-            <i class="bi bi-arrow-left-circle"></i> Back
-        </a>
+<a href="{% url 'purchase_dashboard' %}" class="btn btn-outline-secondary btn-sm"><i class="bi bi-arrow-left-circle"></i> Back</a>
 {% endblock link %}
-{% block panel %}Update PO Panel{% endblock panel%}
+{% block panel %}Purchase Panel{% endblock panel%}
 {% block content %}
+
 <style>
-    .page-wrapper {
-        margin-top: 90px;
-    }
-
-    .form-card {
-        max-width: 950px;
-        margin: auto;
-    }
-
-    .form-section {
-        background: #ffffff;
-        border-radius: 12px;
-        border: 1px solid #eee;
-        padding: 24px;
-    }
-
-    .form-control, .form-select {
-        border-radius: 8px;
-    }
-
-    .action-bar {
-        background: #fafafa;
-        border-top: 1px solid #eee;
-        padding: 16px 24px;
-        border-radius: 0 0 12px 12px;
-    }
-
-    .asteriskField { display: none; }
+.form-card { max-width:760px; margin:auto; }
+.section-card { background:#fff; border:1px solid #e5e7eb; border-radius:12px; padding:24px; margin-bottom:20px; }
+.section-title { font-size:0.8rem; font-weight:700; text-transform:uppercase; letter-spacing:0.05em; color:#6b7280; margin-bottom:16px; }
+.form-label { font-size:0.875rem; font-weight:500; color:#374151; }
+.form-control, .form-select { border-radius:8px; border-color:#d1d5db; font-size:0.9rem; }
+.form-control:focus, .form-select:focus { border-color:#6366f1; box-shadow:0 0 0 3px rgba(99,102,241,0.1); }
+.action-bar { background:#fafafa; border-top:1px solid #eee; padding:16px 24px; border-radius:0 0 12px 12px; }
+.required-star { color:#ef4444; }
+.po-chip { display:inline-flex; align-items:center; gap:6px; background:#eff6ff; color:#2563eb; border:1px solid #bfdbfe; border-radius:20px; padding:3px 12px; font-size:0.75rem; font-weight:700; font-family:monospace; margin-bottom:16px; }
+.info-box { background:#f8fafc; border:1px solid #e5e7eb; border-radius:10px; padding:12px 14px; }
+.info-box-label { font-size:0.65rem; font-weight:700; text-transform:uppercase; letter-spacing:0.06em; color:#9ca3af; margin-bottom:3px; }
+.info-box-val { font-size:0.9rem; font-weight:700; color:#111827; }
 </style>
+
 <div class="card shadow-sm border-0 form-card">
+    <form method="POST" id="poForm">
+        {% csrf_token %}
+        <div class="card-body p-4">
 
-        <form method="POST" enctype="multipart/form-data">
-            {% csrf_token %}
-
-            <div class="card-body p-4">
-
-                <!-- Section Header -->
-                <div class="mb-4">
-                    <h5 class="fw-bold mb-1">Purchase Information</h5>
-                    <p class="text-muted small mb-0">
-                        Fill the details for this purchase.
-                    </p>
-                </div>
-
-                <!-- Form -->
-                <div class="form-section">
-                    {{ form|crispy }}
-                    {% if po.status == 'draft' %}
-    <button type="submit" name="place_order" class="btn btn-primary">
-      Place Order
-    </button>
-    <button type="submit" class="btn btn-outline-dark">Save Draft</button>
-  {% endif %}
-                </div>
-
+            <div class="mb-4">
+                <span class="po-chip"><i class="bi bi-bag-check me-1"></i>PO-{{ po.id }}</span>
+                <h5 class="fw-bold mb-1">Edit Purchase Order</h5>
+                <p class="text-muted small mb-0">Fill in the delivery details and place the order when ready.</p>
             </div>
 
-            <!-- Footer Actions -->
-            <div class="action-bar d-flex justify-content-between align-items-center">
+            {% if form.errors %}
+            <div class="alert alert-danger rounded-3 mb-4">
+                {% for field in form %}{% for error in field.errors %}<div>{{ field.label }}: {{ error }}</div>{% endfor %}{% endfor %}
+            </div>
+            {% endif %}
 
-                <div class="text-muted small">
-                    Fields marked required must contain values.
+            <!-- Order Summary -->
+            <div class="section-card">
+                <div class="section-title">Order Summary</div>
+                <div class="row g-3">
+                    {% if po.request %}
+                    <div class="col-md-4">
+                        <div class="info-box">
+                            <div class="info-box-label">Product</div>
+                            <div class="info-box-val">{{ po.request.product.name }}</div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="info-box">
+                            <div class="info-box-label">Quantity</div>
+                            <div class="info-box-val">{{ po.request.quantity }} units</div>
+                        </div>
+                    </div>
+                    {% endif %}
+                    <div class="col-md-4">
+                        <div class="info-box">
+                            <div class="info-box-label">Supplier</div>
+                            <div class="info-box-val">{{ po.supplier.name }}</div>
+                        </div>
+                    </div>
                 </div>
-
-                <div class="d-flex gap-2">
-                    <a href="{% url 'purchase_dashboard' %}" class="btn btn-light border px-4">
-                        Cancel
-                    </a>
-
-                </div>
-
             </div>
 
-        </form>
+            <!-- Delivery Details -->
+            <div class="section-card">
+                <div class="section-title">Delivery Details</div>
+                <div class="row g-3">
+                    {% for field in form.visible_fields %}
+                    <div class="col-md-6">
+                        <label class="form-label">{{ field.label }}</label>
+                        {{ field }}
+                        {% if field.errors %}<div class="text-danger small mt-1">{{ field.errors.0 }}</div>{% endif %}
+                    </div>
+                    {% endfor %}
+                    {% for field in form.hidden_fields %}{{ field }}{% endfor %}
+                </div>
+            </div>
 
-    </div>
+        </div>
+
+        <div class="action-bar d-flex justify-content-between align-items-center">
+            <span class="text-muted small">Fill all required fields before placing the order.</span>
+            <div class="d-flex gap-2">
+                <a href="{% url 'purchase_dashboard' %}" class="btn btn-light border px-4">Cancel</a>
+                {% if po.status == 'draft' %}
+                <button type="submit" name="save_draft" class="btn btn-outline-dark px-4">
+                    <i class="bi bi-floppy me-1"></i> Save Draft
+                </button>
+                <button type="submit" name="place_order" class="btn btn-success px-4 fw-semibold">
+                    <i class="bi bi-bag-check me-1"></i> Place Order
+                </button>
+                {% endif %}
+            </div>
+        </div>
+    </form>
+</div>
+
+<script>
+document.querySelectorAll('#poForm input[type="text"], #poForm input[type="date"], #poForm input[type="number"], #poForm textarea').forEach(el => el.classList.add('form-control'));
+document.querySelectorAll('#poForm select').forEach(el => el.classList.add('form-select'));
+</script>
+
 {% endblock %}

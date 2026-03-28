@@ -131,17 +131,17 @@ def supplier_list(request):
     for supplier in suppliers:
         products = Product.objects.filter(supplier=supplier)
 
-        categories = set([p.category.name for p in products if p.category])
-        brands = set([p.brand for p in products if p.brand])
+        categories = sorted(set(p.category.name for p in products if p.category))
+        brands = sorted(set(p.brand for p in products if p.brand))
 
         supplier_data.append({
             'supplier': supplier,
-            'categories': ", ".join(categories) if categories else "—",
-            'brands': ", ".join(brands) if brands else "—",
+            'categories': categories,
+            'brands': brands,
             'total_products': products.count()
         })
 
-    paginator = Paginator(supplier_data, 10)
+    paginator = Paginator(supplier_data, 12)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
 

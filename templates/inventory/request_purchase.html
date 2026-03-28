@@ -1,154 +1,119 @@
 {% extends "base_dashboard.html" %}
 {% load static %}
-{%block pagetitle%} Request Purchase{% endblock pagetitle%}
-{%block pagecontent %} Request for stock to admin{% endblock pagecontent %}
+{%block pagetitle%}Request Purchase{% endblock pagetitle%}
+{%block pagecontent%}Select a product to raise a purchase request{% endblock pagecontent%}
 {% block link %}
 <a href="{% url 'purchase_dashboard2' %}" class="btn btn-outline-secondary btn-sm"><i class="bi bi-arrow-left-circle"></i> Back</a>
 {% endblock link %}
-{% block panel %}Request Panel{% endblock panel%}
+{% block panel %}Purchase Panel{% endblock panel%}
 {% block content %}
+
 <style>
-/* Table hover effect */
-.table-hover tbody tr:hover {
-  background-color: #f8f9fa;
-  transition: 0.15s;
-}
-
-/* Card header subtle background */
-.card-header {
-  font-size: 1rem;
-  background-color: #f8f9fa;
-}
-
-/* Buttons minimal style */
-.btn-outline-secondary {
-  font-size: 0.8rem;
-  padding: 0.25rem 0.5rem;
-}
-
-/* Text muted for stock num*
-.text-muted {
-  font-weight: 500;
-}
-
-/* Responsive table scroll */
-.table-responsive {
-  overflow-x: auto;
-}
+.rp-wrap { border-radius:14px; overflow:hidden; border:1px solid #e5e7eb; background:#fff; height:100%; display:flex; flex-direction:column; }
+.rp-header { padding:16px 20px; border-bottom:1px solid #f0f0f0; display:flex; justify-content:space-between; align-items:center; }
+.rp-title { font-size:0.875rem; font-weight:700; color:#111827; margin:0; }
+.rp-sub { font-size:0.75rem; color:#9ca3af; margin-top:1px; }
+.rp-table thead th { background:#f8fafc; font-size:0.67rem; font-weight:700; text-transform:uppercase; letter-spacing:0.07em; color:#94a3b8; padding:10px 14px; border-bottom:1px solid #f0f0f0; white-space:nowrap; }
+.rp-table tbody tr { border-bottom:1px solid #f8f9fa; }
+.rp-table tbody tr:last-child { border-bottom:none; }
+.rp-table td { padding:12px 14px; vertical-align:middle; font-size:0.875rem; }
+.qty-chip-low { display:inline-flex;align-items:center;background:#fef2f2;color:#b91c1c;border:1px solid #fecaca;border-radius:6px;padding:2px 8px;font-size:0.75rem;font-weight:700; }
+.qty-chip-out { display:inline-flex;align-items:center;background:#f3f4f6;color:#374151;border:1px solid #e5e7eb;border-radius:6px;padding:2px 8px;font-size:0.75rem;font-weight:700; }
+.btn-req { display:inline-flex;align-items:center;gap:5px;padding:5px 12px;border-radius:8px;font-size:0.75rem;font-weight:600;background:#eff6ff;color:#2563eb;border:1px solid #bfdbfe;text-decoration:none;transition:background 0.15s; }
+.btn-req:hover { background:#2563eb;color:#fff; }
+.rp-footer { padding:10px 14px; border-top:1px solid #f0f0f0; background:#fafafa; display:flex; justify-content:space-between; align-items:center; }
+.pg-btn { padding:4px 10px;border-radius:7px;border:1px solid #e5e7eb;background:#fff;font-size:0.75rem;text-decoration:none;color:#374151; }
 </style>
-<div class="row g-3 mb-4">
-  <!-- ===== CRITICAL STOCKS ===== -->
-  <div class="col-lg-6 col-12">
-    <div class="card shadow-sm h-100">
-      <div class="card-header fw-semibold d-flex justify-content-between align-items-center">
-        ⚠ Critical Stocks
-        <a href="{% url 'low_stock' %}" class="text-decoration-none small text-muted">View All</a>
-      </div>
-      <div class="card-body p-0">
-        <div class="table-responsive">
-          <table class="table table-sm table-hover mb-0">
-            <thead class="table-light">
-              <tr>
-                <th>Product</th>
-                <th>Stock</th>
-                <th>Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              {% for p in low %}
-              <tr>
-                <td>{{ p.name }}</td>
-                <td class="fw-semibold text-muted">{{ p.quantity }}</td>
-                <td>
-                  <a href="{% url 'create_request' p.id %}" class="btn btn-sm btn-outline-secondary">
-                    Request
-                  </a>
-                </td>
-              </tr>
-              {% empty %}
-              <tr>
-                <td colspan="3" class="text-center text-muted">No low stock items</td>
-              </tr>
-              {% endfor %}
-            </tbody>
-          </table>
-        </div>
-        <div class="p-2 d-flex justify-content-end">
-          <ul class="pagination pagination-sm mb-0">
-            {% if low.has_previous %}
-            <li class="page-item">
-              <a class="page-link" href="?page_low={{ low.previous_page_number }}">‹</a>
-            </li>
-            {% endif %}
-            <li class="page-item active">
-              <span class="page-link">{{ low.number }}</span>
-            </li>
-            {% if low.has_next %}
-            <li class="page-item">
-              <a class="page-link" href="?page_low={{ low.next_page_number }}">›</a>
-            </li>
-            {% endif %}
-          </ul>
-        </div>
-      </div>
-    </div>
-  </div>
 
-  <!-- ===== STOCKOUTS ===== -->
-  <div class="col-lg-6 col-12">
-    <div class="card shadow-sm h-100">
-      <div class="card-header fw-semibold d-flex justify-content-between align-items-center">
-        ❌ Stockouts
-        <a href="{% url 'out_stock' %}" class="text-decoration-none small text-muted">View All</a>
-      </div>
-      <div class="card-body p-0">
-        <div class="table-responsive">
-          <table class="table table-sm table-hover mb-0">
-            <thead class="table-light">
-              <tr>
-                <th>Product</th>
-                <th>Stock</th>
-                <th>Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              {% for p in out %}
-              <tr>
-                <td>{{ p.name }}</td>
-                <td class="fw-semibold text-muted">{{ p.quantity }}</td>
-                <td>
-                  <a href="{% url 'create_request' p.id %}" class="btn btn-sm btn-outline-secondary">
-                    Request
-                  </a>
-                </td>
-              </tr>
-              {% empty %}
-              <tr>
-                <td colspan="3" class="text-center text-muted">No out of stock items</td>
-              </tr>
-              {% endfor %}
-            </tbody>
-          </table>
+<div class="row g-4">
+
+    <!-- Critical Stock -->
+    <div class="col-lg-6">
+        <div class="rp-wrap">
+            <div class="rp-header">
+                <div>
+                    <p class="rp-title" style="color:#dc2626;"><i class="bi bi-exclamation-triangle-fill me-2"></i>Critical Stock</p>
+                    <p class="rp-sub">Products below minimum threshold</p>
+                </div>
+                <a href="{% url 'low_stock' %}" style="font-size:0.78rem;font-weight:600;color:#4f46e5;text-decoration:none;">View All →</a>
+            </div>
+            <div class="table-responsive" style="flex:1;">
+                <table class="table rp-table mb-0">
+                    <thead><tr>
+                        <th style="padding-left:18px;">Product</th>
+                        <th>Category</th>
+                        <th class="text-center">Stock</th>
+                        <th class="text-end" style="padding-right:18px;">Action</th>
+                    </tr></thead>
+                    <tbody>
+                    {% for p in low %}
+                    <tr>
+                        <td style="padding-left:18px; font-weight:600; color:#111827;">{{ p.name }}</td>
+                        <td style="font-size:0.78rem; color:#6b7280;">{{ p.category.name }}</td>
+                        <td class="text-center"><span class="qty-chip-low">{{ p.quantity }}</span></td>
+                        <td class="text-end" style="padding-right:18px;">
+                            <a href="{% url 'create_request' p.id %}" class="btn-req"><i class="bi bi-plus-lg" style="font-size:0.65rem;"></i> Request</a>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr><td colspan="4" style="text-align:center;padding:28px;color:#9ca3af;font-size:0.85rem;">No critical stock items.</td></tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <div class="rp-footer">
+                <span style="font-size:0.75rem;color:#6b7280;">Page {{ low.number }} / {{ low.paginator.num_pages }}</span>
+                <div style="display:flex;gap:6px;">
+                    {% if low.has_previous %}<a href="?page_low={{ low.previous_page_number }}" class="pg-btn">‹</a>{% endif %}
+                    {% if low.has_next %}<a href="?page_low={{ low.next_page_number }}" class="pg-btn">›</a>{% endif %}
+                </div>
+            </div>
         </div>
-        <div class="p-2 d-flex justify-content-end">
-          <ul class="pagination pagination-sm mb-0">
-            {% if out.has_previous %}
-            <li class="page-item">
-              <a class="page-link" href="?page_out={{ out.previous_page_number }}">‹</a>
-            </li>
-            {% endif %}
-            <li class="page-item active">
-              <span class="page-link">{{ out.number }}</span>
-            </li>
-            {% if out.has_next %}
-            <li class="page-item">
-              <a class="page-link" href="?page_out={{ out.next_page_number }}">›</a>
-            </li>
-            {% endif %}
-          </ul>
-        </div>
-      </div>
     </div>
-  </div>
+
+    <!-- Stockouts -->
+    <div class="col-lg-6">
+        <div class="rp-wrap">
+            <div class="rp-header">
+                <div>
+                    <p class="rp-title"><i class="bi bi-x-circle-fill me-2 text-secondary"></i>Out of Stock</p>
+                    <p class="rp-sub">Products with zero inventory</p>
+                </div>
+                <a href="{% url 'out_stock' %}" style="font-size:0.78rem;font-weight:600;color:#4f46e5;text-decoration:none;">View All →</a>
+            </div>
+            <div class="table-responsive" style="flex:1;">
+                <table class="table rp-table mb-0">
+                    <thead><tr>
+                        <th style="padding-left:18px;">Product</th>
+                        <th>Category</th>
+                        <th class="text-center">Stock</th>
+                        <th class="text-end" style="padding-right:18px;">Action</th>
+                    </tr></thead>
+                    <tbody>
+                    {% for p in out %}
+                    <tr>
+                        <td style="padding-left:18px; font-weight:600; color:#6b7280;">{{ p.name }}</td>
+                        <td style="font-size:0.78rem; color:#6b7280;">{{ p.category.name }}</td>
+                        <td class="text-center"><span class="qty-chip-out">0</span></td>
+                        <td class="text-end" style="padding-right:18px;">
+                            <a href="{% url 'create_request' p.id %}" class="btn-req"><i class="bi bi-plus-lg" style="font-size:0.65rem;"></i> Request</a>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr><td colspan="4" style="text-align:center;padding:28px;color:#9ca3af;font-size:0.85rem;">No stockout items.</td></tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <div class="rp-footer">
+                <span style="font-size:0.75rem;color:#6b7280;">Page {{ out.number }} / {{ out.paginator.num_pages }}</span>
+                <div style="display:flex;gap:6px;">
+                    {% if out.has_previous %}<a href="?page_out={{ out.previous_page_number }}" class="pg-btn">‹</a>{% endif %}
+                    {% if out.has_next %}<a href="?page_out={{ out.next_page_number }}" class="pg-btn">›</a>{% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
 </div>
-{% endblock content %}
+{% endblock %}

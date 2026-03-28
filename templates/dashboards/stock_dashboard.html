@@ -20,21 +20,29 @@
 {% block panel %}Stock Panel{% endblock panel%}
 {% block content %}
 <style>
-.table th {
-  font-size: 14px;
-  font-weight: 600;
-}
-
-.table td {
-  padding: 12px;
-  font-size: 14px;
-}
-
-.badge {
-  font-weight: 500;
-  border-radius: 12px;
-  font-size: 12px;
-}
+.sd-table-wrap { border-radius:12px; overflow:hidden; border:1px solid #e5e7eb; background:#fff; height:100%; display:flex; flex-direction:column; }
+.sd-table-header { padding:14px 20px; border-bottom:1px solid #f0f0f0; display:flex; justify-content:space-between; align-items:center; }
+.sd-table-title { font-size:0.875rem; font-weight:700; color:#111827; margin:0; }
+.sd-table-sub { font-size:0.72rem; color:#9ca3af; margin-top:1px; }
+.sd-table thead th { background:#f8fafc; font-size:0.67rem; font-weight:700; text-transform:uppercase; letter-spacing:0.07em; color:#94a3b8; padding:10px 14px; border-bottom:1px solid #f0f0f0; white-space:nowrap; }
+.sd-table tbody tr { border-bottom:1px solid #f8f9fa; }
+.sd-table tbody tr:last-child { border-bottom:none; }
+.sd-table td { padding:11px 14px; vertical-align:middle; font-size:0.85rem; }
+.cat-pill { display:inline-flex; align-items:center; background:#f0f4ff; color:#4f46e5; border-radius:5px; padding:2px 7px; font-size:0.67rem; font-weight:600; }
+.sup-pill { display:inline-flex; align-items:center; background:#f0fdf4; color:#16a34a; border-radius:5px; padding:2px 7px; font-size:0.67rem; font-weight:600; }
+.qty-in   { font-weight:700; color:#16a34a; }
+.qty-low  { font-weight:700; color:#d97706; }
+.qty-out  { font-weight:700; color:#dc2626; }
+.qty-chip-low { display:inline-flex; align-items:center; background:#fef2f2; color:#b91c1c; border:1px solid #fecaca; border-radius:6px; padding:2px 8px; font-size:0.75rem; font-weight:700; }
+.s-in  { display:inline-flex; align-items:center; gap:3px; background:#ecfdf5; color:#047857; border:1px solid #a7f3d0; border-radius:20px; padding:2px 8px; font-size:0.68rem; font-weight:600; }
+.s-low { display:inline-flex; align-items:center; gap:3px; background:#fffbeb; color:#b45309; border:1px solid #fde68a; border-radius:20px; padding:2px 8px; font-size:0.68rem; font-weight:600; }
+.s-out { display:inline-flex; align-items:center; gap:3px; background:#fef2f2; color:#b91c1c; border:1px solid #fecaca; border-radius:20px; padding:2px 8px; font-size:0.68rem; font-weight:600; }
+.sdot { width:5px; height:5px; border-radius:50%; display:inline-block; }
+.sd-footer { padding:10px 14px; border-top:1px solid #f0f0f0; background:#fafafa; }
+.page-btn-sm { display:inline-flex; align-items:center; gap:4px; padding:4px 10px; border-radius:7px; font-size:0.75rem; font-weight:500; border:1px solid #e5e7eb; background:#fff; color:#374151; text-decoration:none; transition:background 0.15s; }
+.page-btn-sm:hover { background:#f3f4f6; }
+.page-btn-sm.disabled { opacity:0.4; pointer-events:none; }
+.page-counter-sm { display:inline-flex; align-items:center; justify-content:center; background:#111827; color:#fff; border-radius:7px; padding:3px 10px; font-size:0.75rem; font-weight:600; }
 </style>
 <!--Stats-->
 <div class="row mb-3">
@@ -212,225 +220,115 @@
 </div>
 <div class="row g-4">
 
-    <!-- ================= Inventory Snapshot ================= -->
+    <!-- Inventory Snapshot -->
     <div class="col-lg-6">
-        <div class="card border-0 shadow-sm h-100">
-
-            <!-- Header -->
-            <div class="card-header bg-white border-bottom d-flex justify-content-between align-items-center">
+        <div class="sd-table-wrap">
+            <div class="sd-table-header">
                 <div>
-                    <h6 class="mb-0 fw-semibold">Inventory Snapshot</h6>
-                    <small class="text-muted">Latest stock overview</small>
-                </div>
-                <span class="small text-muted">
-                    Total: {{ products.paginator.count }}
-                </span>
-            </div>
-
-            <!-- Table -->
-            <div class="card-body p-0">
-                <div class="table-responsive">
-                    <table class="table table-hover align-middle mb-0">
-                        <thead class="table-light">
-                            <tr>
-                                <th class="ps-4">Product</th>
-                                <th>Category</th>
-                                <th class="text-center">Quantity</th>
-                                <th class="text-center pe-4">Status</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-
-                            {% for product in products %}
-                            <tr>
-                                <td class="ps-4 fw-medium">
-                                    {{ product.name }}
-                                </td>
-
-                                <td class="text-muted">
-                                    {{ product.category.name }}
-                                </td>
-
-                                <td class="text-center fw-semibold">
-                                    {{ product.quantity }}
-                                </td>
-
-                                <td class="text-center pe-4">
-                                    {% if product.quantity == 0 %}
-                                        <span class="badge bg-danger-subtle text-danger px-3 py-2">
-                                            Out of Stock
-                                        </span>
-                                    {% elif product.quantity <= 5 %}
-                                        <span class="badge bg-warning-subtle text-warning px-3 py-2">
-                                            Low Stock
-                                        </span>
-                                    {% else %}
-                                        <span class="badge bg-success-subtle text-success px-3 py-2">
-                                            In Stock
-                                        </span>
-                                    {% endif %}
-                                </td>
-                            </tr>
-                            {% endfor %}
-
-                        </tbody>
-                    </table>
+                    <p class="sd-table-title">Inventory Snapshot</p>
+                    <p class="sd-table-sub">Total: {{ products.paginator.count }} products</p>
                 </div>
             </div>
-
-            <!-- Pagination Footer -->
-            <div class="border-top bg-light p-2">
-                <nav>
-                    <ul class="pagination pagination-sm justify-content-end mb-0">
-
-                        {% if products.has_previous %}
-                        <li class="page-item">
-                            <a class="page-link"
-                               href="?page_products={{ products.previous_page_number }}">
-                                &laquo;
-                            </a>
-                        </li>
-                        {% else %}
-                        <li class="page-item disabled">
-                            <span class="page-link">&laquo;</span>
-                        </li>
-                        {% endif %}
-
-                        <li class="page-item disabled">
-                            <span class="page-link small">
-                                Page {{ products.number }} of {{ products.paginator.num_pages }}
+            <div class="table-responsive" style="flex:1;">
+                <table class="table sd-table mb-0">
+                    <thead>
+                        <tr>
+                            <th style="padding-left:20px;">Product</th>
+                            <th>Category</th>
+                            <th class="text-center">Qty</th>
+                            <th class="text-center">Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for product in products %}
+                    <tr>
+                        <td style="padding-left:20px; font-weight:600; color:#111827;">{{ product.name }}</td>
+                        <td><span class="cat-pill">{{ product.category.name }}</span></td>
+                        <td class="text-center">
+                            <span class="{% if product.quantity == 0 %}qty-out{% elif product.quantity <= 5 %}qty-low{% else %}qty-in{% endif %}">
+                                {{ product.quantity }}
                             </span>
-                        </li>
-
-                        {% if products.has_next %}
-                        <li class="page-item">
-                            <a class="page-link"
-                               href="?page_products={{ products.next_page_number }}">
-                                &raquo;
-                            </a>
-                        </li>
-                        {% else %}
-                        <li class="page-item disabled">
-                            <span class="page-link">&raquo;</span>
-                        </li>
-                        {% endif %}
-
-                    </ul>
-                </nav>
+                        </td>
+                        <td class="text-center">
+                            {% if product.quantity == 0 %}
+                            <span class="s-out"><span class="sdot bg-danger"></span>Out</span>
+                            {% elif product.quantity <= 5 %}
+                            <span class="s-low"><span class="sdot" style="background:#d97706;"></span>Low</span>
+                            {% else %}
+                            <span class="s-in"><span class="sdot bg-success"></span>In Stock</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr><td colspan="4" class="text-center py-4 text-muted">No products found.</td></tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
             </div>
-
+            <div class="sd-footer d-flex justify-content-between align-items-center">
+                <span style="font-size:0.75rem; color:#6b7280;">Page {{ products.number }} / {{ products.paginator.num_pages }}</span>
+                <div class="d-flex align-items-center gap-1">
+                    {% if products.has_previous %}
+                    <a class="page-btn-sm" href="?page_products={{ products.previous_page_number }}"><i class="bi bi-chevron-left"></i></a>
+                    {% else %}<span class="page-btn-sm disabled"><i class="bi bi-chevron-left"></i></span>{% endif %}
+                    <span class="page-counter-sm">{{ products.number }}</span>
+                    {% if products.has_next %}
+                    <a class="page-btn-sm" href="?page_products={{ products.next_page_number }}"><i class="bi bi-chevron-right"></i></a>
+                    {% else %}<span class="page-btn-sm disabled"><i class="bi bi-chevron-right"></i></span>{% endif %}
+                </div>
+            </div>
         </div>
     </div>
 
-
-    <!-- ================= Critical Stock Alerts ================= -->
+    <!-- Critical Stock Alerts -->
     <div class="col-lg-6">
-        <div class="card border-0 shadow-sm h-100">
-
-            <!-- Header -->
-            <div class="card-header bg-white border-bottom d-flex justify-content-between align-items-center">
+        <div class="sd-table-wrap">
+            <div class="sd-table-header">
                 <div>
-                    <h6 class="mb-0 fw-semibold text-danger">
-                        Critical Stock Alerts
-                    </h6>
-                    <small class="text-muted">
-                        Items below minimum threshold
-                    </small>
-                </div>
-                <span class="small text-muted">
-                    Total: {{ low_stock_products.paginator.count }}
-                </span>
-            </div>
-
-            <!-- Table -->
-            <div class="card-body p-0">
-                <div class="table-responsive">
-                    <table class="table table-hover align-middle mb-0">
-                        <thead class="table-light">
-                            <tr>
-                                <th class="ps-4">Product</th>
-                                <th>Category</th>
-                                <th>Supplier</th>
-                                <th class="text-center pe-4">Quantity</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-
-                            {% for product in low_stock_products %}
-                            <tr>
-                                <td class="ps-4 fw-medium">
-                                    {{ product.name }}
-                                </td>
-
-                                <td class="text-muted">
-                                    {{ product.category.name }}
-                                </td>
-
-                                <td>
-                                    {{ product.supplier.name }}
-                                </td>
-
-                                <td class="text-center pe-4">
-                                    <span class="badge bg-danger-subtle text-danger fw-semibold px-3 py-2">
-                                        {{ product.quantity }}
-                                    </span>
-                                </td>
-                            </tr>
-
-                            {% empty %}
-                            <tr>
-                                <td colspan="4" class="text-center py-5 text-muted">
-                                    No critical stock items found.
-                                </td>
-                            </tr>
-                            {% endfor %}
-
-                        </tbody>
-                    </table>
+                    <p class="sd-table-title" style="color:#dc2626;">Critical Stock Alerts</p>
+                    <p class="sd-table-sub">{{ low_stock_products.paginator.count }} items below threshold</p>
                 </div>
             </div>
-
-            <!-- Pagination Footer -->
-            <div class="border-top bg-light p-2">
-                <nav>
-                    <ul class="pagination pagination-sm justify-content-end mb-0">
-
-                        {% if low_stock_products.has_previous %}
-                        <li class="page-item">
-                            <a class="page-link"
-                               href="?page_low={{ low_stock_products.previous_page_number }}">
-                                &laquo;
-                            </a>
-                        </li>
-                        {% else %}
-                        <li class="page-item disabled">
-                            <span class="page-link">&laquo;</span>
-                        </li>
-                        {% endif %}
-
-                        <li class="page-item disabled">
-                            <span class="page-link small">
-                                Page {{ low_stock_products.number }} of {{ low_stock_products.paginator.num_pages }}
-                            </span>
-                        </li>
-
-                        {% if low_stock_products.has_next %}
-                        <li class="page-item">
-                            <a class="page-link"
-                               href="?page_low={{ low_stock_products.next_page_number }}">
-                                &raquo;
-                            </a>
-                        </li>
-                        {% else %}
-                        <li class="page-item disabled">
-                            <span class="page-link">&raquo;</span>
-                        </li>
-                        {% endif %}
-
-                    </ul>
-                </nav>
+            <div class="table-responsive" style="flex:1;">
+                <table class="table sd-table mb-0">
+                    <thead>
+                        <tr>
+                            <th style="padding-left:20px;">Product</th>
+                            <th>Category</th>
+                            <th>Supplier</th>
+                            <th class="text-center">Qty</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for product in low_stock_products %}
+                    <tr>
+                        <td style="padding-left:20px; font-weight:600; color:#111827;">{{ product.name }}</td>
+                        <td><span class="cat-pill">{{ product.category.name }}</span></td>
+                        <td>
+                            {% if product.supplier %}
+                            <span class="sup-pill">{{ product.supplier.name }}</span>
+                            {% else %}<span class="text-muted small">—</span>{% endif %}
+                        </td>
+                        <td class="text-center"><span class="qty-chip-low">{{ product.quantity }}</span></td>
+                    </tr>
+                    {% empty %}
+                    <tr><td colspan="4" class="text-center py-4 text-muted">No critical stock items.</td></tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
             </div>
-
+            <div class="sd-footer d-flex justify-content-between align-items-center">
+                <span style="font-size:0.75rem; color:#6b7280;">Page {{ low_stock_products.number }} / {{ low_stock_products.paginator.num_pages }}</span>
+                <div class="d-flex align-items-center gap-1">
+                    {% if low_stock_products.has_previous %}
+                    <a class="page-btn-sm" href="?page_low={{ low_stock_products.previous_page_number }}"><i class="bi bi-chevron-left"></i></a>
+                    {% else %}<span class="page-btn-sm disabled"><i class="bi bi-chevron-left"></i></span>{% endif %}
+                    <span class="page-counter-sm">{{ low_stock_products.number }}</span>
+                    {% if low_stock_products.has_next %}
+                    <a class="page-btn-sm" href="?page_low={{ low_stock_products.next_page_number }}"><i class="bi bi-chevron-right"></i></a>
+                    {% else %}<span class="page-btn-sm disabled"><i class="bi bi-chevron-right"></i></span>{% endif %}
+                </div>
+            </div>
         </div>
     </div>
 

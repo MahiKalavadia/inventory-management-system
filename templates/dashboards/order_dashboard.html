@@ -20,24 +20,25 @@
 {% block panel %}Order Panel{% endblock panel%}
 {% block content %}
 <style>
-
-
-.table th {
-  font-size: 14px;
-  font-weight: 600;
-}
-
-.table td {
-  font-size: 14px;
-  padding: 10px;
-}
-
-.badge {
-  font-size: 10px;
-  font-weight: 500;
-  border-radius: 10px;
-}
-
+.od-table-wrap { border-radius:12px; overflow:hidden; border:1px solid #e5e7eb; background:#fff; }
+.od-table-header { padding:14px 20px; border-bottom:1px solid #f0f0f0; display:flex; justify-content:space-between; align-items:center; }
+.od-table-title { font-size:0.875rem; font-weight:700; color:#111827; margin:0; }
+.od-table-sub { font-size:0.72rem; color:#9ca3af; }
+.od-table thead th { background:#f8fafc; font-size:0.67rem; font-weight:700; text-transform:uppercase; letter-spacing:0.07em; color:#94a3b8; padding:10px 14px; border-bottom:1px solid #f0f0f0; white-space:nowrap; }
+.od-table tbody tr { border-bottom:1px solid #f8f9fa; }
+.od-table tbody tr:last-child { border-bottom:none; }
+.od-table td { padding:11px 14px; vertical-align:middle; font-size:0.85rem; }
+.bill-no { font-weight:700; color:#4f46e5; font-size:0.8rem; font-family:monospace; }
+.cust-name { font-weight:600; color:#111827; }
+.s-draft     { background:#f3f4f6; color:#374151; border:1px solid #e5e7eb; }
+.s-confirmed { background:#eff6ff; color:#2563eb; border:1px solid #bfdbfe; }
+.s-paid      { background:#ecfdf5; color:#047857; border:1px solid #a7f3d0; }
+.s-cancelled { background:#fef2f2; color:#b91c1c; border:1px solid #fecaca; }
+.s-pending   { background:#fffbeb; color:#b45309; border:1px solid #fde68a; }
+.status-pill { display:inline-flex; align-items:center; gap:4px; border-radius:20px; padding:2px 9px; font-size:0.68rem; font-weight:600; }
+.sdot { width:5px; height:5px; border-radius:50%; display:inline-block; }
+.btn-review { display:inline-flex; align-items:center; gap:4px; padding:4px 10px; border-radius:7px; font-size:0.75rem; font-weight:600; background:#fef2f2; color:#dc2626; border:1px solid #fecaca; text-decoration:none; transition:background 0.15s; }
+.btn-review:hover { background:#dc2626; color:#fff; }
 </style>
 <!-- First Row of 5 Cards -->
 <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 row-cols-xl-5 g-3 mb-4">
@@ -201,231 +202,166 @@
 </div>
 <div class="row g-4">
 
-  <!-- ================= Recent Orders ================= -->
+  <!-- Recent Orders -->
   <div class="col-lg-6">
-    <div class="card border-0 shadow-sm rounded-4 h-100">
-
-      <div class="card-header bg-white border-0 d-flex justify-content-between align-items-center py-3">
+    <div class="od-table-wrap">
+      <div class="od-table-header">
         <div>
-          <h6 class="mb-0 fw-bold">Recent Orders</h6>
-          <small class="text-muted">Latest customer transactions</small>
+          <p class="od-table-title">Recent Orders</p>
+          <p class="od-table-sub">Latest customer transactions</p>
         </div>
-        <a href="{% url 'order_list' %}" class="btn btn-sm btn-outline-dark">
-          View All
-        </a>
+        <a href="{% url 'order_list' %}" class="btn btn-sm btn-outline-dark" style="font-size:0.78rem;">View All</a>
       </div>
-
       <div class="table-responsive">
-        <table class="table table-hover align-middle mb-0">
-          <thead class="bg-light">
-            <tr class="text-muted small text-uppercase">
-              <th>#</th>
+        <table class="table od-table mb-0">
+          <thead>
+            <tr>
+              <th style="padding-left:18px;">Bill No</th>
               <th>Customer</th>
               <th>Status</th>
               <th>Payment</th>
-              <th class="text-end">Total</th>
-              <th class="text-end">Date</th>
+              <th class="text-end" style="padding-right:18px;">Total</th>
             </tr>
           </thead>
           <tbody>
             {% for order in recent_orders %}
             <tr>
-              <td class="text-muted">#{{ order.id }}</td>
-              <td class="fw-semibold">{{ order.customer_name }}</td>
-
+              <td style="padding-left:18px;"><span class="bill-no">{{ order.bill_number }}</span></td>
+              <td><span class="cust-name">{{ order.customer_name }}</span></td>
               <td>
-                <span class="badge bg-light text-dark border">
-                  {{ order.status|title }}
-                </span>
+                {% if order.status == 'Draft' %}<span class="status-pill s-draft"><span class="sdot" style="background:#9ca3af;"></span>Draft</span>
+                {% elif order.status == 'Confirmed' %}<span class="status-pill s-confirmed"><span class="sdot bg-primary"></span>Confirmed</span>
+                {% elif order.status == 'Paid' %}<span class="status-pill s-paid"><span class="sdot bg-success"></span>Paid</span>
+                {% elif order.status == 'Cancelled' %}<span class="status-pill s-cancelled"><span class="sdot bg-danger"></span>Cancelled</span>
+                {% else %}<span class="status-pill s-draft">{{ order.status }}</span>{% endif %}
               </td>
-
               <td>
-                {% if order.payment_status == 'paid' %}
-                  <span class="badge bg-success-subtle text-success">
-                    Paid
-                  </span>
-                {% else %}
-                  <span class="badge bg-warning-subtle text-warning">
-                    Pending
-                  </span>
-                {% endif %}
+                {% if order.payment_status == 'Paid' %}<span class="status-pill s-paid"><span class="sdot bg-success"></span>Paid</span>
+                {% else %}<span class="status-pill s-pending"><span class="sdot" style="background:#d97706;"></span>Pending</span>{% endif %}
               </td>
-
-              <td class="text-end fw-semibold">
-                ₹ {{ order.total_amount|intcomma }}
-              </td>
-
-              <td class="text-end text-muted small">
-                {{ order.created_at|date:"d M Y" }}
-              </td>
+              <td class="text-end" style="padding-right:18px; font-weight:700; color:#111827;">₹{{ order.total_amount|intcomma }}</td>
             </tr>
             {% empty %}
-            <tr>
-              <td colspan="6" class="text-center text-muted py-4">
-                No recent orders available.
-              </td>
-            </tr>
+            <tr><td colspan="5" class="text-center py-4 text-muted">No recent orders.</td></tr>
             {% endfor %}
           </tbody>
         </table>
       </div>
-
     </div>
   </div>
 
-
-  <!-- ================= Best Selling Products ================= -->
+  <!-- Best Selling Products -->
   <div class="col-lg-6">
-    <div class="card border-0 shadow-sm rounded-4 h-100">
-
-      <div class="card-header bg-white border-0 d-flex justify-content-between align-items-center py-3">
+    <div class="od-table-wrap">
+      <div class="od-table-header">
         <div>
-          <h6 class="mb-0 fw-bold">Best Selling Products</h6>
-          <small class="text-muted">Top performing inventory items</small>
+          <p class="od-table-title">Best Selling Products</p>
+          <p class="od-table-sub">Top performing inventory items</p>
         </div>
-        <a href="{% url 'order_list' %}" class="btn btn-sm btn-outline-dark">
-          View All
-        </a>
+        
       </div>
-
       <div class="table-responsive">
-        <table class="table table-hover align-middle mb-0">
-          <thead class="bg-light">
-            <tr class="text-muted small text-uppercase">
+        <table class="table od-table mb-0">
+          <thead>
+            <tr>
+              <th style="padding-left:18px;">#</th>
               <th>Product</th>
-              <th>Quantity Sold</th>
-              <th>Supplier</th>
+              <th class="text-center">Units Sold</th>
+              <th style="padding-right:18px;">Supplier</th>
             </tr>
           </thead>
           <tbody>
             {% for product in top_products %}
             <tr>
-              <td class="fw-semibold">{{ product.product__name }}</td>
-              <td>{{ product.total_sold }}</td>
-              <td class="text-muted">
-                {{ product.product__supplier__name }}
-              </td>
+              <td style="padding-left:18px; color:#9ca3af; font-size:0.75rem; font-weight:700;">{{ forloop.counter }}</td>
+              <td style="font-weight:600; color:#111827;">{{ product.product__name }}</td>
+              <td class="text-center"><span style="font-weight:700; color:#4f46e5;">{{ product.total_sold }}</span></td>
+              <td style="padding-right:18px; font-size:0.8rem; color:#6b7280;">{{ product.product__supplier__name|default:"—" }}</td>
             </tr>
             {% empty %}
-            <tr>
-              <td colspan="3" class="text-center text-muted py-4">
-                No sales data available.
-              </td>
-            </tr>
+            <tr><td colspan="4" class="text-center py-4 text-muted">No sales data.</td></tr>
             {% endfor %}
           </tbody>
         </table>
       </div>
-
     </div>
   </div>
 
 </div>
 
-
-
 <div class="row g-4 mt-1">
 
-  <!-- ================= Pending Payments ================= -->
+  <!-- Pending Payments -->
   <div class="col-lg-6">
-    <div class="card border-0 shadow-sm rounded-4 h-100">
-
-      <div class="card-header bg-white border-0 d-flex justify-content-between align-items-center py-3">
+    <div class="od-table-wrap">
+      <div class="od-table-header">
         <div>
-          <h6 class="mb-0 fw-bold">Pending Payments</h6>
-          <small class="text-muted">Outstanding customer balances</small>
+          <p class="od-table-title">Pending Payments</p>
+          <p class="od-table-sub">Outstanding customer balances</p>
         </div>
-        <a href="{% url 'pending_payments' %}" class="btn btn-sm btn-outline-dark">
-          View All
-        </a>
+        <a href="{% url 'pending_payments' %}" class="btn btn-sm btn-outline-dark" style="font-size:0.78rem;">View All</a>
       </div>
-
       <div class="table-responsive">
-        <table class="table table-hover align-middle mb-0">
-          <thead class="bg-light">
-            <tr class="text-muted small text-uppercase">
-              <th>Order</th>
+        <table class="table od-table mb-0">
+          <thead>
+            <tr>
+              <th style="padding-left:18px;">Order</th>
               <th>Customer</th>
               <th class="text-end">Amount</th>
-              <th class="text-end">Due</th>
+              <th class="text-end" style="padding-right:18px;">Since</th>
             </tr>
           </thead>
           <tbody>
             {% for o in pending_payments %}
             <tr>
-              <td>#{{ o.id }}</td>
-              <td class="fw-semibold">{{ o.customer_name }}</td>
-              <td class="text-end text-danger fw-semibold">
-                ₹ {{ o.total_amount|intcomma }}
-              </td>
-              <td class="text-end text-muted small">
-                {{ o.created_at|timesince }} ago
-              </td>
+              <td style="padding-left:18px;"><span class="bill-no">{{ o.bill_number }}</span></td>
+              <td style="font-weight:600; color:#111827;">{{ o.customer_name }}</td>
+              <td class="text-end" style="font-weight:700; color:#dc2626;">₹{{ o.total_amount|intcomma }}</td>
+              <td class="text-end" style="padding-right:18px; font-size:0.78rem; color:#9ca3af;">{{ o.created_at|timesince }} ago</td>
             </tr>
             {% empty %}
-            <tr>
-              <td colspan="4" class="text-center text-success py-4">
-                All payments are up to date.
-              </td>
-            </tr>
+            <tr><td colspan="4" class="text-center py-4" style="color:#16a34a;">All payments up to date.</td></tr>
             {% endfor %}
           </tbody>
         </table>
       </div>
-
     </div>
   </div>
 
-
-
-  <!-- ================= Orders Requiring Attention ================= -->
+  <!-- Orders Requiring Attention -->
   <div class="col-lg-6">
-    <div class="card border-0 shadow-sm rounded-4 h-100">
-
-      <div class="card-header bg-white border-0 d-flex justify-content-between align-items-center py-3">
+    <div class="od-table-wrap">
+      <div class="od-table-header">
         <div>
-          <h6 class="mb-0 fw-bold">Orders Requiring Attention</h6>
-          <small class="text-muted">Orders with pending issues</small>
+          <p class="od-table-title">Orders Requiring Attention</p>
+          <p class="od-table-sub">Orders with pending issues</p>
         </div>
-        <a href="{% url 'order_attention' %}" class="btn btn-sm btn-outline-dark">
-          View All
-        </a>
+        <a href="{% url 'order_attention' %}" class="btn btn-sm btn-outline-dark" style="font-size:0.78rem;">View All</a>
       </div>
-
       <div class="table-responsive">
-        <table class="table table-hover align-middle mb-0">
-          <thead class="bg-light">
-            <tr class="text-muted small text-uppercase">
-              <th>Order</th>
+        <table class="table od-table mb-0">
+          <thead>
+            <tr>
+              <th style="padding-left:18px;">Order</th>
               <th>Issue</th>
-              <th class="text-end">Action</th>
+              <th class="text-end" style="padding-right:18px;">Action</th>
             </tr>
           </thead>
           <tbody>
             {% for o in attention_orders %}
             <tr>
-              <td>#{{ o.id }}</td>
-              <td class="text-muted">
-                Confirmed but payment pending
-              </td>
-              <td class="text-end">
-                <a href="{% url 'order_detail' o.id %}" 
-                   class="btn btn-sm btn-outline-danger rounded-pill px-3">
-                  Review
-                </a>
+              <td style="padding-left:18px;"><span class="bill-no">{{ o.bill_number }}</span></td>
+              <td style="font-size:0.8rem; color:#6b7280;">Payment pending after confirmation</td>
+              <td class="text-end" style="padding-right:18px;">
+                <a href="{% url 'order_detail' o.id %}" class="btn-review"><i class="bi bi-eye-fill"></i> Review</a>
               </td>
             </tr>
             {% empty %}
-            <tr>
-              <td colspan="3" class="text-center text-success py-4">
-                No critical issues found.
-              </td>
-            </tr>
+            <tr><td colspan="3" class="text-center py-4" style="color:#16a34a;">No critical issues found.</td></tr>
             {% endfor %}
           </tbody>
         </table>
       </div>
-
     </div>
   </div>
 

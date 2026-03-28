@@ -344,6 +344,7 @@ body {
 .main-content {
     margin-left: 260px;
     padding: 24px;
+    padding-top: 90px;
     width: 100%;
     transition: all 0.3s ease;
 }

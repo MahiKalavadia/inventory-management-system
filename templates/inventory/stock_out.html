@@ -1,92 +1,71 @@
 {% extends 'base_dashboard.html' %}
 {% load static %}
-{% load crispy_forms_tags %}
-{%block pagetitle%} Stock Out{% endblock pagetitle%}
-{%block pagecontent %}Remove Stock{% endblock pagecontent %}
+{%block pagetitle%}Stock Out{% endblock pagetitle%}
+{%block pagecontent%}Remove stock from a product{% endblock pagecontent%}
 {% block link %}
-<a href="{% url 'stock_dashboard' %}" class="btn btn-outline-secondary btn-sm">
-            <i class="bi bi-arrow-left-circle"></i> Back
-        </a>
+<a href="{% url 'stock_dashboard' %}" class="btn btn-outline-secondary btn-sm"><i class="bi bi-arrow-left-circle"></i> Back</a>
 {% endblock link %}
-{% block panel %}Stock Out Panel{% endblock panel%}
+{% block panel %}Stock Panel{% endblock panel%}
 {% block content %}
-
 <style>
-    .page-wrapper {
-        margin-top: 90px;
-    }
-
-    .form-card {
-        max-width: 950px;
-        margin: auto;
-    }
-
-    .form-section {
-        background: #ffffff;
-        border-radius: 12px;
-        border: 1px solid #eee;
-        padding: 24px;
-    }
-
-    .form-control, .form-select {
-        border-radius: 8px;
-    }
-
-    .action-bar {
-        background: #fafafa;
-        border-top: 1px solid #eee;
-        padding: 16px 24px;
-        border-radius: 0 0 12px 12px;
-    }
-
-    .asteriskField { display: none; }
+.form-card { max-width: 560px; margin: auto; }
+.section-card { background:#fff; border:1px solid #e5e7eb; border-radius:12px; padding:24px; margin-bottom:20px; }
+.section-title { font-size:0.8rem; font-weight:700; text-transform:uppercase; letter-spacing:0.05em; color:#6b7280; margin-bottom:16px; }
+.form-label { font-size:0.875rem; font-weight:500; color:#374151; }
+.form-control, .form-select { border-radius:8px; border-color:#d1d5db; font-size:0.9rem; }
+.form-control:focus, .form-select:focus { border-color:#dc2626; box-shadow:0 0 0 3px rgba(220,38,38,0.1); }
+.action-bar { background:#fafafa; border-top:1px solid #eee; padding:16px 24px; border-radius:0 0 12px 12px; }
+.required-star { color:#ef4444; }
+.stock-out-badge { display:inline-flex; align-items:center; gap:6px; background:#fef2f2; color:#b91c1c; border:1px solid #fecaca; border-radius:20px; padding:4px 14px; font-size:0.78rem; font-weight:600; margin-bottom:16px; }
+.warn-box { background:#fffbeb; border:1px solid #fde68a; border-radius:10px; padding:12px 16px; font-size:0.8rem; color:#92400e; display:flex; gap:10px; align-items:flex-start; margin-bottom:4px; }
 </style>
-<!-- Page Content -->
-
-    <div class="card shadow-sm border-0 form-card">
-
-        <form method="POST" enctype="multipart/form-data">
-            {% csrf_token %}
-
-            <div class="card-body p-4">
-
-                <!-- Section Header -->
-                <div class="mb-4">
-                    <h5 class="fw-bold mb-1">Stock Details</h5>
-                    <p class="text-muted small mb-0">
-                        Be careful while removing stock it can't be reversed.
-                    </p>
-                </div>
-
-                <!-- Form -->
-                <div class="form-section">
-                    {{ form|crispy }}
-                </div>
-
+<div class="card shadow-sm border-0 form-card">
+    <form method="POST" id="stockForm">
+        {% csrf_token %}
+        <div class="card-body p-4">
+            <div class="mb-4">
+                <span class="stock-out-badge"><i class="bi bi-box-arrow-up-right"></i> Stock Out</span>
+                <h5 class="fw-bold mb-1">Remove Stock</h5>
+                <p class="text-muted small mb-0">Select a product and enter the quantity to remove from inventory.</p>
             </div>
-
-            <!-- Footer Actions -->
-            <div class="action-bar d-flex justify-content-between align-items-center">
-
-                <div class="text-muted small">
-                    
-                </div>
-
-                <div class="d-flex gap-2">
-                    <a href="{% url 'stock_dashboard' %}" class="btn btn-light border px-4">
-                        Cancel
-                    </a>
-
-                    <button type="submit" class="btn btn-danger px-4 fw-semibold">
-                        <i class="bi bi-check-circle me-1"></i>
-                        Remove Stock
-                    </button>
-                </div>
-
+            {% if form.errors %}
+            <div class="alert alert-danger rounded-3 mb-4">
+                {% for field in form %}{% for error in field.errors %}<div>{{ field.label }}: {{ error }}</div>{% endfor %}{% endfor %}
             </div>
-
-        </form>
-
-    </div>
-
+            {% endif %}
+            <div class="section-card">
+                <div class="section-title">Stock Details</div>
+                <div class="row g-3">
+                    <div class="col-12">
+                        <label class="form-label">Product <span class="required-star">*</span></label>
+                        {{ form.product }}
+                        {% if form.product.errors %}<div class="text-danger small mt-1">{{ form.product.errors.0 }}</div>{% endif %}
+                    </div>
+                    <div class="col-12">
+                        <label class="form-label">Quantity to Remove <span class="required-star">*</span></label>
+                        {{ form.quantity }}
+                        {% if form.quantity.errors %}<div class="text-danger small mt-1">{{ form.quantity.errors.0 }}</div>{% endif %}
+                    </div>
+                    <div class="col-12">
+                        <div class="warn-box">
+                            <i class="bi bi-exclamation-triangle-fill" style="color:#d97706; flex-shrink:0; margin-top:1px;"></i>
+                            <span>Stock removal cannot be reversed. Make sure the quantity is correct before submitting.</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="action-bar d-flex justify-content-between align-items-center">
+            <span class="text-muted small">Fields marked <span class="required-star">*</span> are required.</span>
+            <div class="d-flex gap-2">
+                <a href="{% url 'stock_dashboard' %}" class="btn btn-light border px-4">Cancel</a>
+                <button type="submit" class="btn btn-danger px-4 fw-semibold"><i class="bi bi-dash-circle me-1"></i> Remove Stock</button>
+            </div>
+        </div>
+    </form>
+</div>
+<script>
+document.querySelectorAll('#stockForm input[type="number"]').forEach(el => el.classList.add('form-control'));
+document.querySelectorAll('#stockForm select').forEach(el => el.classList.add('form-select'));
+</script>
 {% endblock %}

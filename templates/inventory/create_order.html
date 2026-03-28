@@ -1,188 +1,174 @@
 {% extends 'base_dashboard.html' %}
 {% load static %}
-{% load crispy_forms_tags %}
 {%block pagetitle%}Create Order{% endblock pagetitle%}
-{%block pagecontent %}Place order here{% endblock pagecontent %}
+{%block pagecontent%}Place a new customer order{% endblock pagecontent%}
 {% block link %}
 <a href="{% url 'order_dashboard' %}" class="btn btn-outline-secondary btn-sm">
-            <i class="bi bi-arrow-left-circle"></i> Back
-        </a>
+    <i class="bi bi-arrow-left-circle"></i> Back
+</a>
 {% endblock link %}
-{% block panel %}Create Order Panel{% endblock panel%}
+{% block panel %}Order Panel{% endblock panel%}
 {% block content %}
 
 <style>
-    .product-row {
-  background: #f9fafb;
-  transition: 0.2s ease;
-}
+.form-card { max-width: 960px; margin: auto; }
+.section-card { background:#fff; border:1px solid #e5e7eb; border-radius:12px; padding:24px; margin-bottom:20px; }
+.section-title { font-size:0.8rem; font-weight:700; text-transform:uppercase; letter-spacing:0.05em; color:#6b7280; margin-bottom:16px; }
+.form-label { font-size:0.875rem; font-weight:500; color:#374151; }
+.form-control, .form-select { border-radius:8px; border-color:#d1d5db; font-size:0.9rem; }
+.form-control:focus, .form-select:focus { border-color:#6366f1; box-shadow:0 0 0 3px rgba(99,102,241,0.1); }
+.action-bar { background:#fafafa; border-top:1px solid #eee; padding:16px 24px; border-radius:0 0 12px 12px; }
+.required-star { color:#ef4444; }
 
-.product-row:hover {
-  background: #ffffff;
-  box-shadow: 0 6px 18px rgba(0,0,0,0.05);
-}
-
-.card-header h6 {
-  font-size: 16px;
-}
-
-.remove-row {
-  border-radius: 50px;
-}
-
-#add-row {
-  border-radius: 20px;
-}
-
-    .page-wrapper {
-        margin-top: 90px;
-    }
-
-    .form-card {
-        max-width: 950px;
-        margin: auto;
-    }
-
-    .form-section {
-        background: #ffffff;
-        border-radius: 12px;
-        border: 1px solid #eee;
-        padding: 24px;
-    }
-
-    .form-control, .form-select {
-        border-radius: 8px;
-    }
-
-    .action-bar {
-        background: #fafafa;
-        border-top: 1px solid #eee;
-        padding: 16px 24px;
-        border-radius: 0 0 12px 12px;
-    }
-
-    .asteriskField { display: none; }
+/* Product rows */
+.product-row { background:#f9fafb; border:1px solid #e5e7eb; border-radius:10px; padding:16px; margin-bottom:12px; position:relative; }
+.product-row-header { font-size:0.75rem; font-weight:700; text-transform:uppercase; letter-spacing:0.05em; color:#9ca3af; margin-bottom:12px; display:flex; justify-content:space-between; align-items:center; }
+.btn-remove { width:28px; height:28px; border-radius:7px; background:#fef2f2; color:#dc2626; border:none; display:inline-flex; align-items:center; justify-content:center; font-size:0.75rem; cursor:pointer; transition:background 0.15s; }
+.btn-remove:hover { background:#dc2626; color:#fff; }
+.btn-add-row { display:inline-flex; align-items:center; gap:6px; padding:8px 16px; border-radius:9px; background:#eff6ff; color:#2563eb; border:1px solid #bfdbfe; font-size:0.82rem; font-weight:600; cursor:pointer; transition:background 0.15s; }
+.btn-add-row:hover { background:#2563eb; color:#fff; }
 </style>
-<!-- Page Content -->
 
-    <div class="card shadow-sm border-0 form-card">
+<div class="card shadow-sm border-0 form-card">
+    <form method="POST" id="orderForm">
+        {% csrf_token %}
+        <div class="card-body p-4">
 
-        <form method="POST" enctype="multipart/form-data">
-            {% csrf_token %}
+            <div class="mb-4">
+                <h5 class="fw-bold mb-1">New Order</h5>
+                <p class="text-muted small mb-0">Fill in customer details and add products to create an invoice.</p>
+            </div>
 
-            <div class="card-body p-4">
+            {% if order_form.errors %}
+            <div class="alert alert-danger rounded-3 mb-4">
+                {% for field in order_form %}{% for error in field.errors %}<div>{{ field.label }}: {{ error }}</div>{% endfor %}{% endfor %}
+            </div>
+            {% endif %}
 
-                <!-- Section Header -->
-                <div class="mb-4">
-                    <h5 class="fw-bold mb-1">Order Details</h5>
-                    <p class="text-muted small mb-0">
-                         Fields marked required must be completed.
-                    </p>
+            <!-- Customer Info -->
+            <div class="section-card">
+                <div class="section-title">Customer Information</div>
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label class="form-label">Customer Name <span class="required-star">*</span></label>
+                        {{ order_form.customer_name }}
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Email <span class="required-star">*</span></label>
+                        {{ order_form.customer_email }}
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Phone <span class="required-star">*</span></label>
+                        {{ order_form.customer_phonenumber }}
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label">City</label>
+                        {{ order_form.city }}
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label">State</label>
+                        {{ order_form.state }}
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Address <span class="required-star">*</span></label>
+                        {{ order_form.customer_address }}
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label">Pincode</label>
+                        {{ order_form.pincode }}
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label">Order Status</label>
+                        {{ order_form.status }}
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label">Payment Status</label>
+                        {{ order_form.payment_status }}
+                    </div>
                 </div>
+            </div>
 
-                <!-- Form -->
-                <div class="form-section">
-                    {{ order_form|crispy }}
-                </div>
-
-                
-            <div class="card shadow-sm border-0 rounded-4 mb-4">
-
-  <div class="card-header bg-white d-flex justify-content-between align-items-center">
-    <h6 class="mb-0 fw-semibold">
-      <i class="bi bi-box-seam me-2 text-primary"></i> Products
-    </h6>
-
-    <button type="button" class="btn btn-sm btn-primary" id="add-row">
-      <i class="bi bi-plus-lg"></i> Add Product
-    </button>
-  </div>
-
-           <div class="card-body" id="formset-container">
-    {{ formset.management_form }}
-
-    {% for form in formset %}
-    <div class="product-row border rounded-3 p-3 mb-3 position-relative bg-light-subtle">
-
-        {{ form|crispy }}
-
-        <button type="button" 
-                class="btn btn-sm btn-outline-danger remove-row position-absolute top-0 end-0 m-2">
-            <i class="bi bi-trash"></i>
-        </button>
-
-    </div>
-    {% endfor %}
-</div>
-</div>
-
-
-            <!-- Footer Actions -->
-            <div class="action-bar d-flex justify-content-between align-items-center">
-
-                <div class="text-muted small">
-                    Fields marked required must be completed.
-                </div>
-
-                <div class="d-flex gap-2">
-                    <a href="{% url 'order_dashboard' %}" class="btn btn-light border px-4">
-                        Cancel
-                    </a>
-
-                    <button type="submit" class="btn btn-success px-4 fw-semibold">
-                        <i class="bi bi-check-circle me-1"></i>
-                        Place Order
+            <!-- Products -->
+            <div class="section-card">
+                <div class="section-title" style="display:flex; justify-content:space-between; align-items:center;">
+                    <span>Products</span>
+                    <button type="button" class="btn-add-row" id="add-row">
+                        <i class="bi bi-plus-lg"></i> Add Product
                     </button>
                 </div>
 
+                {{ formset.management_form }}
+                <div id="formset-container">
+                    {% for form in formset %}
+                    <div class="product-row">
+                        <div class="product-row-header">
+                            <span>Item {{ forloop.counter }}</span>
+                            <button type="button" class="btn-remove remove-row" title="Remove"><i class="bi bi-trash-fill"></i></button>
+                        </div>
+                        <div class="row g-3">
+                            {% for field in form.visible_fields %}
+                            <div class="col-md-6">
+                                <label class="form-label">{{ field.label }}</label>
+                                {{ field }}
+                                {% if field.errors %}<div class="text-danger small mt-1">{{ field.errors.0 }}</div>{% endif %}
+                            </div>
+                            {% endfor %}
+                            {% for field in form.hidden_fields %}{{ field }}{% endfor %}
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
             </div>
 
-        </form>
+        </div>
 
-    </div>
+        <div class="action-bar d-flex justify-content:space-between align-items-center">
+            <span class="text-muted small">Fields marked <span class="required-star">*</span> are required.</span>
+            <div class="d-flex gap-2 ms-auto">
+                <a href="{% url 'order_dashboard' %}" class="btn btn-light border px-4">Cancel</a>
+                <button type="submit" class="btn btn-success px-4 fw-semibold">
+                    <i class="bi bi-check-circle me-1"></i> Place Order
+                </button>
+            </div>
+        </div>
+    </form>
+</div>
 
-<!-- JavaScript for dynamic formset -->
 <script>
-document.addEventListener("DOMContentLoaded", function() {
+document.addEventListener("DOMContentLoaded", function () {
+    // Apply Bootstrap classes
+    document.querySelectorAll('#orderForm input[type="text"], #orderForm input[type="email"], #orderForm input[type="tel"], #orderForm input[type="number"], #orderForm textarea').forEach(el => el.classList.add('form-control'));
+    document.querySelectorAll('#orderForm select').forEach(el => el.classList.add('form-select'));
+
     const addRowBtn = document.getElementById('add-row');
-    const formsetContainer = document.getElementById('formset-container');
+    const container = document.getElementById('formset-container');
+    const prefix = '{{ formset.prefix }}';
+    const totalInput = document.getElementById('id_' + prefix + '-TOTAL_FORMS');
 
-    // Inline formset prefix
-    const formPrefix = '{{ formset.prefix }}';
-    const totalFormsInput = document.getElementById('id_' + formPrefix + '-TOTAL_FORMS');
+    addRowBtn.addEventListener('click', function () {
+        const total = parseInt(totalInput.value);
+        const first = container.querySelector('.product-row');
+        const clone = first.cloneNode(true);
 
-    addRowBtn.addEventListener('click', function() {
-        const totalForms = parseInt(totalFormsInput.value);
-        const firstRow = formsetContainer.querySelector('.product-row');
-        const newForm = firstRow.cloneNode(true);
-
-        // Reset all inputs in cloned form
-        newForm.querySelectorAll('input, select').forEach(input => {
-            if (input.type !== 'hidden') input.value = '';
-            if (input.type === 'checkbox') input.checked = false;
+        clone.querySelectorAll('input, select, textarea').forEach(el => {
+            if (el.type !== 'hidden') el.value = '';
         });
+        clone.innerHTML = clone.innerHTML.replace(new RegExp(prefix + '-\\d+-', 'g'), prefix + '-' + total + '-');
+        clone.querySelector('.product-row-header span').textContent = 'Item ' + (total + 1);
 
-        // Update form index
-        newForm.innerHTML = newForm.innerHTML.replace(
-            new RegExp(formPrefix + '-\\d+-', 'g'),
-            formPrefix + '-' + totalForms + '-'
-        );
+        // Re-apply classes
+        clone.querySelectorAll('input[type="text"], input[type="email"], input[type="number"], textarea').forEach(el => el.classList.add('form-control'));
+        clone.querySelectorAll('select').forEach(el => el.classList.add('form-select'));
 
-        formsetContainer.appendChild(newForm);
-
-        // Increase total forms count
-        totalFormsInput.value = totalForms + 1;
+        container.appendChild(clone);
+        totalInput.value = total + 1;
     });
 
-    // Remove row
-    formsetContainer.addEventListener('click', function(e){
-        if(e.target.classList.contains('remove-row')){
-            const row = e.target.closest('.product-row');
-            row.remove();
-
-            // Update total forms count
-            const currentRows = formsetContainer.querySelectorAll('.product-row').length;
-            totalFormsInput.value = currentRows;
+    container.addEventListener('click', function (e) {
+        const btn = e.target.closest('.remove-row');
+        if (btn && container.querySelectorAll('.product-row').length > 1) {
+            btn.closest('.product-row').remove();
+            totalInput.value = container.querySelectorAll('.product-row').length;
         }
     });
 });

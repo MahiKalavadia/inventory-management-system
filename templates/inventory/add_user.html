@@ -1,89 +1,60 @@
 {% extends 'base_dashboard.html' %}
-{% load crispy_forms_tags %}
 {% load static %}
 {%block pagetitle%}Add User{% endblock pagetitle%}
+{%block pagecontent%}Create a new system user{% endblock pagecontent%}
 {% block link %}
-<a href="{% url 'user_dashboard' %}" class="btn btn-outline-secondary btn-sm">
-            <i class="bi bi-arrow-left-circle"></i> Back
-        </a>
+<a href="{% url 'user_dashboard' %}" class="btn btn-outline-secondary btn-sm"><i class="bi bi-arrow-left-circle"></i> Back</a>
 {% endblock link %}
-{% block panel %}Add User Panel{% endblock panel%}
+{% block panel %}User Panel{% endblock panel%}
 {% block content %}
 <style>
-        .page-wrapper {
-        margin-top: 90px;
-    }
-
-    .form-card {
-        max-width: 950px;
-        margin: auto;
-    }
-
-    .form-section {
-        background: #ffffff;
-        border-radius: 12px;
-        border: 1px solid #eee;
-        padding: 24px;
-    }
-
-    .form-control, .form-select {
-        border-radius: 8px;
-    }
-
-    .action-bar {
-        background: #fafafa;
-        border-top: 1px solid #eee;
-        padding: 16px 24px;
-        border-radius: 0 0 12px 12px;
-    }
-
-    .asteriskField { display: none; }
+.form-card { max-width:640px; margin:auto; }
+.section-card { background:#fff; border:1px solid #e5e7eb; border-radius:12px; padding:24px; margin-bottom:20px; }
+.section-title { font-size:0.8rem; font-weight:700; text-transform:uppercase; letter-spacing:0.05em; color:#6b7280; margin-bottom:16px; }
+.form-label { font-size:0.875rem; font-weight:500; color:#374151; }
+.form-control, .form-select { border-radius:8px; border-color:#d1d5db; font-size:0.9rem; }
+.form-control:focus, .form-select:focus { border-color:#6366f1; box-shadow:0 0 0 3px rgba(99,102,241,0.1); }
+.action-bar { background:#fafafa; border-top:1px solid #eee; padding:16px 24px; border-radius:0 0 12px 12px; }
+.required-star { color:#ef4444; }
 </style>
-<!-- Page Content -->
-
-    <div class="card shadow-sm border-0 form-card">
-
-        <form method="POST" enctype="multipart/form-data">
-            {% csrf_token %}
-
-            <div class="card-body p-4">
-
-                <!-- Section Header -->
-                <div class="mb-4">
-                    <h5 class="fw-bold mb-1">User Details</h5>
-                    <p class="text-muted small mb-0">
-                        Fill in the details below to add a new user.
-                    </p>
-                </div>
-
-                <!-- Form -->
-                <div class="form-section">
-                    {{ form|crispy }}
-                </div>
-
+<div class="card shadow-sm border-0 form-card">
+    <form method="POST" id="addUserForm">
+        {% csrf_token %}
+        <div class="card-body p-4">
+            <div class="mb-4">
+                <h5 class="fw-bold mb-1">Add New User</h5>
+                <p class="text-muted small mb-0">Fill in the details to create a new system user.</p>
             </div>
-
-            <!-- Footer Actions -->
-            <div class="action-bar d-flex justify-content-between align-items-center">
-
-                <div class="text-muted small">
-                    Fields marked required must be completed.
-                </div>
-
-                <div class="d-flex gap-2">
-                    <a href="{% url 'view_users' %}" class="btn btn-light border px-4">
-                        Cancel
-                    </a>
-
-                    <button type="submit" class="btn btn-success px-4 fw-semibold">
-                        <i class="bi bi-check-circle me-1"></i>
-                        Save User
-                    </button>
-                </div>
-
+            {% if form.errors %}
+            <div class="alert alert-danger rounded-3 mb-4">
+                {% for field in form %}{% for error in field.errors %}<div>{{ field.label }}: {{ error }}</div>{% endfor %}{% endfor %}
+                {% for error in form.non_field_errors %}<div>{{ error }}</div>{% endfor %}
             </div>
-
-        </form>
-
-    </div>
+            {% endif %}
+            <div class="section-card">
+                <div class="section-title">User Details</div>
+                <div class="row g-3">
+                    {% for field in form.visible_fields %}
+                    <div class="col-12">
+                        <label class="form-label">{{ field.label }}</label>
+                        {{ field }}
+                        {% if field.errors %}<div class="text-danger small mt-1">{{ field.errors.0 }}</div>{% endif %}
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        <div class="action-bar d-flex justify-content-between align-items-center">
+            <span class="text-muted small">All fields are required.</span>
+            <div class="d-flex gap-2">
+                <a href="{% url 'view_users' %}" class="btn btn-light border px-4">Cancel</a>
+                <button type="submit" class="btn btn-success px-4 fw-semibold"><i class="bi bi-check-circle me-1"></i> Save User</button>
+            </div>
+        </div>
+    </form>
+</div>
+<script>
+document.querySelectorAll('#addUserForm input, #addUserForm textarea').forEach(el => { if(el.type !== 'hidden') el.classList.add('form-control'); });
+document.querySelectorAll('#addUserForm select').forEach(el => el.classList.add('form-select'));
+</script>
 {% endblock %}

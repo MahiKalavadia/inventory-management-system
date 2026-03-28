@@ -1,146 +1,135 @@
 {% extends "base_dashboard.html" %}
 {% load static %}
 {%block pagetitle%}Purchase Orders{% endblock pagetitle%}
-{%block pagecontent %}Tracking of orders{% endblock pagecontent %}
+{%block pagecontent%}Track and manage all purchase orders{% endblock pagecontent%}
 {% block link %}
- {% if request.user.is_superuser %}
-              <a href="{% url 'purchase_dashboard' %}" class="btn btn-outline-secondary btn-sm me-2">
-                 <i class="bi bi-arrow-left-circle-fill"></i> Back
-              </a>
-              {% elif request.user.groups.first.name == 'Manager' or request.user.groups.first.name == 'Staff' %}
-              <a href="{% url 'purchase_dashboard2' %}" class="btn btn-outline-secondary btn-sm me-2">
-                 <i class="bi bi-arrow-left-circle-fill"></i> Back
-              </a>
-              {% endif %}
+{% if request.user.is_superuser %}
+<a href="{% url 'purchase_dashboard' %}" class="btn btn-outline-secondary btn-sm"><i class="bi bi-arrow-left-circle"></i> Back</a>
+{% elif request.user.groups.first.name == 'Manager' or request.user.groups.first.name == 'Staff' %}
+<a href="{% url 'purchase_dashboard2' %}" class="btn btn-outline-secondary btn-sm"><i class="bi bi-arrow-left-circle"></i> Back</a>
+{% endif %}
+<button class="btn btn-outline-secondary btn-sm dropdown-toggle" data-bs-toggle="dropdown">
+    <i class="bi bi-download me-1"></i> Export
+</button>
+<ul class="dropdown-menu">
+    <li><a class="dropdown-item" href="{% url 'export_orders_csv' %}"><i class="bi bi-filetype-csv me-2 text-success"></i>CSV</a></li>
+    <li><a class="dropdown-item" href="{% url 'export_orders_excel' %}"><i class="bi bi-file-earmark-excel me-2 text-success"></i>Excel</a></li>
+    <li><a class="dropdown-item" href="{% url 'export_orders_pdf' %}"><i class="bi bi-file-earmark-pdf me-2 text-danger"></i>PDF</a></li>
+</ul>
 {% endblock link %}
-{% block panel %}Purchase Order Panel{% endblock panel%}
+{% block panel %}Purchase Panel{% endblock panel%}
 {% block content %}
-<div class="card shadow-sm border-0 rounded-4 mb-4">
 
-  <!-- Header -->
-  <div class="card-header bg-white d-flex justify-content-between align-items-center px-4 py-3 border-bottom">
-    
-    <div>
-      <h6 class="fw-bold mb-0">📦 Purchase Orders</h6>
-      <small class="text-muted">Manage supplier purchase orders</small>
+<style>
+.po-wrap { border-radius:14px; overflow:hidden; border:1px solid #e5e7eb; background:#fff; }
+.po-header { padding:18px 24px; border-bottom:1px solid #f0f0f0; display:flex; justify-content:space-between; align-items:center; }
+.po-title { font-size:0.95rem; font-weight:700; color:#111827; margin:0; }
+.po-sub { font-size:0.78rem; color:#9ca3af; margin-top:2px; }
+.po-table thead th { background:#f8fafc; font-size:0.68rem; font-weight:700; text-transform:uppercase; letter-spacing:0.07em; color:#94a3b8; padding:11px 16px; border-bottom:1px solid #f0f0f0; white-space:nowrap; }
+.po-table tbody tr { border-bottom:1px solid #f8f9fa; }
+.po-table tbody tr:last-child { border-bottom:none; }
+.po-table td { padding:13px 16px; vertical-align:middle; font-size:0.875rem; }
+.po-id { font-weight:700; color:#4f46e5; font-size:0.82rem; font-family:monospace; }
+.po-prod { font-weight:600; color:#111827; }
+.po-sup { font-size:0.72rem; color:#9ca3af; margin-top:1px; }
+.s-delivered { display:inline-flex;align-items:center;gap:4px;background:#ecfdf5;color:#047857;border:1px solid #a7f3d0;border-radius:20px;padding:3px 10px;font-size:0.7rem;font-weight:700; }
+.s-transit   { display:inline-flex;align-items:center;gap:4px;background:#eff6ff;color:#2563eb;border:1px solid #bfdbfe;border-radius:20px;padding:3px 10px;font-size:0.7rem;font-weight:700; }
+.s-delayed   { display:inline-flex;align-items:center;gap:4px;background:#fef2f2;color:#b91c1c;border:1px solid #fecaca;border-radius:20px;padding:3px 10px;font-size:0.7rem;font-weight:700; }
+.s-ordered   { display:inline-flex;align-items:center;gap:4px;background:#f5f3ff;color:#7c3aed;border:1px solid #ddd6fe;border-radius:20px;padding:3px 10px;font-size:0.7rem;font-weight:700; }
+.s-shipped   { display:inline-flex;align-items:center;gap:4px;background:#f0fdf4;color:#16a34a;border:1px solid #bbf7d0;border-radius:20px;padding:3px 10px;font-size:0.7rem;font-weight:700; }
+.s-draft     { display:inline-flex;align-items:center;gap:4px;background:#f3f4f6;color:#374151;border:1px solid #e5e7eb;border-radius:20px;padding:3px 10px;font-size:0.7rem;font-weight:700; }
+.sdot { width:5px; height:5px; border-radius:50%; display:inline-block; }
+.btn-act { width:30px; height:30px; border-radius:8px; display:inline-flex; align-items:center; justify-content:center; font-size:0.78rem; border:none; transition:all 0.15s; text-decoration:none; }
+.btn-update { background:#111827; color:#fff; }
+.btn-update:hover { background:#374151; color:#fff; }
+.btn-detail { background:#eff6ff; color:#2563eb; }
+.btn-detail:hover { background:#2563eb; color:#fff; }
+.btn-fill { background:#f5f3ff; color:#7c3aed; }
+.btn-fill:hover { background:#7c3aed; color:#fff; }
+.po-footer { padding:13px 24px; border-top:1px solid #f0f0f0; background:#fafafa; display:flex; justify-content:space-between; align-items:center; }
+.page-btn { display:inline-flex;align-items:center;gap:5px;padding:6px 14px;border-radius:8px;font-size:0.8rem;font-weight:500;border:1px solid #e5e7eb;background:#fff;color:#374151;text-decoration:none;transition:background 0.15s; }
+.page-btn:hover { background:#f3f4f6; }
+.page-btn.disabled { opacity:0.4; pointer-events:none; }
+.page-counter { display:inline-flex;align-items:center;justify-content:center;background:#111827;color:#fff;border-radius:8px;padding:5px 14px;font-size:0.8rem;font-weight:600; }
+</style>
+
+<div class="po-wrap">
+
+    <div class="po-header">
+        <div>
+            <p class="po-title">Purchase Orders</p>
+            <p class="po-sub">{{ orders.paginator.count }} order{{ orders.paginator.count|pluralize }} total</p>
+        </div>
     </div>
-
-    <div class="d-flex gap-2">
-
-      <div class="dropdown">
-        <button class="btn btn-outline-primary btn-sm dropdown-toggle" data-bs-toggle="dropdown">
-          Export
-        </button>
-        <ul class="dropdown-menu">
-          <li><a class="dropdown-item" href="{% url 'export_orders_csv' %}">CSV</a></li>
-          <li><a class="dropdown-item" href="{% url 'export_orders_excel' %}">Excel</a></li>
-          <li><a class="dropdown-item" href="{% url 'export_orders_pdf' %}">PDF</a></li>
-        </ul>
-      </div>
-    </div>
-
-  </div>
-
-  <!-- Body -->
-  <div class="card-body p-0">
 
     <div class="table-responsive">
-      <table class="table table-hover align-middle mb-0">
-        <thead class="bg-light text-muted small">
-          <tr>
-            <th>PO ID</th>
-            <th>Product</th>
-            <th>Status</th>
-            <th class="text-end">Action</th>
-          </tr>
-        </thead>
-
-        <tbody>
-          {% for po in orders %}
-          <tr class="border-bottom">
-
-            <td class="fw-semibold">PO-{{ po.id }}</td>
-
-            <td>
-              {% if po.request %}
-              <div class="fw-semibold">{{ po.request.product.name }}</div>
-              <small class="text-muted">Supplier: {{ po.supplier.name }}</small>
-              {% else %}
-              <div class="fw-semibold text-muted">No Product Linked</div>
-              <small class="text-muted">Supplier: {{ po.supplier.name }}</small>
-              {% endif %}
-            </td>
-
-            <!-- STATUS -->
-            <td>
-              {% if po.status == "delivered" %}
-                  <span class="badge bg-success">Completed</span>
-                {% elif po.status == "pending" %}
-                  <span class="badge bg-warning text-dark">Pending</span>
-                {% elif po.status == "delayed" %}
-                  <span class="badge bg-danger">delayed</span>
-                {% else %}
-                  <span class="badge bg-info text-dark">{{ po.status }}</span>
-                {% endif %}
-
-            <!-- ACTION -->
-             <td class="text-end">
-               {% if po.status == 'draft' %}
-                 <a href="{% url 'edit_purchase_order' po.pk %}" class="btn btn-sm btn-outline-dark">
-                  Fill Details
-                 </a>
-               {% endif %}
-               {% if po.status != 'delivered' and po.status != 'delayed' %}
-               <a href="{% url 'update_po_status' po.pk %}" class="btn btn-sm btn-outline-dark">
-                  Update Status
-                 </a>
-               {% endif %}
-               {% if po.status == 'delivered' %}
-                <span class="text-success fw-semibold">✔ Done</span>
-                {% elif po.status == 'delayed' %}
-                  <span class="text-success fw-semibold">✔ Arrived Late but Completed</span>
-               {% endif %}
-               <a href="{% url 'purchase_order_detail' po.pk %}" class="btn btn-sm btn-outline-primary ms-1">
-                Details
-               </a>
-            </td>
-
-          </tr>
-          {% empty %}
-          <tr>
-            <td colspan="4" class="text-center py-4 text-muted">
-              No Purchase Orders Found
-            </td>
-          </tr>
-          {% endfor %}
-        </tbody>
-
-      </table>
+        <table class="table po-table mb-0">
+            <thead>
+                <tr>
+                    <th style="padding-left:24px;">PO ID</th>
+                    <th>Product & Supplier</th>
+                    <th>Status</th>
+                    <th>Expected</th>
+                    <th class="text-end" style="padding-right:24px;">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for po in orders %}
+            <tr>
+                <td style="padding-left:24px;"><span class="po-id">PO-{{ po.id }}</span></td>
+                <td>
+                    {% if po.request %}
+                    <div class="po-prod">{{ po.request.product.name }}</div>
+                    {% else %}
+                    <div class="po-prod" style="color:#9ca3af;">No product linked</div>
+                    {% endif %}
+                    <div class="po-sup">{{ po.supplier.name }}</div>
+                </td>
+                <td>
+                    {% if po.status == "delivered" %}<span class="s-delivered"><span class="sdot bg-success"></span>Delivered</span>
+                    {% elif po.status == "in_transit" %}<span class="s-transit"><span class="sdot bg-primary"></span>In Transit</span>
+                    {% elif po.status == "shipped" %}<span class="s-shipped"><span class="sdot bg-success"></span>Shipped</span>
+                    {% elif po.status == "ordered" %}<span class="s-ordered"><span class="sdot" style="background:#7c3aed;"></span>Ordered</span>
+                    {% elif po.status == "delayed" %}<span class="s-delayed"><span class="sdot bg-danger"></span>Delayed</span>
+                    {% else %}<span class="s-draft"><span class="sdot" style="background:#9ca3af;"></span>{{ po.status|capfirst }}</span>{% endif %}
+                </td>
+                <td style="font-size:0.82rem; color:#6b7280;">
+                    {% if po.expected_delivery %}{{ po.expected_delivery|date:"d M Y" }}{% else %}<span style="color:#9ca3af;">—</span>{% endif %}
+                </td>
+                <td class="text-end" style="padding-right:24px;">
+                    <div class="d-flex justify-content-end gap-2">
+                        {% if po.status == 'draft' %}
+                        <a href="{% url 'edit_purchase_order' po.pk %}" class="btn-act btn-fill" title="Fill Details"><i class="bi bi-pencil-fill"></i></a>
+                        {% endif %}
+                        {% if po.status != 'delivered' and po.status != 'delayed' %}
+                        <a href="{% url 'update_po_status' po.pk %}" class="btn-act btn-update" title="Update Status"><i class="bi bi-arrow-repeat"></i></a>
+                        {% endif %}
+                        <a href="{% url 'purchase_order_detail' po.pk %}" class="btn-act btn-detail" title="View Details"><i class="bi bi-eye-fill"></i></a>
+                    </div>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="5" class="text-center py-5">
+                    <div class="text-muted"><i class="bi bi-bag-x fs-2 d-block mb-2 opacity-25"></i>No purchase orders found.</div>
+                </td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
     </div>
 
-  </div>
+    <div class="po-footer">
+        <span style="font-size:0.8rem; color:#6b7280;">Page {{ orders.number }} of {{ orders.paginator.num_pages }}</span>
+        <div class="d-flex align-items-center gap-2">
+            {% if orders.has_previous %}<a class="page-btn" href="?page={{ orders.previous_page_number }}"><i class="bi bi-chevron-left"></i> Prev</a>
+            {% else %}<span class="page-btn disabled"><i class="bi bi-chevron-left"></i> Prev</span>{% endif %}
+            <span class="page-counter">{{ orders.number }} / {{ orders.paginator.num_pages }}</span>
+            {% if orders.has_next %}<a class="page-btn" href="?page={{ orders.next_page_number }}">Next <i class="bi bi-chevron-right"></i></a>
+            {% else %}<span class="page-btn disabled">Next <i class="bi bi-chevron-right"></i></span>{% endif %}
+        </div>
+    </div>
+
 </div>
-<nav class="mt-4">
-    <ul class="pagination justify-content-center">
-
-        {% if orders.has_previous %}
-        <li class="page-item">
-            <a class="page-link" href="?page={{ orders.previous_page_number }}">Previous</a>
-        </li>
-        {% endif %}
-
-        <li class="page-item active">
-            <span class="page-link">{{ orders.number }}</span>
-        </li>
-
-        {% if orders.has_next %}
-        <li class="page-item">
-            <a class="page-link" href="?page={{ orders.next_page_number }}">Next</a>
-        </li>
-        {% endif %}
-
-    </ul>
-</nav>
-
 
 {% endblock %}

@@ -1,146 +1,142 @@
 {% extends 'base_dashboard.html' %}
 {% load static %}
 {% load group_tags %}
-{%block pagetitle%} In Stock Products{% endblock pagetitle%}
-{%block pagecontent %}Products having stock available{% endblock pagecontent %}
+{%block pagetitle%}In Stock Products{% endblock pagetitle%}
+{%block pagecontent%}Products with healthy stock levels{% endblock pagecontent%}
 {% block link %}
 <a href="{% url 'stock_dashboard' %}" class="btn btn-outline-secondary btn-sm">
-            <i class="bi bi-arrow-left-circle"></i> Back
-        </a>
- <button class="btn btn-outline-secondary btn-sm dropdown-toggle"
-                    data-bs-toggle="dropdown">
-                Export In Stock List
-            </button>
-            <ul class="dropdown-menu">
-                <li><a class="dropdown-item" href="{% url 'export_instock_csv' %}">CSV</a></li>
-                <li><a class="dropdown-item" href="{% url 'export_instock_excel' %}">Excel</a></li>
-                <li><a class="dropdown-item" href="{% url 'export_instock_pdf' %}">PDF</a></li>
-            </ul>
+    <i class="bi bi-arrow-left-circle"></i> Back
+</a>
+<button class="btn btn-outline-secondary btn-sm dropdown-toggle" data-bs-toggle="dropdown">
+    <i class="bi bi-download me-1"></i> Export
+</button>
+<ul class="dropdown-menu">
+    <li><a class="dropdown-item" href="{% url 'export_instock_csv' %}"><i class="bi bi-filetype-csv me-2 text-success"></i>CSV</a></li>
+    <li><a class="dropdown-item" href="{% url 'export_instock_excel' %}"><i class="bi bi-file-earmark-excel me-2 text-success"></i>Excel</a></li>
+    <li><a class="dropdown-item" href="{% url 'export_instock_pdf' %}"><i class="bi bi-file-earmark-pdf me-2 text-danger"></i>PDF</a></li>
+</ul>
 {% endblock link %}
-{% block panel %}In Stock Panel{% endblock panel%}
+{% block panel %}Stock Panel{% endblock panel%}
 {% block content %}
+
 <style>
-.stock-table th {
-    font-size: 12px;
-    text-transform: uppercase;
-    color: #6c757d;
-    background: #f8fafc;
-}
+.sl-wrap { border-radius: 14px; overflow: hidden; border: 1px solid #e5e7eb; background: #fff; }
+.sl-header { padding: 18px 24px; border-bottom: 1px solid #f0f0f0; background: #fff; }
+.sl-badge-in { display:inline-flex; align-items:center; gap:6px; background:#ecfdf5; color:#047857; border:1px solid #a7f3d0; border-radius:20px; padding:4px 14px; font-size:0.75rem; font-weight:600; }
+.sl-table thead th { background:#f8fafc; font-size:0.7rem; font-weight:700; text-transform:uppercase; letter-spacing:0.06em; color:#94a3b8; padding:12px 16px; border-bottom:1px solid #f0f0f0; white-space:nowrap; }
+.sl-table tbody tr { border-bottom:1px solid #f8f9fa; transition:background 0.15s; }
+.sl-table tbody tr:hover { background:#f0fdf4; }
+.sl-table tbody tr:last-child { border-bottom:none; }
+.sl-table td { padding:13px 16px; vertical-align:middle; font-size:0.875rem; }
 
-.stock-row:hover {
-    background: #f8fafc;
-    transition: 0.2s;
-}
+.prod-img { width:42px; height:42px; border-radius:10px; object-fit:cover; border:1px solid #e5e7eb; }
+.prod-avatar { width:42px; height:42px; border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:0.75rem; font-weight:700; background:linear-gradient(135deg,#16a34a,#059669); color:#fff; flex-shrink:0; }
+.prod-name { font-weight:600; color:#111827; font-size:0.875rem; }
+.prod-sku { font-size:0.72rem; color:#9ca3af; margin-top:1px; }
 
-.product-img {
-    width: 48px;
-    height: 48px;
-    border-radius: 10px;
-    object-fit: cover;
-    background: #f1f5f9;
-    padding: 6px;
-}
+.cat-pill { display:inline-flex; align-items:center; gap:5px; background:#f0f4ff; color:#4f46e5; border-radius:20px; padding:3px 10px; font-size:0.72rem; font-weight:600; }
+.sup-pill { display:inline-flex; align-items:center; gap:5px; background:#f0fdf4; color:#16a34a; border-radius:20px; padding:3px 10px; font-size:0.72rem; font-weight:600; }
 
-.stock-progress {
-    height: 6px;
-    border-radius: 20px;
-}
+.stock-bar-wrap { width:80px; height:5px; background:#e5e7eb; border-radius:99px; margin-top:5px; }
+.stock-bar { height:5px; border-radius:99px; background:#16a34a; }
+.qty-chip { display:inline-flex; align-items:center; gap:5px; background:#ecfdf5; color:#047857; border:1px solid #a7f3d0; border-radius:20px; padding:4px 12px; font-size:0.78rem; font-weight:600; }
 
-.qty-badge {
-    background: #fff3cd;
-    padding: 6px 12px;
-    border-radius: 20px;
-    font-weight: 600;
-}
-
+.page-btn { display:inline-flex; align-items:center; gap:6px; padding:6px 14px; border-radius:8px; font-size:0.8rem; font-weight:500; border:1px solid #e5e7eb; background:#fff; color:#374151; text-decoration:none; transition:all 0.15s; }
+.page-btn:hover { background:#f3f4f6; color:#111; }
+.page-btn.disabled { opacity:0.4; pointer-events:none; }
+.page-counter { display:inline-flex; align-items:center; justify-content:center; background:#16a34a; color:#fff; border-radius:8px; padding:5px 14px; font-size:0.8rem; font-weight:600; }
 </style>
-    <div class="card-body">
-        <table class="table table-striped">
+
+<div class="sl-wrap">
+
+    <!-- Header -->
+    <div class="sl-header d-flex justify-content-between align-items-center">
+        <div>
+            <div class="d-flex align-items-center gap-2 mb-1">
+                <span class="sl-badge-in"><span style="width:7px;height:7px;border-radius:50%;background:#16a34a;display:inline-block;"></span> In Stock</span>
+            </div>
+            <h6 class="fw-bold mb-0" style="font-size:0.95rem;">In Stock Products</h6>
+            <span class="text-muted" style="font-size:0.78rem;">
+                {{ page_obj.paginator.count }} product{{ page_obj.paginator.count|pluralize }} available
+            </span>
+        </div>
+        <div class="text-muted" style="font-size:0.78rem;">
+            Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+        </div>
+    </div>
+
+    <!-- Table -->
+    <div class="table-responsive">
+        <table class="table sl-table mb-0">
             <thead>
-                    <tr>
-                        <th>Image</th>
-                        <th>Name</th>
-                        <th>Category</th>
-                        <th>Vendor</th>
-                        <th>Stock Level</th>
-                        <th>Qty</th>
-                    </tr>
+                <tr>
+                    <th style="padding-left:24px; width:52px;"></th>
+                    <th>Product</th>
+                    <th>Category</th>
+                    <th>Supplier</th>
+                    <th>Brand</th>
+                    <th>Price</th>
+                    <th>Stock Level</th>
+                    <th>Quantity</th>
+                </tr>
             </thead>
             <tbody>
-          {% for product in page_obj %}
-                <tr class="stock-row">
+            {% for product in page_obj %}
+            <tr>
+                <td style="padding-left:24px;">
+                    {% if product.image %}
+                        <img src="{{ product.image.url }}" class="prod-img" alt="{{ product.name }}">
+                    {% else %}
+                        <div class="prod-avatar">{{ product.name|slice:":2"|upper }}</div>
+                    {% endif %}
+                </td>
+                <td>
+                    <div class="prod-name">{{ product.name }}</div>
+                    <div class="prod-sku">SKU: {{ product.sku }}</div>
+                </td>
+                <td><span class="cat-pill"><i class="bi bi-grid-3x3-gap-fill" style="font-size:0.6rem;"></i>{{ product.category.name }}</span></td>
+                <td>
+                    {% if product.supplier %}
+                    <span class="sup-pill"><i class="bi bi-truck" style="font-size:0.6rem;"></i>{{ product.supplier.name }}</span>
+                    {% else %}<span class="text-muted small">—</span>{% endif %}
+                </td>
+                <td style="font-size:0.82rem; color:#374151;">{{ product.brand }}</td>
+                <td>
+                    <div style="font-weight:700; font-size:0.875rem; color:#111827;">₹{{ product.price }}</div>
+                    {% if product.purchase_price %}<div style="font-size:0.72rem; color:#9ca3af;">Cost: ₹{{ product.purchase_price }}</div>{% endif %}
+                </td>
+                <td>
+                    <div style="font-size:0.72rem; color:#16a34a; font-weight:600;">Healthy</div>
+                    <div class="stock-bar-wrap">
+                        <div class="stock-bar" style="width:{{ product.stock_percent|floatformat:0 }}%;"></div>
+                    </div>
+                </td>
+                <td><span class="qty-chip"><i class="bi bi-check-circle-fill" style="font-size:0.7rem;"></i>{{ product.quantity }} units</span></td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="8" class="text-center py-5">
+                    <div class="text-muted"><i class="bi bi-inbox fs-2 d-block mb-2 opacity-25"></i>No in-stock products found.</div>
+                </td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
 
-                    <!-- Image -->
-                    <td>
-                        {% if product.image %}
-                            <img src="{{ product.image.url }}" class="product-img">
-                        {% else %}
-                            <img src="https://cdn-icons-png.flaticon.com/512/679/679922.png" class="product-img">
-                        {% endif %}
-                    </td>
-
-                    <!-- Name -->
-                    <td>
-                        <div class="fw-semibold">{{ product.name }}</div>
-                        <small class="text-muted">SKU: {{ product.id }}</small>
-                    </td>
-
-                    <td>{{ product.category.name }}</td>
-                    <td>{{ product.supplier.name }}</td>
-
-                    <!-- Stock Progress -->
-                    <td style="width:180px;">
-    <small class="text-success fw-semibold">
-        Stock
-    </small>
-
-    <div class="progress mt-1" style="height:6px;">
-        <div class="progress-bar bg-success"
-             style="width: {{ product.stock_percent }}%;">
+    <!-- Pagination -->
+    <div style="padding:14px 24px; border-top:1px solid #f0f0f0; background:#fafafa;" class="d-flex justify-content-between align-items-center">
+        <span style="font-size:0.8rem; color:#6b7280;">Showing {{ page_obj.start_index }}–{{ page_obj.end_index }} of {{ page_obj.paginator.count }}</span>
+        <div class="d-flex align-items-center gap-2">
+            {% if page_obj.has_previous %}
+            <a class="page-btn" href="?page={{ page_obj.previous_page_number }}"><i class="bi bi-chevron-left"></i> Prev</a>
+            {% else %}<span class="page-btn disabled"><i class="bi bi-chevron-left"></i> Prev</span>{% endif %}
+            <span class="page-counter">{{ page_obj.number }} / {{ page_obj.paginator.num_pages }}</span>
+            {% if page_obj.has_next %}
+            <a class="page-btn" href="?page={{ page_obj.next_page_number }}">Next <i class="bi bi-chevron-right"></i></a>
+            {% else %}<span class="page-btn disabled">Next <i class="bi bi-chevron-right"></i></span>{% endif %}
         </div>
     </div>
-</td>
 
-
-                    <!-- Qty Badge -->
-                    <td>
-                        <span class="qty-badge bg-success-subtle">{{ product.quantity }} units</span>
-                    </td>
-
-                </tr>
-                {% empty %}
-                <tr>
-                    <td colspan="6" class="text-center py-4 text-muted">
-                        🎉 No low stock items
-                    </td>
-                </tr>
-                {% endfor %}
-                </tbody>
-
-            </table>
-        </div>
-        <nav class="mt-4">
-<ul class="pagination justify-content-center">
-
-    {% if page_obj.has_previous %}
-        <li class="page-item">
-            <a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous</a>
-        </li>
-    {% endif %}
-
-    <li class="page-item active">
-        <span class="page-link">{{ page_obj.number }}</span>
-    </li>
-
-    {% if page_obj.has_next %}
-        <li class="page-item">
-            <a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a>
-        </li>
-    {% endif %}
-
-</ul>
-</nav>
-    </div>
-</div>
 </div>
 {% endblock %}

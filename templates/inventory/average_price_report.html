@@ -2,46 +2,54 @@
 {% load number_filters %}
 {% load static %}
 {%block pagetitle%}Average Price Report{% endblock pagetitle%}
+{%block pagecontent%}Purchase price analysis across products{% endblock pagecontent%}
 {% block link %}
-<a href="{% url 'report_dashboard' %}" class="btn btn-light btn-sm border">
-            ← Back
-        </a>
-<button class="btn btn-outline-secondary btn-sm dropdown-toggle"
-                    data-bs-toggle="dropdown">
-                Export Average Price Report
-            </button>
-            <ul class="dropdown-menu">
-                <li><a class="dropdown-item" href="{% url "export_averageprice_csv" %}">CSV</a></li>
-                <li><a class="dropdown-item" href="{% url "export_averageprice_excel" %}">Excel</a></li>
-                <li><a class="dropdown-item" href="{% url "export_averageprice_pdf" %}">PDF</a></li>
-            </ul>
+<a href="{% url 'report_dashboard' %}" class="btn btn-outline-secondary btn-sm"><i class="bi bi-arrow-left-circle"></i> Back</a>
+<button class="btn btn-outline-secondary btn-sm dropdown-toggle" data-bs-toggle="dropdown"><i class="bi bi-download me-1"></i> Export</button>
+<ul class="dropdown-menu">
+    <li><a class="dropdown-item" href="{% url 'export_averageprice_csv' %}"><i class="bi bi-filetype-csv me-2 text-success"></i>CSV</a></li>
+    <li><a class="dropdown-item" href="{% url 'export_averageprice_excel' %}"><i class="bi bi-file-earmark-excel me-2 text-success"></i>Excel</a></li>
+    <li><a class="dropdown-item" href="{% url 'export_averageprice_pdf' %}"><i class="bi bi-file-earmark-pdf me-2 text-danger"></i>PDF</a></li>
+</ul>
 {% endblock link %}
 {% block panel %}Report Panel{% endblock panel%}
 {% block content %}
-<h5><b>Average Purchase Price:</b> ₹{{ avg_price|floatformat:2|short_number }}</h5>
-<div class="card dashboard-card mb-4">
-
-
-    <!-- TABLE -->
-    <div class="card-body p-0">
-        <table class="table table-hover align-middle mb-0">
-            <thead>
-              <tr>
-                <th>Product</th>
-                <th>Purchase Price</th>
-            </tr>
-            </thead>
-
+<style>
+.rpt-wrap { border-radius:14px; overflow:hidden; border:1px solid #e5e7eb; background:#fff; }
+.rpt-header { padding:16px 24px; border-bottom:1px solid #f0f0f0; display:flex; justify-content:space-between; align-items:center; }
+.rpt-title { font-size:0.9rem; font-weight:700; color:#111827; margin:0; }
+.rpt-sub { font-size:0.75rem; color:#9ca3af; }
+.rpt-table thead th { background:#f8fafc; font-size:0.67rem; font-weight:700; text-transform:uppercase; letter-spacing:0.07em; color:#94a3b8; padding:10px 16px; border-bottom:1px solid #f0f0f0; white-space:nowrap; }
+.rpt-table tbody tr { border-bottom:1px solid #f8f9fa; }
+.rpt-table tbody tr:last-child { border-bottom:none; }
+.rpt-table td { padding:12px 16px; vertical-align:middle; font-size:0.875rem; }
+.avg-bar { background:#f5f3ff; border:1px solid #ddd6fe; border-radius:10px; padding:14px 20px; display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; }
+</style>
+<div class="avg-bar">
+    <span style="font-size:0.82rem; color:#7c3aed; font-weight:600;">Average Purchase Price</span>
+    <span style="font-size:1.3rem; font-weight:800; color:#7c3aed;">₹{{ avg_price|floatformat:2|short_number }}</span>
+</div>
+<div class="rpt-wrap">
+    <div class="rpt-header">
+        <div><p class="rpt-title">Average Price Report</p><p class="rpt-sub">{{ products|length }} products</p></div>
+    </div>
+    <div class="table-responsive">
+        <table class="table rpt-table mb-0">
+            <thead><tr>
+                <th style="padding-left:24px;">Product</th>
+                <th class="text-end" style="padding-right:24px;">Purchase Price</th>
+            </tr></thead>
             <tbody>
             {% for product in products %}
             <tr>
-                <td>{{ product.name }}</td>
-                <td>₹{{ product.purchase_price }}</td>
+                <td style="padding-left:24px; font-weight:600; color:#111827;">{{ product.name }}</td>
+                <td class="text-end" style="padding-right:24px; font-weight:600; color:#374151;">₹{{ product.purchase_price }}</td>
             </tr>
+            {% empty %}
+            <tr><td colspan="2" class="text-center py-5 text-muted">No products found.</td></tr>
             {% endfor %}
-        </tbody>
+            </tbody>
         </table>
     </div>
 </div>
-
 {% endblock %}

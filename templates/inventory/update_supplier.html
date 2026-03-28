@@ -1,88 +1,96 @@
 {% extends 'base_dashboard.html' %}
-{% load crispy_forms_tags %}
 {% load static %}
-{%block pagetitle%}Update Vendor Details{% endblock pagetitle%}
-{%block pagecontent %}Update existing vendor in your inventory{% endblock pagecontent %}
+{%block pagetitle%}Update Vendor{% endblock pagetitle%}
+{%block pagecontent %}Edit vendor details{% endblock pagecontent %}
 {% block link %}
-<a href="{% url 'supplier_dashboard' %}" class="btn btn-outline-secondary btn-sm">
-            <i class="bi bi-arrow-left-circle"></i> Back
-        </a>
+<a href="{% url 'supplier_dashboard' %}" class="btn btn-outline-secondary btn-sm"><i class="bi bi-arrow-left-circle"></i> Back</a>
 {% endblock link %}
-{% block panel %}Update Vendor Panel{% endblock panel%}
+{% block panel %}Vendor Panel{% endblock panel%}
 {% block content %}
 <style>
-    .page-wrapper {
-        margin-top: 90px;
-    }
-
-    .form-card {
-        max-width: 950px;
-        margin: auto;
-    }
-
-    .form-section {
-        background: #ffffff;
-        border-radius: 12px;
-        border: 1px solid #eee;
-        padding: 24px;
-    }
-
-    .form-control, .form-select {
-        border-radius: 8px;
-    }
-
-    .action-bar {
-        background: #fafafa;
-        border-top: 1px solid #eee;
-        padding: 16px 24px;
-        border-radius: 0 0 12px 12px;
-    }
-
-    .asteriskField { display: none; }
+.form-card { max-width: 760px; margin: auto; }
+.section-card { background:#fff; border:1px solid #e5e7eb; border-radius:12px; padding:24px; margin-bottom:20px; }
+.section-title { font-size:0.8rem; font-weight:700; text-transform:uppercase; letter-spacing:0.05em; color:#6b7280; margin-bottom:16px; }
+.form-label { font-size:0.875rem; font-weight:500; color:#374151; }
+.form-control, .form-select { border-radius:8px; border-color:#d1d5db; font-size:0.9rem; }
+.form-control:focus, .form-select:focus { border-color:#6366f1; box-shadow:0 0 0 3px rgba(99,102,241,0.1); }
+.action-bar { background:#fafafa; border-top:1px solid #eee; padding:16px 24px; border-radius:0 0 12px 12px; }
+.required-star { color:#ef4444; }
 </style>
 <div class="card shadow-sm border-0 form-card">
+    <form method="POST" id="supplierForm">
+        {% csrf_token %}
+        <div class="card-body p-4">
+            <div class="mb-4">
+                <h5 class="fw-bold mb-1">Update Vendor</h5>
+                <p class="text-muted small mb-0">Edit the details for this vendor.</p>
+            </div>
+            {% if form.errors %}
+            <div class="alert alert-danger rounded-3 mb-4">
+                {% for field in form %}{% for error in field.errors %}<div>{{ field.label }}: {{ error }}</div>{% endfor %}{% endfor %}
+            </div>
+            {% endif %}
 
-        <form method="POST" enctype="multipart/form-data">
-            {% csrf_token %}
-
-            <div class="card-body p-4">
-
-                <!-- Section Header -->
-                <div class="mb-4">
-                    <h5 class="fw-bold mb-1">Vendor Details</h5>
-                    <p class="text-muted small mb-0">
-                        Update the details for this vendor.
-                    </p>
+            <div class="section-card">
+                <div class="section-title">Vendor Information</div>
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label class="form-label">Vendor Name <span class="required-star">*</span></label>
+                        {{ form.name }}
+                        {% if form.name.errors %}<div class="text-danger small mt-1">{{ form.name.errors.0 }}</div>{% endif %}
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Contact Person <span class="required-star">*</span></label>
+                        {{ form.contact_person }}
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Phone <span class="required-star">*</span></label>
+                        {{ form.phone }}
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Email</label>
+                        {{ form.email }}
+                    </div>
+                    <div class="col-12">
+                        <label class="form-label">Address</label>
+                        {{ form.address }}
+                    </div>
                 </div>
-
-                <!-- Form -->
-                <div class="form-section">
-                    {{ form|crispy }}
-                </div>
-
             </div>
 
-            <!-- Footer Actions -->
-            <div class="action-bar d-flex justify-content-between align-items-center">
-
-                <div class="text-muted small">
-                    Fields marked required must contain values.
+            <div class="section-card">
+                <div class="section-title">Settings</div>
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label class="form-label">Categories Supplied</label>
+                        {{ form.categories_supplies }}
+                        <div class="form-text text-muted">Hold Ctrl / Cmd to select multiple</div>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Active Status</label>
+                        <div class="mt-2 d-flex align-items-center gap-2">
+                            {{ form.is_active }}
+                            <span class="form-text text-muted mb-0">Mark vendor as active</span>
+                        </div>
+                    </div>
                 </div>
-
-                <div class="d-flex gap-2">
-                    <a href="{% url 'supplier_dashboard' %}" class="btn btn-light border px-4">
-                        Cancel
-                    </a>
-
-                    <button type="submit" class="btn btn-success px-4 fw-semibold">
-                        <i class="bi bi-check-circle me-1"></i>
-                        Update Vendor
-                    </button>
-                </div>
-
             </div>
-
-        </form>
-
-    </div>
+        </div>
+        <div class="action-bar d-flex justify-content-between align-items-center">
+            <span class="text-muted small">Fields marked <span class="required-star">*</span> are required.</span>
+            <div class="d-flex gap-2">
+                <a href="{% url 'supplier_dashboard' %}" class="btn btn-light border px-4">Cancel</a>
+                <button type="submit" class="btn btn-success px-4 fw-semibold"><i class="bi bi-check-circle me-1"></i> Update Vendor</button>
+            </div>
+        </div>
+    </form>
+</div>
+<script>
+document.querySelectorAll('#supplierForm input[type="text"], #supplierForm input[type="email"], #supplierForm input[type="tel"], #supplierForm textarea').forEach(el => {
+    el.classList.add('form-control');
+});
+document.querySelectorAll('#supplierForm select').forEach(el => {
+    el.classList.add('form-select');
+});
+</script>
 {% endblock %}

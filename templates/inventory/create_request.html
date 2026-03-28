@@ -1,71 +1,101 @@
 {% extends "base_dashboard.html" %}
-{%block pagetitle%}Create Request{% endblock pagetitle%}
-{% block panel %}Request Panel{% endblock panel%}
+{%block pagetitle%}Create Purchase Request{% endblock pagetitle%}
+{%block pagecontent%}Raise a stock request for admin approval{% endblock pagecontent%}
+{% block link %}
+{% if request.user.is_superuser %}
+<a href="{% url 'purchase_dashboard' %}" class="btn btn-outline-secondary btn-sm"><i class="bi bi-arrow-left-circle"></i> Back</a>
+{% else %}
+<a href="{% url 'purchase_dashboard2' %}" class="btn btn-outline-secondary btn-sm"><i class="bi bi-arrow-left-circle"></i> Back</a>
+{% endif %}
+{% endblock link %}
+{% block panel %}Purchase Panel{% endblock panel%}
 {% block content %}
-<div class="container-fluid mt-4">
 
-    <div class="card shadow-sm">
+<style>
+.form-card { max-width:600px; margin:auto; }
+.section-card { background:#fff; border:1px solid #e5e7eb; border-radius:12px; padding:24px; margin-bottom:20px; }
+.section-title { font-size:0.8rem; font-weight:700; text-transform:uppercase; letter-spacing:0.05em; color:#6b7280; margin-bottom:16px; }
+.form-label { font-size:0.875rem; font-weight:500; color:#374151; }
+.form-control { border-radius:8px; border-color:#d1d5db; font-size:0.9rem; }
+.form-control:focus { border-color:#6366f1; box-shadow:0 0 0 3px rgba(99,102,241,0.1); }
+.action-bar { background:#fafafa; border-top:1px solid #eee; padding:16px 24px; border-radius:0 0 12px 12px; }
+.required-star { color:#ef4444; }
+.prod-info-chip { display:inline-flex; align-items:center; gap:6px; background:#f0fdf4; color:#16a34a; border:1px solid #a7f3d0; border-radius:20px; padding:4px 14px; font-size:0.78rem; font-weight:600; margin-bottom:16px; }
+</style>
 
-        <!-- Card Header -->
-        <div class="card-header d-flex justify-content-between align-items-center">
-            <h5 class="mb-0 fw-bold">
-                Request {{ product.name }}
-            </h5>
+<div class="card shadow-sm border-0 form-card">
+    <form method="POST" id="reqForm">
+        {% csrf_token %}
+        <div class="card-body p-4">
 
-            {% if request.user.is_superuser %}
-                <a href="{% url 'purchase_dashboard' %}" 
-                   class="btn btn-outline-secondary btn-sm">
-                   <i class="bi bi-arrow-left-circle"></i> Back
-                </a>
-
-            {% elif request.user.groups.first.name == 'Manager' or request.user.groups.first.name == 'Staff' %}
-                <a href="{% url 'purchase_dashboard2' %}" 
-                   class="btn btn-outline-secondary btn-sm">
-                   <i class="bi bi-arrow-left-circle"></i> Back
-                </a>
-            {% endif %}
-        </div>
-
-        <!-- Card Body -->
-        <div class="card-body">
-
-            <!-- Supplier Info -->
-            <div class="alert alert-info py-2">
-                Supplier: <span class="fw-semibold">
-                    {{ product.supplier.name }}
-                </span>
+            <div class="mb-4">
+                <span class="prod-info-chip"><i class="bi bi-box-seam" style="font-size:0.65rem;"></i>{{ product.name }}</span>
+                <h5 class="fw-bold mb-1">Create Purchase Request</h5>
+                <p class="text-muted small mb-0">Submit a request to the admin to restock this product.</p>
             </div>
 
-            <!-- Form -->
-            <form method="POST">
-                {% csrf_token %}
-
-                <div class="mb-3">
-                    <label class="form-label">Reason for Purchase</label>
-                    <input type="text" 
-                           name="description" 
-                           class="form-control"
-                           placeholder="Enter reason"
-                           required>
+            <!-- Product Info -->
+            <div class="section-card">
+                <div class="section-title">Product Information</div>
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <div style="background:#f8fafc; border:1px solid #e5e7eb; border-radius:10px; padding:12px 14px;">
+                            <div style="font-size:0.65rem; font-weight:700; text-transform:uppercase; letter-spacing:0.06em; color:#9ca3af; margin-bottom:3px;">Product</div>
+                            <div style="font-size:0.9rem; font-weight:700; color:#111827;">{{ product.name }}</div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div style="background:#f8fafc; border:1px solid #e5e7eb; border-radius:10px; padding:12px 14px;">
+                            <div style="font-size:0.65rem; font-weight:700; text-transform:uppercase; letter-spacing:0.06em; color:#9ca3af; margin-bottom:3px;">Supplier</div>
+                            <div style="font-size:0.9rem; font-weight:700; color:#111827;">{{ product.supplier.name }}</div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div style="background:#f8fafc; border:1px solid #e5e7eb; border-radius:10px; padding:12px 14px;">
+                            <div style="font-size:0.65rem; font-weight:700; text-transform:uppercase; letter-spacing:0.06em; color:#9ca3af; margin-bottom:3px;">Category</div>
+                            <div style="font-size:0.9rem; font-weight:600; color:#374151;">{{ product.category.name }}</div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div style="background:#fef2f2; border:1px solid #fecaca; border-radius:10px; padding:12px 14px;">
+                            <div style="font-size:0.65rem; font-weight:700; text-transform:uppercase; letter-spacing:0.06em; color:#9ca3af; margin-bottom:3px;">Current Stock</div>
+                            <div style="font-size:0.9rem; font-weight:700; color:#dc2626;">{{ product.quantity }} units</div>
+                        </div>
+                    </div>
                 </div>
+            </div>
 
-                <div class="mb-3">
-                    <label class="form-label">Quantity</label>
-                    <input type="number" 
-                           name="quantity" 
-                           class="form-control"
-                           placeholder="Enter quantity"
-                           min="1"
-                           required>
+            <!-- Request Details -->
+            <div class="section-card">
+                <div class="section-title">Request Details</div>
+                <div class="row g-3">
+                    <div class="col-12">
+                        <label class="form-label">Reason for Purchase <span class="required-star">*</span></label>
+                        <input type="text" name="description" class="form-control" placeholder="e.g. Stock running low, customer demand" required>
+                    </div>
+                    <div class="col-12">
+                        <label class="form-label">Quantity Required <span class="required-star">*</span></label>
+                        <input type="number" name="quantity" class="form-control" placeholder="Enter quantity" min="1" required>
+                        <div class="form-text text-muted mt-1">Enter the number of units you need to restock.</div>
+                    </div>
                 </div>
-
-                <button class="btn btn-success">
-                    <i class="bi bi-send"></i> Submit Request
-                </button>
-
-            </form>
+            </div>
 
         </div>
-    </div>
+        <div class="action-bar d-flex justify-content-between align-items-center">
+            <span class="text-muted small">Fields marked <span class="required-star">*</span> are required.</span>
+            <div class="d-flex gap-2">
+                {% if request.user.is_superuser %}
+                <a href="{% url 'purchase_dashboard' %}" class="btn btn-light border px-4">Cancel</a>
+                {% else %}
+                <a href="{% url 'purchase_dashboard2' %}" class="btn btn-light border px-4">Cancel</a>
+                {% endif %}
+                <button type="submit" class="btn btn-success px-4 fw-semibold">
+                    <i class="bi bi-send me-1"></i> Submit Request
+                </button>
+            </div>
+        </div>
+    </form>
 </div>
+
 {% endblock %}

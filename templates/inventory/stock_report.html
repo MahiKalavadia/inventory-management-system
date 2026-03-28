@@ -1,57 +1,62 @@
 {% extends "base_dashboard.html" %}
 {% load static %}
 {%block pagetitle%}Stock Report{% endblock pagetitle%}
-{%block pagecontent %}Vendor actively supplying products{% endblock pagecontent %}
+{%block pagecontent%}Full inventory stock snapshot{% endblock pagecontent%}
 {% block link %}
-<a href="{% url 'report_dashboard' %}" class="btn btn-light btn-sm border">
-            ← Back
-        </a>
-<button class="btn btn-outline-secondary btn-sm dropdown-toggle"
-                    data-bs-toggle="dropdown">
-                Export Stock Report
-            </button>
-            <ul class="dropdown-menu">
-                <li><a class="dropdown-item" href="{% url 'export_stock_report_csv' %}">CSV</a></li>
-                <li><a class="dropdown-item" href="{% url 'export_stock_report_excel' %}">Excel</a></li>
-                <li><a class="dropdown-item" href="{% url 'export_stock_report_pdf' %}">PDF</a></li>
-            </ul>
+<a href="{% url 'report_dashboard' %}" class="btn btn-outline-secondary btn-sm"><i class="bi bi-arrow-left-circle"></i> Back</a>
+<button class="btn btn-outline-secondary btn-sm dropdown-toggle" data-bs-toggle="dropdown"><i class="bi bi-download me-1"></i> Export</button>
+<ul class="dropdown-menu">
+    <li><a class="dropdown-item" href="{% url 'export_stock_report_csv' %}"><i class="bi bi-filetype-csv me-2 text-success"></i>CSV</a></li>
+    <li><a class="dropdown-item" href="{% url 'export_stock_report_excel' %}"><i class="bi bi-file-earmark-excel me-2 text-success"></i>Excel</a></li>
+    <li><a class="dropdown-item" href="{% url 'export_stock_report_pdf' %}"><i class="bi bi-file-earmark-pdf me-2 text-danger"></i>PDF</a></li>
+</ul>
 {% endblock link %}
 {% block panel %}Report Panel{% endblock panel%}
 {% block content %}
-<div class="card dashboard-card mb-4">
-
-    <!-- TABLE -->
-    <div class="card-body p-0">
-        <table class="table table-hover align-middle mb-0">
-            <thead>
-                <tr>
-                <th>SKU</th>
-                <th>Name</th>
+<style>
+.rpt-wrap { border-radius:14px; overflow:hidden; border:1px solid #e5e7eb; background:#fff; }
+.rpt-header { padding:16px 24px; border-bottom:1px solid #f0f0f0; display:flex; justify-content:space-between; align-items:center; }
+.rpt-title { font-size:0.9rem; font-weight:700; color:#111827; margin:0; }
+.rpt-sub { font-size:0.75rem; color:#9ca3af; }
+.rpt-table thead th { background:#f8fafc; font-size:0.67rem; font-weight:700; text-transform:uppercase; letter-spacing:0.07em; color:#94a3b8; padding:10px 16px; border-bottom:1px solid #f0f0f0; white-space:nowrap; }
+.rpt-table tbody tr { border-bottom:1px solid #f8f9fa; }
+.rpt-table tbody tr:last-child { border-bottom:none; }
+.rpt-table td { padding:12px 16px; vertical-align:middle; font-size:0.875rem; }
+.sku-chip { font-family:monospace; font-size:0.78rem; color:#4f46e5; font-weight:600; }
+.cat-pill { display:inline-flex;align-items:center;background:#f0f4ff;color:#4f46e5;border-radius:5px;padding:2px 7px;font-size:0.68rem;font-weight:600; }
+.qty-in  { font-weight:700; color:#16a34a; }
+.qty-low { font-weight:700; color:#d97706; }
+.qty-out { font-weight:700; color:#dc2626; }
+</style>
+<div class="rpt-wrap">
+    <div class="rpt-header">
+        <div><p class="rpt-title">Stock Report</p><p class="rpt-sub">{{ products|length }} products</p></div>
+    </div>
+    <div class="table-responsive">
+        <table class="table rpt-table mb-0">
+            <thead><tr>
+                <th style="padding-left:24px;">SKU</th>
+                <th>Product</th>
                 <th>Brand</th>
-                <th>Quantity</th>
-                <th>Price</th>
-                <th>Stock Value</th>
-            </tr>
-            </thead>
-
+                <th class="text-center">Quantity</th>
+                <th class="text-end">Price</th>
+                <th class="text-end" style="padding-right:24px;">Stock Value</th>
+            </tr></thead>
             <tbody>
             {% for product in products %}
             <tr>
-                <td>{{ product.sku }}</td>
-                <td>{{ product.name }}</td>
-                <td>{{ product.brand }}</td>
-                <td>{{ product.quantity }}</td>
-                <td>₹{{ product.price }}</td>
-                <td>₹{{ product.stock_value }}</td>
+                <td style="padding-left:24px;"><span class="sku-chip">{{ product.sku }}</span></td>
+                <td style="font-weight:600; color:#111827;">{{ product.name }}</td>
+                <td style="font-size:0.82rem; color:#6b7280;">{{ product.brand }}</td>
+                <td class="text-center"><span class="{% if product.quantity == 0 %}qty-out{% elif product.quantity <= 5 %}qty-low{% else %}qty-in{% endif %}">{{ product.quantity }}</span></td>
+                <td class="text-end" style="color:#374151;">₹{{ product.price }}</td>
+                <td class="text-end" style="padding-right:24px; font-weight:700; color:#111827;">₹{{ product.stock_value }}</td>
             </tr>
             {% empty %}
-            <tr>
-                <td colspan="6" class="text-center">No products found</td>
-            </tr>
+            <tr><td colspan="6" class="text-center py-5 text-muted">No products found.</td></tr>
             {% endfor %}
-        </tbody>
+            </tbody>
         </table>
     </div>
 </div>
-
 {% endblock %}

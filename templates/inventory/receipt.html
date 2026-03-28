@@ -1,229 +1,431 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Order Receipt</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Receipt — {{ order.bill_number }}</title>
     <style>
+        * { margin:0; padding:0; box-sizing:border-box; }
+
         body {
-            font-family: "Inter", Arial, sans-serif;
-            background: #f4f6f9;
-            padding: 30px;
+            font-family: "Segoe UI", -apple-system, Arial, sans-serif;
+            background: #f1f5f9;
+            min-height: 100vh;
+            padding: 32px 16px 48px;
             color: #111827;
         }
 
-        .container {
-            width: 820px;
-            margin: auto;
-            background: #ffffff;
-            padding: 30px 35px;
-            border-radius: 12px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
-        }
-
-        /* Header */
-        .header {
+        /* ── Action bar (screen only) ── */
+        .action-bar {
+            width: 760px;
+            margin: 0 auto 20px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border-bottom: 2px solid #f3f4f6;
-            padding-bottom: 15px;
-            margin-bottom: 20px;
         }
-
-        h2 {
-            font-size: 22px;
-            font-weight: 700;
-        }
-
-        .status {
-            padding: 6px 14px;
-            background: #dcfce7;
-            color: #166534;
+        .action-bar a {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 16px;
+            border-radius: 9px;
+            font-size: 0.82rem;
             font-weight: 600;
-            border-radius: 20px;
-            font-size: 13px;
+            text-decoration: none;
+            transition: background 0.15s;
+        }
+        .btn-back {
+            background: #fff;
+            color: #374151;
+            border: 1px solid #e5e7eb;
+        }
+        .btn-back:hover { background: #f3f4f6; }
+        .btn-download {
+            background: #4f46e5;
+            color: #fff;
+            border: 1px solid #4f46e5;
+        }
+        .btn-download:hover { background: #4338ca; }
+        .btn-print {
+            background: #fff;
+            color: #374151;
+            border: 1px solid #e5e7eb;
+        }
+        .btn-print:hover { background: #f3f4f6; }
+
+        /* ── Receipt card ── */
+        .receipt {
+            width: 760px;
+            margin: 0 auto;
+            background: #fff;
+            border-radius: 18px;
+            overflow: hidden;
+            box-shadow: 0 12px 40px rgba(0,0,0,0.10);
         }
 
-        /* Meta Info */
-        .meta {
+        /* ── Header ── */
+        .receipt-header {
+            background: linear-gradient(135deg, #1e1b4b 0%, #4f46e5 60%, #0ea5e9 100%);
+            padding: 32px 36px 28px;
+            position: relative;
+            overflow: hidden;
+        }
+        .receipt-header::before {
+            content: '';
+            position: absolute;
+            top: -40px; right: -40px;
+            width: 160px; height: 160px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.06);
+        }
+        .receipt-header::after {
+            content: '';
+            position: absolute;
+            bottom: -30px; left: 60px;
+            width: 100px; height: 100px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.04);
+        }
+        .header-top {
             display: flex;
             justify-content: space-between;
-            font-size: 14px;
-            margin-bottom: 20px;
+            align-items: flex-start;
+            margin-bottom: 24px;
+        }
+        .brand-name {
+            font-size: 1.3rem;
+            font-weight: 800;
+            color: #fff;
+            letter-spacing: -0.02em;
+        }
+        .brand-sub {
+            font-size: 0.75rem;
+            color: rgba(255,255,255,0.6);
+            margin-top: 3px;
+        }
+        .paid-stamp {
+            background: rgba(255,255,255,0.15);
+            border: 2px solid rgba(255,255,255,0.35);
+            color: #fff;
+            border-radius: 10px;
+            padding: 6px 18px;
+            font-size: 0.78rem;
+            font-weight: 800;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+        }
+        .header-meta {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+        }
+        .meta-item { }
+        .meta-label {
+            font-size: 0.65rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: rgba(255,255,255,0.5);
+            margin-bottom: 4px;
+        }
+        .meta-val {
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: #fff;
+        }
+        .meta-val.bill { font-family: monospace; font-size: 0.95rem; }
+        .meta-val.amount { color: #86efac; font-size: 1.05rem; }
+
+        /* ── Divider ── */
+        .receipt-divider {
+            height: 1px;
+            background: #f0f0f0;
         }
 
-        .meta p {
-            margin: 3px 0;
+        /* ── Info section ── */
+        .receipt-info {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0;
+            border-bottom: 1px solid #f0f0f0;
         }
-
-        /* Customer Box */
-        .customer-box {
-            background: #f9fafb;
-            padding: 12px 15px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-            font-size: 14px;
+        .info-block {
+            padding: 20px 28px;
         }
+        .info-block:first-child {
+            border-right: 1px solid #f0f0f0;
+        }
+        .info-block-title {
+            font-size: 0.65rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: #9ca3af;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .info-block-title span {
+            width: 20px; height: 20px;
+            border-radius: 6px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.65rem;
+        }
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 7px;
+            font-size: 0.82rem;
+        }
+        .info-row:last-child { margin-bottom: 0; }
+        .info-key { color: #9ca3af; font-weight: 500; flex-shrink: 0; margin-right: 12px; }
+        .info-val { color: #111827; font-weight: 600; text-align: right; }
 
-        /* Table */
+        /* ── Items table ── */
+        .items-section { padding: 0 28px 0; }
+        .items-label {
+            font-size: 0.65rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: #9ca3af;
+            padding: 16px 0 10px;
+            border-bottom: 1px solid #f0f0f0;
+        }
         table {
             width: 100%;
             border-collapse: collapse;
-            margin-top: 15px;
-            font-size: 14px;
         }
-
-        th, td {
-            border: 1px solid #e5e7eb;
-            padding: 10px;
+        thead th {
+            font-size: 0.65rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.07em;
+            color: #94a3b8;
+            padding: 10px 8px;
+            border-bottom: 1px solid #f0f0f0;
+            text-align: center;
+            background: #f8fafc;
         }
+        thead th:first-child { text-align: left; padding-left: 0; }
+        thead th:last-child { text-align: right; padding-right: 0; }
 
-        th {
+        tbody tr { border-bottom: 1px solid #f8f9fa; }
+        tbody tr:last-child { border-bottom: none; }
+        tbody td {
+            padding: 12px 8px;
+            font-size: 0.85rem;
+            text-align: center;
+            vertical-align: middle;
+            color: #374151;
+        }
+        tbody td:first-child { text-align: left; padding-left: 0; font-weight: 600; color: #111827; }
+        tbody td:last-child { text-align: right; padding-right: 0; font-weight: 700; color: #111827; }
+
+        .qty-chip {
+            display: inline-block;
             background: #f3f4f6;
-            font-weight: 600;
-            text-align: center;
-        }
-
-        td {
-            text-align: center;
-        }
-
-        td:first-child {
-            text-align: left;
-            font-weight: 500;
-        }
-
-        .total-row th {
-            background: #111827;
-            color: white;
-            font-size: 16px;
-        }
-
-        /* Warranty badges */
-        .badge {
-            padding: 4px 10px;
-            border-radius: 14px;
-            font-size: 12px;
-            font-weight: 600;
-            display: inline-block;
-        }
-
-        .bg-success {
-            background: #dcfce7;
-            color: #166534;
-        }
-
-        .bg-danger {
-            background: #fee2e2;
-            color: #991b1b;
-        }
-
-        .text-muted {
-            color: #6b7280;
-        }
-
-        /* Footer */
-        .footer {
-            margin-top: 25px;
-            text-align: center;
-            font-size: 13px;
-            color: #6b7280;
-        }
-
-        /* Button */
-        .btn {
-            display: inline-block;
-            margin-top: 20px;
-            padding: 10px 20px;
-            background: #2563eb;
-            color: #fff;
-            text-decoration: none;
+            color: #374151;
             border-radius: 6px;
-            font-weight: 600;
-            font-size: 14px;
+            padding: 2px 8px;
+            font-size: 0.78rem;
+            font-weight: 700;
         }
+        .w-active  { display:inline-block; background:#ecfdf5; color:#047857; border:1px solid #a7f3d0; border-radius:20px; padding:2px 8px; font-size:0.62rem; font-weight:700; }
+        .w-expired { display:inline-block; background:#fef2f2; color:#b91c1c; border:1px solid #fecaca; border-radius:20px; padding:2px 8px; font-size:0.62rem; font-weight:700; }
+        .w-pending { display:inline-block; background:#f3f4f6; color:#6b7280; border:1px solid #e5e7eb; border-radius:20px; padding:2px 8px; font-size:0.62rem; font-weight:700; }
+        .w-date { font-size:0.65rem; color:#9ca3af; display:block; margin-top:2px; }
 
-        .btn:hover {
-            background: #1d4ed8;
+        /* ── Total bar ── */
+        .total-bar {
+            margin: 0 28px;
+            background: #111827;
+            border-radius: 12px;
+            padding: 16px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+        .total-label { font-size: 0.82rem; color: rgba(255,255,255,0.6); font-weight: 500; }
+        .total-amount { font-size: 1.4rem; font-weight: 800; color: #fff; }
+        .total-items { font-size: 0.72rem; color: rgba(255,255,255,0.4); margin-top: 2px; }
+
+        /* ── Footer ── */
+        .receipt-footer {
+            padding: 16px 28px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 1px dashed #e5e7eb;
+        }
+        .footer-note { font-size: 0.72rem; color: #9ca3af; }
+        .footer-note strong { color: #6b7280; }
+
+        /* ── Print styles ── */
+        @media print {
+            body { background: #fff; padding: 0; }
+            .action-bar { display: none; }
+            .receipt { box-shadow: none; border-radius: 0; width: 100%; }
         }
     </style>
 </head>
 <body>
 
-<div class="container">
+<!-- Action bar (hidden on print) -->
+<div class="action-bar">
+    <a href="{% url 'order_detail' order.id %}" class="btn-back">
+        ← Back to Order
+    </a>
+    <div style="display:flex; gap:10px;">
+        <a href="#" class="btn-print" onclick="window.print(); return false;">
+            🖨 Print
+        </a>
+        <a href="{% url 'download_receipt' order.id %}" class="btn-download">
+            ↓ Download PDF
+        </a>
+    </div>
+</div>
+
+<!-- Receipt -->
+<div class="receipt">
 
     <!-- Header -->
-    <div class="header">
-        <h2>Order Receipt</h2>
-        <span class="status">PAID</span>
-    </div>
-
-    <!-- Order Meta -->
-    <div class="meta">
-        <div>
-            <p><strong>Order ID:</strong> #{{ order.id }}</p>
-            <p><strong>Date:</strong> {{ order.created_at|date:"d M Y" }}</p>
+    <div class="receipt-header">
+        <div class="header-top">
+            <div>
+                <div class="brand-name">Smart Inventory</div>
+                <div class="brand-sub">Official Tax Receipt</div>
+            </div>
+            <div class="paid-stamp">✓ Paid</div>
         </div>
-        <div>
-            <p><strong>Total Items:</strong> {{ order.items.count }}</p>
+        <div class="header-meta">
+            <div class="meta-item">
+                <div class="meta-label">Bill Number</div>
+                <div class="meta-val bill">{{ order.bill_number }}</div>
+            </div>
+            <div class="meta-item">
+                <div class="meta-label">Date</div>
+                <div class="meta-val">{{ order.created_at|date:"d M Y" }}</div>
+            </div>
+            <div class="meta-item">
+                <div class="meta-label">Items</div>
+                <div class="meta-val">{{ order.items.count }} item{{ order.items.count|pluralize }}</div>
+            </div>
+            <div class="meta-item">
+                <div class="meta-label">Grand Total</div>
+                <div class="meta-val amount">₹{{ order.total_amount }}</div>
+            </div>
         </div>
     </div>
 
-    <!-- Customer Info -->
-    <div class="customer-box">
-        <strong>Customer Details</strong><br>
-        {{ order.customer_name }} <br>
-        {{ order.customer_address }}, {{ order.city }} - {{ order.pincode }} <br>
-        {{ order.get_state_display }}
+    <!-- Customer + Address -->
+    <div class="receipt-info">
+        <div class="info-block">
+            <div class="info-block-title">
+                <span style="background:#eff6ff; color:#2563eb;">👤</span>
+                Customer
+            </div>
+            <div class="info-row">
+                <span class="info-key">Name</span>
+                <span class="info-val">{{ order.customer_name }}</span>
+            </div>
+            <div class="info-row">
+                <span class="info-key">Email</span>
+                <span class="info-val" style="font-size:0.78rem;">{{ order.customer_email }}</span>
+            </div>
+            <div class="info-row">
+                <span class="info-key">Phone</span>
+                <span class="info-val">{{ order.customer_phonenumber }}</span>
+            </div>
+        </div>
+        <div class="info-block">
+            <div class="info-block-title">
+                <span style="background:#f0fdf4; color:#16a34a;">📍</span>
+                Delivery Address
+            </div>
+            <div class="info-row">
+                <span class="info-key">Address</span>
+                <span class="info-val" style="font-size:0.78rem; max-width:200px;">{{ order.customer_address }}</span>
+            </div>
+            <div class="info-row">
+                <span class="info-key">City</span>
+                <span class="info-val">{{ order.city }} — {{ order.pincode }}</span>
+            </div>
+            <div class="info-row">
+                <span class="info-key">State</span>
+                <span class="info-val">{{ order.get_state_display }}</span>
+            </div>
+        </div>
     </div>
 
-    <!-- Order Table -->
-    <table>
-        <tr>
-            <th>Product</th>
-            <th>Price</th>
-            <th>Qty</th>
-            <th>Warranty</th>
-            <th>Total</th>
-        </tr>
-
-        {% for item in order.items.all %}
-        <tr>
-            <td>{{ item.product }}</td>
-            <td>₹ {{ item.price }}</td>
-            <td>{{ item.quantity }}</td>
-            <td>
-                {{ item.warranty_months }} months <br>
-
-                {% if item.warranty_end %}
-                    Valid till: {{ item.warranty_end }} <br>
-
+    <!-- Items -->
+    <div class="items-section">
+        <div class="items-label">Order Items</div>
+        <table>
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Product</th>
+                    <th>Unit Price</th>
+                    <th>Qty</th>
+                    <th>Warranty</th>
+                    <th>Total</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for item in order.items.all %}
+            <tr>
+                <td style="text-align:left; color:#9ca3af; font-size:0.75rem; font-weight:700; width:28px;">{{ forloop.counter }}</td>
+                <td>{{ item.product }}</td>
+                <td>₹{{ item.price }}</td>
+                <td><span class="qty-chip">× {{ item.quantity }}</span></td>
+                <td>
+                    <div style="font-size:0.78rem; font-weight:600; color:#374151;">{{ item.warranty_months }}mo</div>
+                    {% if item.warranty_end %}
+                    <span class="w-date">Until {{ item.warranty_end }}</span>
                     {% if item.is_under_warranty %}
-                        <span class="badge bg-success">Under Warranty</span>
+                    <span class="w-active">Active</span>
                     {% else %}
-                        <span class="badge bg-danger">Expired</span>
+                    <span class="w-expired">Expired</span>
                     {% endif %}
-                {% else %}
-                    <span class="text-muted">Not Started</span>
-                {% endif %}
-            </td>
-            <td>₹ {{ item.total }}</td>
-        </tr>
-        {% endfor %}
+                    {% else %}
+                    <span class="w-pending">Not started</span>
+                    {% endif %}
+                </td>
+                <td>₹{{ item.total }}</td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
 
-        <tr class="total-row">
-            <th colspan="4">Grand Total</th>
-            <th>₹ {{ order.total_amount }}</th>
-        </tr>
-    </table>
+    <!-- Total bar -->
+    <div style="padding: 20px 28px 0;">
+        <div class="total-bar">
+            <div>
+                <div class="total-label">Grand Total</div>
+                <div class="total-items">{{ order.items.count }} item{{ order.items.count|pluralize }} · Payment received</div>
+            </div>
+            <div class="total-amount">₹{{ order.total_amount }}</div>
+        </div>
+    </div>
 
     <!-- Footer -->
-    <div class="footer">
-        This is a system-generated receipt. No signature required.
+    <div class="receipt-footer">
+        <div class="footer-note">
+            <strong>Smart Inventory System</strong><br>
+            System-generated receipt · No signature required
+        </div>
+        <div style="font-size:0.72rem; color:#9ca3af; text-align:right;">
+            Generated on {{ order.created_at|date:"d M Y, H:i" }}<br>
+            Order ID: #{{ order.id }}
+        </div>
     </div>
-
-    <a href="{% url 'download_receipt' order.id %}" class="btn">
-        Download PDF Receipt
-    </a>
 
 </div>
 

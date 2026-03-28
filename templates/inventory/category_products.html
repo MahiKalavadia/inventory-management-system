@@ -1,75 +1,76 @@
 {% extends 'base_dashboard.html' %}
-{%block pagetitle%}Category Products List{% endblock pagetitle%}
+{%block pagetitle%}{{ category.name }} Products{% endblock pagetitle%}
+{%block pagecontent%}Products in this category{% endblock pagecontent%}
 {% block link %}
-<b><a href="{% url 'category_list' %}" style="color: grey; font-size: 2rem;">
-        <i class="bi bi-arrow-left-circle-fill"></i></a> Products in {{ category.name }}</b>
+<a href="{% url 'category_list' %}" class="btn btn-outline-secondary btn-sm"><i class="bi bi-arrow-left-circle"></i> Back</a>
 {% endblock link %}
-{% block panel %}Active Supplier Panel{% endblock panel%}
+{% block panel %}Category Panel{% endblock panel%}
 {% block content %}
 <style>
-    .table th {
-    background-color: #f8f9fa;
-    font-weight: 600;
-}
-
-.table tbody tr:hover {
-    background-color: #f1f3f5;
-    }
-
+.rpt-wrap { border-radius:14px; overflow:hidden; border:1px solid #e5e7eb; background:#fff; }
+.rpt-header { padding:16px 24px; border-bottom:1px solid #f0f0f0; display:flex; justify-content:space-between; align-items:center; }
+.rpt-title { font-size:0.9rem; font-weight:700; color:#111827; margin:0; }
+.rpt-sub { font-size:0.75rem; color:#9ca3af; }
+.rpt-table thead th { background:#f8fafc; font-size:0.67rem; font-weight:700; text-transform:uppercase; letter-spacing:0.07em; color:#94a3b8; padding:10px 16px; border-bottom:1px solid #f0f0f0; white-space:nowrap; }
+.rpt-table tbody tr { border-bottom:1px solid #f8f9fa; }
+.rpt-table tbody tr:last-child { border-bottom:none; }
+.rpt-table td { padding:12px 16px; vertical-align:middle; font-size:0.875rem; }
+.prod-img { width:36px; height:36px; border-radius:8px; object-fit:cover; border:1px solid #e5e7eb; }
+.prod-av { width:36px; height:36px; border-radius:8px; display:inline-flex; align-items:center; justify-content:center; font-size:0.7rem; font-weight:800; color:#fff; background:linear-gradient(135deg,#f59e0b,#ef4444); flex-shrink:0; }
+.sup-pill { display:inline-flex;align-items:center;background:#f0fdf4;color:#16a34a;border-radius:5px;padding:2px 7px;font-size:0.68rem;font-weight:600; }
+.qty-in  { font-weight:700; color:#16a34a; }
+.qty-low { font-weight:700; color:#d97706; }
+.qty-out { font-weight:700; color:#dc2626; }
+.page-btn { display:inline-flex;align-items:center;gap:5px;padding:6px 14px;border-radius:8px;font-size:0.8rem;font-weight:500;border:1px solid #e5e7eb;background:#fff;color:#374151;text-decoration:none;transition:background 0.15s; }
+.page-btn:hover { background:#f3f4f6; }
+.page-btn.disabled { opacity:0.4; pointer-events:none; }
+.page-counter { display:inline-flex;align-items:center;justify-content:center;background:#111827;color:#fff;border-radius:8px;padding:5px 14px;font-size:0.8rem;font-weight:600; }
 </style>
-<table class="table table-hover align-middle bg-white shadow-sm rounded">
-    <tr>
-        <th>Image</th>
-        <th>Product Name</th>
-        <th>Brand</th>
-        <th>Vendor</th>
-        <th>Price</th>
-        <th>Quantity</th>
-    </tr>
-
-    {% for product in products %}
-    <tr>
-        <td>
-            {% if product.image %}
-                <img src="{{ product.image.url }}" width="60">
-            {% else %}
-                No Image
-            {% endif %}
-        </td>
-        <td>{{ product.name }}</td>
-        <td>{{ product.brand }}</td>
-        <td>{{ product.supplier.name }}</td>
-        <td>{{ product.price }}</td>
-        <td>{{ product.quantity }}</td>
-    </tr>
-    {% empty %}
-    <tr>
-        <td colspan="6" class="text-center">No products in this category</td>
-    </tr>
-    {% endfor %}
-</table>
-<nav class="mt-4">
-    <ul class="pagination justify-content-center">
-
-        {% if products.has_previous %}
-        <li class="page-item">
-            <a class="page-link" href="?page={{ products.previous_page_number }}">Previous</a>
-        </li>
-        {% endif %}
-
-        {% for num in products.paginator.page_range %}
-        <li class="page-item {% if products.number == num %}active{% endif %}">
-            <a class="page-link" href="?page={{ num }}">{{ num }}</a>
-        </li>
-        {% endfor %}
-
-        {% if products.has_next %}
-        <li class="page-item">
-            <a class="page-link" href="?page={{ products.next_page_number }}">Next</a>
-        </li>
-        {% endif %}
-
-    </ul>
-</nav>
-
+<div class="rpt-wrap">
+    <div class="rpt-header">
+        <div>
+            <p class="rpt-title">{{ category.name }}</p>
+            <p class="rpt-sub">{{ products.paginator.count }} product{{ products.paginator.count|pluralize }} in this category</p>
+        </div>
+    </div>
+    <div class="table-responsive">
+        <table class="table rpt-table mb-0">
+            <thead><tr>
+                <th style="padding-left:24px; width:52px;"></th>
+                <th>Product</th>
+                <th>Brand</th>
+                <th>Supplier</th>
+                <th class="text-center">Quantity</th>
+                <th class="text-end" style="padding-right:24px;">Price</th>
+            </tr></thead>
+            <tbody>
+            {% for product in products %}
+            <tr>
+                <td style="padding-left:24px;">
+                    {% if product.image %}<img src="{{ product.image.url }}" class="prod-img" alt="{{ product.name }}">
+                    {% else %}<div class="prod-av">{{ product.name|slice:":2"|upper }}</div>{% endif %}
+                </td>
+                <td style="font-weight:600; color:#111827;">{{ product.name }}</td>
+                <td style="font-size:0.82rem; color:#374151;">{{ product.brand }}</td>
+                <td>{% if product.supplier %}<span class="sup-pill">{{ product.supplier.name }}</span>{% else %}<span style="color:#9ca3af;font-size:0.8rem;">—</span>{% endif %}</td>
+                <td class="text-center"><span class="{% if product.quantity == 0 %}qty-out{% elif product.quantity <= 5 %}qty-low{% else %}qty-in{% endif %}">{{ product.quantity }}</span></td>
+                <td class="text-end" style="padding-right:24px; font-weight:600; color:#111827;">₹{{ product.price }}</td>
+            </tr>
+            {% empty %}
+            <tr><td colspan="6" class="text-center py-5 text-muted">No products in this category.</td></tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <div style="padding:13px 24px; border-top:1px solid #f0f0f0; background:#fafafa; display:flex; justify-content:space-between; align-items:center;">
+        <span style="font-size:0.8rem; color:#6b7280;">Page {{ products.number }} of {{ products.paginator.num_pages }}</span>
+        <div class="d-flex align-items-center gap-2">
+            {% if products.has_previous %}<a class="page-btn" href="?page={{ products.previous_page_number }}"><i class="bi bi-chevron-left"></i> Prev</a>
+            {% else %}<span class="page-btn disabled"><i class="bi bi-chevron-left"></i> Prev</span>{% endif %}
+            <span class="page-counter">{{ products.number }} / {{ products.paginator.num_pages }}</span>
+            {% if products.has_next %}<a class="page-btn" href="?page={{ products.next_page_number }}">Next <i class="bi bi-chevron-right"></i></a>
+            {% else %}<span class="page-btn disabled">Next <i class="bi bi-chevron-right"></i></span>{% endif %}
+        </div>
+    </div>
+</div>
 {% endblock %}

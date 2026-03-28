@@ -201,98 +201,71 @@ thead th {
                     </tbody>
                 </table>
             </div>
-        </div>
 
+        </div>
 
         <!-- Directory Tab -->
         <div class="tab-pane fade" id="directory-tab">
-
+            <style>
+            .ud-table thead th { background:#f8fafc; font-size:0.67rem; font-weight:700; text-transform:uppercase; letter-spacing:0.07em; color:#94a3b8; padding:10px 14px; border-bottom:1px solid #f0f0f0; }
+            .ud-table tbody tr { border-bottom:1px solid #f8f9fa; }
+            .ud-table tbody tr:last-child { border-bottom:none; }
+            .ud-table td { padding:12px 14px; vertical-align:middle; font-size:0.875rem; }
+            .ud-av { width:30px; height:30px; border-radius:8px; display:inline-flex; align-items:center; justify-content:center; font-size:0.68rem; font-weight:800; color:#fff; background:linear-gradient(135deg,#6366f1,#0ea5e9); flex-shrink:0; }
+            .ud-role-admin   { display:inline-flex;align-items:center;background:#eff6ff;color:#2563eb;border:1px solid #bfdbfe;border-radius:20px;padding:2px 9px;font-size:0.68rem;font-weight:700; }
+            .ud-role-manager { display:inline-flex;align-items:center;background:#f5f3ff;color:#7c3aed;border:1px solid #ddd6fe;border-radius:20px;padding:2px 9px;font-size:0.68rem;font-weight:700; }
+            .ud-role-staff   { display:inline-flex;align-items:center;background:#ecfdf5;color:#047857;border:1px solid #a7f3d0;border-radius:20px;padding:2px 9px;font-size:0.68rem;font-weight:700; }
+            .ud-role-none    { display:inline-flex;align-items:center;background:#f3f4f6;color:#6b7280;border:1px solid #e5e7eb;border-radius:20px;padding:2px 9px;font-size:0.68rem;font-weight:700; }
+            .ud-s-active   { display:inline-flex;align-items:center;gap:3px;background:#ecfdf5;color:#047857;border:1px solid #a7f3d0;border-radius:20px;padding:2px 9px;font-size:0.68rem;font-weight:600; }
+            .ud-s-inactive { display:inline-flex;align-items:center;gap:3px;background:#fef2f2;color:#b91c1c;border:1px solid #fecaca;border-radius:20px;padding:2px 9px;font-size:0.68rem;font-weight:600; }
+            .ud-btn { width:26px; height:26px; border-radius:7px; display:inline-flex; align-items:center; justify-content:center; font-size:0.72rem; border:none; transition:all 0.15s; text-decoration:none; }
+            .ud-edit { background:#eff6ff; color:#2563eb; } .ud-edit:hover { background:#2563eb; color:#fff; }
+            .ud-tog  { background:#fffbeb; color:#b45309; } .ud-tog:hover  { background:#d97706; color:#fff; }
+            .ud-key  { background:#f5f3ff; color:#7c3aed; } .ud-key:hover  { background:#7c3aed; color:#fff; }
+            </style>
             <div class="d-flex justify-content-between align-items-center mb-3">
-                <div>
-                    <h6 class="fw-bold mb-0">User Directory</h6>
-                    <small class="text-muted">Manage system users & roles</small>
-                </div>
-                <a href="{% url 'view_users' %}" class="btn btn-sm btn-outline-primary">
-                    See All Users
-                </a>
+                <div><h6 class="fw-bold mb-0">User Directory</h6><small class="text-muted">Manage system users & roles</small></div>
+                <a href="{% url 'view_users' %}" class="btn btn-sm btn-outline-primary" style="font-size:0.78rem;">See All →</a>
             </div>
-
             <div class="table-responsive">
-                <table class="table table-hover align-middle">
-                    <thead class="table-light">
-                        <tr class="text-uppercase small text-muted">
-                            <th>User</th>
-                            <th>Email</th>
-                            <th>Role</th>
-                            <th>Status</th>
-                            <th class="text-end">Actions</th>
-                        </tr>
-                    </thead>
+                <table class="table ud-table mb-0">
+                    <thead><tr>
+                        <th>User</th><th>Email</th><th>Role</th><th>Status</th><th class="text-end">Actions</th>
+                    </tr></thead>
                     <tbody>
-                        {% for user in users %}
-                        <tr>
-                            <td class="fw-medium">
-                                <i class="bi bi-person-circle me-2 text-secondary"></i>
-                                {{ user.username }}
-                            </td>
-
-                            <td class="text-muted">
-                                {{ user.email|default:"-" }}
-                            </td>
-
-                            <td>
-                                {% if user.groups.all %}
-                                    <span class="badge bg-info-subtle text-info px-3 py-2">
-                                        {{ user.groups.first.name }}
-                                    </span>
-                                {% else %}
-                                    <span class="badge bg-light text-dark px-3 py-2">
-                                        None
-                                    </span>
-                                {% endif %}
-                            </td>
-
-                            <td>
-                                {% if user.is_active %}
-                                    <span class="badge bg-success-subtle text-success px-3 py-2">
-                                        Active
-                                    </span>
-                                {% else %}
-                                    <span class="badge bg-danger-subtle text-danger px-3 py-2">
-                                        Inactive
-                                    </span>
-                                {% endif %}
-                            </td>
-
-                            <td class="text-end">
-                                <div class="btn-group btn-group-sm">
-                                    <a href="{% url 'update_user' user.id %}" class="btn btn-outline-primary">
-                                        Manage
-                                    </a>
-
-                                    <a href="{% url 'toggle_user_status' user.id %}"
-                                       class="btn {% if user.is_active %}btn-outline-warning{% else %}btn-outline-success{% endif %}">
-                                        {% if user.is_active %}Deactivate{% else %}Activate{% endif %}
-                                    </a>
-
-                                    <a href="{% url 'reset_user_password' user.id %}" 
-                                       class="btn btn-outline-secondary">
-                                        Reset
-                                    </a>
-                                </div>
-                            </td>
-                        </tr>
-                        {% empty %}
-                        <tr>
-                            <td colspan="5" class="text-center text-muted py-4">
-                                No users found
-                            </td>
-                        </tr>
-                        {% endfor %}
+                    {% for user in users %}
+                    <tr>
+                        <td>
+                            <div class="d-flex align-items-center gap-2">
+                                <div class="ud-av">{{ user.username|slice:":2"|upper }}</div>
+                                <span style="font-weight:600; color:#111827;">{{ user.username }}</span>
+                            </div>
+                        </td>
+                        <td style="font-size:0.8rem; color:#6b7280;">{{ user.email|default:"—" }}</td>
+                        <td>
+                            {% if user.is_superuser %}<span class="ud-role-admin">Admin</span>
+                            {% elif user.groups.first.name == "Manager" %}<span class="ud-role-manager">Manager</span>
+                            {% elif user.groups.first.name == "Staff" %}<span class="ud-role-staff">Staff</span>
+                            {% else %}<span class="ud-role-none">No Role</span>{% endif %}
+                        </td>
+                        <td>
+                            {% if user.is_active %}<span class="ud-s-active">Active</span>
+                            {% else %}<span class="ud-s-inactive">Inactive</span>{% endif %}
+                        </td>
+                        <td class="text-end">
+                            <div class="d-flex justify-content-end gap-1">
+                                <a href="{% url 'update_user' user.id %}" class="ud-btn ud-edit" title="Edit"><i class="bi bi-pencil-fill"></i></a>
+                                <a href="{% url 'toggle_user_status' user.id %}" class="ud-btn ud-tog" title="Toggle"><i class="bi bi-arrow-repeat"></i></a>
+                                <a href="{% url 'reset_user_password' user.id %}" class="ud-btn ud-key" title="Reset Password"><i class="bi bi-key-fill"></i></a>
+                            </div>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr><td colspan="5" class="text-center py-4 text-muted">No users found.</td></tr>
+                    {% endfor %}
                     </tbody>
                 </table>
             </div>
-
         </div>
 
     </div>

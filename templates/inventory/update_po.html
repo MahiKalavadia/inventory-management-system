@@ -1,101 +1,68 @@
 {% extends 'base_dashboard.html' %}
-{% load crispy_forms_tags %}
 {% load static %}
 {%block pagetitle%}Update PO Status{% endblock pagetitle%}
-{%block pagecontent %}Update status for your order.{% endblock pagecontent %}
+{%block pagecontent%}Change the status of this purchase order{% endblock pagecontent%}
 {% block link %}
-<a href="{% url 'purchase_orders' %}" class="btn btn-outline-secondary btn-sm">
-            <i class="bi bi-arrow-left-circle"></i> Back
-        </a>
+<a href="{% url 'purchase_orders' %}" class="btn btn-outline-secondary btn-sm"><i class="bi bi-arrow-left-circle"></i> Back</a>
 {% endblock link %}
-{% block panel %}Update PO Status Panel{% endblock panel%}
+{% block panel %}Purchase Panel{% endblock panel%}
 {% block content %}
+
 <style>
-    .page-wrapper {
-        margin-top: 90px;
-    }
-
-    .form-card {
-        max-width: 950px;
-        margin: auto;
-    }
-
-    .form-section {
-        background: #ffffff;
-        border-radius: 12px;
-        border: 1px solid #eee;
-        padding: 24px;
-    }
-
-    .form-control, .form-select {
-        border-radius: 8px;
-    }
-
-    .action-bar {
-        background: #fafafa;
-        border-top: 1px solid #eee;
-        padding: 16px 24px;
-        border-radius: 0 0 12px 12px;
-    }
-
-    .asteriskField { display: none; }
+.form-card { max-width:560px; margin:auto; }
+.section-card { background:#fff; border:1px solid #e5e7eb; border-radius:12px; padding:24px; margin-bottom:20px; }
+.section-title { font-size:0.8rem; font-weight:700; text-transform:uppercase; letter-spacing:0.05em; color:#6b7280; margin-bottom:16px; }
+.form-label { font-size:0.875rem; font-weight:500; color:#374151; }
+.form-select { border-radius:8px; border-color:#d1d5db; font-size:0.9rem; }
+.form-select:focus { border-color:#6366f1; box-shadow:0 0 0 3px rgba(99,102,241,0.1); }
+.action-bar { background:#fafafa; border-top:1px solid #eee; padding:16px 24px; border-radius:0 0 12px 12px; }
+.po-chip { display:inline-flex; align-items:center; gap:6px; background:#eff6ff; color:#2563eb; border:1px solid #bfdbfe; border-radius:20px; padding:3px 12px; font-size:0.75rem; font-weight:700; font-family:monospace; margin-bottom:16px; }
+.status-hint { display:flex; flex-direction:column; gap:6px; margin-top:12px; }
+.hint-row { display:flex; align-items:center; gap:8px; font-size:0.78rem; color:#6b7280; }
+.hint-dot { width:8px; height:8px; border-radius:50%; flex-shrink:0; }
 </style>
+
 <div class="card shadow-sm border-0 form-card">
-
-    <form method="POST" enctype="multipart/form-data">
+    <form method="POST" id="poStatusForm">
         {% csrf_token %}
-
         <div class="card-body p-4">
 
-            <!-- Section Header -->
             <div class="mb-4">
-                <h5 class="fw-bold mb-1">Status Information</h5>
-                <p class="text-muted small mb-0">
-                    Update the status of this purchase order.
-                </p>
+                <span class="po-chip"><i class="bi bi-bag-check me-1"></i>PO-{{ po.id }}</span>
+                <h5 class="fw-bold mb-1">Update Order Status</h5>
+                <p class="text-muted small mb-0">Select the new status for this purchase order.</p>
             </div>
 
-            <!-- Form -->
-            <div class="form-section">
-                {# Replace the status field manually so it pre-selects the current status #}
-                <div class="mb-3">
-                    <label for="id_status" class="form-label">Status</label>
-                    <select name="status" id="id_status" class="form-select">
-                        {% for key, val in po.STATUS %}
-                            <option value="{{ key }}" {% if po.status == key %}selected{% endif %}>
-                                {{ val }}
-                            </option>
-                        {% endfor %}
-                    </select>
-                </div>
+            <div class="section-card">
+                <div class="section-title">Status</div>
+                <label class="form-label">New Status <span style="color:#ef4444;">*</span></label>
+                <select name="status" id="id_status" class="form-select">
+                    {% for key, val in po.STATUS %}
+                    <option value="{{ key }}" {% if po.status == key %}selected{% endif %}>{{ val }}</option>
+                    {% endfor %}
+                </select>
 
-                {# Render the rest of the form fields from your crispy form #}
-                {% for field in form %}
-                    {% if field.name != 'status' %}
-                        {{ field|crispy }}
-                    {% endif %}
-                {% endfor %}
+                <div class="status-hint mt-3">
+                    <div class="hint-row"><span class="hint-dot" style="background:#9ca3af;"></span>Draft — Order created, details not filled yet</div>
+                    <div class="hint-row"><span class="hint-dot" style="background:#7c3aed;"></span>Ordered — Order placed with supplier</div>
+                    <div class="hint-row"><span class="hint-dot" style="background:#16a34a;"></span>Shipped — Supplier has dispatched</div>
+                    <div class="hint-row"><span class="hint-dot" style="background:#2563eb;"></span>In Transit — On the way to warehouse</div>
+                    <div class="hint-row"><span class="hint-dot" style="background:#16a34a;"></span>Delivered — Received at warehouse</div>
+                    <div class="hint-row"><span class="hint-dot" style="background:#dc2626;"></span>Delayed — Delivery is behind schedule</div>
+                </div>
             </div>
 
         </div>
-
-        <!-- Footer Actions -->
         <div class="action-bar d-flex justify-content-between align-items-center">
-
+            <span class="text-muted small">Current status: <strong>{{ po.status|capfirst }}</strong></span>
             <div class="d-flex gap-2">
-                <a href="{% url 'purchase_orders' %}" class="btn btn-light border px-4">
-                    Cancel
-                </a>
-
+                <a href="{% url 'purchase_orders' %}" class="btn btn-light border px-4">Cancel</a>
                 <button type="submit" class="btn btn-success px-4 fw-semibold">
-                    <i class="bi bi-check-circle me-1"></i>
-                    Update Status
+                    <i class="bi bi-check-circle me-1"></i> Update Status
                 </button>
             </div>
-
         </div>
-
     </form>
-
 </div>
+
 {% endblock %}

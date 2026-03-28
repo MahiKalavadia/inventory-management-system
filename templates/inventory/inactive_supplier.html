@@ -1,121 +1,127 @@
 {% extends 'base_dashboard.html' %}
 {% load static %}
 {%block pagetitle%}Inactive Vendors{% endblock pagetitle%}
-{%block pagecontent %}Vendors not supplying anymore{% endblock pagecontent %}
+{%block pagecontent%}Vendors no longer supplying products{% endblock pagecontent%}
 {% block link %}
 <a href="{% url 'supplier_dashboard' %}" class="btn btn-outline-secondary btn-sm">
-            <i class="bi bi-arrow-left-circle"></i> Back
-        </a>
+    <i class="bi bi-arrow-left-circle"></i> Back
+</a>
 {% endblock link %}
-{% block panel %}Inactive Vendor Panel{% endblock panel%}
+{% block panel %}Vendor Panel{% endblock panel%}
 {% block content %}
+
 <style>
-    .table th {
-    background-color: #f8f9fa;
-    font-weight: 600;
-}
+.vt-wrap { border-radius:14px; overflow:hidden; border:1px solid #e5e7eb; background:#fff; }
+.vt-header { padding:16px 24px; border-bottom:1px solid #f0f0f0; display:flex; justify-content:space-between; align-items:center; }
+.vt-badge-inactive { display:inline-flex; align-items:center; gap:5px; background:#f3f4f6; color:#6b7280; border:1px solid #e5e7eb; border-radius:20px; padding:3px 12px; font-size:0.72rem; font-weight:600; }
+.sdot { width:6px; height:6px; border-radius:50%; display:inline-block; }
 
-.table tbody tr:hover {
-    background-color: #f1f3f5;
-    }
-.bg-soft-danger {
-    background: rgba(220,53,69,0.12);
-    padding: 4px 10px;
-    border-radius: 8px;
-    font-size: 12px;
-    margin-right: 4px;
-}
+.vt-table thead th { background:#f8fafc; font-size:0.68rem; font-weight:700; text-transform:uppercase; letter-spacing:0.07em; color:#94a3b8; padding:11px 16px; border-bottom:1px solid #f0f0f0; white-space:nowrap; }
+.vt-table tbody tr { border-bottom:1px solid #f8f9fa; }
+.vt-table tbody tr:last-child { border-bottom:none; }
+.vt-table td { padding:14px 16px; vertical-align:middle; font-size:0.875rem; }
 
+.vt-avatar { width:38px; height:38px; border-radius:10px; flex-shrink:0; display:flex; align-items:center; justify-content:center; font-size:0.75rem; font-weight:800; color:#fff; background:linear-gradient(135deg,#9ca3af,#6b7280); }
+.vt-name { font-weight:700; color:#6b7280; font-size:0.875rem; }
+.vt-phone { font-size:0.82rem; color:#6b7280; font-weight:500; }
+.vt-email { font-size:0.75rem; color:#9ca3af; margin-top:2px; }
+
+.tag-wrap { display:flex; flex-wrap:wrap; gap:3px; max-width:240px; }
+.cat-tag { display:inline-flex; align-items:center; background:#f3f4f6; color:#6b7280; border:1px solid #e5e7eb; border-radius:5px; padding:2px 7px; font-size:0.67rem; font-weight:600; white-space:nowrap; }
+.more-tag { display:inline-flex; align-items:center; background:#f3f4f6; color:#9ca3af; border-radius:5px; padding:2px 7px; font-size:0.67rem; font-weight:600; }
+
+.btn-activate { display:inline-flex; align-items:center; gap:5px; padding:5px 12px; border-radius:8px; font-size:0.75rem; font-weight:600; background:#f0fdf4; color:#16a34a; border:1px solid #a7f3d0; text-decoration:none; transition:background 0.15s; }
+.btn-activate:hover { background:#16a34a; color:#fff; }
+
+.vt-footer { padding:13px 24px; border-top:1px solid #f0f0f0; background:#fafafa; display:flex; justify-content:space-between; align-items:center; }
+.page-btn { display:inline-flex; align-items:center; gap:5px; padding:6px 14px; border-radius:8px; font-size:0.8rem; font-weight:500; border:1px solid #e5e7eb; background:#fff; color:#374151; text-decoration:none; transition:background 0.15s; }
+.page-btn:hover { background:#f3f4f6; }
+.page-btn.disabled { opacity:0.4; pointer-events:none; }
+.page-counter { display:inline-flex; align-items:center; justify-content:center; background:#6b7280; color:#fff; border-radius:8px; padding:5px 14px; font-size:0.8rem; font-weight:600; }
 </style>
-<div class="card shadow-sm border-0">
-    <div class="card-header bg-white d-flex justify-content-between align-items-center">
-        <h5 class="mb-0 fw-bold">
-            <i class="bi bi-person-x text-danger"></i> Inactive Vendors
-        </h5>
-        <span class="badge bg-danger">Inactive List</span>
-    </div>
 
-    <div class="card-body p-0">
-        <div class="table-responsive">
-            <table class="table table-hover align-middle mb-0">
-                <thead class="table-light text-uppercase small">
-                    <tr>
-                        <th>Name</th>
-                        <th>Contact Person</th>
-                        <th>Phone</th>
-                        <th>Email</th>
-                        <th>Category Supplied</th>
-                    </tr>
-                </thead>
+<div class="vt-wrap">
 
-                <tbody>
-                {% for product in page_obj %}
-                    <tr>
-                        <td class="fw-semibold text-danger">
-                            {{ product.name }}
-                        </td>
-
-                        <td>{{ product.contact_person }}</td>
-
-                        <td>
-                            <i class="bi bi-telephone text-success"></i>
-                            {{ product.phone }}
-                        </td>
-
-                        <td>
-                            <i class="bi bi-envelope text-primary"></i>
-                            {{ product.email|default:"—" }}
-                        </td>
-
-                        <td>
-                            {% for category in product.categories_supplies.all %}
-                                <span class="badge bg-soft-danger text-danger border">
-                                    {{ category.name }}
-                                </span>
-                            {% empty %}
-                                <span class="text-muted">—</span>
-                            {% endfor %}
-                        </td>
-                    </tr>
-                {% empty %}
-                    <tr>
-                        <td colspan="5" class="text-center text-muted py-4">
-                            No inactive vendors found
-                        </td>
-                    </tr>
-                {% endfor %}
-                </tbody>
-
-            </table>
+    <div class="vt-header">
+        <div>
+            <div class="d-flex align-items-center gap-2 mb-1">
+                <span class="vt-badge-inactive"><span class="sdot" style="background:#9ca3af;"></span> Inactive</span>
+            </div>
+            <h6 class="fw-bold mb-0" style="font-size:0.95rem;">Inactive Vendors</h6>
+            <span style="font-size:0.78rem; color:#9ca3af;">{{ page_obj.paginator.count }} vendor{{ page_obj.paginator.count|pluralize }} no longer active</span>
         </div>
     </div>
+
+    <div class="table-responsive">
+        <table class="table vt-table mb-0">
+            <thead>
+                <tr>
+                    <th style="padding-left:24px;">Vendor</th>
+                    <th>Contact</th>
+                    <th>Phone</th>
+                    <th>Email</th>
+                    <th>Categories</th>
+                    {% if request.user.is_superuser %}<th class="text-end" style="padding-right:24px;">Action</th>{% endif %}
+                </tr>
+            </thead>
+            <tbody>
+            {% for supplier in page_obj %}
+            <tr>
+                <td style="padding-left:24px;">
+                    <div class="d-flex align-items-center gap-3">
+                        <div class="vt-avatar">{{ supplier.name|slice:":2"|upper }}</div>
+                        <div class="vt-name">{{ supplier.name }}</div>
+                    </div>
+                </td>
+                <td style="color:#9ca3af; font-size:0.82rem;">{{ supplier.contact_person|default:"—" }}</td>
+                <td><span class="vt-phone">{{ supplier.phone }}</span></td>
+                <td><span class="vt-email">{{ supplier.email|default:"—" }}</span></td>
+                <td>
+                    {% if supplier.categories_supplies.all %}
+                    <div class="tag-wrap">
+                        {% for cat in supplier.categories_supplies.all|slice:":5" %}
+                        <span class="cat-tag">{{ cat.name }}</span>
+                        {% endfor %}
+                        {% if supplier.categories_supplies.count > 5 %}
+                        <span class="more-tag">+{{ supplier.categories_supplies.count|add:"-5" }} more</span>
+                        {% endif %}
+                    </div>
+                    {% else %}<span class="text-muted small">—</span>{% endif %}
+                </td>
+                {% if request.user.is_superuser %}
+                <td class="text-end" style="padding-right:24px;">
+                    <a href="{% url 'toggle_supplier_status' supplier.pk %}" class="btn-activate">
+                        <i class="bi bi-toggle-off"></i> Activate
+                    </a>
+                </td>
+                {% endif %}
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="6" class="text-center py-5">
+                    <div class="text-muted">
+                        <i class="bi bi-check-circle fs-2 d-block mb-2 opacity-25 text-success"></i>
+                        All vendors are active.
+                    </div>
+                </td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <div class="vt-footer">
+        <span style="font-size:0.8rem; color:#6b7280;">Showing {{ page_obj.start_index }}–{{ page_obj.end_index }} of {{ page_obj.paginator.count }}</span>
+        <div class="d-flex align-items-center gap-2">
+            {% if page_obj.has_previous %}
+            <a class="page-btn" href="?page={{ page_obj.previous_page_number }}"><i class="bi bi-chevron-left"></i> Prev</a>
+            {% else %}<span class="page-btn disabled"><i class="bi bi-chevron-left"></i> Prev</span>{% endif %}
+            <span class="page-counter">{{ page_obj.number }} / {{ page_obj.paginator.num_pages }}</span>
+            {% if page_obj.has_next %}
+            <a class="page-btn" href="?page={{ page_obj.next_page_number }}">Next <i class="bi bi-chevron-right"></i></a>
+            {% else %}<span class="page-btn disabled">Next <i class="bi bi-chevron-right"></i></span>{% endif %}
+        </div>
+    </div>
+
 </div>
-
-<!--Pagination-->
-<nav class="mt-4">
-    <ul class="pagination justify-content-center pagination-sm">
-
-        {% if page_obj.has_previous %}
-        <li class="page-item">
-            <a class="page-link" href="?page={{ page_obj.previous_page_number }}">
-                <i class="bi bi-chevron-left"></i>
-            </a>
-        </li>
-        {% endif %}
-
-        <li class="page-item active">
-            <span class="page-link fw-bold">{{ page_obj.number }}</span>
-        </li>
-
-        {% if page_obj.has_next %}
-        <li class="page-item">
-            <a class="page-link" href="?page={{ page_obj.next_page_number }}">
-                <i class="bi bi-chevron-right"></i>
-            </a>
-        </li>
-        {% endif %}
-
-    </ul>
-</nav>
-
 {% endblock %}

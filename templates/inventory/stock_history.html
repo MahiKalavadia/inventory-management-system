@@ -1,80 +1,175 @@
 {% extends 'base_dashboard.html' %}
 {% load humanize %}
 {% load static %}
-{%block pagetitle%} Stock History{% endblock pagetitle%}
-{%block pagecontent %}View previous transactions{% endblock pagecontent %}
+{%block pagetitle%}Stock History{% endblock pagetitle%}
+{%block pagecontent%}Complete log of all stock in/out transactions{% endblock pagecontent%}
 {% block link %}
-  <a href="{% url 'stock_dashboard' %}" class="btn btn-outline-secondary btn-sm">
-            <i class="bi bi-arrow-left-circle"></i> Back
-        </a>
+<a href="{% url 'stock_dashboard' %}" class="btn btn-outline-secondary btn-sm">
+    <i class="bi bi-arrow-left-circle"></i> Back
+</a>
 {% endblock link %}
-{% block panel %}Stock History Panel{% endblock panel%}
+{% block panel %}Stock Panel{% endblock panel%}
 {% block content %}
-<div class="card shadow-sm border-0 rounded-4">
-  <div class="card-header bg-white fw-semibold d-flex justify-content-between align-items-center">
-    <span>📜 Stock Activity Logs</span>
-    <small class="text-muted">Recent stock in/out history</small>
-  </div>
 
-  <div class="card-body p-0">
+<style>
+.sh-wrap { border-radius:14px; overflow:hidden; border:1px solid #e5e7eb; background:#fff; }
+.sh-header { padding:18px 24px; border-bottom:1px solid #f0f0f0; display:flex; justify-content:space-between; align-items:center; }
+.sh-title { font-size:0.95rem; font-weight:700; color:#111827; margin:0; }
+.sh-sub { font-size:0.78rem; color:#9ca3af; margin-top:2px; }
 
-    <table class="table table-hover align-middle mb-0">
-      <thead class="table-light">
-        <tr>
-          <th>Product</th>
-          <th class="text-center">Action</th>
-          <th class="text-center">Qty</th>
-          <th>User</th>
-          <th>Note</th>
-          <th class="text-end">Time</th>
-        </tr>
-      </thead>
+.sh-table thead th { background:#f8fafc; font-size:0.68rem; font-weight:700; text-transform:uppercase; letter-spacing:0.07em; color:#94a3b8; padding:11px 16px; border-bottom:1px solid #f0f0f0; white-space:nowrap; }
+.sh-table tbody tr { border-bottom:1px solid #f8f9fa; }
+.sh-table tbody tr:last-child { border-bottom:none; }
+.sh-table td { padding:13px 16px; vertical-align:middle; font-size:0.875rem; }
 
-      <tbody>
-        {% for log in page_obj %}
-        <tr>
-          <td class="fw-medium">{{ log.product.name }}</td>
+/* Action indicator */
+.action-in {
+    display:inline-flex; align-items:center; gap:6px;
+    background:#ecfdf5; color:#047857; border:1px solid #a7f3d0;
+    border-radius:20px; padding:4px 12px; font-size:0.72rem; font-weight:700;
+}
+.action-out {
+    display:inline-flex; align-items:center; gap:6px;
+    background:#fef2f2; color:#b91c1c; border:1px solid #fecaca;
+    border-radius:20px; padding:4px 12px; font-size:0.72rem; font-weight:700;
+}
+.action-dot { width:6px; height:6px; border-radius:50%; display:inline-block; }
 
-          <td class="text-center">
-            {% if log.action == 'IN' %}
-              <span class="badge bg-success-subtle text-success px-3">IN</span>
-            {% else %}
-              <span class="badge bg-danger-subtle text-danger px-3">OUT</span>
-            {% endif %}
-          </td>
+/* Product cell */
+.prod-avatar { width:34px; height:34px; border-radius:9px; display:flex; align-items:center; justify-content:center; font-size:0.7rem; font-weight:800; color:#fff; flex-shrink:0; }
+.prod-in-av  { background:linear-gradient(135deg,#16a34a,#059669); }
+.prod-out-av { background:linear-gradient(135deg,#dc2626,#b91c1c); }
+.prod-name { font-weight:600; color:#111827; font-size:0.875rem; }
+.prod-sku  { font-size:0.7rem; color:#9ca3af; }
 
-          <td class="text-center fw-semibold">{{ log.quantity }}</td>
-          <td class="text-muted">{{ log.user.username }}</td>
-          <td>{{ log.note|default:"-" }}</td>
-          <td class="text-muted text-end small">{{ log.created_at|naturaltime }}</td>
-        </tr>
-        {% endfor %}
-      </tbody>
-    </table>
+/* Qty chip */
+.qty-in  { display:inline-flex; align-items:center; gap:4px; background:#ecfdf5; color:#047857; border-radius:8px; padding:3px 10px; font-size:0.82rem; font-weight:700; }
+.qty-out { display:inline-flex; align-items:center; gap:4px; background:#fef2f2; color:#b91c1c; border-radius:8px; padding:3px 10px; font-size:0.82rem; font-weight:700; }
 
-    <!-- Pagination -->
-    <div class="p-2 d-flex justify-content-end">
-      <ul class="pagination pagination-sm mb-0">
-        {% if page_obj.has_previous %}
-          <li class="page-item">
-            <a class="page-link" href="?page={{ page_obj.previous_page_number }}">‹</a>
-          </li>
-        {% endif %}
+/* User chip */
+.user-chip { display:inline-flex; align-items:center; gap:6px; background:#f8fafc; border:1px solid #e5e7eb; border-radius:20px; padding:3px 10px; font-size:0.75rem; font-weight:500; color:#374151; }
+.user-av { width:20px; height:20px; border-radius:50%; background:#6366f1; color:#fff; display:inline-flex; align-items:center; justify-content:center; font-size:0.6rem; font-weight:800; flex-shrink:0; }
 
-        <li class="page-item active">
-          <span class="page-link">{{ page_obj.number }}</span>
-        </li>
+/* Time */
+.time-main { font-size:0.8rem; color:#374151; font-weight:500; }
+.time-rel  { font-size:0.7rem; color:#9ca3af; margin-top:1px; }
 
-        {% if page_obj.has_next %}
-          <li class="page-item">
-            <a class="page-link" href="?page={{ page_obj.next_page_number }}">›</a>
-          </li>
-        {% endif %}
-      </ul>
+/* Pagination */
+.sh-footer { padding:13px 24px; border-top:1px solid #f0f0f0; background:#fafafa; display:flex; justify-content:space-between; align-items:center; }
+.page-btn { display:inline-flex; align-items:center; gap:5px; padding:6px 14px; border-radius:8px; font-size:0.8rem; font-weight:500; border:1px solid #e5e7eb; background:#fff; color:#374151; text-decoration:none; transition:background 0.15s; }
+.page-btn:hover { background:#f3f4f6; }
+.page-btn.disabled { opacity:0.4; pointer-events:none; }
+.page-counter { display:inline-flex; align-items:center; justify-content:center; background:#111827; color:#fff; border-radius:8px; padding:5px 14px; font-size:0.8rem; font-weight:600; }
+</style>
+
+<div class="sh-wrap">
+
+    <div class="sh-header">
+        <div>
+            <p class="sh-title">Stock Activity Log</p>
+            <p class="sh-sub">{{ page_obj.paginator.count }} transaction{{ page_obj.paginator.count|pluralize }} recorded</p>
+        </div>
+        <div style="font-size:0.78rem; color:#9ca3af;">
+            Showing {{ page_obj.start_index }}–{{ page_obj.end_index }}
+        </div>
     </div>
 
-  </div>
-</div>
+    <div class="table-responsive">
+        <table class="table sh-table mb-0">
+            <thead>
+                <tr>
+                    <th style="padding-left:24px;">Product</th>
+                    <th>Action</th>
+                    <th>Quantity</th>
+                    <th>Performed By</th>
+                    <th class="text-end" style="padding-right:24px;">Time</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for log in page_obj %}
+            <tr>
+                <!-- Product -->
+                <td style="padding-left:24px;">
+                    <div class="d-flex align-items-center gap-3">
+                        <div class="prod-avatar {% if log.action == 'IN' %}prod-in-av{% else %}prod-out-av{% endif %}">
+                            {{ log.product.name|slice:":2"|upper }}
+                        </div>
+                        <div>
+                            <div class="prod-name">{{ log.product.name }}</div>
+                            <div class="prod-sku">{{ log.product.sku }}</div>
+                        </div>
+                    </div>
+                </td>
 
+                <!-- Action -->
+                <td>
+                    {% if log.action == 'IN' %}
+                    <span class="action-in">
+                        <span class="action-dot bg-success"></span>
+                        <i class="bi bi-box-arrow-in-down" style="font-size:0.65rem;"></i> Stock In
+                    </span>
+                    {% else %}
+                    <span class="action-out">
+                        <span class="action-dot bg-danger"></span>
+                        <i class="bi bi-box-arrow-up-right" style="font-size:0.65rem;"></i> Stock Out
+                    </span>
+                    {% endif %}
+                </td>
+
+                <!-- Quantity -->
+                <td>
+                    {% if log.action == 'IN' %}
+                    <span class="qty-in"><i class="bi bi-plus" style="font-size:0.7rem;"></i>{{ log.quantity }}</span>
+                    {% else %}
+                    <span class="qty-out"><i class="bi bi-dash" style="font-size:0.7rem;"></i>{{ log.quantity }}</span>
+                    {% endif %}
+                </td>
+
+                <!-- User -->
+                <td>
+                    {% if log.user %}
+                    <span class="user-chip">
+                        <span class="user-av">{{ log.user.username|slice:":1"|upper }}</span>
+                        {{ log.user.username }}
+                    </span>
+                    {% else %}
+                    <span style="font-size:0.78rem; color:#9ca3af;">System</span>
+                    {% endif %}
+                </td>
+
+                <!-- Time -->
+                <td class="text-end" style="padding-right:24px;">
+                    <div class="time-main">{{ log.created_at|date:"d M Y, H:i" }}</div>
+                    <div class="time-rel">{{ log.created_at|naturaltime }}</div>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="5" class="text-center py-5">
+                    <div class="text-muted">
+                        <i class="bi bi-clock-history fs-2 d-block mb-2 opacity-25"></i>
+                        No stock transactions recorded yet.
+                    </div>
+                </td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <div class="sh-footer">
+        <span style="font-size:0.8rem; color:#6b7280;">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
+        <div class="d-flex align-items-center gap-2">
+            {% if page_obj.has_previous %}
+            <a class="page-btn" href="?page={{ page_obj.previous_page_number }}"><i class="bi bi-chevron-left"></i> Prev</a>
+            {% else %}<span class="page-btn disabled"><i class="bi bi-chevron-left"></i> Prev</span>{% endif %}
+            <span class="page-counter">{{ page_obj.number }} / {{ page_obj.paginator.num_pages }}</span>
+            {% if page_obj.has_next %}
+            <a class="page-btn" href="?page={{ page_obj.next_page_number }}">Next <i class="bi bi-chevron-right"></i></a>
+            {% else %}<span class="page-btn disabled">Next <i class="bi bi-chevron-right"></i></span>{% endif %}
+        </div>
+    </div>
+
+</div>
 
 {% endblock %}

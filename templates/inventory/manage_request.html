@@ -1,149 +1,167 @@
 {% extends "base_dashboard.html" %}
 {% load static %}
 {%block pagetitle%}Manage Requests{% endblock pagetitle%}
-{%block pagecontent %}Purchase request received details{% endblock pagecontent %}
+{%block pagecontent%}Review and action purchase requests{% endblock pagecontent%}
 {% block link %}
 {% if request.user.is_superuser %}
-              <a href="{% url 'purchase_dashboard' %}" class="btn btn-outline-secondary btn-sm me-2">
-                 <i class="bi bi-arrow-left-circle-fill"></i> Back
-              </a>
-              {% elif request.user.groups.first.name == 'Manager' or request.user.groups.first.name == 'Staff' %}
-              <a href="{% url 'purchase_dashboard2' %}" class="btn btn-outline-secondary btn-sm me-2">
-                 <i class="bi bi-arrow-left-circle-fill"></i> Back
-              </a>
-              {% endif %}
+<a href="{% url 'purchase_dashboard' %}" class="btn btn-outline-secondary btn-sm"><i class="bi bi-arrow-left-circle"></i> Back</a>
+{% elif request.user.groups.first.name == 'Manager' or request.user.groups.first.name == 'Staff' %}
+<a href="{% url 'purchase_dashboard2' %}" class="btn btn-outline-secondary btn-sm"><i class="bi bi-arrow-left-circle"></i> Back</a>
+{% endif %}
+<button class="btn btn-outline-secondary btn-sm dropdown-toggle" data-bs-toggle="dropdown">
+    <i class="bi bi-download me-1"></i> Export
+</button>
+<ul class="dropdown-menu">
+    <li><a class="dropdown-item" href="{% url 'export_requests_csv' %}"><i class="bi bi-filetype-csv me-2 text-success"></i>CSV</a></li>
+    <li><a class="dropdown-item" href="{% url 'export_requests_excel' %}"><i class="bi bi-file-earmark-excel me-2 text-success"></i>Excel</a></li>
+    <li><a class="dropdown-item" href="{% url 'export_requests_pdf' %}"><i class="bi bi-file-earmark-pdf me-2 text-danger"></i>PDF</a></li>
+</ul>
 {% endblock link %}
-{% block panel %}Request Panel{% endblock panel%}
+{% block panel %}Purchase Panel{% endblock panel%}
 {% block content %}
+
 <style>
- .request-card {
-  transition: 0.2s ease;
-  border-radius: 14px;
+.req-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; }
+.req-title { font-size:0.95rem; font-weight:700; color:#111827; margin:0; }
+.req-sub { font-size:0.78rem; color:#9ca3af; margin-top:2px; }
+
+.req-card {
+    background:#fff;
+    border:1px solid #e5e7eb;
+    border-radius:12px;
+    padding:18px;
+    cursor:pointer;
+    transition:box-shadow 0.15s, border-color 0.15s;
+    height:100%;
 }
-.request-card:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 10px 25px rgba(0,0,0,0.08);
-}
+.req-card:hover { box-shadow:0 4px 16px rgba(0,0,0,0.08); border-color:#c7d2fe; }
+.req-card-top { display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:10px; }
+.req-prod-name { font-weight:700; color:#111827; font-size:0.9rem; line-height:1.3; }
+.req-meta { font-size:0.75rem; color:#9ca3af; margin-bottom:4px; }
+.req-meta span { color:#374151; font-weight:500; }
+.req-qty { display:inline-flex; align-items:center; gap:5px; background:#eff6ff; color:#2563eb; border:1px solid #bfdbfe; border-radius:20px; padding:3px 10px; font-size:0.75rem; font-weight:700; margin-top:10px; }
+.req-footer { display:flex; justify-content:space-between; align-items:center; margin-top:12px; padding-top:10px; border-top:1px solid #f0f0f0; }
+.req-by { font-size:0.72rem; color:#9ca3af; }
+.req-link { font-size:0.75rem; font-weight:600; color:#4f46e5; text-decoration:none; }
+
+.s-pending  { display:inline-flex;align-items:center;gap:4px;background:#fffbeb;color:#b45309;border:1px solid #fde68a;border-radius:20px;padding:3px 10px;font-size:0.7rem;font-weight:700; }
+.s-approved { display:inline-flex;align-items:center;gap:4px;background:#ecfdf5;color:#047857;border:1px solid #a7f3d0;border-radius:20px;padding:3px 10px;font-size:0.7rem;font-weight:700; }
+.s-rejected { display:inline-flex;align-items:center;gap:4px;background:#fef2f2;color:#b91c1c;border:1px solid #fecaca;border-radius:20px;padding:3px 10px;font-size:0.7rem;font-weight:700; }
+.sdot { width:5px; height:5px; border-radius:50%; display:inline-block; }
+
+.page-btn { display:inline-flex;align-items:center;gap:5px;padding:6px 14px;border-radius:8px;font-size:0.8rem;font-weight:500;border:1px solid #e5e7eb;background:#fff;color:#374151;text-decoration:none;transition:background 0.15s; }
+.page-btn:hover { background:#f3f4f6; }
+.page-btn.disabled { opacity:0.4; pointer-events:none; }
+.page-counter { display:inline-flex;align-items:center;justify-content:center;background:#111827;color:#fff;border-radius:8px;padding:5px 14px;font-size:0.8rem;font-weight:600; }
 </style>
- <div class="card shadow-sm border-0 rounded-4">
-  <div class="card-header bg-white d-flex justify-content-between align-items-center">
-    <h6 class="fw-bold mb-0">📦 Purchase Requests</h6>
 
-    <div class="d-flex gap-2">
-      <div class="dropdown">
-            <button class="btn btn-outline-secondary btn-sm dropdown-toggle"
-                    data-bs-toggle="dropdown">
-                Export Requests
-            </button>
-            <ul class="dropdown-menu">
-                <li><a class="dropdown-item" href="{% url 'export_requests_csv' %}">CSV</a></li>
-                <li><a class="dropdown-item" href="{% url 'export_requests_excel' %}">Excel</a></li>
-                <li><a class="dropdown-item" href="{% url 'export_requests_pdf' %}">PDF</a></li>
-            </ul>
-        </div>
-
+<div class="req-header">
+    <div>
+        <p class="req-title">Purchase Requests</p>
+        <p class="req-sub">{{ page_obj.paginator.count }} request{{ page_obj.paginator.count|pluralize }} total</p>
     </div>
-    
-  </div>
-
-  <div class="card-body">
-    <div class="row g-3">
-
-      {% for r in page_obj %}
-      <div class="col-md-4">
-        <div class="card shadow-sm border-0 request-card p-3"
-             data-bs-toggle="modal"
-             data-bs-target="#requestModal{{ r.id }}"
-             style="cursor:pointer; border-left:5px solid #2563eb">
-
-          <div class="d-flex justify-content-between">
-            <h6 class="fw-semibold">{{ r.product.name }}</h6>
-
-            {% if r.status == "Pending" %}
-              <span class="badge bg-warning text-dark">Pending</span>
-            {% elif r.status == "Approved" %}
-              <span class="badge bg-success">Approved</span>
-            {% else %}
-              <span class="badge bg-danger">Rejected</span>
-            {% endif %}
-          </div>
-
-          <p class="text-muted small mb-1">Category: {{ r.product.category.name }}</p>
-          <p class="text-muted small mb-1">Supplier: {{ r.product.supplier.name }}</p>
-          <p class="small text-muted">{{ r.description|truncatechars:60 }}</p>
-
-          <div class="d-flex justify-content-between align-items-center mt-2">
-            <span class="fw-bold">Qty: {{ r.quantity }}</span>
-            <span class="text-primary small">View Details →</span>
-          </div>
-
-        </div>
-      </div>
-      {% endfor %}
-
-    </div>
-  </div>
 </div>
-<nav class="mt-4">
-    <ul class="pagination justify-content-center">
 
-        {% if page_obj.has_previous %}
-        <li class="page-item">
-            <a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous</a>
-        </li>
-        {% endif %}
-
-        <li class="page-item active">
-            <span class="page-link">{{ page_obj.number }}</span>
-        </li>
-
-        {% if page_obj.has_next %}
-        <li class="page-item">
-            <a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a>
-        </li>
-        {% endif %}
-
-    </ul>
-</nav>
-
+<div class="row g-3">
 {% for r in page_obj %}
-<div class="modal fade" id="requestModal{{ r.id }}" tabindex="-1">
-  <div class="modal-dialog modal-lg modal-dialog-centered">
-    <div class="modal-content rounded-4">
-      <div class="modal-header">
-        <h5 class="modal-title">Request Details</h5>
-        <button class="btn-close" data-bs-dismiss="modal"></button>
-      </div>
-
-      <div class="modal-body">
-        <p><b>Product:</b> {{ r.product.name }}</p>
-        <p><b>Category:</b> {{ r.product.category.name }}</p>
-        <p><b>Supplier:</b> {{ r.product.supplier.name }}</p>
-        <p><b>Quantity:</b> {{ r.quantity }}</p>
-        <p><b>Reason:</b> {{ r.description }}</p>
-        <p><b>Requested By:</b> {{ r.requested_by }}</p>
-
-        <p><b>Status:</b>
-          {% if r.status == "Pending" %}
-            <span class="badge bg-warning text-dark">Pending</span>
-          {% elif r.status == "Approved" %}
-            <span class="badge bg-success">Approved</span>
-          {% else %}
-            <span class="badge bg-danger">Rejected</span>
-          {% endif %}
-        </p>
-      </div>
-
-      <div class="modal-footer">
-        {% if r.status == "Pending" %}
-        <a href="{% url 'approve_request' r.id %}" class="btn btn-success">Approve</a>
-        <a href="{% url 'reject_request' r.id %}" class="btn btn-danger">Reject</a>
+<div class="col-md-4">
+    <div class="req-card" data-bs-toggle="modal" data-bs-target="#reqModal{{ r.id }}">
+        <div class="req-card-top">
+            <div class="req-prod-name">{{ r.product.name }}</div>
+            {% if r.status == "Pending" %}<span class="s-pending"><span class="sdot" style="background:#d97706;"></span>Pending</span>
+            {% elif r.status == "Approved" %}<span class="s-approved"><span class="sdot bg-success"></span>Approved</span>
+            {% else %}<span class="s-rejected"><span class="sdot bg-danger"></span>Rejected</span>{% endif %}
+        </div>
+        <div class="req-meta">Category: <span>{{ r.product.category.name }}</span></div>
+        <div class="req-meta">Supplier: <span>{{ r.product.supplier.name }}</span></div>
+        {% if r.description %}
+        <div style="font-size:0.78rem; color:#6b7280; margin-top:4px; line-height:1.5;">{{ r.description|truncatechars:70 }}</div>
         {% endif %}
-        <button class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-      </div>
-
+        <span class="req-qty"><i class="bi bi-box-seam" style="font-size:0.65rem;"></i>Qty: {{ r.quantity }}</span>
+        <div class="req-footer">
+            <span class="req-by">By {{ r.requested_by.username }}</span>
+            <span class="req-link">View Details →</span>
+        </div>
     </div>
-  </div>
+</div>
+{% empty %}
+<div class="col-12 text-center py-5">
+    <div class="text-muted"><i class="bi bi-inbox fs-2 d-block mb-2 opacity-25"></i>No purchase requests found.</div>
+</div>
+{% endfor %}
+</div>
+
+<!-- Pagination -->
+<div class="d-flex justify-content-between align-items-center mt-4">
+    <span style="font-size:0.8rem; color:#6b7280;">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
+    <div class="d-flex align-items-center gap-2">
+        {% if page_obj.has_previous %}<a class="page-btn" href="?page={{ page_obj.previous_page_number }}"><i class="bi bi-chevron-left"></i> Prev</a>
+        {% else %}<span class="page-btn disabled"><i class="bi bi-chevron-left"></i> Prev</span>{% endif %}
+        <span class="page-counter">{{ page_obj.number }} / {{ page_obj.paginator.num_pages }}</span>
+        {% if page_obj.has_next %}<a class="page-btn" href="?page={{ page_obj.next_page_number }}">Next <i class="bi bi-chevron-right"></i></a>
+        {% else %}<span class="page-btn disabled">Next <i class="bi bi-chevron-right"></i></span>{% endif %}
+    </div>
+</div>
+
+<!-- Modals -->
+{% for r in page_obj %}
+<div class="modal fade" id="reqModal{{ r.id }}" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered" style="max-width:480px;">
+        <div class="modal-content" style="border-radius:16px; border:1px solid #e5e7eb; overflow:hidden;">
+
+            <div style="background:linear-gradient(135deg,#4f46e5,#0ea5e9); padding:20px 24px; display:flex; justify-content:space-between; align-items:center;">
+                <div>
+                    <div style="font-size:0.95rem; font-weight:700; color:#fff;">Request Details</div>
+                    <div style="font-size:0.75rem; color:rgba(255,255,255,0.65); margin-top:2px;">ID #{{ r.id }}</div>
+                </div>
+                <button class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+
+            <div style="padding:20px 24px;">
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:16px;">
+                    <div style="background:#f8fafc; border:1px solid #e5e7eb; border-radius:10px; padding:12px;">
+                        <div style="font-size:0.65rem; font-weight:700; text-transform:uppercase; letter-spacing:0.06em; color:#9ca3af; margin-bottom:4px;">Product</div>
+                        <div style="font-size:0.875rem; font-weight:700; color:#111827;">{{ r.product.name }}</div>
+                    </div>
+                    <div style="background:#f8fafc; border:1px solid #e5e7eb; border-radius:10px; padding:12px;">
+                        <div style="font-size:0.65rem; font-weight:700; text-transform:uppercase; letter-spacing:0.06em; color:#9ca3af; margin-bottom:4px;">Quantity</div>
+                        <div style="font-size:0.875rem; font-weight:700; color:#111827;">{{ r.quantity }} units</div>
+                    </div>
+                    <div style="background:#f8fafc; border:1px solid #e5e7eb; border-radius:10px; padding:12px;">
+                        <div style="font-size:0.65rem; font-weight:700; text-transform:uppercase; letter-spacing:0.06em; color:#9ca3af; margin-bottom:4px;">Category</div>
+                        <div style="font-size:0.875rem; font-weight:600; color:#374151;">{{ r.product.category.name }}</div>
+                    </div>
+                    <div style="background:#f8fafc; border:1px solid #e5e7eb; border-radius:10px; padding:12px;">
+                        <div style="font-size:0.65rem; font-weight:700; text-transform:uppercase; letter-spacing:0.06em; color:#9ca3af; margin-bottom:4px;">Supplier</div>
+                        <div style="font-size:0.875rem; font-weight:600; color:#374151;">{{ r.product.supplier.name }}</div>
+                    </div>
+                </div>
+
+                {% if r.description %}
+                <div style="background:#f8fafc; border:1px solid #e5e7eb; border-radius:10px; padding:12px; margin-bottom:16px;">
+                    <div style="font-size:0.65rem; font-weight:700; text-transform:uppercase; letter-spacing:0.06em; color:#9ca3af; margin-bottom:4px;">Reason</div>
+                    <div style="font-size:0.85rem; color:#374151; line-height:1.5;">{{ r.description }}</div>
+                </div>
+                {% endif %}
+
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+                    <div style="font-size:0.82rem; color:#6b7280;">Requested by <strong style="color:#111827;">{{ r.requested_by.username }}</strong></div>
+                    {% if r.status == "Pending" %}<span class="s-pending"><span class="sdot" style="background:#d97706;"></span>Pending</span>
+                    {% elif r.status == "Approved" %}<span class="s-approved"><span class="sdot bg-success"></span>Approved</span>
+                    {% else %}<span class="s-rejected"><span class="sdot bg-danger"></span>Rejected</span>{% endif %}
+                </div>
+            </div>
+
+            <div style="padding:14px 24px; border-top:1px solid #f0f0f0; background:#fafafa; display:flex; justify-content:flex-end; gap:10px;">
+                <button class="btn btn-light border px-4" data-bs-dismiss="modal">Close</button>
+                {% if r.status == "Pending" %}
+                <a href="{% url 'reject_request' r.id %}" class="btn btn-outline-danger px-4">Reject</a>
+                <a href="{% url 'approve_request' r.id %}" class="btn btn-success px-4 fw-semibold">Approve</a>
+                {% endif %}
+            </div>
+
+        </div>
+    </div>
 </div>
 {% endfor %}
 
